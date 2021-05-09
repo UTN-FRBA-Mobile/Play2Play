@@ -20,7 +20,7 @@ abstract class BaseViewModel<E : Any> : ViewModel() {
         _singleTimeEvent.value = event
     }
 
-    /** Dispatch a new event that will update the UI only once. */
+    /** Dispatch a new event that will show a message. */
     protected fun dispatchMessage(message: MessageData) {
         _message.value = message
     }
