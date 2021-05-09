@@ -43,7 +43,6 @@ android {
 
 dependencies {
     implementation libraries.kotlin.core
-    implementation libraries.kotlin.coroutines
 
     implementation libraries.androidx.appCompat
     implementation libraries.androidx.constraintLayout
@@ -57,7 +56,6 @@ dependencies {
 
     implementation libraries.leakCanary
 
-    testImplementation testingLibraries.kotlin.coroutines
     testImplementation testingLibraries.androidx.core
     testImplementation testingLibraries.androidx.arch
     testImplementation testingLibraries.junit

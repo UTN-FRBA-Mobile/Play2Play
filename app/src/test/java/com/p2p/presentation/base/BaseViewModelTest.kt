@@ -11,7 +11,6 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.mockk
 import io.mockk.spyk
 import io.mockk.verify
-import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -50,7 +49,7 @@ class BaseViewModelTest : BaseTest() {
     }
 
     @Test
-    fun `given observed single time event when co dispatch event then observer is invoked`() = runBlocking {
+    fun `given observed single time event when co dispatch event then observer is invoked`() {
 
         // GIVEN
         val observer = spyk(Observer<Any> {})
