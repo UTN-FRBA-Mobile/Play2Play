@@ -1,0 +1,60 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+}
+
+android {
+    compileSdkVersion 30
+
+    defaultConfig {
+        applicationId "com.p2p"
+        minSdkVersion 21
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    viewBinding {
+        enabled = true
+    }
+}
+
+dependencies {
+    implementation libraries.kotlin.core
+    implementation libraries.kotlin.coroutines
+
+    implementation libraries.androidx.appCompat
+    implementation libraries.androidx.constraintLayout
+    implementation libraries.androidx.recyclerView
+    implementation libraries.androidx.ktx.core
+    implementation libraries.androidx.ktx.fragment
+    implementation libraries.androidx.ktx.lifecycle
+
+    implementation libraries.material
+    implementation libraries.gson
+
+    implementation libraries.leakCanary
+
+    testImplementation testingLibraries.kotlin.coroutines
+    testImplementation testingLibraries.androidx.core
+    testImplementation testingLibraries.androidx.arch
+    testImplementation testingLibraries.junit
+    testImplementation testingLibraries.mockk
+    testImplementation testingLibraries.robolectric
+}
