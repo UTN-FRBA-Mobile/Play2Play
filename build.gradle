@@ -14,26 +14,12 @@ buildscript {
     }
 }
 
-plugins {
-    id "io.gitlab.arturbosch.detekt" version "1.0.0.RC8"
-}
-
 apply from: 'dependencies.gradle'
 
 allprojects {
     repositories {
         google()
         mavenCentral()
-    }
-}
-
-detekt {
-    version = "1.0.0.RC8"
-    profile("main") {
-        config = "$rootDir/default-detekt-config.yml"
-        filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
-        parallel = true
-        disableDefaultRuleSets = false
     }
 }
 
