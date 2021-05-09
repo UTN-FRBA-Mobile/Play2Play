@@ -32,4 +32,10 @@
 
     <!-- General dimensions -->
     <dimen name="screen_padding">@dimen/medium_extra</dimen>
+
+    <!-- Splash screen -->
+    <dimen name="logo_size">@dimen/huge_extra</dimen>
+
+    <!-- Games -->
+    <dimen name="games_item_corner_radius">8dp</dimen>
 </resources>
