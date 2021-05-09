@@ -5,9 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.viewbinding.ViewBinding
+import com.google.android.material.snackbar.Snackbar
 import com.p2p.R
 
 /** Base implementation of a [Fragment] used to simplify boilerplate. */
@@ -38,6 +40,9 @@ abstract class BaseFragment<VB : ViewBinding, E : Any, VM : BaseViewModel<E>> : 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.singleTimeEvent.observe(viewLifecycleOwner) { onEvent(it) }
+        viewModel.message.observe(viewLifecycleOwner) { showSnackBar(it) }
+        initUI()
+        setupObservers()
     }
 
     @CallSuper
@@ -54,6 +59,29 @@ abstract class BaseFragment<VB : ViewBinding, E : Any, VM : BaseViewModel<E>> : 
         }
     }
 
+    /** Invoked when the view is initialized and should be used to setup the observers for the view model. */
+    protected open fun setupObservers() {}
+
+    /** Invoked when the view is initialized and should initialize the view that requires it. */
+    protected open fun initUI() {}
+
     /** Invoked when a single time event is dispatched from the view model. */
     protected open fun onEvent(event: E) {}
+
+    /** Show a snackbar customized with the given [data]. */
+    protected fun showSnackBar(data: BaseViewModel.MessageData) {
+        val view = view ?: return
+        val text = data.textRes?.let { context?.getText(it) } ?: data.text ?: return
+        val duration = when (data.duration) {
+            BaseViewModel.MessageData.Duration.SHORT -> Snackbar.LENGTH_SHORT
+            BaseViewModel.MessageData.Duration.LONG -> Snackbar.LENGTH_LONG
+        }
+        val backgroundColor = when (data.type) {
+            BaseViewModel.MessageData.Type.ERROR -> R.color.design_default_color_error
+        }
+        Snackbar
+            .make(view, text, duration)
+            .setBackgroundTint(ContextCompat.getColor(requireContext(), backgroundColor))
+            .show()
+    }
 }

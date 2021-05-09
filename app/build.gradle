@@ -30,8 +30,14 @@ android {
         jvmTarget = '1.8'
     }
 
-    gbuildFeatures {
+    buildFeatures {
         viewBinding true
+    }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
     }
 }
 
