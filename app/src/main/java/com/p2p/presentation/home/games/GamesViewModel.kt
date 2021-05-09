@@ -46,7 +46,7 @@ class GamesViewModel(private val userSession: UserSession) : BaseViewModel<Unit>
 
     private fun validateAndSaveName(name: String?): Boolean {
         return if (name.isNullOrBlank()) {
-            _message.value = MessageData(textRes = R.string.games_name_error, type = MessageData.Type.ERROR)
+            dispatchMessage(MessageData(textRes = R.string.games_name_error, type = MessageData.Type.ERROR))
             false
         } else {
             saveName(name)
