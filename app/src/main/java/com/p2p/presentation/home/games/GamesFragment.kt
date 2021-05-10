@@ -21,10 +21,10 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, Unit, GamesViewModel>()
         binding.joinButton.setOnClickListener { viewModel.joinGame(getUserName()) }
     }
 
-    override fun setupObservers() {
-        viewModel.games.observe(viewLifecycleOwner) { adapter.games = it }
-        viewModel.userName.observe(viewLifecycleOwner) { binding.userNameInput.clearAndAppend(it) }
-        viewModel.createButtonEnabled.observe(viewLifecycleOwner) { binding.createButton.isEnabled = it }
+    override fun setupObservers() = with(viewModel) {
+        games.observe(viewLifecycleOwner) { adapter.games = it }
+        userName.observe(viewLifecycleOwner) { binding.userNameInput.clearAndAppend(it) }
+        createButtonEnabled.observe(viewLifecycleOwner) { binding.createButton.isEnabled = it }
     }
 
     private fun setupGamesRecycler() = with(binding.gamesRecycler) {
