@@ -61,5 +61,4 @@ dependencies {
     testImplementation testingLibraries.junit
     testImplementation testingLibraries.mockk
     testImplementation testingLibraries.robolectric
-    testImplementation testingLibraries.kotest.assertions
 }
