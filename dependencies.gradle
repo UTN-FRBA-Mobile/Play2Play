@@ -45,7 +45,6 @@ ext {
             ],
             espresso   : "3.1.0",
             junit      : '4.12',
-            kotest     : "4.5.0",
             mockk      : "1.10.6",
             robolectric: "4.5.1"
     ]
@@ -59,9 +58,6 @@ ext {
                     fragment: "androidx.fragment:fragment-testing:$testingVersions.androidx.fragment"
             ],
             junit      : "junit:junit:$testingVersions.junit",
-            kotest     : [
-                    assertions: "io.kotest:kotest-assertions-core:$testingVersions.koTest"
-            ],
             mockk      : "io.mockk:mockk:$testingVersions.mockk",
             robolectric: "org.robolectric:robolectric:$testingVersions.robolectric"
     ]
