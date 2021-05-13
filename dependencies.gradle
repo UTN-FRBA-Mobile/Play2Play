@@ -1,0 +1,64 @@
+ext {
+    versions = [
+            androidx  : [
+                    appCompat       : '1.2.0',
+                    ktx             : [
+                            core     : '1.3.2',
+                            fragment : '1.3.3',
+                            lifecycle: '2.3.1'
+                    ],
+                    constraintLayout: '2.0.4',
+                    recyclerView    : '1.2.0'
+            ],
+            material  : '1.3.0',
+            gson      : '2.8.6',
+            leakCanary: '2.2',
+    ]
+
+    libraries = [
+            kotlin    : [
+                    core      : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version",
+            ],
+            androidx  : [
+                    appCompat       : "androidx.appcompat:appcompat:$versions.androidx.appCompat",
+                    ktx             : [
+                            core     : "androidx.core:core-ktx:$versions.androidx.ktx.core",
+                            fragment : "androidx.fragment:fragment-ktx:$versions.androidx.ktx.fragment",
+                            lifecycle: "androidx.lifecycle:lifecycle-runtime-ktx:$versions.androidx.ktx.lifecycle"
+                    ],
+                    constraintLayout: "androidx.constraintlayout:constraintlayout:$versions.androidx.constraintLayout",
+                    recyclerView    : "androidx.recyclerview:recyclerview:$versions.androidx.recyclerView"
+
+            ],
+            material  : "com.google.android.material:material:$versions.material",
+            gson      : "com.google.code.gson:gson:$versions.gson",
+            leakCanary: "com.squareup.leakcanary:leakcanary-android:$versions.leakCanary",
+    ]
+
+    testingVersions = [
+            androidx   : [
+                    core    : '1.0.0',
+                    runner  : "1.1.0",
+                    rules   : "1.1.0",
+                    arch    : "2.1.0",
+                    fragment: "1.2.3"
+            ],
+            espresso   : "3.1.0",
+            junit      : '4.12',
+            mockk      : "1.10.6",
+            robolectric: "4.5.1"
+    ]
+
+    testingLibraries = [
+            androidx   : [
+                    core    : "androidx.test:core:$testingVersions.androidx.core",
+                    runner  : "androidx.test:runner:$testingVersions.androidx.runner",
+                    rules   : "androidx.test:rules:$testingVersions.androidx.rules",
+                    arch    : "androidx.arch.core:core-testing:$testingVersions.androidx.arch",
+                    fragment: "androidx.fragment:fragment-testing:$testingVersions.androidx.fragment"
+            ],
+            junit      : "junit:junit:$testingVersions.junit",
+            mockk      : "io.mockk:mockk:$testingVersions.mockk",
+            robolectric: "org.robolectric:robolectric:$testingVersions.robolectric"
+    ]
+}

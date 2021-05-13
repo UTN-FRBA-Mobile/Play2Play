@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Dimensions -->
+    <dimen name="none">0dp</dimen>
+    <dimen name="tiniest">1dp</dimen>
+    <dimen name="tiny">2dp</dimen>
+    <dimen name="small">4dp</dimen>
+    <dimen name="medium">8dp</dimen>
+    <dimen name="medium_more">12dp</dimen>
+    <dimen name="medium_extra">16dp</dimen>
+    <dimen name="large">20dp</dimen>
+    <dimen name="large_extra">24dp</dimen>
+    <dimen name="big">28dp</dimen>
+    <dimen name="big_extra">32dp</dimen>
+    <dimen name="huge">38dp</dimen>
+    <dimen name="huge_extra">46dp</dimen>
+    <dimen name="largest">54dp</dimen>
+    <dimen name="largest_extra">64dp</dimen>
+
+    <!-- Text sizes -->
+    <dimen name="font_tiny">6sp</dimen>
+    <dimen name="font_small">8sp</dimen>
+    <dimen name="font_small_more">10sp</dimen>
+    <dimen name="font_medium">12sp</dimen>
+    <dimen name="font_medium_more">14sp</dimen>
+    <dimen name="font_medium_extra">16sp</dimen>
+    <dimen name="font_large">18sp</dimen>
+    <dimen name="font_large_extra">20sp</dimen>
+    <dimen name="font_big">22sp</dimen>
+    <dimen name="font_huge">24sp</dimen>
+
+    <!-- General dimensions -->
+    <dimen name="screen_padding">@dimen/medium_extra</dimen>
+</resources>
