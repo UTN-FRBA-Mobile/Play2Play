@@ -1,6 +1,8 @@
 package com.p2p.data
 
 import com.p2p.BaseTest
+import com.p2p.data.userInfo.UserInfoStorage
+import com.p2p.data.userInfo.UserSession
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify

@@ -1,4 +1,4 @@
-package com.p2p.data
+package com.p2p.data.userInfo
 
 /** This interface brings the capacity to save user info into some storage. */
 interface UserInfoStorage {
