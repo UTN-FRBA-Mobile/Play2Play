@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.p2p.databinding.ViewCategoryItemBinding
 
-/** The adapter used to show the list of games. */
+/** The adapter used to show the list of categories. */
 class CategoriesAdapter(private val onSelectedChanged: (Category?) -> Unit) : RecyclerView.Adapter<CategoriesAdapter.ViewHolder>() {
 
     /** The list of games displayed on the recycler. */

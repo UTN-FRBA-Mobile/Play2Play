@@ -1,13 +1,11 @@
 package com.p2p.data.tuttifrutti
 import com.p2p.presentation.tuttifrutti.create.Category
 
-data class TuttiFruttiRepository(val categoriesSource: CategoriesSource){
+data class TuttiFruttiRepository(private val gameCategories: CategoriesSource){
 
-    fun addCategory(category: Category) {
-        categoriesSource.addCategory(category)
+    fun setCategories(categories: List<Category>) {
+        gameCategories.setCategories(categories)
     }
 
-    fun getCategories(): MutableSet<Category> = categoriesSource.getCategories()
-
-    fun categoriesCountIsValid() = getCategories().size >= 5
+    fun getGameCategories(): List<Category> = gameCategories.getCategories()
 }

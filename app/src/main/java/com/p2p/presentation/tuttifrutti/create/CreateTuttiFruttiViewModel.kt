@@ -11,32 +11,49 @@ import com.p2p.presentation.home.games.Game
 
 class CreateTuttiFruttiViewModel(val repository: TuttiFruttiRepository) : BaseViewModel<CategoriesEvents>() {
 
-    /** Selected categories for current game. */
-    private val _selectedCategories = MutableLiveData(repository.getCategories())
-    val selectedCategories: LiveData<MutableSet<Category>> = _selectedCategories
+
+    /** The list of categories available to select. */
+    private val _allCategories = MutableLiveData<List<Category>>()
+    val allCategories: LiveData<List<Category>> = _allCategories
 
     /** Whether the continue button is enabled or not. */
     private val _continueButtonEnabled = MutableLiveData<Boolean>()
     val continueButtonEnabled: LiveData<Boolean> = _continueButtonEnabled
 
-    /** The list of categories available to choose. */
-    private val _categories = MutableLiveData<List<Category>>()
-    val categories: LiveData<List<Category>> = _categories
+    /** The current selected categories.
+     * Necessary to be a LiveData so the recyclerView can be notified and change the opacity of the button,
+     * if i only add the category to the repository, the view won't get notified
+     * */
+    private val _selectedCategories = MutableLiveData(mutableListOf<Category>())
+    val selectedCategories: LiveData<MutableList<Category>> = _selectedCategories
 
     init {
-        _categories.value = Category.values().toList()
+        _allCategories.value = Category.values().toList()
     }
 
-    /** Add [category] to the selected list. */
-    fun addCategory(category: Category) {
-        _continueButtonEnabled.value = repository.categoriesCountIsValid()
-        selectedCategories.value?.add(category)
-        repository.addCategory(category)
+    /** Adds the [Category] to current game */
+    fun addCategory(category: Category?) {
+        _selectedCategories.value?.add(category!!)
+        _continueButtonEnabled.value = categoriesCountIsValid()
     }
 
-    /** Continues creating the game */
+
+    /** Next view to show when Continue button is pressed. */
     fun next() {
-        if (!repository.categoriesCountIsValid()) return
+        if (!validateCateogoriesCount()) return
         dispatchSingleTimeEvent(ContinueCreatingGame)
     }
+
+    private fun validateCateogoriesCount(): Boolean {
+        return if (!categoriesCountIsValid()) {
+            dispatchMessage(MessageData(textRes = R.string.tf_categories_count_error, type = MessageData.Type.ERROR))
+            false
+        } else {
+            repository.setCategories(selectedCategories.value!!)
+            true
+        }
+    }
+
+
+    fun categoriesCountIsValid() = selectedCategories.value?.size?.let { it >= 5 } ?: false
 }

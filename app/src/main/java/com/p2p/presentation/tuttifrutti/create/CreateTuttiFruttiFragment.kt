@@ -23,9 +23,8 @@ class CreateTuttiFruttiFragment : BaseFragment<FragmentCreateTuttiFruttiBinding,
     }
 
     override fun setupObservers() = with(viewModel) {
-        selectedCategories.observe(viewLifecycleOwner) { adapter.categories = it }
-        userName.observe(viewLifecycleOwner) { binding.userNameInput.clearAndAppend(it) }
-        createButtonEnabled.observe(viewLifecycleOwner) { binding.createButton.isEnabled = it }
+        allCategories.observe(viewLifecycleOwner) { adapter.categories = it }
+        continueButtonEnabled.observe(viewLifecycleOwner) { binding.continueButton.isEnabled = it }
     }
 
 
@@ -40,8 +39,6 @@ class CreateTuttiFruttiFragment : BaseFragment<FragmentCreateTuttiFruttiBinding,
             this@CreateTuttiFruttiFragment.adapter = it
         }
     }
-
-    private fun getUserName() = binding.userNameInput.text?.toString()
 
     companion object {
 
