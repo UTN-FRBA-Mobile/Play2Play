@@ -27,6 +27,8 @@ class SelectedCategoriesAdapter(private val onDeleteCategory: (Category) -> Unit
         private set(value) {
             if (field == value) return
             field = value
+            val filteredCategories = selectedCategories.filter { it != value!! }
+            selectedCategories = filteredCategories
             onDeleteCategory.invoke(value!!)
             notifyDataSetChanged()
         }

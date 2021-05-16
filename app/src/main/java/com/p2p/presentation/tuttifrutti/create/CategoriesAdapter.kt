@@ -37,17 +37,18 @@ class CategoriesAdapter(private val onSelectedChanged: (Category, Boolean) -> Un
             notifyDataSetChanged()
         }
 
+
     /** The current category on the list. */
-    var selected: Category? = null
+    var selected: Pair<Category, Boolean>? = null
         private set(value) {
             if (field == value) return
             field = value
-            val categoryData = categoriesData.find { it.category == value!! }!!
+            val categoryData = categoriesData.find { it.category == value!!.first }!!
             categoryData.run {
                 val lastValue = isSelected
                 isSelected = !lastValue
             }
-            onSelectedChanged.invoke(value!!, categoryData.isSelected)
+            onSelectedChanged.invoke(value!!.first, categoryData.isSelected)
             notifyDataSetChanged()
         }
 
@@ -72,13 +73,13 @@ class CategoriesAdapter(private val onSelectedChanged: (Category, Boolean) -> Un
             item.text = category.name
             item.setBackgroundColor(ContextCompat.getColor(itemView.context, categoryData.backgroundColour))
             item.setOnClickListener {
-                selected = category
+                selected = Pair(category, categoryData.isSelected)
             }
             item.isChecked = categoryData.isSelected
             categoryItem
                 .animate()
                 .alpha(
-                    when (selected) {
+                    when (selected?.first) {
                         category -> SELECTED_OPACITY
                         null -> NONE_SELECTED_OPACITY
                         else -> NO_SELECTED_OPACITY
