@@ -28,6 +28,15 @@ class CategoriesAdapter(private val onSelectedChanged: (Category, Boolean) -> Un
 
     var categoriesData: List<CategoryData> = listOf()
 
+    var selectedCategories = listOf<Category>()
+        set(value) {
+            field = value
+            categoriesData.forEach {
+                it.isSelected = selectedCategories.contains(it.category)
+            }
+            notifyDataSetChanged()
+        }
+
     /** The current category on the list. */
     var selected: Category? = null
         private set(value) {
@@ -43,7 +52,6 @@ class CategoriesAdapter(private val onSelectedChanged: (Category, Boolean) -> Un
         }
 
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(ViewCategoryItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
@@ -52,39 +60,39 @@ class CategoriesAdapter(private val onSelectedChanged: (Category, Boolean) -> Un
         return holder.bind(categories[position])
     }
 
-        override fun getItemCount() = categories.size
+    override fun getItemCount() = categories.size
 
-        private fun getBackgroundColour(index: Int) = if(index.isEven()) backgroundPrimaryColour else backgroundSecondaryColour
+    private fun getBackgroundColour(index: Int) = if(index.isEven()) backgroundPrimaryColour else backgroundSecondaryColour
 
-        inner class ViewHolder(private val binding: ViewCategoryItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: ViewCategoryItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
-            /** Show the given [category] into the view. */
-            fun bind(category: Category) = with(binding) {
-                val categoryData = categoriesData.find { it.category == category }!!
-                item.text = category.name
-                item.setBackgroundColor(ContextCompat.getColor(itemView.context, categoryData.backgroundColour))
-                item.setOnClickListener {
-                    selected = category
-                }
-                item.isChecked = categoryData.isSelected
-                categoryItem
-                    .animate()
-                    .alpha(
-                        when (selected) {
-                            category -> SELECTED_OPACITY
-                            null -> NONE_SELECTED_OPACITY
-                            else -> NO_SELECTED_OPACITY
-                        }
-                    )
-                    .start()
+        /** Show the given [category] into the view. */
+        fun bind(category: Category) = with(binding) {
+            val categoryData = categoriesData.find { it.category == category }!!
+            item.text = category.name
+            item.setBackgroundColor(ContextCompat.getColor(itemView.context, categoryData.backgroundColour))
+            item.setOnClickListener {
+                selected = category
             }
+            item.isChecked = categoryData.isSelected
+            categoryItem
+                .animate()
+                .alpha(
+                    when (selected) {
+                        category -> SELECTED_OPACITY
+                        null -> NONE_SELECTED_OPACITY
+                        else -> NO_SELECTED_OPACITY
+                    }
+                )
+                .start()
         }
+    }
 
-        companion object {
+    companion object {
 
-        private const val SELECTED_OPACITY = 1f
-        private const val NO_SELECTED_OPACITY = 0.5f
-        private const val NONE_SELECTED_OPACITY = 0.8f
+    private const val SELECTED_OPACITY = 1f
+    private const val NO_SELECTED_OPACITY = 0.5f
+    private const val NONE_SELECTED_OPACITY = 0.8f
     }
 }
 

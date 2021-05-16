@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:id="@+id/item"
+    android:layout_marginEnd="@dimen/medium"
+    android:background="@drawable/border"
+    android:minHeight="?attr/minTouchTargetSize">
+
+    <TextView
+        android:id="@+id/selected_category_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/small"
+        android:layout_gravity="center_vertical"
+        android:maxLines="1"
+        android:text="Selected category"
+        android:textColor="@color/colorPrimaryVariant"/>
+
+    <ImageView
+        android:id="@+id/delete_icon"
+        android:background="@drawable/ic_baseline_delete_24"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/medium_more"
+        android:layout_marginBottom="@dimen/medium"
+        android:layout_marginLeft="@dimen/small"
+        android:paddingEnd="16dp"/>
+
+</LinearLayout>

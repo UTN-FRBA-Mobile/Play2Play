@@ -24,23 +24,27 @@ class CreateTuttiFruttiViewModel(val repository: TuttiFruttiRepository) : BaseVi
      * Necessary to be a LiveData so the recyclerView can be notified and change the opacity of the button,
      * if i only add the category to the repository, the view won't get notified
      * */
-    private val _selectedCategories = MutableLiveData(mutableListOf<Category>())
-    val selectedCategories: LiveData<MutableList<Category>> = _selectedCategories
+    private val _selectedCategories = MutableLiveData(listOf<Category>())
+    val selectedCategories: LiveData<List<Category>> = _selectedCategories
 
     init {
         _allCategories.value = Category.values().toList()
     }
 
-    /** Adds the [Category] to current game */
-    fun addCategory(category: Category, isSelected: Boolean) {
+
+    /** Changes the [Category] selection */
+    fun changeCategorySelection(category: Category, isSelected: Boolean) {
         if(isSelected){
-            _selectedCategories.value?.add(category)
+            _selectedCategories.value = selectedCategories.value?.plus(category)
         }else{
-            _selectedCategories.value?.remove(category)
+            _selectedCategories.value = selectedCategories.value?.filter { it != category }
         }
         _continueButtonEnabled.value = categoriesCountIsValid()
     }
 
+    fun deleteCategoryFromFooter(category: Category){
+        changeCategorySelection(category, isSelected = false)
+    }
 
     /** Next view to show when Continue button is pressed. */
     fun next() {

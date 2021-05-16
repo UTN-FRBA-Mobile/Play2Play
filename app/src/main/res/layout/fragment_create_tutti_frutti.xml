@@ -31,20 +31,63 @@
         android:layout_marginBottom="@dimen/large"
         android:orientation="vertical"
         android:requiresFadingEdge="vertical"
-        app:layout_constraintBottom_toTopOf="@id/continue_button"
+        app:layout_constraintBottom_toTopOf="@id/footer"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
         app:layout_constraintTop_toBottomOf="@id/topAppBar"
         app:layout_constraintVertical_bias="0.0"
         tools:listitem="@layout/view_category_item" />
 
-    <Button
-        android:id="@+id/continue_button"
-        android:layout_width="0dp"
+
+    <LinearLayout
+        android:id="@+id/footer"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/continue_button"
+        android:background="@color/colorSecondary"
+        android:orientation="vertical"
+        android:layout_weight="0.7"
+        android:paddingStart="@dimen/screen_padding"
+        android:paddingTop="@dimen/screen_padding"
+        android:paddingEnd="@dimen/screen_padding"
+        android:paddingBottom="@dimen/screen_padding"
         app:layout_constraintBottom_toBottomOf="@id/guideline_bottom"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
-        app:layout_constraintStart_toStartOf="@id/guideline_begin" />
+        app:layout_constraintStart_toStartOf="@id/guideline_begin" >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="@dimen/font_big"
+            android:textStyle="bold"
+            android:text="@string/tf_categories_selected_categories"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingTop="@dimen/tiniest"
+            android:textSize="@dimen/font_medium_extra"
+            android:text="@string/tf_categories_count_error"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/categories_selected_recycle"
+            android:layout_marginTop="@dimen/large"
+            android:layout_marginBottom="@dimen/large"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            tools:orientation="horizontal"
+            tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/view_selected_category_item" />
+        <Button
+            android:id="@+id/continue_button"
+            android:layout_width="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/medium"
+            android:layout_weight="@android:integer/config_shortAnimTime"
+            android:layout_height="0dp"
+            android:text="@string/continue_button"/>
+
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
