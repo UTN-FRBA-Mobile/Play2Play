@@ -46,7 +46,7 @@ class CreateTuttiFruttiFragment : BaseFragment<FragmentCreateTuttiFruttiBinding,
 
 
     private fun setupCategoriesSelectedRecycler() = with(binding.categoriesSelectedRecycle) {
-        layoutManager = LinearLayoutManager(context)
+        layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         adapter = SelectedCategoriesAdapter(viewModel::deleteCategoryFromFooter).also {
             this@CreateTuttiFruttiFragment.selectedCategoriesAadapter = it
         }
