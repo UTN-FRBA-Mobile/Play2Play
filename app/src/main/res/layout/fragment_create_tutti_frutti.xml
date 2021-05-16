@@ -9,26 +9,15 @@
 
     <include layout="@layout/view_guidelines" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/text_field"
+    <TextView
+        android:id="@+id/pruebita"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="@string/games_user_name"
-        app:endIconDrawable="@drawable/ic_pencil"
-        app:endIconMode="custom"
+        android:text="HOlaaaa!!!!"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
-        app:layout_constraintTop_toTopOf="@id/guideline_top">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/user_name_input"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorBackground"
-            android:maxLines="1"
-            android:paddingStart="@dimen/small"
-            android:paddingEnd="@dimen/small" />
-    </com.google.android.material.textfield.TextInputLayout>
+        app:layout_constraintTop_toTopOf="@id/guideline_top"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/categories_recycle"
@@ -38,11 +27,11 @@
         android:layout_marginBottom="@dimen/large"
         android:orientation="vertical"
         android:requiresFadingEdge="vertical"
-        app:layout_constraintBottom_toTopOf="@id/create_button"
+        app:layout_constraintBottom_toTopOf="@id/continue_button"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
-        app:layout_constraintTop_toBottomOf="@id/text_field"
-        tools:listitem="@layout/view_games_item" />
+        app:layout_constraintTop_toBottomOf="@id/pruebita"
+        tools:listitem="@layout/view_category_item" />
 
 
     <Button
