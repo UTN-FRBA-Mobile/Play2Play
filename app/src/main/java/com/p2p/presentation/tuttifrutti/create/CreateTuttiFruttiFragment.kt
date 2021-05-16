@@ -13,7 +13,7 @@ class CreateTuttiFruttiFragment : BaseFragment<FragmentCreateTuttiFruttiBinding,
     override val inflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentCreateTuttiFruttiBinding = FragmentCreateTuttiFruttiBinding::inflate
 
     private lateinit var categoriesAadapter: CategoriesAdapter
-    private lateinit var selectedCategoriesAadapter: SelectedCategoriesAdapter
+    private lateinit var selectedCategoriesAdapter: SelectedCategoriesAdapter
 
 
     override fun initUI() {
@@ -26,7 +26,7 @@ class CreateTuttiFruttiFragment : BaseFragment<FragmentCreateTuttiFruttiBinding,
         allCategories.observe(viewLifecycleOwner) { categoriesAadapter.categories = it }
         selectedCategories.observe(viewLifecycleOwner) {
             categoriesAadapter.selectedCategories = it
-            selectedCategoriesAadapter.selectedCategories = it
+            selectedCategoriesAdapter.selectedCategories = it
         }
         continueButtonEnabled.observe(viewLifecycleOwner) { binding.continueButton.isEnabled = it }
     }
@@ -48,7 +48,7 @@ class CreateTuttiFruttiFragment : BaseFragment<FragmentCreateTuttiFruttiBinding,
     private fun setupCategoriesSelectedRecycler() = with(binding.categoriesSelectedRecycle) {
         layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         adapter = SelectedCategoriesAdapter(viewModel::deleteCategoryFromFooter).also {
-            this@CreateTuttiFruttiFragment.selectedCategoriesAadapter = it
+            this@CreateTuttiFruttiFragment.selectedCategoriesAdapter = it
         }
     }
 

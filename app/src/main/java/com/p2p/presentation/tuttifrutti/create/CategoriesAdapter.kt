@@ -13,9 +13,9 @@ import com.p2p.utils.isEven
 /** The adapter used to show the list of categories. */
 class CategoriesAdapter(private val onSelectedChanged: (Category, Boolean) -> Unit) : RecyclerView.Adapter<CategoriesAdapter.ViewHolder>() {
 
-    val backgroundPrimaryColour = R.color.colorBackgroundListFirst
+    private val backgroundPrimaryColour = R.color.colorBackgroundListFirst
 
-    val backgroundSecondaryColour = R.color.colorBackgroundListSecond
+    private val backgroundSecondaryColour = R.color.colorBackgroundListSecond
 
     /** The list of games displayed on the recycler. */
     var categories = listOf<Category>()

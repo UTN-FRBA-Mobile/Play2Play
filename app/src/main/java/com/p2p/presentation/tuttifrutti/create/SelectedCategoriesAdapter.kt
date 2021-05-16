@@ -11,10 +11,10 @@ import com.p2p.databinding.ViewSelectedCategoryItemBinding
 import com.p2p.utils.isEven
 
 
-/** The adapter used to show the list of categories. */
+/** The adapter used to show the list of selected categories. */
 class SelectedCategoriesAdapter(private val onDeleteCategory: (Category) -> Unit) : RecyclerView.Adapter<SelectedCategoriesAdapter.ViewHolder>() {
 
-    /** The list of games displayed on the recycler. */
+    /** The list of the selected categories */
     var selectedCategories = listOf<Category>()
         set(value) {
             field = value
@@ -22,7 +22,7 @@ class SelectedCategoriesAdapter(private val onDeleteCategory: (Category) -> Unit
         }
 
 
-    /** The current category on the list. */
+    /** The current category to delete */
     var selected: Category? = null
         private set(value) {
             if (field == value) return
@@ -49,7 +49,7 @@ class SelectedCategoriesAdapter(private val onDeleteCategory: (Category) -> Unit
         /** Show the given [category] into the view. */
         fun bind(category: Category) = with(binding) {
             selectedCategoryName.text = category.name
-            item.setOnClickListener {
+            deleteIcon.setOnClickListener {
                 selected = category
             }
         }
