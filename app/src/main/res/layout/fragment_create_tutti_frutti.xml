@@ -9,15 +9,19 @@
 
     <include layout="@layout/view_guidelines" />
 
-    <TextView
-        android:id="@+id/pruebita"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="HOlaaaa!!!!"
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/topAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:title="@string/games_tutti_frutti"
+        app:menu="@menu/top_app_bar"
+        app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+        style="@style/Widget.MaterialComponents.Toolbar.Primary"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
         app:layout_constraintTop_toTopOf="@id/guideline_top"
         />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/categories_recycle"
@@ -30,9 +34,9 @@
         app:layout_constraintBottom_toTopOf="@id/continue_button"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
-        app:layout_constraintTop_toBottomOf="@id/pruebita"
+        app:layout_constraintTop_toBottomOf="@id/topAppBar"
+        app:layout_constraintVertical_bias="0.0"
         tools:listitem="@layout/view_category_item" />
-
 
     <Button
         android:id="@+id/continue_button"

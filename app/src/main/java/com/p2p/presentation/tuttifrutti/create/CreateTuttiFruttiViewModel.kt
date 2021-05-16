@@ -32,8 +32,12 @@ class CreateTuttiFruttiViewModel(val repository: TuttiFruttiRepository) : BaseVi
     }
 
     /** Adds the [Category] to current game */
-    fun addCategory(category: Category?) {
-        _selectedCategories.value?.add(category!!)
+    fun addCategory(category: Category, isSelected: Boolean) {
+        if(isSelected){
+            _selectedCategories.value?.add(category)
+        }else{
+            _selectedCategories.value?.remove(category)
+        }
         _continueButtonEnabled.value = categoriesCountIsValid()
     }
 
