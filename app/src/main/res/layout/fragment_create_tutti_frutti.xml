@@ -7,8 +7,6 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackground">
 
-    <include layout="@layout/view_guidelines" />
-
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/topAppBar"
         android:layout_width="match_parent"
@@ -17,23 +15,19 @@
         app:menu="@menu/top_app_bar"
         app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
         style="@style/Widget.MaterialComponents.Toolbar.Primary"
-        app:layout_constraintEnd_toEndOf="@id/guideline_end"
-        app:layout_constraintStart_toStartOf="@id/guideline_begin"
-        app:layout_constraintTop_toTopOf="@id/guideline_top"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         />
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/categories_recycler"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/large"
         android:layout_marginBottom="@dimen/large"
         android:orientation="vertical"
         android:requiresFadingEdge="vertical"
         app:layout_constraintBottom_toTopOf="@id/footer"
-        app:layout_constraintEnd_toEndOf="@id/guideline_end"
-        app:layout_constraintStart_toStartOf="@id/guideline_begin"
         app:layout_constraintTop_toBottomOf="@id/topAppBar"
         app:layout_constraintVertical_bias="0.0"
         tools:listitem="@layout/view_category_item" />
@@ -49,9 +43,9 @@
         android:paddingEnd="@dimen/screen_padding"
         android:paddingBottom="@dimen/screen_padding"
         app:layout_constraintTop_toBottomOf="@id/categories_recycler"
-        app:layout_constraintBottom_toBottomOf="@id/guideline_bottom"
-        app:layout_constraintEnd_toEndOf="@id/guideline_end"
-        app:layout_constraintStart_toStartOf="@id/guideline_begin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         >
         <TextView
             android:id="@+id/selected_categories"

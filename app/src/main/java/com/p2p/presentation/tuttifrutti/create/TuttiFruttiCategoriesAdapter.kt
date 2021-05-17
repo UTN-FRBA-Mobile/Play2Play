@@ -52,7 +52,7 @@ class TuttiFruttiCategoriesAdapter(private val onSelectedChanges: (Category) -> 
         /** Show the given [category] into the view. */
         fun bind(category: Category, position: Int) = with(binding) {
             item.text = category
-            item.setBackgroundColor(
+            categoryItem.setBackgroundColor(
                 ContextCompat.getColor(
                     itemView.context,
                     getBackgroundColor(position)
@@ -62,24 +62,7 @@ class TuttiFruttiCategoriesAdapter(private val onSelectedChanges: (Category) -> 
                 onSelectedChanges.invoke(category)
             }
             item.isChecked = selectedCategories?.contains(category) ?: false
-            categoryItem
-                .animate()
-                .alpha(
-                    when (category) {
-                        category -> SELECTED_OPACITY
-                        null -> NONE_SELECTED_OPACITY
-                        else -> NO_SELECTED_OPACITY
-                    }
-                )
-                .start()
         }
-    }
-
-    companion object {
-
-        private const val SELECTED_OPACITY = 1f
-        private const val NO_SELECTED_OPACITY = 0.5f
-        private const val NONE_SELECTED_OPACITY = 0.8f
     }
 }
 
