@@ -32,11 +32,12 @@ class CreateTuttiFruttiViewModel(repository: TuttiFruttiRepository) :
 
 
     /** Changes the [Category] selection */
-    fun changeCategorySelection(category: Category, isSelected: Boolean) {
-        if (isSelected) {
-            _selectedCategories.value = selectedCategories.value?.plus(category)
-        } else {
+    fun changeCategorySelection(category: Category) {
+        val wasSelected = selectedCategories.value?.contains(category) ?: false
+        if (wasSelected) {
             _selectedCategories.value = selectedCategories.value?.filter { it != category }
+        } else {
+            _selectedCategories.value = selectedCategories.value?.plus(category)
         }
         _continueButtonEnabled.value = categoriesCountIsValid()
     }

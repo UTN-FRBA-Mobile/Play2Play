@@ -10,7 +10,7 @@ import com.p2p.utils.isEven
 
 
 /** The adapter used to show the list of categories. */
-class TuttiFruttiCategoriesAdapter(private val onSelectedChanged: (Category, Boolean) -> Unit) :
+class TuttiFruttiCategoriesAdapter(private val onSelectedChanges: (Category) -> Unit) :
     RecyclerView.Adapter<TuttiFruttiCategoriesAdapter.ViewHolder>() {
 
     /** The list of categories displayed on the recycler. */
@@ -26,17 +26,6 @@ class TuttiFruttiCategoriesAdapter(private val onSelectedChanged: (Category, Boo
             field = value
             notifyDataSetChanged()
         }
-
-
-    /** The current category on the list. */
-    var selected: Pair<Category, Boolean>? = null
-        private set(value) {
-            if (field == value) return
-            field = value
-            onSelectedChanged.invoke(value!!.first, value!!.second)
-            notifyDataSetChanged()
-        }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -62,7 +51,6 @@ class TuttiFruttiCategoriesAdapter(private val onSelectedChanged: (Category, Boo
 
         /** Show the given [category] into the view. */
         fun bind(category: Category, position: Int) = with(binding) {
-            val isSelected = selectedCategories?.contains(category) ?: false
             item.text = category
             item.setBackgroundColor(
                 ContextCompat.getColor(
@@ -71,13 +59,13 @@ class TuttiFruttiCategoriesAdapter(private val onSelectedChanged: (Category, Boo
                 )
             )
             item.setOnClickListener {
-                selected = Pair(category, !isSelected)
+                onSelectedChanges.invoke(category)
             }
-            item.isChecked = isSelected
+            item.isChecked = selectedCategories?.contains(category) ?: false
             categoryItem
                 .animate()
                 .alpha(
-                    when (selected?.first) {
+                    when (category) {
                         category -> SELECTED_OPACITY
                         null -> NONE_SELECTED_OPACITY
                         else -> NO_SELECTED_OPACITY

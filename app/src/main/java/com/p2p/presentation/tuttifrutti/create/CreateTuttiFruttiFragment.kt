@@ -55,7 +55,7 @@ class CreateTuttiFruttiFragment :
     private fun setupCategoriesSelectedRecycler() = with(binding.categoriesSelectedRecycle) {
         layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         adapter = TuttiFruttiSelectedCategoriesAdapter{ category ->
-            viewModel.changeCategorySelection(category, isSelected = false)}.also {
+            viewModel.changeCategorySelection(category)}.also {
             this@CreateTuttiFruttiFragment.tuttiFruttiSelectedCategoriesAdapter = it
         }
     }
