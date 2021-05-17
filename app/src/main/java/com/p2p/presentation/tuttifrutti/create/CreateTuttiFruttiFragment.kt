@@ -20,6 +20,7 @@ class CreateTuttiFruttiFragment : BaseFragment<FragmentCreateTuttiFruttiBinding,
         setupCategoriesRecycler()
         setupCategoriesSelectedRecycler()
         binding.continueButton.setOnClickListener { viewModel.next() }
+        binding.deleteAllButton.setOnClickListener { viewModel.deleteAll() }
     }
 
     override fun setupObservers() = with(viewModel) {

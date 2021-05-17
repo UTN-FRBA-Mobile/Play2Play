@@ -48,6 +48,13 @@ class CreateTuttiFruttiViewModel(val repository: TuttiFruttiRepository) : BaseVi
         dispatchSingleTimeEvent(ContinueCreatingGame)
     }
 
+
+    /** Deletes all the categories */
+    fun deleteAll() {
+        _selectedCategories.value = listOf()
+    }
+
+
     private fun validateCategoriesCount(): Boolean {
         return if (!categoriesCountIsValid()) {
             dispatchMessage(MessageData(textRes = R.string.tf_categories_count_error, type = MessageData.Type.ERROR))
