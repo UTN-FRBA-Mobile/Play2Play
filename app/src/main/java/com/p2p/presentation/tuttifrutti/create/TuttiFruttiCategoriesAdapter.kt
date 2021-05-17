@@ -10,12 +10,8 @@ import com.p2p.utils.isEven
 
 
 /** The adapter used to show the list of categories. */
-class CategoriesAdapter(private val onSelectedChanged: (Category, Boolean) -> Unit) :
-    RecyclerView.Adapter<CategoriesAdapter.ViewHolder>() {
-
-    private val backgroundPrimaryColour = R.color.colorBackgroundListFirst
-
-    private val backgroundSecondaryColour = R.color.colorBackgroundListSecond
+class TuttiFruttiCategoriesAdapter(private val onSelectedChanged: (Category, Boolean) -> Unit) :
+    RecyclerView.Adapter<TuttiFruttiCategoriesAdapter.ViewHolder>() {
 
     /** The list of categories displayed on the recycler. */
     var categories = listOf<Category>()
@@ -71,7 +67,7 @@ class CategoriesAdapter(private val onSelectedChanged: (Category, Boolean) -> Un
     override fun getItemCount() = categories.size
 
     private fun getBackgroundColour(index: Int) =
-        if (index.isEven()) backgroundPrimaryColour else backgroundSecondaryColour
+        if (index.isEven()) R.color.colorBackgroundListFirst else R.color.colorBackgroundListSecond
 
     inner class ViewHolder(private val binding: ViewCategoryItemBinding) :
         RecyclerView.ViewHolder(binding.root) {

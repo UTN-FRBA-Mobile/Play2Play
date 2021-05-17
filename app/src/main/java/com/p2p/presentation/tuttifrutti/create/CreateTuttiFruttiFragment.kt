@@ -18,7 +18,7 @@ class CreateTuttiFruttiFragment :
     override val inflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentCreateTuttiFruttiBinding =
         FragmentCreateTuttiFruttiBinding::inflate
 
-    private lateinit var categoriesAadapter: CategoriesAdapter
+    private lateinit var tuttiFruttiCategoriesAadapter: TuttiFruttiCategoriesAdapter
     private lateinit var tuttiFruttiSelectedCategoriesAdapter: TuttiFruttiSelectedCategoriesAdapter
 
 
@@ -29,9 +29,9 @@ class CreateTuttiFruttiFragment :
     }
 
     override fun setupObservers() = with(viewModel) {
-        allCategories.observe(viewLifecycleOwner) { categoriesAadapter.categories = it }
+        allCategories.observe(viewLifecycleOwner) { tuttiFruttiCategoriesAadapter.categories = it }
         selectedCategories.observe(viewLifecycleOwner) {
-            categoriesAadapter.selectedCategories = it
+            tuttiFruttiCategoriesAadapter.selectedCategories = it
             tuttiFruttiSelectedCategoriesAdapter.selectedCategories = it
         }
         continueButtonEnabled.observe(viewLifecycleOwner) { binding.continueButton.isEnabled = it }
@@ -46,8 +46,8 @@ class CreateTuttiFruttiFragment :
 
     private fun setupCategoriesRecycler() = with(binding.categoriesRecycle) {
         layoutManager = LinearLayoutManager(context)
-        adapter = CategoriesAdapter(viewModel::changeCategorySelection).also {
-            this@CreateTuttiFruttiFragment.categoriesAadapter = it
+        adapter = TuttiFruttiCategoriesAdapter(viewModel::changeCategorySelection).also {
+            this@CreateTuttiFruttiFragment.tuttiFruttiCategoriesAadapter = it
         }
     }
 
