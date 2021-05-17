@@ -41,12 +41,8 @@ class CreateTuttiFruttiViewModel(repository: TuttiFruttiRepository) :
         _continueButtonEnabled.value = categoriesCountIsValid()
     }
 
-    fun deleteCategoryFromFooter(category: Category) {
-        changeCategorySelection(category, isSelected = false)
-    }
-
     /** Next view to show when Continue button is pressed. */
-    fun next() {
+    fun continueToNextScreen() {
         if (!validateCategoriesCount()) return
         dispatchSingleTimeEvent(ContinueCreatingGame)
     }
@@ -66,5 +62,9 @@ class CreateTuttiFruttiViewModel(repository: TuttiFruttiRepository) :
     }
 
 
-    fun categoriesCountIsValid() = selectedCategories.value?.size?.let { it >= 5 } ?: false
+    fun categoriesCountIsValid() = selectedCategories.value?.size?.let { it >= CATEGORIES_VALID_THRESHOLD } ?: false
+
+    companion object{
+        const val CATEGORIES_VALID_THRESHOLD: Int = 5
+    }
 }

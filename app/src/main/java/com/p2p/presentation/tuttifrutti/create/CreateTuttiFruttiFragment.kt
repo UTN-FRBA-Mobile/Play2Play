@@ -25,7 +25,7 @@ class CreateTuttiFruttiFragment :
     override fun initUI() {
         setupCategoriesRecycler()
         setupCategoriesSelectedRecycler()
-        binding.continueButton.setOnClickListener { viewModel.next() }
+        binding.continueButton.setOnClickListener { viewModel.continueToNextScreen() }
     }
 
     override fun setupObservers() = with(viewModel) {
@@ -54,7 +54,8 @@ class CreateTuttiFruttiFragment :
 
     private fun setupCategoriesSelectedRecycler() = with(binding.categoriesSelectedRecycle) {
         layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        adapter = TuttiFruttiSelectedCategoriesAdapter(viewModel::deleteCategoryFromFooter).also {
+        adapter = TuttiFruttiSelectedCategoriesAdapter{ category ->
+            viewModel.changeCategorySelection(category, isSelected = false)}.also {
             this@CreateTuttiFruttiFragment.tuttiFruttiSelectedCategoriesAdapter = it
         }
     }
