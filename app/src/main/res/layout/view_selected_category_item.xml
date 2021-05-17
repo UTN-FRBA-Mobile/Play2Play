@@ -16,7 +16,7 @@
         android:layout_marginLeft="@dimen/small"
         android:layout_gravity="center_vertical"
         android:maxLines="1"
-        android:text="Selected category"
+        tools:text="Selected category"
         android:textColor="@color/colorPrimaryVariant"/>
 
     <ImageView

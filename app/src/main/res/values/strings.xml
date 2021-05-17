@@ -18,6 +18,6 @@
 
     <!-- Tutti Frutti - Categories -->
     <string name="tf_categories_selected_categories">Categorías seleccionadas</string>
-    <string name="tf_categories_count_error">Debes seleccionar al menos 5!</string>
+    <string name="tf_categories_count_error">¡Debes seleccionar al menos 5!</string>
 
 </resources>

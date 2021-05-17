@@ -12,11 +12,12 @@ import androidx.viewbinding.ViewBinding
 import com.google.android.material.snackbar.Snackbar
 import com.p2p.R
 
-/** Base implementation of a [Fragment] used to simplify boilerplate.
+/** 
+ * Base implementation of a [Fragment] used to simplify boilerplate.
  * [VB]: ViewBinding
  * [E]: Event
  * [VM]: BaseViewModel with the same event defined
- * */
+ */
 abstract class BaseFragment<VB : ViewBinding, E : Any, VM : BaseViewModel<E>> : Fragment() {
 
     protected abstract val viewModel: VM
