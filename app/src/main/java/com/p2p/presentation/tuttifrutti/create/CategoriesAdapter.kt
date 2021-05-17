@@ -17,7 +17,7 @@ class CategoriesAdapter(private val onSelectedChanged: (Category, Boolean) -> Un
 
     private val backgroundSecondaryColour = R.color.colorBackgroundListSecond
 
-    /** The list of games displayed on the recycler. */
+    /** The list of categories displayed on the recycler. */
     var categories = listOf<Category>()
         set(value) {
             field = value
