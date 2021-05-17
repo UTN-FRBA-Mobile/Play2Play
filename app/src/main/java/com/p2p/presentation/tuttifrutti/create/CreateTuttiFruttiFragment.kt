@@ -44,7 +44,7 @@ class CreateTuttiFruttiFragment :
         }
     }
 
-    private fun setupCategoriesRecycler() = with(binding.categoriesRecycle) {
+    private fun setupCategoriesRecycler() = with(binding.categoriesRecycler) {
         layoutManager = LinearLayoutManager(context)
         adapter = TuttiFruttiCategoriesAdapter(viewModel::changeCategorySelection).also {
             this@CreateTuttiFruttiFragment.tuttiFruttiCategoriesAadapter = it
@@ -52,13 +52,12 @@ class CreateTuttiFruttiFragment :
     }
 
 
-    private fun setupCategoriesSelectedRecycler() = with(binding.categoriesSelectedRecycle) {
+    private fun setupCategoriesSelectedRecycler() = with(binding.categoriesSelectedRecycler) {
         layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         adapter = TuttiFruttiSelectedCategoriesAdapter(viewModel::changeCategorySelection).also {
             this@CreateTuttiFruttiFragment.tuttiFruttiSelectedCategoriesAdapter = it
         }
     }
-
 
     companion object {
 

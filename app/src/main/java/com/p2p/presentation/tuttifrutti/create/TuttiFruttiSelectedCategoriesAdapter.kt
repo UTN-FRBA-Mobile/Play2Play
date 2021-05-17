@@ -38,8 +38,8 @@ class TuttiFruttiSelectedCategoriesAdapter(private val onDeleteCategory: (Catego
 
         /** Show the given [category] into the view. */
         fun bind(category: Category) = with(binding) {
-            selectedCategoryName.text = category
-            deleteIcon.setOnClickListener {
+            categoryToMaybeDelete.text = category
+            categoryToMaybeDelete.setOnClickListener {
                 onDeleteCategory.invoke(category)
             }
         }

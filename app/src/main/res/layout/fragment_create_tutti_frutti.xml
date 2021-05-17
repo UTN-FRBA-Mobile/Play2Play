@@ -48,7 +48,7 @@
         android:paddingTop="@dimen/screen_padding"
         android:paddingEnd="@dimen/screen_padding"
         android:paddingBottom="@dimen/screen_padding"
-        app:layout_constraintTop_toBottomOf="@id/categories_recycle"
+        app:layout_constraintTop_toBottomOf="@id/categories_recycler"
         app:layout_constraintBottom_toBottomOf="@id/guideline_bottom"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
@@ -91,7 +91,7 @@
             android:layout_width="match_parent"
             android:layout_marginTop="@dimen/medium"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/categories_selected_recycle"
+            android:layout_below="@id/categories_selected_recycler"
             android:layout_height="wrap_content"
             android:text="@string/continue_button"/>
 
