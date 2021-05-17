@@ -8,7 +8,6 @@ import com.p2p.databinding.FragmentGamesBinding
 import com.p2p.presentation.base.BaseFragment
 import com.p2p.presentation.extensions.clearAndAppend
 import com.p2p.presentation.tuttifrutti.TuttiFruttiActivity
-import com.p2p.presentation.tuttifrutti.create.CreateTuttiFruttiFragment
 
 class GamesFragment : BaseFragment<FragmentGamesBinding, GamesEvents, GamesViewModel>() {
 

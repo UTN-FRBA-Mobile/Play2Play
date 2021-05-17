@@ -6,7 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.p2p.databinding.ViewGamesItemBinding
 
 /** The adapter used to show the list of games. */
-class GamesAdapter(private val onSelectedChanged: (Game?) -> Unit) : RecyclerView.Adapter<GamesAdapter.ViewHolder>() {
+class GamesAdapter(private val onSelectedChanged: (Game?) -> Unit) :
+    RecyclerView.Adapter<GamesAdapter.ViewHolder>() {
 
     /** The list of games displayed on the recycler. */
     var games = listOf<Game>()
@@ -26,14 +27,21 @@ class GamesAdapter(private val onSelectedChanged: (Game?) -> Unit) : RecyclerVie
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(ViewGamesItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return ViewHolder(
+            ViewGamesItemBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(games[position])
 
     override fun getItemCount() = games.size
 
-    inner class ViewHolder(private val binding: ViewGamesItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: ViewGamesItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         /** Show the given [game] into the view. */
         fun bind(game: Game) = with(binding) {

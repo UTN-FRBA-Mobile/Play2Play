@@ -2,17 +2,13 @@ package com.p2p.presentation.tuttifrutti.create
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.p2p.R
-import com.p2p.databinding.ViewCategoryItemBinding
 import com.p2p.databinding.ViewSelectedCategoryItemBinding
-import com.p2p.utils.isEven
 
 
 /** The adapter used to show the list of selected categories. */
-class SelectedCategoriesAdapter(private val onDeleteCategory: (Category) -> Unit) : RecyclerView.Adapter<SelectedCategoriesAdapter.ViewHolder>() {
+class TuttiFruttiSelectedCategoriesAdapter(private val onDeleteCategory: (Category) -> Unit) :
+    RecyclerView.Adapter<TuttiFruttiSelectedCategoriesAdapter.ViewHolder>() {
 
     /** The list of the selected categories */
     var selectedCategories = listOf<Category>()
@@ -35,7 +31,13 @@ class SelectedCategoriesAdapter(private val onDeleteCategory: (Category) -> Unit
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(ViewSelectedCategoryItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return ViewHolder(
+            ViewSelectedCategoryItemBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -44,11 +46,12 @@ class SelectedCategoriesAdapter(private val onDeleteCategory: (Category) -> Unit
 
     override fun getItemCount() = selectedCategories.size
 
-    inner class ViewHolder(private val binding: ViewSelectedCategoryItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: ViewSelectedCategoryItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         /** Show the given [category] into the view. */
         fun bind(category: Category) = with(binding) {
-            selectedCategoryName.text = category.name
+            selectedCategoryName.text = category
             deleteIcon.setOnClickListener {
                 selected = category
             }

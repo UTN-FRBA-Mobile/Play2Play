@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- TODO ver como se puede crear el enum con estas categorias -->
     <string-array
-        name="tutti_frutti_categories">
-        <item name="tf_categories_countries">Países</item>
-        <item name="tf_categories_names">Nombres</item>
-        <item name="tf_categories_animals">Animales</item>
-        <item name="tf_categories_foods">Comidas</item>
-        <item name="tf_categories_movies">Películas</item>
-        <item name="tf_categories_colours">Colores</item>
+        name="tf_categories">
+        <item>Países</item>
+        <item>Nombres</item>
+        <item>Animales</item>
+        <item>Comidas</item>
+        <item>Películas</item>
+        <item>Colores</item>
     </string-array>
 </resources>

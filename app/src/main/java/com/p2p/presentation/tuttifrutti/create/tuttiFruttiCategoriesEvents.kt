@@ -1,6 +1,6 @@
 package com.p2p.presentation.tuttifrutti.create
 
 /** A base class for all events that could occur on the Games screen. */
-sealed class CategoriesEvents
+sealed class TuttiFruttiCategoriesEvents
 
-object ContinueCreatingGame: CategoriesEvents()
+object ContinueCreatingGame : TuttiFruttiCategoriesEvents()

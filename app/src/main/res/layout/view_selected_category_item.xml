@@ -7,7 +7,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:layout_marginEnd="@dimen/medium"
-    android:background="@drawable/border"
     android:minHeight="?attr/minTouchTargetSize">
 
     <TextView
@@ -28,6 +27,6 @@
         android:layout_marginTop="@dimen/medium_more"
         android:layout_marginBottom="@dimen/medium"
         android:layout_marginLeft="@dimen/small"
-        android:paddingEnd="16dp"/>
+        android:paddingEnd="@dimen/medium_extra"/>
 
 </LinearLayout>

@@ -7,13 +7,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.p2p.databinding.FragmentCreateTuttiFruttiBinding
 import com.p2p.presentation.base.BaseFragment
 
-class CreateTuttiFruttiFragment : BaseFragment<FragmentCreateTuttiFruttiBinding, CategoriesEvents, CreateTuttiFruttiViewModel>() {
+class CreateTuttiFruttiFragment :
+    BaseFragment<FragmentCreateTuttiFruttiBinding, TuttiFruttiCategoriesEvents, CreateTuttiFruttiViewModel>() {
 
-    override val viewModel: CreateTuttiFruttiViewModel by viewModels { CreateTuttiFruttiViewModelFactory() }
-    override val inflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentCreateTuttiFruttiBinding = FragmentCreateTuttiFruttiBinding::inflate
+    override val viewModel: CreateTuttiFruttiViewModel by viewModels {
+        CreateTuttiFruttiViewModelFactory(
+            requireContext()
+        )
+    }
+    override val inflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentCreateTuttiFruttiBinding =
+        FragmentCreateTuttiFruttiBinding::inflate
 
     private lateinit var categoriesAadapter: CategoriesAdapter
-    private lateinit var selectedCategoriesAdapter: SelectedCategoriesAdapter
+    private lateinit var tuttiFruttiSelectedCategoriesAdapter: TuttiFruttiSelectedCategoriesAdapter
 
 
     override fun initUI() {
@@ -26,15 +32,16 @@ class CreateTuttiFruttiFragment : BaseFragment<FragmentCreateTuttiFruttiBinding,
         allCategories.observe(viewLifecycleOwner) { categoriesAadapter.categories = it }
         selectedCategories.observe(viewLifecycleOwner) {
             categoriesAadapter.selectedCategories = it
-            selectedCategoriesAdapter.selectedCategories = it
+            tuttiFruttiSelectedCategoriesAdapter.selectedCategories = it
         }
         continueButtonEnabled.observe(viewLifecycleOwner) { binding.continueButton.isEnabled = it }
     }
 
 
-    open override fun onEvent(event: CategoriesEvents) = when(event){
+    open override fun onEvent(event: TuttiFruttiCategoriesEvents) = when (event) {
         //TODO call next step of creating game
-        ContinueCreatingGame -> {}
+        ContinueCreatingGame -> {
+        }
     }
 
     private fun setupCategoriesRecycler() = with(binding.categoriesRecycle) {
@@ -47,8 +54,8 @@ class CreateTuttiFruttiFragment : BaseFragment<FragmentCreateTuttiFruttiBinding,
 
     private fun setupCategoriesSelectedRecycler() = with(binding.categoriesSelectedRecycle) {
         layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        adapter = SelectedCategoriesAdapter(viewModel::deleteCategoryFromFooter).also {
-            this@CreateTuttiFruttiFragment.selectedCategoriesAdapter = it
+        adapter = TuttiFruttiSelectedCategoriesAdapter(viewModel::deleteCategoryFromFooter).also {
+            this@CreateTuttiFruttiFragment.tuttiFruttiSelectedCategoriesAdapter = it
         }
     }
 

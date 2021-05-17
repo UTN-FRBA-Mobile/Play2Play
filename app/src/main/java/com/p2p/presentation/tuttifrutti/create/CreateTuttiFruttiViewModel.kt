@@ -6,7 +6,8 @@ import com.p2p.R
 import com.p2p.data.tuttifrutti.TuttiFruttiRepository
 import com.p2p.presentation.base.BaseViewModel
 
-class CreateTuttiFruttiViewModel(val repository: TuttiFruttiRepository) : BaseViewModel<CategoriesEvents>() {
+class CreateTuttiFruttiViewModel(repository: TuttiFruttiRepository) :
+    BaseViewModel<TuttiFruttiCategoriesEvents>() {
 
     /** The list of categories available to select. */
     private val _allCategories = MutableLiveData<List<Category>>()
@@ -24,21 +25,23 @@ class CreateTuttiFruttiViewModel(val repository: TuttiFruttiRepository) : BaseVi
     val selectedCategories: LiveData<List<Category>> = _selectedCategories
 
     init {
-        _allCategories.value = Category.values().toList()
+
+        _allCategories.value = repository.allCategories()
+        _continueButtonEnabled.value = false
     }
 
 
     /** Changes the [Category] selection */
     fun changeCategorySelection(category: Category, isSelected: Boolean) {
-        if(isSelected){
+        if (isSelected) {
             _selectedCategories.value = selectedCategories.value?.plus(category)
-        }else{
+        } else {
             _selectedCategories.value = selectedCategories.value?.filter { it != category }
         }
         _continueButtonEnabled.value = categoriesCountIsValid()
     }
 
-    fun deleteCategoryFromFooter(category: Category){
+    fun deleteCategoryFromFooter(category: Category) {
         changeCategorySelection(category, isSelected = false)
     }
 
@@ -50,10 +53,14 @@ class CreateTuttiFruttiViewModel(val repository: TuttiFruttiRepository) : BaseVi
 
     private fun validateCategoriesCount(): Boolean {
         return if (!categoriesCountIsValid()) {
-            dispatchMessage(MessageData(textRes = R.string.tf_categories_count_error, type = MessageData.Type.ERROR))
+            dispatchMessage(
+                MessageData(
+                    textRes = R.string.games_tutti_frutti,
+                    type = MessageData.Type.ERROR
+                )
+            )
             false
         } else {
-            repository.setCategories(selectedCategories.value!!)
             true
         }
     }

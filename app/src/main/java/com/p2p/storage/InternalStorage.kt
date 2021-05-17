@@ -22,7 +22,7 @@ class InternalStorage {
             return null
         }
 
-        fun saveFile(context: Context, data: String, fileName: String) : File {
+        fun saveFile(context: Context, data: String, fileName: String): File {
             val file = File(context.filesDir.path + "/" + fileName)
             try {
                 file.createNewFile()
@@ -52,7 +52,7 @@ class InternalStorage {
             return null
         }
 
-        fun saveFileInCache(context: Context, bitmap: Bitmap, fileName: String) : File {
+        fun saveFileInCache(context: Context, bitmap: Bitmap, fileName: String): File {
             val file = File(context.cacheDir.path + "/" + fileName)
             try {
                 file.createNewFile()

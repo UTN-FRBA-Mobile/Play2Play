@@ -2,7 +2,6 @@ package com.p2p.presentation.tuttifrutti.create
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.p2p.R
@@ -11,7 +10,8 @@ import com.p2p.utils.isEven
 
 
 /** The adapter used to show the list of categories. */
-class CategoriesAdapter(private val onSelectedChanged: (Category, Boolean) -> Unit) : RecyclerView.Adapter<CategoriesAdapter.ViewHolder>() {
+class CategoriesAdapter(private val onSelectedChanged: (Category, Boolean) -> Unit) :
+    RecyclerView.Adapter<CategoriesAdapter.ViewHolder>() {
 
     private val backgroundPrimaryColour = R.color.colorBackgroundListFirst
 
@@ -22,7 +22,8 @@ class CategoriesAdapter(private val onSelectedChanged: (Category, Boolean) -> Un
         set(value) {
             field = value
             categoriesData = categories.mapIndexed { index, category ->
-                CategoryData(category, isSelected = false, getBackgroundColour(index)) }
+                CategoryData(category, isSelected = false, getBackgroundColour(index))
+            }
             notifyDataSetChanged()
         }
 
@@ -54,7 +55,13 @@ class CategoriesAdapter(private val onSelectedChanged: (Category, Boolean) -> Un
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(ViewCategoryItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return ViewHolder(
+            ViewCategoryItemBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -63,15 +70,22 @@ class CategoriesAdapter(private val onSelectedChanged: (Category, Boolean) -> Un
 
     override fun getItemCount() = categories.size
 
-    private fun getBackgroundColour(index: Int) = if(index.isEven()) backgroundPrimaryColour else backgroundSecondaryColour
+    private fun getBackgroundColour(index: Int) =
+        if (index.isEven()) backgroundPrimaryColour else backgroundSecondaryColour
 
-    inner class ViewHolder(private val binding: ViewCategoryItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(private val binding: ViewCategoryItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         /** Show the given [category] into the view. */
         fun bind(category: Category) = with(binding) {
             val categoryData = categoriesData.find { it.category == category }!!
-            item.text = category.name
-            item.setBackgroundColor(ContextCompat.getColor(itemView.context, categoryData.backgroundColour))
+            item.text = category
+            item.setBackgroundColor(
+                ContextCompat.getColor(
+                    itemView.context,
+                    categoryData.backgroundColour
+                )
+            )
             item.setOnClickListener {
                 selected = Pair(category, categoryData.isSelected)
             }
@@ -91,9 +105,9 @@ class CategoriesAdapter(private val onSelectedChanged: (Category, Boolean) -> Un
 
     companion object {
 
-    private const val SELECTED_OPACITY = 1f
-    private const val NO_SELECTED_OPACITY = 0.5f
-    private const val NONE_SELECTED_OPACITY = 0.8f
+        private const val SELECTED_OPACITY = 1f
+        private const val NO_SELECTED_OPACITY = 0.5f
+        private const val NONE_SELECTED_OPACITY = 0.8f
     }
 }
 

@@ -3,9 +3,7 @@ package com.p2p.presentation.tuttifrutti
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import com.p2p.R
 import com.p2p.presentation.base.BaseActivity
-import com.p2p.presentation.home.games.GamesFragment
 import com.p2p.presentation.tuttifrutti.create.CreateTuttiFruttiFragment
 
 class TuttiFruttiActivity : BaseActivity() {
