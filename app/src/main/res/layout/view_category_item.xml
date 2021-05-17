@@ -15,25 +15,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/container"
+        <RadioButton
+            android:id="@+id/item"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="match_parent"
+            android:paddingStart="@dimen/screen_padding"
+            android:paddingTop="@dimen/screen_padding"
+            android:paddingEnd="@dimen/screen_padding"
+            android:paddingBottom="@dimen/screen_padding"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/font_medium_extra"
+            tools:text="Category" />
 
-            <RadioButton
-                android:id="@+id/item"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingStart="@dimen/screen_padding"
-                android:paddingTop="@dimen/screen_padding"
-                android:paddingEnd="@dimen/screen_padding"
-                android:paddingBottom="@dimen/screen_padding"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/font_medium_extra"
-                tools:text="Category" />
-
-        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
