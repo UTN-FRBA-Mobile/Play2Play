@@ -17,19 +17,6 @@ class TuttiFruttiSelectedCategoriesAdapter(private val onDeleteCategory: (Catego
             notifyDataSetChanged()
         }
 
-
-    /** The current category to delete */
-    var selected: Category? = null
-        private set(value) {
-            if (field == value) return
-            field = value
-            val filteredCategories = selectedCategories.filter { it != value!! }
-            selectedCategories = filteredCategories
-            onDeleteCategory.invoke(value!!)
-            notifyDataSetChanged()
-        }
-
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             ViewSelectedCategoryItemBinding.inflate(
@@ -53,7 +40,7 @@ class TuttiFruttiSelectedCategoriesAdapter(private val onDeleteCategory: (Catego
         fun bind(category: Category) = with(binding) {
             selectedCategoryName.text = category
             deleteIcon.setOnClickListener {
-                selected = category
+                onDeleteCategory.invoke(category)
             }
         }
     }
