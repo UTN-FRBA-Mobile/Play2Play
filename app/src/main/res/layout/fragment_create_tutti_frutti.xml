@@ -44,7 +44,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorSecondary"
-        android:layout_weight="0.7"
         android:paddingStart="@dimen/screen_padding"
         android:paddingTop="@dimen/screen_padding"
         android:paddingEnd="@dimen/screen_padding"
@@ -83,6 +82,7 @@
             android:layout_height="wrap_content"
             android:clipToPadding="false"
             tools:orientation="horizontal"
+            android:requiresFadingEdge="horizontal"
             tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/view_selected_category_item" />
 
