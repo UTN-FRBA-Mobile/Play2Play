@@ -24,6 +24,6 @@
     <string name="tf_categories_movies">Películas</string>
     <string name="tf_categories_colours">Colores</string>
     <string name="tf_categories_selected_categories">Categorías seleccionadas</string>
-    <string name="tf_categories_count_error">Debes seleccionar al menos 5!</string>
+    <string name="tf_categories_count_error">¡Debes seleccionar al menos 5!</string>
 
 </resources>
