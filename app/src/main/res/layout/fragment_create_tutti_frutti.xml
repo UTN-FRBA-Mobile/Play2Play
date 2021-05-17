@@ -75,7 +75,7 @@
             />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/categories_selected_recycle"
+            android:id="@+id/categories_selected_recycler"
             android:layout_below="@id/selected_categories_span"
             android:layout_marginTop="@dimen/large"
             android:layout_marginBottom="@dimen/large"
