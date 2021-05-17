@@ -54,7 +54,7 @@ class TuttiFruttiCategoriesAdapter(private val onSelectedChanged: (Category, Boo
 
     override fun getItemCount() = categories.size
 
-    private fun getBackgroundColour(index: Int) =
+    private fun getBackgroundColor(index: Int) =
         if (index.isEven()) R.color.colorBackgroundListFirst else R.color.colorBackgroundListSecond
 
     inner class ViewHolder(private val binding: ViewCategoryItemBinding) :
@@ -67,7 +67,7 @@ class TuttiFruttiCategoriesAdapter(private val onSelectedChanged: (Category, Boo
             item.setBackgroundColor(
                 ContextCompat.getColor(
                     itemView.context,
-                    getBackgroundColour(position)
+                    getBackgroundColor(position)
                 )
             )
             item.setOnClickListener {
