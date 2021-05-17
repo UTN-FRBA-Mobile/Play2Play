@@ -17,20 +17,13 @@ class TuttiFruttiCategoriesAdapter(private val onSelectedChanged: (Category, Boo
     var categories = listOf<Category>()
         set(value) {
             field = value
-            categoriesData = categories.mapIndexed { index, category ->
-                CategoryData(category, isSelected = false, getBackgroundColour(index))
-            }
             notifyDataSetChanged()
         }
 
-    var categoriesData: List<CategoryData> = listOf()
 
-    var selectedCategories = listOf<Category>()
+    var selectedCategories: List<Category>? = null
         set(value) {
             field = value
-            categoriesData.forEach {
-                it.isSelected = selectedCategories.contains(it.category)
-            }
             notifyDataSetChanged()
         }
 
@@ -40,12 +33,7 @@ class TuttiFruttiCategoriesAdapter(private val onSelectedChanged: (Category, Boo
         private set(value) {
             if (field == value) return
             field = value
-            val categoryData = categoriesData.find { it.category == value!!.first }!!
-            categoryData.run {
-                val lastValue = isSelected
-                isSelected = !lastValue
-            }
-            onSelectedChanged.invoke(value!!.first, categoryData.isSelected)
+            onSelectedChanged.invoke(value!!.first, value!!.second)
             notifyDataSetChanged()
         }
 
@@ -61,7 +49,7 @@ class TuttiFruttiCategoriesAdapter(private val onSelectedChanged: (Category, Boo
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        return holder.bind(categories[position])
+        return holder.bind(categories[position], position)
     }
 
     override fun getItemCount() = categories.size
@@ -73,19 +61,19 @@ class TuttiFruttiCategoriesAdapter(private val onSelectedChanged: (Category, Boo
         RecyclerView.ViewHolder(binding.root) {
 
         /** Show the given [category] into the view. */
-        fun bind(category: Category) = with(binding) {
-            val categoryData = categoriesData.find { it.category == category }!!
+        fun bind(category: Category, position: Int) = with(binding) {
+            val isSelected = selectedCategories?.contains(category) ?: false
             item.text = category
             item.setBackgroundColor(
                 ContextCompat.getColor(
                     itemView.context,
-                    categoryData.backgroundColour
+                    getBackgroundColour(position)
                 )
             )
             item.setOnClickListener {
-                selected = Pair(category, categoryData.isSelected)
+                selected = Pair(category, !isSelected)
             }
-            item.isChecked = categoryData.isSelected
+            item.isChecked = isSelected
             categoryItem
                 .animate()
                 .alpha(
@@ -108,4 +96,3 @@ class TuttiFruttiCategoriesAdapter(private val onSelectedChanged: (Category, Boo
 }
 
 
-data class CategoryData(val category: Category, var isSelected: Boolean, val backgroundColour: Int)
