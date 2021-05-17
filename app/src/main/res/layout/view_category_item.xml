@@ -33,7 +33,7 @@
                 android:paddingEnd="@dimen/screen_padding"
                 android:paddingBottom="@dimen/screen_padding"
                 android:textSize="@dimen/font_medium_extra"
-                android:text="Category"/>
+                tools:text="Category"/>
 
         </LinearLayout>
 
