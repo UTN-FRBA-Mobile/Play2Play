@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/item"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
-    android:layout_marginEnd="@dimen/medium"
-    android:minHeight="?attr/minTouchTargetSize">
+    android:layout_marginHorizontal="@dimen/small"
+    android:background="@android:color/transparent">
 
     <com.google.android.material.chip.Chip
         android:id="@+id/category_to_maybe_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:chipIcon="@drawable/ic_baseline_delete_24"
-        tools:text="Selected category"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Selected category" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
