@@ -35,7 +35,9 @@ class GamesViewModel(private val userSession: UserSession) : BaseViewModel<Games
     /** Open the view that corresponds to create the [selectedGame]. */
     fun createGame(userName: String?) {
         if (!validateAndSaveName(userName)) return
-        dispatchSingleTimeEvent(GoToCreateTuttiFrutti)
+        when(selectedGame) {
+            TUTTI_FRUTTI -> dispatchSingleTimeEvent(GoToCreateTuttiFrutti)
+        }
     }
 
     /** Open the view to join to a game. */
