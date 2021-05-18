@@ -36,7 +36,7 @@ class GamesViewModel(private val userSession: UserSession) : BaseViewModel<Games
     fun createGame(userName: String?) {
         if (!validateAndSaveName(userName)) return
         when(selectedGame) {
-            TUTTI_FRUTTI -> dispatchSingleTimeEvent(GoToCreateTuttiFrutti)
+            Game.TUTTI_FRUTTI -> dispatchSingleTimeEvent(GoToCreateTuttiFrutti)
         }
     }
 

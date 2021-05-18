@@ -18,6 +18,7 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesEvents, GamesViewM
 
     override fun initUI() {
         setupGamesRecycler()
+        binding.createButton.isEnabled = false
         binding.createButton.setOnClickListener { viewModel.createGame(getUserName()) }
         binding.joinButton.setOnClickListener { viewModel.joinGame(getUserName()) }
     }
