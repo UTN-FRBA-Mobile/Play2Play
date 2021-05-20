@@ -19,5 +19,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".presentation.tuttifrutti.TuttiFruttiActivity"
+            android:theme="@style/Theme.P2P"/>
     </application>
 </manifest>

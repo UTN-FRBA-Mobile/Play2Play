@@ -1,4 +1,4 @@
-package com.p2p.data
+package com.p2p.data.userInfo
 
 /** An user session will save the user preferences on the time. */
 class UserSession(private val storage: UserInfoStorage) {

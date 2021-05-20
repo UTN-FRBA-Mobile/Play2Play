@@ -3,10 +3,10 @@ package com.p2p.presentation.home.games
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.p2p.R
-import com.p2p.data.UserSession
+import com.p2p.data.userInfo.UserSession
 import com.p2p.presentation.base.BaseViewModel
 
-class GamesViewModel(private val userSession: UserSession) : BaseViewModel<Unit>() {
+class GamesViewModel(private val userSession: UserSession) : BaseViewModel<GamesEvents>() {
 
     /** The list of games available to play. */
     private val _games = MutableLiveData<List<Game>>()
@@ -35,7 +35,9 @@ class GamesViewModel(private val userSession: UserSession) : BaseViewModel<Unit>
     /** Open the view that corresponds to create the [selectedGame]. */
     fun createGame(userName: String?) {
         if (!validateAndSaveName(userName)) return
-        // TODO: perform actions for createGame (create an event GoToCreateGame and dispatch it)
+        when(selectedGame) {
+            Game.TUTTI_FRUTTI -> dispatchSingleTimeEvent(GoToCreateTuttiFrutti)
+        }
     }
 
     /** Open the view to join to a game. */
