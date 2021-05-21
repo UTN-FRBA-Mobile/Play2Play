@@ -1,12 +1,13 @@
 <resources>
 
     <string name="app_name">P2P</string>
+    <string name="full_app_name">Play 2 Play</string>
     <string name="shared_preferences">P2P_GAME_SHARED_PREFERENCES</string>
 
     <!-- Games -->
     <string name="games_user_name">Tu nombre</string>
-    <string name="games_join">Unirse a un juego</string>
-    <string name="games_create">Crear juego</string>
+    <string name="games_join">Unirse</string>
+    <string name="games_create">Crear partida</string>
 
     <!-- Games names -->
     <string name="games_tutti_frutti">Tutti Frutti</string>

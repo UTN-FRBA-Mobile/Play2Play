@@ -9,11 +9,22 @@
 
     <include layout="@layout/view_guidelines" />
 
+    <View
+        android:id="@+id/top_background"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/colorPrimaryVariant"
+        app:layout_constraintBottom_toBottomOf="@+id/text_field"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/text_field"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/games_user_name"
+        android:paddingBottom="@dimen/medium_extra"
         app:endIconDrawable="@drawable/ic_pencil"
         app:endIconMode="custom"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
@@ -24,7 +35,6 @@
             android:id="@+id/user_name_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorBackground"
             android:maxLines="1"
             android:paddingStart="@dimen/small"
             android:paddingEnd="@dimen/small" />
@@ -34,7 +44,7 @@
         android:id="@+id/games_recycler"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="@dimen/large"
+        android:layout_marginTop="@dimen/big"
         android:layout_marginBottom="@dimen/large"
         android:orientation="vertical"
         android:requiresFadingEdge="vertical"
@@ -43,6 +53,16 @@
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
         app:layout_constraintTop_toBottomOf="@id/text_field"
         tools:listitem="@layout/view_games_item" />
+
+    <View
+        android:id="@+id/bottom_background"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/wild_sand"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/games_recycler" />
 
     <Button
         android:id="@+id/create_button"
@@ -60,6 +80,7 @@
         android:text="@string/games_join"
         app:layout_constraintBottom_toBottomOf="@id/guideline_bottom"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
-        app:layout_constraintStart_toStartOf="@id/guideline_begin" />
+        app:layout_constraintStart_toStartOf="@id/guideline_begin"
+        style="@style/Widget.P2P.Button.SecondOptionButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
