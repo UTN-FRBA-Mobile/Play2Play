@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/categoryItem"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RadioButton
+        android:id="@+id/item"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_marginStart="@dimen/screen_padding"
+        android:layout_marginEnd="@dimen/screen_padding"
+        android:paddingBottom="@dimen/screen_padding"
+        android:paddingEnd="@dimen/screen_padding"
+        android:paddingStart="@dimen/screen_padding"
+        android:paddingTop="@dimen/screen_padding"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/font_medium_extra"
+        tools:text="Category" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array
+        name="tf_categories">
+        <item>Países</item>
+        <item>Nombres</item>
+        <item>Animales</item>
+        <item>Comidas</item>
+        <item>Películas</item>
+        <item>Colores</item>
+    </string-array>
+</resources>

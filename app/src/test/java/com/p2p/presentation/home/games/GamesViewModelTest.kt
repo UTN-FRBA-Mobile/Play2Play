@@ -2,7 +2,7 @@ package com.p2p.presentation.home.games
 
 import com.p2p.BaseTest
 import com.p2p.R
-import com.p2p.data.UserSession
+import com.p2p.data.userInfo.UserSession
 import com.p2p.presentation.base.BaseViewModel
 import io.mockk.impl.annotations.MockK
 import io.mockk.mockk

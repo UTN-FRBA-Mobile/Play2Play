@@ -4,6 +4,9 @@
     <string name="full_app_name">Play 2 Play</string>
     <string name="shared_preferences">P2P_GAME_SHARED_PREFERENCES</string>
 
+    <!-- Common -->
+    <string name="continue_button">Continuar</string>
+
     <!-- Games -->
     <string name="games_user_name">Tu nombre</string>
     <string name="games_join">Unirse</string>
@@ -12,4 +15,10 @@
     <!-- Games names -->
     <string name="games_tutti_frutti">Tutti Frutti</string>
     <string name="games_name_error">¡Para jugar primero tenés que decirnos tu nombre!</string>
+
+
+    <!-- Tutti Frutti - Categories -->
+    <string name="tf_categories_selected_categories">Categorías seleccionadas</string>
+    <string name="tf_categories_count_error">¡Debes seleccionar al menos 5!</string>
+
 </resources>

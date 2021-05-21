@@ -5,7 +5,7 @@ import android.content.Context.MODE_PRIVATE
 import androidx.annotation.VisibleForTesting
 import androidx.core.content.edit
 import com.p2p.R
-import com.p2p.data.UserInfoStorage
+import com.p2p.data.userInfo.UserInfoStorage
 
 /** A [UserInfoStorage] implementation for shared preferences. */
 class SharedPreferencesUserInfoStorage(private val context: Context) : UserInfoStorage {
