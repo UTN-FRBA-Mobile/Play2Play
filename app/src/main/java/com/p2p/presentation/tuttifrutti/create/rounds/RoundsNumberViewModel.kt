@@ -17,8 +17,7 @@ class RoundsNumberViewModel : BaseViewModel<GamesEvents>() {
     }
 
     fun decrease(number: Int) {
-        if (number > 1)
-            _roundsNumber.value = number - 1
+        _roundsNumber.value = (number - 1).coerceAtLeast(1)
     }
 
     /** Next view to show when Continue button is pressed. */
