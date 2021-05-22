@@ -15,7 +15,6 @@
         <!-- Error brand color. -->
         <item name="colorError">@color/colorError</item>
         <item name="colorOnError">@color/colorOnError</item>
-        <item name="errorTextColor">@color/colorError</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Text edit label colors -->
@@ -30,6 +29,5 @@
         <item name="textInputStyle">@style/Widget.P2P.TextInputLayout</item>
         <item name="editTextStyle">@style/Widget.P2P.EditText</item>
         <item name="materialButtonStyle">@style/Widget.P2P.Button</item>
-
     </style>
 </resources>
