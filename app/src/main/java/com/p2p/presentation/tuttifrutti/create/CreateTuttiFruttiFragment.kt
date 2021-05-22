@@ -4,28 +4,31 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.p2p.R
+import com.p2p.data.BaseGameData
 import com.p2p.databinding.FragmentCreateTuttiFruttiBinding
-import com.p2p.presentation.base.BaseFragment
+import com.p2p.presentation.base.BaseGameFragment
 
 class CreateTuttiFruttiFragment :
-    BaseFragment<FragmentCreateTuttiFruttiBinding, TuttiFruttiCategoriesEvents, CreateTuttiFruttiViewModel>() {
+    BaseGameFragment<FragmentCreateTuttiFruttiBinding, TuttiFruttiCategoriesEvents, CreateTuttiFruttiViewModel>() {
 
     override val viewModel: CreateTuttiFruttiViewModel by viewModels {
         CreateTuttiFruttiViewModelFactory(
             requireContext()
         )
     }
-    override val inflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentCreateTuttiFruttiBinding =
+    override val gameInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentCreateTuttiFruttiBinding =
         FragmentCreateTuttiFruttiBinding::inflate
 
+    override val baseGameData: BaseGameData = BaseGameData(R.string.app_name, R.raw.tutti_frutti_instructions)
     private lateinit var tuttiFruttiCategoriesAadapter: TuttiFruttiCategoriesAdapter
     private lateinit var tuttiFruttiSelectedCategoriesAdapter: TuttiFruttiSelectedCategoriesAdapter
 
 
-    override fun initUI() {
+    override fun initGameUI() {
         setupCategoriesRecycler()
         setupCategoriesSelectedRecycler()
-        binding.continueButton.setOnClickListener { viewModel.continueToNextScreen() }
+        gameBinding.continueButton.setOnClickListener { viewModel.continueToNextScreen() }
     }
 
     override fun setupObservers() = with(viewModel) {
@@ -34,7 +37,7 @@ class CreateTuttiFruttiFragment :
             tuttiFruttiCategoriesAadapter.selectedCategories = it
             tuttiFruttiSelectedCategoriesAdapter.selectedCategories = it
         }
-        continueButtonEnabled.observe(viewLifecycleOwner) { binding.continueButton.isEnabled = it }
+        continueButtonEnabled.observe(viewLifecycleOwner) { gameBinding.continueButton.isEnabled = it }
     }
 
 
@@ -44,7 +47,7 @@ class CreateTuttiFruttiFragment :
         }
     }
 
-    private fun setupCategoriesRecycler() = with(binding.categoriesRecycler) {
+    private fun setupCategoriesRecycler() = with(gameBinding.categoriesRecycler) {
         layoutManager = LinearLayoutManager(context)
         adapter = TuttiFruttiCategoriesAdapter(viewModel::changeCategorySelection).also {
             this@CreateTuttiFruttiFragment.tuttiFruttiCategoriesAadapter = it
@@ -52,7 +55,7 @@ class CreateTuttiFruttiFragment :
     }
 
 
-    private fun setupCategoriesSelectedRecycler() = with(binding.categoriesSelectedRecycler) {
+    private fun setupCategoriesSelectedRecycler() = with(gameBinding.categoriesSelectedRecycler) {
         layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         adapter = TuttiFruttiSelectedCategoriesAdapter(viewModel::changeCategorySelection).also {
             this@CreateTuttiFruttiFragment.tuttiFruttiSelectedCategoriesAdapter = it

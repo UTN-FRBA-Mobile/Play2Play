@@ -25,7 +25,6 @@ class CreateTuttiFruttiViewModel(repository: TuttiFruttiRepository) :
     val selectedCategories: LiveData<List<Category>> = _selectedCategories
 
     init {
-
         _allCategories.value = repository.allCategories()
         _continueButtonEnabled.value = false
     }
