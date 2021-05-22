@@ -13,8 +13,7 @@ class RoundsNumberViewModel : BaseViewModel<GamesEvents>() {
     val roundsNumber: LiveData<Int> = _roundsNumber
 
     fun increase(number: Int) {
-        if (number < MAXIMUM_ROUND_NUMBER)
-            _roundsNumber.value = number + 1
+        _roundsNumber.value = (number + 1).coerceAtMost(MAXIMUM_ROUND_NUMBER)
     }
 
     fun decrease(number: Int) {
