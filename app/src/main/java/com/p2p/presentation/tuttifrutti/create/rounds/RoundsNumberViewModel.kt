@@ -15,13 +15,11 @@ class RoundsNumberViewModel : BaseViewModel<RoundsNumberEvents>() {
     }
 
     fun increase() {
-        if (number() < MAXIMUM_ROUND_NUMBER)
-            _roundsNumber.value = (number() + 1).coerceAtMost(MAXIMUM_ROUND_NUMBER)
+        _roundsNumber.value = (number() + 1).coerceAtMost(MAXIMUM_ROUND_NUMBER)
     }
 
     fun decrease() {
-        if (number() > 1)
-            _roundsNumber.value = (number() - 1).coerceAtLeast(1)
+        _roundsNumber.value = (number() - 1).coerceAtLeast(1)
     }
 
     /** Next view to show when Create button is pressed. */
