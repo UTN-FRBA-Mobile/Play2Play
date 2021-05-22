@@ -1,4 +1,4 @@
-package com.p2p.presentation.tuttifrutti.create
+package com.p2p.presentation.tuttifrutti.create.categories
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,21 +6,23 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.p2p.databinding.FragmentCreateTuttiFruttiBinding
 import com.p2p.presentation.base.BaseFragment
+import com.p2p.presentation.home.games.GoToSelectRounds
+import com.p2p.presentation.home.games.GamesEvents
+import com.p2p.presentation.tuttifrutti.create.rounds.RoundsNumberFragment
 
 class CreateTuttiFruttiFragment :
-    BaseFragment<FragmentCreateTuttiFruttiBinding, TuttiFruttiCategoriesEvents, CreateTuttiFruttiViewModel>() {
+        BaseFragment<FragmentCreateTuttiFruttiBinding, GamesEvents, CreateTuttiFruttiViewModel>() {
 
     override val viewModel: CreateTuttiFruttiViewModel by viewModels {
         CreateTuttiFruttiViewModelFactory(
-            requireContext()
+                requireContext()
         )
     }
     override val inflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentCreateTuttiFruttiBinding =
-        FragmentCreateTuttiFruttiBinding::inflate
+            FragmentCreateTuttiFruttiBinding::inflate
 
     private lateinit var tuttiFruttiCategoriesAadapter: TuttiFruttiCategoriesAdapter
     private lateinit var tuttiFruttiSelectedCategoriesAdapter: TuttiFruttiSelectedCategoriesAdapter
-
 
     override fun initUI() {
         setupCategoriesRecycler()
@@ -38,10 +40,9 @@ class CreateTuttiFruttiFragment :
     }
 
 
-    open override fun onEvent(event: TuttiFruttiCategoriesEvents) = when (event) {
-        //TODO call next step of creating game
-        ContinueCreatingGame -> {
-        }
+    override fun onEvent(event: GamesEvents) = when (event) {
+        GoToSelectRounds -> RoundsNumberFragment().show(childFragmentManager, "RoundsNumberDialog")
+        else -> Unit
     }
 
     private fun setupCategoriesRecycler() = with(binding.categoriesRecycler) {
@@ -50,7 +51,6 @@ class CreateTuttiFruttiFragment :
             this@CreateTuttiFruttiFragment.tuttiFruttiCategoriesAadapter = it
         }
     }
-
 
     private fun setupCategoriesSelectedRecycler() = with(binding.categoriesSelectedRecycler) {
         layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)

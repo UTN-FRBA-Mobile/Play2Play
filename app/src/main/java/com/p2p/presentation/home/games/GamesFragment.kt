@@ -12,7 +12,8 @@ import com.p2p.presentation.tuttifrutti.TuttiFruttiActivity
 class GamesFragment : BaseFragment<FragmentGamesBinding, GamesEvents, GamesViewModel>() {
 
     override val viewModel: GamesViewModel by viewModels { GamesViewModelFactory(requireContext()) }
-    override val inflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentGamesBinding = FragmentGamesBinding::inflate
+    override val inflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentGamesBinding =
+        FragmentGamesBinding::inflate
 
     private lateinit var adapter: GamesAdapter
 
@@ -30,8 +31,9 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesEvents, GamesViewM
     }
 
 
-    override fun onEvent(event: GamesEvents) = when(event){
+    override fun onEvent(event: GamesEvents) = when (event) {
         GoToCreateTuttiFrutti -> TuttiFruttiActivity.start(requireContext())
+        else -> Unit
     }
 
     private fun setupGamesRecycler() = with(binding.gamesRecycler) {

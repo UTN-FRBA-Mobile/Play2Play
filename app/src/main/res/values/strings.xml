@@ -21,4 +21,8 @@
     <string name="tf_categories_selected_categories">Categorías seleccionadas</string>
     <string name="tf_categories_count_error">¡Debes seleccionar al menos 5!</string>
 
+    <!-- Tutti Frutti - Rounds -->
+    <string name="tutti_frutti_rounds">¿Cuántas rondas van a jugar?</string>
+    <string name="tutti_frutti_rounds_number">1</string>
+
 </resources>

@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.p2p.presentation.base.BaseActivity
-import com.p2p.presentation.tuttifrutti.create.CreateTuttiFruttiFragment
+import com.p2p.presentation.tuttifrutti.create.categories.CreateTuttiFruttiFragment
 
 class TuttiFruttiActivity : BaseActivity() {
 

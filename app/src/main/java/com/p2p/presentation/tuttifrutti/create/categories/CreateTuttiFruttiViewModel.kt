@@ -1,13 +1,15 @@
-package com.p2p.presentation.tuttifrutti.create
+package com.p2p.presentation.tuttifrutti.create.categories
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.p2p.R
 import com.p2p.data.tuttifrutti.TuttiFruttiRepository
 import com.p2p.presentation.base.BaseViewModel
+import com.p2p.presentation.home.games.GoToSelectRounds
+import com.p2p.presentation.home.games.GamesEvents
 
 class CreateTuttiFruttiViewModel(repository: TuttiFruttiRepository) :
-    BaseViewModel<TuttiFruttiCategoriesEvents>() {
+    BaseViewModel<GamesEvents>() {
 
     /** The list of categories available to select. */
     private val _allCategories = MutableLiveData<List<Category>>()
@@ -45,7 +47,7 @@ class CreateTuttiFruttiViewModel(repository: TuttiFruttiRepository) :
     /** Next view to show when Continue button is pressed. */
     fun continueToNextScreen() {
         if (!validateCategoriesCount()) return
-        dispatchSingleTimeEvent(ContinueCreatingGame)
+        dispatchSingleTimeEvent(GoToSelectRounds)
     }
 
     private fun validateCategoriesCount(): Boolean {
