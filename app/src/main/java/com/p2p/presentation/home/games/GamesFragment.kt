@@ -33,7 +33,6 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesEvents, GamesViewM
 
     override fun onEvent(event: GamesEvents) = when (event) {
         GoToCreateTuttiFrutti -> TuttiFruttiActivity.start(requireContext())
-        else -> Unit
     }
 
     private fun setupGamesRecycler() = with(binding.gamesRecycler) {

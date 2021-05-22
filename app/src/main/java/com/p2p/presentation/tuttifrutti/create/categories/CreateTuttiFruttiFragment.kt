@@ -6,12 +6,10 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.p2p.databinding.FragmentCreateTuttiFruttiBinding
 import com.p2p.presentation.base.BaseFragment
-import com.p2p.presentation.home.games.GoToSelectRounds
-import com.p2p.presentation.home.games.GamesEvents
 import com.p2p.presentation.tuttifrutti.create.rounds.RoundsNumberFragment
 
 class CreateTuttiFruttiFragment :
-        BaseFragment<FragmentCreateTuttiFruttiBinding, GamesEvents, CreateTuttiFruttiViewModel>() {
+        BaseFragment<FragmentCreateTuttiFruttiBinding, TuttiFruttiCategoriesEvents, CreateTuttiFruttiViewModel>() {
 
     override val viewModel: CreateTuttiFruttiViewModel by viewModels {
         CreateTuttiFruttiViewModelFactory(
@@ -40,9 +38,8 @@ class CreateTuttiFruttiFragment :
     }
 
 
-    override fun onEvent(event: GamesEvents) = when (event) {
+    override fun onEvent(event: TuttiFruttiCategoriesEvents) = when (event) {
         GoToSelectRounds -> RoundsNumberFragment().show(childFragmentManager, "RoundsNumberDialog")
-        else -> Unit
     }
 
     private fun setupCategoriesRecycler() = with(binding.categoriesRecycler) {

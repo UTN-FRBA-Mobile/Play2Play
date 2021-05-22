@@ -55,7 +55,6 @@ dependencies {
     implementation libraries.gson
 
     implementation libraries.leakCanary
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
 
     testImplementation testingLibraries.androidx.core
     testImplementation testingLibraries.androidx.arch

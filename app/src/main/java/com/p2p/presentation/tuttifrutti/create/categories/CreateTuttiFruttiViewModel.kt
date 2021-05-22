@@ -5,11 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import com.p2p.R
 import com.p2p.data.tuttifrutti.TuttiFruttiRepository
 import com.p2p.presentation.base.BaseViewModel
-import com.p2p.presentation.home.games.GoToSelectRounds
-import com.p2p.presentation.home.games.GamesEvents
 
 class CreateTuttiFruttiViewModel(repository: TuttiFruttiRepository) :
-    BaseViewModel<GamesEvents>() {
+    BaseViewModel<TuttiFruttiCategoriesEvents>() {
 
     /** The list of categories available to select. */
     private val _allCategories = MutableLiveData<List<Category>>()
