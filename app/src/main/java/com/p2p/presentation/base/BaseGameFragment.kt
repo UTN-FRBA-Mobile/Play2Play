@@ -2,7 +2,9 @@ package com.p2p.presentation.base
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.CallSuper
 import androidx.viewbinding.ViewBinding
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.p2p.R
 import com.p2p.databinding.BaseGameBinding
@@ -39,12 +41,15 @@ abstract class BaseGameFragment<GVB : ViewBinding, E : Any, VM : BaseViewModel<E
 
     abstract val gameInflater: (LayoutInflater, ViewGroup?, Boolean) -> GVB
 
-    /** Invoked when the view is initialized and should initialize the game view that requires it. */
-    protected open fun initGameUI() {}
-
+    @CallSuper
     override fun initUI() {
         binding.header.title = context?.getText(gameData.nameRes)
-        binding.header.setOnMenuItemClickListener { menuItem ->
+        setHeaderEvents(binding.header)
+    }
+
+
+    private fun setHeaderEvents(header: MaterialToolbar) =
+        header.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.instructions -> {
                     showInstructions()
@@ -53,8 +58,6 @@ abstract class BaseGameFragment<GVB : ViewBinding, E : Any, VM : BaseViewModel<E
                 else -> false
             }
         }
-        initGameUI()
-    }
 
     private fun showInstructions() =
         MaterialAlertDialogBuilder(requireContext())

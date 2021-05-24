@@ -26,7 +26,8 @@ class CreateTuttiFruttiFragment(instructions: String) :
     private lateinit var tuttiFruttiSelectedCategoriesAdapter: TuttiFruttiSelectedCategoriesAdapter
 
 
-    override fun initGameUI() {
+    override fun initUI() {
+        super.initUI()
         setupCategoriesRecycler()
         setupCategoriesSelectedRecycler()
         gameBinding.continueButton.setOnClickListener { viewModel.continueToNextScreen() }

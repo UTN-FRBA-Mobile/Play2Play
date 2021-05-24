@@ -9,7 +9,7 @@ import com.p2p.presentation.home.games.Game
 class InstructionsLocalResourcesSource(private val context: Context) : InstructionsSource {
 
     private val instructionsByGame = mapOf(
-        Pair(Game.TUTTI_FRUTTI, getForGame(Game.TUTTI_FRUTTI.instructionsRes))
+        Game.TUTTI_FRUTTI to getForGame(Game.TUTTI_FRUTTI.instructionsRes)
     )
 
     private fun getForGame(resourceId: Int): String =
