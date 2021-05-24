@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.p2p.databinding.FragmentGamesBinding
+import com.p2p.framework.InstructionsLocalResourcesSource
 import com.p2p.presentation.base.BaseFragment
 import com.p2p.presentation.extensions.clearAndAppend
 import com.p2p.presentation.tuttifrutti.TuttiFruttiActivity
@@ -15,6 +16,14 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesEvents, GamesViewM
     override val inflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentGamesBinding = FragmentGamesBinding::inflate
 
     private lateinit var adapter: GamesAdapter
+
+    private lateinit var instructionsByGame: Map<Game, String>
+
+    override fun initValues() {
+        instructionsByGame =
+            InstructionsLocalResourcesSource(requireContext())
+                .instructionsByGame()
+    }
 
     override fun initUI() {
         setupGamesRecycler()
@@ -31,7 +40,7 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesEvents, GamesViewM
 
 
     override fun onEvent(event: GamesEvents) = when(event){
-        GoToCreateTuttiFrutti -> TuttiFruttiActivity.start(requireContext())
+        GoToCreateTuttiFrutti -> TuttiFruttiActivity.start(requireContext(), instructionsByGame[Game.TUTTI_FRUTTI]!!)
     }
 
     private fun setupGamesRecycler() = with(binding.gamesRecycler) {

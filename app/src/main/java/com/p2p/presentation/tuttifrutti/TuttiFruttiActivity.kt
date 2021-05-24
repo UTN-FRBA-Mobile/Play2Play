@@ -11,12 +11,14 @@ class TuttiFruttiActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null) {
-            addFragment(CreateTuttiFruttiFragment.newInstance(), shouldAddToBackStack = true)
+            addFragment(CreateTuttiFruttiFragment.newInstance(instructions), shouldAddToBackStack = true)
         }
     }
 
     companion object {
-        fun start(context: Context) {
+        lateinit var instructions: String
+        fun start(context: Context, instructions: String) {
+            this.instructions = instructions
             context.startActivity(Intent(context, TuttiFruttiActivity::class.java))
         }
     }

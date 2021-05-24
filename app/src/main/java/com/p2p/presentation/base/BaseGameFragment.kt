@@ -3,8 +3,10 @@ package com.p2p.presentation.base
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding
-import com.p2p.data.BaseGameData
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.p2p.R
 import com.p2p.databinding.BaseGameBinding
+import com.p2p.presentation.home.games.Game
 
 /**
  * Base implementation of a [BaseGameFragment] used to simplify boilerplate.
@@ -13,11 +15,11 @@ import com.p2p.databinding.BaseGameBinding
  * [E]: Event
  * [VM]: BaseViewModel with the same event defined
  */
-abstract class BaseGameFragment<GVB : ViewBinding, E : Any, VM : BaseViewModel<E>>
-    : BaseFragment<BaseGameBinding, E, VM>() {
+abstract class BaseGameFragment<GVB : ViewBinding, E : Any, VM : BaseViewModel<E>>(val instructions: String) :
+    BaseFragment<BaseGameBinding, E, VM>() {
 
     /** Common properties of games to be shown in the layout */
-    abstract val baseGameData: BaseGameData
+    abstract val gameData: Game
 
     override val inflater: (LayoutInflater, ViewGroup?, Boolean) -> BaseGameBinding =
         { inflater, container, boolean ->
@@ -41,10 +43,26 @@ abstract class BaseGameFragment<GVB : ViewBinding, E : Any, VM : BaseViewModel<E
     protected open fun initGameUI() {}
 
     override fun initUI() {
-        binding.topAppBar.title = context?.getText(baseGameData.name)
-        //TODO put dialog
-        //binding.topAppBar.title = context?.getText(baseData.name)
+        binding.header.title = context?.getText(gameData.nameRes)
+        binding.header.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.instructions -> {
+                    showInstructions()
+                    true
+                }
+                else -> false
+            }
+        }
         initGameUI()
     }
+
+    private fun showInstructions() =
+        MaterialAlertDialogBuilder(requireContext())
+            .setMessage(instructions)
+            //It is positive to be shown on the right
+            .setPositiveButton(resources.getString(R.string.close_button)) { _, _ ->
+                // Respond to positive button press
+            }
+            .show()
 
 }
