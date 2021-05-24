@@ -14,40 +14,54 @@ import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.p2p.R
-import com.p2p.bluetooth.ClientBluetooth
-import com.p2p.bluetooth.MESSAGE_READ
-import com.p2p.bluetooth.MESSAGE_TOAST
-import com.p2p.bluetooth.MESSAGE_WRITE
+import com.p2p.bluetooth.Bluetooth
 import com.p2p.bluetooth.BluetoothConnectionThread
+import com.p2p.bluetooth.BluetoothConnectionThread.Companion.MESSAGE_READ
+import com.p2p.bluetooth.BluetoothConnectionThread.Companion.MESSAGE_TOAST
+import com.p2p.bluetooth.BluetoothConnectionThread.Companion.MESSAGE_WRITE
+import com.p2p.bluetooth.ClientBluetooth
 import com.p2p.bluetooth.ServerBluetooth
+import com.p2p.framework.Logger
 import com.p2p.presentation.base.BaseActivity
 
 
 class HomeActivity : BaseActivity() {
 
-    var connectedThread: BluetoothConnectionThread.ConnectedThread? = null
+    private lateinit var messages: TextView
+    private var connectedThread: Bluetooth? = null
     val handler by lazy {
-        Handler(Looper.getMainLooper(), Handler.Callback {
+        Handler(Looper.getMainLooper()) {
             when (it.what) {
                 MESSAGE_READ -> {
-                    Log.d("DylanLog", "Message read: ${String(it.obj as ByteArray)}")
+                    val message = String(it.obj as ByteArray, 0, it.arg1)
+                    Logger.d("P2P_DylanLog", "Message read: $message")
+                    runOnUiThread { messages.append("\nMessage read: $message") }
                     true
                 }
                 MESSAGE_WRITE -> {
-                    Log.d("DylanLog", "Message write: ${String(it.obj as ByteArray)}")
+                    val message = String(it.obj as ByteArray, 0, it.arg1)
+                    Logger.d("P2P_DylanLog", "Message write: $message")
+                    runOnUiThread { messages.append("\nMessage write: $message") }
                     true
                 }
                 MESSAGE_TOAST -> {
-                    runOnUiThread { Toast.makeText(baseContext, String(it.obj as ByteArray), Toast.LENGTH_LONG).show() }
+                    runOnUiThread {
+                        Toast.makeText(
+                            baseContext,
+                            String(it.obj as ByteArray, 0, it.arg1),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                     true
                 }
                 else -> false
             }
-        })
+        }
     }
 
     val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
@@ -65,7 +79,7 @@ class HomeActivity : BaseActivity() {
                         intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE) ?: return
                     val deviceName = device.name
                     val deviceHardwareAddress = device.address // MAC address
-                    Log.d("DylanLog", "$deviceName -> $deviceHardwareAddress")
+                    Log.d("P2P_DylanLog", "$deviceName -> $deviceHardwareAddress")
                 }
             }
         }
@@ -89,12 +103,12 @@ class HomeActivity : BaseActivity() {
             //window.setBackgroundDrawableResource(R.color.colorBackground)
         }
 
+        messages = findViewById(R.id.messages)
         findViewById<View>(R.id.create).setOnClickListener { createServer() }
         findViewById<View>(R.id.connect).setOnClickListener { startDiscovery() }
         findViewById<View>(R.id.send).setOnClickListener {
-            connectedThread?.write(
-                findViewById<EditText>(R.id.message).text?.toString().orEmpty().toByteArray()
-            )
+            val message = findViewById<EditText>(R.id.message).text?.toString().orEmpty()
+            connectedThread?.write(message.toByteArray(), 0, message.length)
         }
     }
 
@@ -105,10 +119,13 @@ class HomeActivity : BaseActivity() {
     }
 
     private fun createServer() {
-        ServerBluetooth().init(this)
+        connectedThread = ServerBluetooth().apply {
+            init(this@HomeActivity)
+        }
     }
 
     private fun startDiscovery() {
+        Log.d("P2P_DylanLog", "Start discovery")
         // Register for broadcasts when a device is discovered.
         val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
         registerReceiver(receiver, filter)
@@ -116,11 +133,12 @@ class HomeActivity : BaseActivity() {
         bluetoothAdapter?.bondedDevices?.forEach { device ->
             val deviceName = device.name
             val deviceHardwareAddress = device.address // MAC address
+            Log.d("P2P_DylanLog", "Paired: $deviceName -> $deviceHardwareAddress")
             if (deviceName == "Server 7 places available Moto E (4) Plus") {
-                val uuid = findViewById<EditText>(R.id.input).text?.toString().orEmpty()
-                ClientBluetooth().init(this, device, uuid)
+                connectedThread = ClientBluetooth().apply {
+                    init(this@HomeActivity, device)
+                }
             }
-            Log.d("DylanLog", "Paired: $deviceName -> $deviceHardwareAddress")
         }
         bluetoothAdapter?.startDiscovery()
     }

@@ -9,7 +9,7 @@ import java.lang.ref.WeakReference
 
 abstract class Bluetooth {
 
-    val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
+    protected val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
     var activity: WeakReference<HomeActivity>? = null
 
     @CallSuper
@@ -21,10 +21,12 @@ abstract class Bluetooth {
         this.activity = WeakReference(activity)
     }
 
-    fun manageMyConnectedSocket(bluetoothSocket: BluetoothSocket): BluetoothConnectionThread {
-        val activity = activity?.get() ?: return
+    fun manageMyConnectedSocket(bluetoothSocket: BluetoothSocket): BluetoothConnectionThread? {
+        val activity = activity?.get() ?: return null
         return BluetoothConnectionThread(activity, bluetoothSocket)
     }
+
+    abstract fun write(byteArray: ByteArray, offset: Int, length: Int)
 
     companion object {
 

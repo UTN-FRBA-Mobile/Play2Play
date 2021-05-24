@@ -12,18 +12,17 @@ import java.io.OutputStream
 
 class BluetoothConnectionThread(
     activity: HomeActivity,
-    private val socket: BluetoothSocket,
+    private val socket: BluetoothSocket
 ) : Thread() {
 
+    var onMessageReceived: ((length: Int, buffer: ByteArray) -> Unit)? = null
     private val handler: Handler = activity.handler
-    private val mmInStream: InputStream = socket.inputStream
-    private val mmOutStream: OutputStream = socket.outputStream
-    private val mmBuffer: ByteArray = ByteArray(1024) // mmBuffer store for the stream
+    private val inputStream: InputStream = socket.inputStream
+    private val outputStream: OutputStream = socket.outputStream
+    private val buffer: ByteArray = ByteArray(1024) // mmBuffer store for the stream
 
     init {
-        activity.connectedThread = this.apply {
-            start()
-        }
+        start()
     }
 
     override fun run() {
@@ -34,23 +33,27 @@ class BluetoothConnectionThread(
             // Read from the InputStream.
             numBytes = try {
                 // This method blocks until input data is available, end of file is detected, or an exception is thrown.
-                mmInStream.read(mmBuffer)
+                Logger.d(TAG, "Reading")
+                inputStream.read(buffer)
             } catch (e: IOException) {
                 Logger.d(TAG, "Input stream was disconnected", e)
                 break
             }
 
             // Send the obtained bytes to the UI activity.
+            Logger.d(TAG, "Message arrived")
+            onMessageReceived?.invoke(numBytes, buffer)
             handler
-                .obtainMessage(MESSAGE_READ, numBytes, -1, mmBuffer)
+                .obtainMessage(MESSAGE_READ, numBytes, -1, buffer)
                 .sendToTarget()
         }
     }
 
     // Call this from the main activity to send data to the remote device.
-    fun write(bytes: ByteArray) {
+    fun write(bytes: ByteArray, offset: Int, length: Int) {
         try {
-            mmOutStream.write(bytes)
+            Logger.d(TAG, "Writting...")
+            outputStream.write(bytes, offset, length)
         } catch (e: IOException) {
             Log.e(TAG, "Error occurred when sending data", e)
 
@@ -65,8 +68,9 @@ class BluetoothConnectionThread(
         }
 
         // Share the sent message with the UI activity.
+        Logger.d(TAG, "Write succeed")
         handler
-            .obtainMessage(MESSAGE_WRITE, -1, -1, mmBuffer)
+            .obtainMessage(MESSAGE_WRITE, length, -1, bytes)
             .sendToTarget()
     }
 
@@ -84,6 +88,6 @@ class BluetoothConnectionThread(
         const val MESSAGE_READ: Int = 0
         const val MESSAGE_WRITE: Int = 1
         const val MESSAGE_TOAST: Int = 2
-        const val TAG = "BLUETOOTH_SERVICE"
+        const val TAG = "P2P_BLUETOOTH_SERVICE"
     }
 }
