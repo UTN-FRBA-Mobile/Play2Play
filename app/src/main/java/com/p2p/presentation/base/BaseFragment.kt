@@ -12,7 +12,7 @@ import androidx.viewbinding.ViewBinding
 import com.google.android.material.snackbar.Snackbar
 import com.p2p.R
 
-/** 
+/**
  * Base implementation of a [Fragment] used to simplify boilerplate.
  * [VB]: ViewBinding
  * [E]: Event
@@ -47,7 +47,7 @@ abstract class BaseFragment<VB : ViewBinding, E : Any, VM : BaseViewModel<E>> : 
         viewModel.singleTimeEvent.observe(viewLifecycleOwner) { onEvent(it) }
         viewModel.message.observe(viewLifecycleOwner) { showSnackBar(it) }
         initUI()
-        initValues(savedInstanceState)
+        initValues()
         setupObservers()
     }
 
@@ -72,7 +72,7 @@ abstract class BaseFragment<VB : ViewBinding, E : Any, VM : BaseViewModel<E>> : 
     protected open fun initUI() {}
 
     /** Invoked when the view is initialized and should initialize values that require context. */
-    protected open fun initValues(savedInstanceState: Bundle?) {}
+    protected open fun initValues() {}
 
 
     /** Invoked when a single time event is dispatched from the view model. */

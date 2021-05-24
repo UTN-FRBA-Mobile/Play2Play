@@ -1,5 +1,5 @@
 package com.p2p.presentation.base
 
-enum class IntentKeys(val key: String) {
+enum class Arguments(val key: String) {
     INSTRUCTIONS("Instructions")
 }
