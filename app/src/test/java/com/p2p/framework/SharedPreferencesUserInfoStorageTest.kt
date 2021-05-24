@@ -35,7 +35,12 @@ class SharedPreferencesUserInfoStorageTest : BaseTest() {
         userInfoStorage.saveUserName(name)
 
         // THEN
-        assertThat(sharedPreferences.getString(SharedPreferencesUserInfoStorage.USER_NAME_KEY, null), `is`(name))
+        assertThat(
+            sharedPreferences.getString(
+                SharedPreferencesUserInfoStorage.USER_NAME_KEY,
+                null
+            ), `is`(name)
+        )
     }
 
     @Test

@@ -10,7 +10,9 @@ import com.p2p.presentation.base.BaseGameFragment
 import com.p2p.presentation.home.games.Game
 
 class CreateTuttiFruttiFragment(instructions: String) :
-    BaseGameFragment<FragmentCreateTuttiFruttiBinding, TuttiFruttiCategoriesEvents, CreateTuttiFruttiViewModel>(instructions) {
+    BaseGameFragment<FragmentCreateTuttiFruttiBinding, TuttiFruttiCategoriesEvents, CreateTuttiFruttiViewModel>(
+        instructions
+    ) {
 
     override val viewModel: CreateTuttiFruttiViewModel by viewModels {
         CreateTuttiFruttiViewModelFactory(
@@ -39,7 +41,9 @@ class CreateTuttiFruttiFragment(instructions: String) :
             tuttiFruttiCategoriesAadapter.selectedCategories = it
             tuttiFruttiSelectedCategoriesAdapter.selectedCategories = it
         }
-        continueButtonEnabled.observe(viewLifecycleOwner) { gameBinding.continueButton.isEnabled = it }
+        continueButtonEnabled.observe(viewLifecycleOwner) {
+            gameBinding.continueButton.isEnabled = it
+        }
     }
 
 

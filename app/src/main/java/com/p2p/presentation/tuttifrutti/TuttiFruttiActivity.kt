@@ -11,7 +11,10 @@ class TuttiFruttiActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null) {
-            addFragment(CreateTuttiFruttiFragment.newInstance(instructions), shouldAddToBackStack = true)
+            addFragment(
+                CreateTuttiFruttiFragment.newInstance(instructions),
+                shouldAddToBackStack = true
+            )
         }
     }
 
