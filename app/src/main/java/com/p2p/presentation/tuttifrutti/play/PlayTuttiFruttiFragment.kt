@@ -3,19 +3,14 @@ package com.p2p.presentation.tuttifrutti.play
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.p2p.R
 import com.p2p.data.tuttifrutti.TuttiFruttiData
 import com.p2p.databinding.FragmentCreateTuttiFruttiBinding
 import com.p2p.databinding.FragmentPlayTuttiFruttiBinding
-import com.p2p.presentation.base.BaseGameFragment
+import com.p2p.presentation.basegame.BaseGameFragment
 import com.p2p.presentation.home.games.Game
-import com.p2p.presentation.tuttifrutti.create.Category
 
-class PlayTuttiFruttiFragment(instructions: String, val tuttiFruttiData: TuttiFruttiData) :
-    BaseGameFragment<FragmentPlayTuttiFruttiBinding, TuttiFruttiPlayingEvents, PlayTuttiFruttiViewModel>(
-        instructions
-    ) {
+class PlayTuttiFruttiFragment :
+    BaseGameFragment<FragmentPlayTuttiFruttiBinding, TuttiFruttiPlayingEvents, PlayTuttiFruttiViewModel>() {
 
     override val viewModel: PlayTuttiFruttiViewModel by viewModels {
         PlayTuttiFruttiViewModelFactory(
@@ -48,7 +43,7 @@ class PlayTuttiFruttiFragment(instructions: String, val tuttiFruttiData: TuttiFr
 
     open override fun onEvent(event: TuttiFruttiPlayingEvents) = when (event) {
         //TODO end game for all
-        EndGame -> {
+        EndRound -> {
         }
     }
 

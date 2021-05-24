@@ -7,79 +7,78 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackground">
 
+    <include layout="@layout/view_guidelines" />
+
+    <TextView
+        android:id="@+id/letter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/font_big"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="@id/guideline_top"
+        app:layout_constraintEnd_toStartOf="@id/round_letter"
+        app:layout_constraintStart_toStartOf="@id/guideline_begin"
+        android:text="@string/tf_letter"
+        />
+
+    <TextView
+        android:id="@+id/round_letter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/font_big"
+        android:textStyle="bold"
+        android:layout_marginStart="@dimen/medium"
+        app:layout_constraintTop_toTopOf="@id/guideline_top"
+        app:layout_constraintStart_toEndOf="@id/letter"
+        tools:text="C"
+        />
+
+    <TextView
+        android:id="@+id/round"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/font_big"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="@id/guideline_top"
+        app:layout_constraintEnd_toStartOf="@id/round_number"
+        android:text="@string/tf_round"
+        />
+    <TextView
+        android:id="@+id/round_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/font_big"
+        android:textStyle="bold"
+        android:layout_marginStart="@dimen/medium"
+        app:layout_constraintTop_toTopOf="@id/guideline_top"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        tools:text="1/5"
+        />
+
+
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/categories_recycler"
-        android:layout_width="match_parent"
+        android:id="@+id/categories_input"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="@dimen/large"
+        android:layout_marginTop="@dimen/big"
         android:layout_marginBottom="@dimen/large"
         android:orientation="vertical"
         android:requiresFadingEdge="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/footer"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        tools:listitem="@layout/view_category_item" />
+        app:layout_constraintBottom_toTopOf="@id/finish_round_button"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintStart_toStartOf="@id/guideline_begin"
+        app:layout_constraintTop_toBottomOf="@id/letter"
+        tools:listitem="@layout/write_category_item" />
 
-
-    <RelativeLayout
-        android:id="@+id/footer"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/finish_round_button"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/colorSecondary"
-        android:paddingStart="@dimen/screen_padding"
-        android:paddingTop="@dimen/screen_padding"
-        android:paddingEnd="@dimen/screen_padding"
-        android:paddingBottom="@dimen/screen_padding"
-        app:layout_constraintTop_toBottomOf="@id/categories_recycler"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        >
-        <TextView
-            android:id="@+id/selected_categories"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/font_big"
-            android:textStyle="bold"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:text="@string/tf_categories_selected_categories"
-            />
-        <TextView
-            android:id="@+id/selected_categories_span"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/selected_categories"
-            android:paddingTop="@dimen/tiniest"
-            android:textSize="@dimen/font_medium_extra"
-            android:text="@string/tf_categories_count_error"
-            />
+        android:text="@string/tf_finish_round"
+        app:layout_constraintBottom_toBottomOf="@id/guideline_bottom"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintStart_toStartOf="@id/guideline_begin"
+        style="@style/Widget.P2P.Button.SecondOptionButton" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/categories_selected_recycler"
-            android:layout_below="@id/selected_categories_span"
-            android:layout_marginTop="@dimen/large"
-            android:layout_marginBottom="@dimen/large"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clipToPadding="false"
-            tools:orientation="horizontal"
-            android:requiresFadingEdge="horizontal"
-            tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/view_selected_category_item" />
-
-        <Button
-            android:id="@+id/continue_button"
-            android:layout_width="match_parent"
-            android:layout_marginTop="@dimen/medium"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@id/categories_selected_recycler"
-            android:layout_height="wrap_content"
-            android:text="@string/continue_button"/>
-
-
-    </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
