@@ -29,8 +29,10 @@ class CountdownActivity : BaseActivity() {
         secondZoomInOutAnimation.startOffset = 1500
         thirdZoomInOutAnimation.startOffset = 3000
 
-        val countdownElements: List<ImageView> = listOf(firstCountdownElement, secondCountdownElement, thirdCountdownElement)
-        val animationElements: List<Animation> = listOf(firstZoomInOutAnimation, secondZoomInOutAnimation, thirdZoomInOutAnimation)
+        val countdownElements: List<ImageView> =
+            listOf(firstCountdownElement, secondCountdownElement, thirdCountdownElement)
+        val animationElements: List<Animation> =
+            listOf(firstZoomInOutAnimation, secondZoomInOutAnimation, thirdZoomInOutAnimation)
 
         startCountdown(countdownElements, animationElements)
 
