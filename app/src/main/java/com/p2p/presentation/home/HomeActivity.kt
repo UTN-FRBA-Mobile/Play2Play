@@ -22,14 +22,14 @@ import com.p2p.bluetooth.ClientBluetooth
 import com.p2p.bluetooth.MESSAGE_READ
 import com.p2p.bluetooth.MESSAGE_TOAST
 import com.p2p.bluetooth.MESSAGE_WRITE
-import com.p2p.bluetooth.MyBluetoothService
+import com.p2p.bluetooth.BluetoothConnectionThread
 import com.p2p.bluetooth.ServerBluetooth
 import com.p2p.presentation.base.BaseActivity
 
 
 class HomeActivity : BaseActivity() {
 
-    var connectedThread: MyBluetoothService.ConnectedThread? = null
+    var connectedThread: BluetoothConnectionThread.ConnectedThread? = null
     val handler by lazy {
         Handler(Looper.getMainLooper(), Handler.Callback {
             when (it.what) {

@@ -21,9 +21,9 @@ abstract class Bluetooth {
         this.activity = WeakReference(activity)
     }
 
-    fun manageMyConnectedSocket(bluetoothSocket: BluetoothSocket) {
+    fun manageMyConnectedSocket(bluetoothSocket: BluetoothSocket): BluetoothConnectionThread {
         val activity = activity?.get() ?: return
-        MyBluetoothService(activity, bluetoothSocket)
+        return BluetoothConnectionThread(activity, bluetoothSocket)
     }
 
     companion object {
