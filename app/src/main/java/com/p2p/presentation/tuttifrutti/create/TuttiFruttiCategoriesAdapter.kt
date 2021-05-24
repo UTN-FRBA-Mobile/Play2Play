@@ -44,7 +44,7 @@ class TuttiFruttiCategoriesAdapter(private val onSelectedChanges: (Category) -> 
     override fun getItemCount() = categories.size
 
     private fun getBackgroundColor(index: Int) =
-        if (index.isEven()) R.color.colorBackgroundListFirst else R.color.colorBackgroundListSecond
+        if (index.isEven()) R.color.colorBackground else R.color.wild_sand
 
     inner class ViewHolder(private val binding: ViewCategoryItemBinding) :
         RecyclerView.ViewHolder(binding.root) {

@@ -45,7 +45,7 @@ class GamesAdapter(private val onSelectedChanged: (Game?) -> Unit) :
 
         /** Show the given [game] into the view. */
         fun bind(game: Game) = with(binding) {
-            image.setImageResource(game.imageRes)
+            gameCardIcon.setBackgroundResource(game.iconRes)
             name.text = name.context.getText(game.nameRes)
             container.setOnClickListener { selected = game }
             container

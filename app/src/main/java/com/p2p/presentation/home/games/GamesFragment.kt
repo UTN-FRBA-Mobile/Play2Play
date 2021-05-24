@@ -44,7 +44,6 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesEvents, GamesViewM
     private fun getUserName() = binding.userNameInput.text?.toString()
 
     companion object {
-
         /** Create a new instance of the [GamesFragment]. */
         fun newInstance() = GamesFragment()
     }
