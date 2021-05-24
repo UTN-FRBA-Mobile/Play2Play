@@ -4,15 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.p2p.R
 import com.p2p.databinding.FragmentCreateTuttiFruttiBinding
-import com.p2p.presentation.base.BaseGameFragment
+import com.p2p.presentation.basegame.BaseGameFragment
 import com.p2p.presentation.home.games.Game
 
-class CreateTuttiFruttiFragment(instructions: String) :
-    BaseGameFragment<FragmentCreateTuttiFruttiBinding, TuttiFruttiCategoriesEvents, CreateTuttiFruttiViewModel>(
-        instructions
-    ) {
+class CreateTuttiFruttiFragment :
+    BaseGameFragment<FragmentCreateTuttiFruttiBinding, TuttiFruttiCategoriesEvents, CreateTuttiFruttiViewModel>(){
 
     override val viewModel: CreateTuttiFruttiViewModel by viewModels {
         CreateTuttiFruttiViewModelFactory(
@@ -71,6 +68,6 @@ class CreateTuttiFruttiFragment(instructions: String) :
     companion object {
 
         /** Create a new instance of the [CreateTuttiFruttiFragment]. */
-        fun newInstance(instructions: String) = CreateTuttiFruttiFragment(instructions)
+        fun newInstance() = CreateTuttiFruttiFragment()
     }
 }
