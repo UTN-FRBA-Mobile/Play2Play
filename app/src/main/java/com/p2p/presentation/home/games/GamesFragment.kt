@@ -17,14 +17,6 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesEvents, GamesViewM
 
     private lateinit var adapter: GamesAdapter
 
-    private lateinit var instructionsByGame: Map<Game, String>
-
-    override fun initValues() {
-        instructionsByGame =
-            InstructionsLocalResourcesSource(requireContext())
-                .instructionsByGame()
-    }
-
     override fun initUI() {
         setupGamesRecycler()
         binding.createButton.isEnabled = false
@@ -40,7 +32,7 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesEvents, GamesViewM
 
 
     override fun onEvent(event: GamesEvents) = when(event){
-        GoToCreateTuttiFrutti -> TuttiFruttiActivity.start(requireContext(), instructionsByGame[Game.TUTTI_FRUTTI]!!)
+        GoToCreateTuttiFrutti -> TuttiFruttiActivity.start(requireContext())
     }
 
     private fun setupGamesRecycler() = with(binding.gamesRecycler) {

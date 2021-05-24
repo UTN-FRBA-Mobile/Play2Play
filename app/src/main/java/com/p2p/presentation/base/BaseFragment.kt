@@ -47,7 +47,7 @@ abstract class BaseFragment<VB : ViewBinding, E : Any, VM : BaseViewModel<E>> : 
         viewModel.singleTimeEvent.observe(viewLifecycleOwner) { onEvent(it) }
         viewModel.message.observe(viewLifecycleOwner) { showSnackBar(it) }
         initUI()
-        initValues()
+        initValues(savedInstanceState)
         setupObservers()
     }
 
@@ -72,7 +72,7 @@ abstract class BaseFragment<VB : ViewBinding, E : Any, VM : BaseViewModel<E>> : 
     protected open fun initUI() {}
 
     /** Invoked when the view is initialized and should initialize values that require context. */
-    protected open fun initValues() {}
+    protected open fun initValues(savedInstanceState: Bundle?) {}
 
 
     /** Invoked when a single time event is dispatched from the view model. */

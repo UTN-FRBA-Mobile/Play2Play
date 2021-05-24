@@ -1,5 +1,6 @@
-package com.p2p.presentation.base
+package com.p2p.presentation.basegame
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
@@ -7,7 +8,14 @@ import androidx.viewbinding.ViewBinding
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.p2p.R
+import com.p2p.data.instructions.InstructionsRepository
+import com.p2p.data.tuttifrutti.TuttiFruttiRepository
 import com.p2p.databinding.BaseGameBinding
+import com.p2p.framework.CategoriesLocalResourcesSource
+import com.p2p.framework.InstructionsLocalResourcesSource
+import com.p2p.presentation.base.BaseFragment
+import com.p2p.presentation.base.BaseViewModel
+import com.p2p.presentation.base.IntentKeys
 import com.p2p.presentation.home.games.Game
 
 /**
@@ -17,11 +25,13 @@ import com.p2p.presentation.home.games.Game
  * [E]: Event
  * [VM]: BaseViewModel with the same event defined
  */
-abstract class BaseGameFragment<GVB : ViewBinding, E : Any, VM : BaseViewModel<E>>(val instructions: String) :
+abstract class BaseGameFragment<GVB : ViewBinding, E : Any, VM : BaseViewModel<E>> :
     BaseFragment<BaseGameBinding, E, VM>() {
 
     /** Common properties of games to be shown in the layout */
     abstract val gameData: Game
+
+    private var instructions: String? = null
 
     override val inflater: (LayoutInflater, ViewGroup?, Boolean) -> BaseGameBinding =
         { inflater, container, boolean ->
@@ -47,6 +57,11 @@ abstract class BaseGameFragment<GVB : ViewBinding, E : Any, VM : BaseViewModel<E
         setHeaderEvents(binding.header)
     }
 
+    @CallSuper
+    override fun initValues(savedInstanceState: Bundle?) {
+        instructions = savedInstanceState?.getString(IntentKeys.INSTRUCTIONS.key)
+    }
+
 
     private fun setHeaderEvents(header: MaterialToolbar) =
         header.setOnMenuItemClickListener { menuItem ->
@@ -61,9 +76,9 @@ abstract class BaseGameFragment<GVB : ViewBinding, E : Any, VM : BaseViewModel<E
 
     private fun showInstructions() =
         MaterialAlertDialogBuilder(requireContext())
-            .setMessage(instructions)
+            .setMessage(instructions!!)
             //It is positive to be shown on the right
-            .setPositiveButton(resources.getString(R.string.close_button)) { _, _ ->
+            .setPositiveButton(resources.getString(R.string.ok_button)) { _, _ ->
                 // Respond to positive button press
             }
             .show()

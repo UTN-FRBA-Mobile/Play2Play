@@ -1,7 +1,7 @@
 package com.p2p.framework
 
 import android.content.Context
-import com.p2p.data.InstructionsSource
+import com.p2p.data.instructions.InstructionsSource
 import com.p2p.presentation.extensions.getString
 import com.p2p.presentation.home.games.Game
 
@@ -15,8 +15,8 @@ class InstructionsLocalResourcesSource(private val context: Context) : Instructi
     private fun getForGame(resourceId: Int): String =
         context.resources.openRawResource(resourceId).getString()
 
-    override fun instructionsByGame(): Map<Game, String> =
-        instructionsByGame
+    override fun getInstructions(game: Game): String =
+        instructionsByGame[game]!!
 
 
 }
