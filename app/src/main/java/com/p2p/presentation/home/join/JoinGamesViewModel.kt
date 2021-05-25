@@ -6,10 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import com.p2p.data.bluetooth.BluetoothDeviceFinder
 import com.p2p.presentation.base.BaseViewModel
 
-class JoinGamesViewModel(bluetoothDeviceFinder: BluetoothDeviceFinder) : BaseViewModel<Unit>() {
+class JoinGamesViewModel(bluetoothDeviceFinder: BluetoothDeviceFinder) : BaseViewModel<JoinGamesEvent>() {
 
-    private val _devices: MutableLiveData<List<BluetoothDevice>> = MutableLiveData()
-    val devices: LiveData<List<BluetoothDevice>> = _devices
+    private val _devices: MutableLiveData<Set<BluetoothDevice>> = MutableLiveData()
+    val devices: LiveData<Set<BluetoothDevice>> = _devices
 
     private val _connectButtonEnabled: MutableLiveData<Boolean> = MutableLiveData()
     val connectButtonEnabled: LiveData<Boolean> = _connectButtonEnabled
@@ -18,7 +18,7 @@ class JoinGamesViewModel(bluetoothDeviceFinder: BluetoothDeviceFinder) : BaseVie
 
     init {
         bluetoothDeviceFinder.listDevices { newDevices ->
-            _devices.value = _devices.value?.let { it + newDevices } ?: newDevices
+            _devices.value = _devices.value?.let { it + newDevices } ?: newDevices.toSet()
         }
     }
 
@@ -30,4 +30,6 @@ class JoinGamesViewModel(bluetoothDeviceFinder: BluetoothDeviceFinder) : BaseVie
         _connectButtonEnabled.value = device != null
         selectedDevice = device
     }
+
+    fun troubleshoot() = dispatchSingleTimeEvent(GoToHowToConnectBluetooth)
 }

@@ -5,4 +5,6 @@ sealed class GamesEvents
 
 object GoToCreateTuttiFrutti : GamesEvents()
 
+object TurnOnBluetooth : GamesEvents()
+
 object JoinGame : GamesEvents()

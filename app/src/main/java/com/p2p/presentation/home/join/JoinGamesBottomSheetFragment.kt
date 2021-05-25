@@ -14,9 +14,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.p2p.databinding.FragmentJoinGamesBinding
 import com.p2p.framework.bluetooth.BluetoothDeviceFinderReceiver
 import com.p2p.presentation.base.BaseBottomSheetDialogFragment
+import com.p2p.presentation.bluetooth.HowToConnectBluetoothActivity
 
 class JoinGamesBottomSheetFragment :
-    BaseBottomSheetDialogFragment<FragmentJoinGamesBinding, Unit, JoinGamesViewModel>() {
+    BaseBottomSheetDialogFragment<FragmentJoinGamesBinding, JoinGamesEvent, JoinGamesViewModel>() {
 
     private lateinit var adapter: ListDevicesAdapter
     private val receiver by lazy { BluetoothDeviceFinderReceiver() }
@@ -28,18 +29,12 @@ class JoinGamesBottomSheetFragment :
     override fun initUI() {
         setupRecycler()
         binding.connectButton.setOnClickListener { viewModel.connect() }
+        binding.troubleshoot.setOnClickListener { viewModel.troubleshoot() }
     }
 
     override fun setupObservers() = with(viewModel) {
-        devices.observe(viewLifecycleOwner) { adapter.devices = it }
+        devices.observe(viewLifecycleOwner) { adapter.devices = it.toList() }
         connectButtonEnabled.observe(viewLifecycleOwner) { binding.connectButton.isEnabled = it }
-    }
-
-    private fun setupRecycler() = with(binding.devicesRecycler) {
-        layoutManager = LinearLayoutManager(context)
-        adapter = ListDevicesAdapter(onSelectedChanged = viewModel::selectDevice).also {
-            this@JoinGamesBottomSheetFragment.adapter = it
-        }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -62,6 +57,20 @@ class JoinGamesBottomSheetFragment :
                     })
                 }
             }
+        }
+    }
+
+    override fun onEvent(event: JoinGamesEvent) = when (event) {
+        GoToHowToConnectBluetooth -> {
+            dismiss()
+            HowToConnectBluetoothActivity.start(requireContext())
+        }
+    }
+
+    private fun setupRecycler() = with(binding.devicesRecycler) {
+        layoutManager = LinearLayoutManager(context)
+        adapter = ListDevicesAdapter(onSelectedChanged = viewModel::selectDevice).also {
+            this@JoinGamesBottomSheetFragment.adapter = it
         }
     }
 

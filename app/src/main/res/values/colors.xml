@@ -12,6 +12,7 @@
     <color name="colorError">@color/persimmon</color>
     <color name="colorOnError">@color/white_alpha_100</color>
     <color name="colorDivider">@color/gray</color>
+    <color name="colorLink">#287AA9</color>
 
     <!-- Color palette -->
     <color name="persimmon">#FF5656</color>

@@ -39,4 +39,5 @@
 
     <!-- Games -->
     <dimen name="games_item_corner_radius">8dp</dimen>
+    <dimen name="turn_on_bluetooth_icon_size">120dp</dimen>
 </resources>

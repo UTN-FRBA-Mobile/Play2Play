@@ -2,7 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.p2p">
 
-    <uses-feature android:name="android.hardware.bluetooth" android:required="true"/>
+    <uses-feature
+        android:name="android.hardware.bluetooth"
+        android:required="true" />
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -25,7 +27,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".presentation.tuttifrutti.TuttiFruttiActivity"
-            android:theme="@style/Theme.P2P"/>
+
+        <activity
+            android:name=".presentation.tuttifrutti.TuttiFruttiActivity"
+            android:theme="@style/Theme.P2P" />
+
+        <activity
+            android:name=".presentation.bluetooth.BluetoothActivity"
+            android:theme="@style/Theme.P2P" />
+
+        <activity
+            android:name=".presentation.bluetooth.HowToConnectBluetoothActivity"
+            android:theme="@style/Theme.P2P" />
     </application>
 </manifest>
