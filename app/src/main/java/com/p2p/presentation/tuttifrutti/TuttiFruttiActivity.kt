@@ -4,23 +4,22 @@ import android.bluetooth.BluetoothDevice
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Looper
-import com.p2p.framework.SharedPreferencesUserInfoStorage
-import com.p2p.framework.bluetooth.BluetoothConnectionCreatorImp
-import com.p2p.framework.bluetooth.basemessage.HandshakeMessage
 import com.p2p.presentation.base.BaseActivity
 import com.p2p.presentation.base.GameConnectionType
 import com.p2p.presentation.tuttifrutti.create.CreateTuttiFruttiFragment
 
 class TuttiFruttiActivity : BaseActivity() {
 
+    /**
     private val bluetoothConnectionCreator = BluetoothConnectionCreatorImp(Looper.getMainLooper())
     private val userInfoRepository by lazy { SharedPreferencesUserInfoStorage(baseContext) }
+    **/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null) {
-            // TODO: this logic shouldn't be here.
+            // TODO: this logic shouldn't be here, it's just an example of a basic handshake.
+            /**
             val fragment = when (intent.getStringExtra(GameConnectionType.EXTRA)) {
                 GameConnectionType.SERVER -> {
                     bluetoothConnectionCreator.createServer()
@@ -38,6 +37,8 @@ class TuttiFruttiActivity : BaseActivity() {
                 else -> return
             }
             addFragment(fragment, shouldAddToBackStack = false)
+            **/
+            addFragment(CreateTuttiFruttiFragment.newInstance(), shouldAddToBackStack = true)
         }
     }
 
