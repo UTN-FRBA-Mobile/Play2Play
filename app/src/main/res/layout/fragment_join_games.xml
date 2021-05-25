@@ -33,9 +33,10 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/devices_recycler"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/medium"
         android:layout_marginBottom="@dimen/medium"
+        app:layout_constrainedHeight="true"
         app:layout_constraintBottom_toTopOf="@id/connect_button"
         app:layout_constraintTop_toBottomOf="@id/troubleshoot"
         app:layout_constraintVertical_bias="0"
@@ -43,6 +44,7 @@
 
     <Button
         android:id="@+id/connect_button"
+        style="@style/Widget.P2P.Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:enabled="false"

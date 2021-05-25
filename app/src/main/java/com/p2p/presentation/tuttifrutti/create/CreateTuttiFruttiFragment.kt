@@ -38,7 +38,7 @@ class CreateTuttiFruttiFragment :
     }
 
 
-    open override fun onEvent(event: TuttiFruttiCategoriesEvents) = when (event) {
+    override fun onEvent(event: TuttiFruttiCategoriesEvents) = when (event) {
         //TODO call next step of creating game
         ContinueCreatingGame -> {
         }

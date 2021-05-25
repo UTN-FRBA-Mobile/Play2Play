@@ -1,10 +1,11 @@
 package com.p2p.presentation.home.join
 
 import android.bluetooth.BluetoothDevice
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.p2p.R
 import com.p2p.databinding.ViewDevicesItemBinding
 
 /** The adapter used to show the list of available devices. */
@@ -47,8 +48,9 @@ class ListDevicesAdapter(private val onSelectedChanged: (BluetoothDevice?) -> Un
 
         /** Show the given [device] into the view. */
         fun bind(device: BluetoothDevice) = with(binding) {
-            root.setOnClickListener { selected = device }
-            root.setBackgroundColor(if (selected == device) Color.GREEN else Color.WHITE)
+            container.setOnClickListener { selected = device }
+            val colorRes = if (selected == device) R.color.gray else R.color.colorBackground
+            container.setBackgroundColor(ContextCompat.getColor(root.context, colorRes))
             name.text = device.name
         }
     }
