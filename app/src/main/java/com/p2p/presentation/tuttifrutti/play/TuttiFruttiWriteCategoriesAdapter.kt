@@ -8,7 +8,7 @@ import com.p2p.databinding.ViewWriteCategoryItemBinding
 import com.p2p.presentation.tuttifrutti.create.Category
 
 
-/** The adapter used to show the list of selected categories. */
+/** The adapter used to show the list of selected categories and be written. */
 class TuttiFruttiWriteCategoriesAdapter(private val categories: List<Category>, private val onWrittenCategory: (Category, String?) -> Unit) :
     RecyclerView.Adapter<TuttiFruttiWriteCategoriesAdapter.ViewHolder>() {
 
