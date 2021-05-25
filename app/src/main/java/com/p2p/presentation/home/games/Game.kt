@@ -6,7 +6,8 @@ import androidx.annotation.StringRes
 import com.p2p.R
 
 enum class Game(
-    @StringRes val nameRes: Int, @DrawableRes val iconRes: Int,
+    @StringRes val nameRes: Int, 
+    @DrawableRes val iconRes: Int,
     @RawRes val instructionsRes: Int
 ) {
 
