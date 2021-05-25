@@ -1,13 +1,11 @@
 package com.p2p.presentation.tuttifrutti.create
 
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.p2p.databinding.FragmentCreateTuttiFruttiBinding
-import com.p2p.presentation.base.Arguments
 import com.p2p.presentation.basegame.BaseGameFragment
 import com.p2p.presentation.home.games.Game
 
@@ -38,7 +36,7 @@ class CreateTuttiFruttiFragment :
     }
 
     override fun initValues() {
-        instructions = requireArguments().getString(Arguments.INSTRUCTIONS.key)!!
+        instructions = requireArguments().getString(INSTRUCTIONS_KEY)!!
     }
 
     override fun setupObservers() = with(viewModel) {
@@ -76,10 +74,12 @@ class CreateTuttiFruttiFragment :
 
     companion object {
 
+        const val INSTRUCTIONS_KEY = "Instructions"
+
         /** Create a new instance of the [CreateTuttiFruttiFragment]. */
         fun newInstance(instructions: String) =
             CreateTuttiFruttiFragment().apply {
-                arguments = bundleOf(Arguments.INSTRUCTIONS.key to instructions)
+                arguments = bundleOf(INSTRUCTIONS_KEY to instructions)
             }
     }
 }

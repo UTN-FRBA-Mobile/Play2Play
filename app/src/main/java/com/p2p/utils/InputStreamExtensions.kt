@@ -1,4 +1,4 @@
-package com.p2p.presentation.extensions
+package com.p2p.utils
 
 import java.io.BufferedReader
 import java.io.InputStream

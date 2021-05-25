@@ -1,6 +1,5 @@
 package com.p2p.presentation.basegame
 
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
@@ -11,7 +10,6 @@ import com.p2p.R
 import com.p2p.databinding.BaseGameBinding
 import com.p2p.presentation.base.BaseFragment
 import com.p2p.presentation.base.BaseViewModel
-import com.p2p.presentation.base.Arguments
 import com.p2p.presentation.home.games.Game
 
 /**
