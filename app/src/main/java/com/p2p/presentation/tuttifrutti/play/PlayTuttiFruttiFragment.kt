@@ -31,7 +31,7 @@ class PlayTuttiFruttiFragment :
         with(gameBinding){
             //Todo set random letter and check on rounds letters that that letter has not been used
             roundLetter.text = "A"
-            roundNumber.text = "1/" + viewModel.metadata.value?.totalRounds ?: ""
+            roundNumber.text = "1/" + viewModel.metadata.totalRounds ?: ""
         }
     }
 
@@ -57,7 +57,7 @@ class PlayTuttiFruttiFragment :
     private fun setupCategoriesRecycler() = with(gameBinding.categoriesRecycler) {
         layoutManager = LinearLayoutManager(context)
         adapter =
-            TuttiFruttiWriteCategoriesAdapter(viewModel.metadata.value!!.categories, viewModel::onWrittenCategory).also {
+            TuttiFruttiWriteCategoriesAdapter(viewModel.metadata.categories, viewModel::onWrittenCategory).also {
                 this@PlayTuttiFruttiFragment.tuttiFruttiCategoriesAdapter = it
             }
     }

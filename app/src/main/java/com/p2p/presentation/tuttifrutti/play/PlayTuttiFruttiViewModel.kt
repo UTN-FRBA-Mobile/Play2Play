@@ -16,16 +16,17 @@ class PlayTuttiFruttiViewModel :
     val stopButtonEnabled: LiveData<Boolean> = _stopButtonEnabled
 
 
+
     /** Whether the continue button is enabled or not. */
-    private val _metadata = MutableLiveData<TuttiFruttiMetadata>()
-    val metadata: LiveData<TuttiFruttiMetadata> = _metadata
+    private var _metadata: TuttiFruttiMetadata? = null
+    val metadata: TuttiFruttiMetadata = _metadata!!
 
     init {
         _stopButtonEnabled.value = false
     }
 
-    fun setMetadata(metadata: TuttiFruttiMetadata) {
-        _metadata.value = metadata
+    fun setMetadata(metadata: TuttiFruttiMetadata){
+        _metadata = metadata
     }
 
     fun onWrittenCategory(category: Category, value: String?) {
@@ -38,7 +39,7 @@ class PlayTuttiFruttiViewModel :
 
     private fun allCategoriesAreFilled(): Boolean {
         val filledCategoriesCount = categoriesData.filter { it.value.isNotBlank() }.size
-        return filledCategoriesCount == metadata.value!!.categories.size
+        return filledCategoriesCount == metadata.categories.size
     }
 
 
