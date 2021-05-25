@@ -8,7 +8,7 @@ import android.widget.Button
 import com.p2p.R
 import com.p2p.presentation.base.BaseActivity
 
-class BluetoothActivity : BaseActivity(R.layout.activity_bluetooth) {
+class TurnOnBluetoothActivity : BaseActivity(R.layout.activity_turn_on_bluetooth) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,6 +20,6 @@ class BluetoothActivity : BaseActivity(R.layout.activity_bluetooth) {
 
     companion object {
 
-        fun start(context: Context) = context.startActivity(Intent(context, BluetoothActivity::class.java))
+        fun start(context: Context) = context.startActivity(Intent(context, TurnOnBluetoothActivity::class.java))
     }
 }

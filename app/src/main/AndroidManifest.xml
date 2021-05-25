@@ -33,7 +33,7 @@
             android:theme="@style/Theme.P2P" />
 
         <activity
-            android:name=".presentation.bluetooth.BluetoothActivity"
+            android:name=".presentation.bluetooth.TurnOnBluetoothActivity"
             android:theme="@style/Theme.P2P" />
 
         <activity
