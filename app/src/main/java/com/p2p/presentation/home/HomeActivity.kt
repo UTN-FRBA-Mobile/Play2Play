@@ -10,8 +10,8 @@ class HomeActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null) {
-            addFragment(GamesFragment.newInstance(), shouldAddToBackStack = true)
-            window.setBackgroundDrawableResource(R.color.colorBackground)
+            `addFragment(GamesFragment.newInstance(), shouldAddToBackStack = true)
+            `window.setBackgroundDrawableResource(R.color.colorBackground)
         }
     }
 }

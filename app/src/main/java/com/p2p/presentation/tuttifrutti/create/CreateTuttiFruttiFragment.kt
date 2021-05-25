@@ -3,11 +3,14 @@ package com.p2p.presentation.tuttifrutti.create
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.p2p.databinding.FragmentCreateTuttiFruttiBinding
 import com.p2p.presentation.basegame.BaseGameFragment
 import com.p2p.presentation.home.games.Game
+import com.p2p.presentation.home.games.GamesFragment
+import com.p2p.presentation.tuttifrutti.play.PlayTuttiFruttiFragment
 
 class CreateTuttiFruttiFragment :
     BaseGameFragment<FragmentCreateTuttiFruttiBinding, TuttiFruttiCategoriesEvents, CreateTuttiFruttiViewModel>() {
@@ -52,8 +55,18 @@ class CreateTuttiFruttiFragment :
 
 
     open override fun onEvent(event: TuttiFruttiCategoriesEvents) = when (event) {
-        //TODO call next step of creating game
+        //TODO call next step of creating game instead of BREN fragment
         ContinueCreatingGame -> {
+
+            setFragmentResult(
+                "creationData",
+                bundleOf(
+                    "roundsCount" to 10,
+                    "selectedCategories" to viewModel.selectedCategories.value
+                )
+            )
+            addFragment(PlayTuttiFruttiFragment.newInstance(instructions!!), shouldAddToBackStack = true)
+
         }
     }
 
