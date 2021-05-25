@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.p2p.presentation.base.BaseViewModel
 
-class RoundsNumberViewModel : BaseViewModel<RoundsNumberEvents>() {
+class RoundsNumberViewModel : BaseViewModel<RoundsNumberEvent>() {
 
     /** The number of rounds to play. */
     private val _roundsNumber = MutableLiveData<Int>()

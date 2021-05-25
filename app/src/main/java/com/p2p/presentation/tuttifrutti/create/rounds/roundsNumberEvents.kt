@@ -1,5 +1,5 @@
 package com.p2p.presentation.tuttifrutti.create.rounds
 
-sealed class RoundsNumberEvents
+sealed class RoundsNumberEvent
 
-object GoToTuttiFruttiLobby: RoundsNumberEvents()
+object GoToTuttiFruttiLobby: RoundsNumberEvent()

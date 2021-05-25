@@ -7,7 +7,7 @@ import com.p2p.databinding.FragmentRoundsNumberBinding
 import com.p2p.presentation.base.BaseDialogFragment
 
 class RoundsNumberFragment :
-    BaseDialogFragment<FragmentRoundsNumberBinding, RoundsNumberEvents, RoundsNumberViewModel>() {
+    BaseDialogFragment<FragmentRoundsNumberBinding, RoundsNumberEvent, RoundsNumberViewModel>() {
 
     override val viewModel: RoundsNumberViewModel by viewModels()
     override val inflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentRoundsNumberBinding =
@@ -23,9 +23,8 @@ class RoundsNumberFragment :
         roundsNumber.observe(viewLifecycleOwner) { binding.number.text = it.toString() }
     }
 
-    override fun onEvent(event: RoundsNumberEvents) = when (event) {
-        // TODO: Go to Lobby
-        GoToTuttiFruttiLobby -> Unit
+    override fun onEvent(event: RoundsNumberEvent) = when (event) {
+        GoToTuttiFruttiLobby -> TODO()
     }
 
     companion object {
