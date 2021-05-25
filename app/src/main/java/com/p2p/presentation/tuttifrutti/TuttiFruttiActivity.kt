@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.os.Looper
 import com.p2p.framework.SharedPreferencesUserInfoStorage
 import com.p2p.framework.bluetooth.BluetoothConnectionCreatorImp
-import com.p2p.framework.bluetooth.basemessage.HelloMessage
+import com.p2p.framework.bluetooth.basemessage.HandshakeMessage
 import com.p2p.presentation.base.BaseActivity
 import com.p2p.presentation.base.GameConnectionType
 import com.p2p.presentation.tuttifrutti.create.CreateTuttiFruttiFragment
@@ -20,6 +20,7 @@ class TuttiFruttiActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null) {
+            // TODO: this logic shouldn't be here.
             val fragment = when (intent.getStringExtra(GameConnectionType.EXTRA)) {
                 GameConnectionType.SERVER -> {
                     bluetoothConnectionCreator.createServer()
@@ -30,7 +31,7 @@ class TuttiFruttiActivity : BaseActivity() {
                         "A bluetooth device should be passed on the activity creation"
                     }
                     bluetoothConnectionCreator.createClient(device).onConnected { // TODO: should wait until connected to continue any processing
-                        it.write(HelloMessage(userInfoRepository.getUserName() ?: "No tengo nombre :("))
+                        it.write(HandshakeMessage(userInfoRepository.getUserName() ?: "No tengo nombre :(")) // TODO: border case
                     }
                     return // TODO: Return lobby fragment
                 }

@@ -16,9 +16,13 @@ class BluetoothClient(
 ) : BluetoothConnectionImp(handler) {
 
     private val onConnectedActions = mutableListOf<(BluetoothConnection) -> Unit>()
-    private var connectedSocket: BluetoothConnectionThread? = null
     private val connectionSocket: BluetoothSocket? by lazy(LazyThreadSafetyMode.NONE) {
         bluetoothServerDevice.createRfcommSocketToServiceRecord(UUID.fromString(BluetoothServer.UUID))
+    }
+    private var connectedSocket: BluetoothConnectionThread? = null
+
+    init {
+        start()
     }
 
     override fun run() {

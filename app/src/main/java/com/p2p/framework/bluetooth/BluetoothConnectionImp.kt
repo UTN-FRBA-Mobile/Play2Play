@@ -18,7 +18,7 @@ abstract class BluetoothConnectionImp(private val handler: Handler) : Thread(), 
     }
 
     protected fun writeOnConnection(connection: BluetoothConnectionThread, message: Message) {
-        val messageJson = objectMapper.writeValueAsBytes(message)
-        connection.write(messageJson, 0, messageJson.size)
+        val messageBytesArray = objectMapper.writeValueAsBytes(message)
+        connection.write(messageBytesArray, 0, messageBytesArray.size)
     }
 }

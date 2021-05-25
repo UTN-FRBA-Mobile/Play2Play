@@ -17,9 +17,10 @@ class BluetoothConnectionCreatorImp(looper: Looper) : BluetoothConnectionCreator
                 val messageString = String(it.obj as ByteArray, 0, it.arg1)
                 val message = ObjectMapper().readValue(messageString, Message::class.java)
                 Logger.d(TAG, "Read: $message")
+                true
             }
+            else -> false
         }
-        false
     }
 
     override fun createServer() = BluetoothServer(handler)

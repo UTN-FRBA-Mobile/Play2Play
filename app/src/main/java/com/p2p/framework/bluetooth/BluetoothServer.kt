@@ -12,10 +12,14 @@ class BluetoothServer(
     private val maxAccepted: Int = MAX_ACCEPTED,
 ) : BluetoothConnectionImp(handler) {
 
-    private val connectedThreads = mutableListOf<BluetoothConnectionThread>()
     private var shouldLoop = true
+    private val connectedThreads = mutableListOf<BluetoothConnectionThread>()
     private val serverSocket: BluetoothServerSocket? by lazy(LazyThreadSafetyMode.NONE) {
         bluetoothAdapter?.listenUsingInsecureRfcommWithServiceRecord(TAG, java.util.UUID.fromString(UUID))
+    }
+
+    init {
+        start()
     }
 
     override fun run() {
