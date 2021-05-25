@@ -2,24 +2,20 @@ package com.p2p.presentation.tuttifrutti.play
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.RecyclerView
-import com.p2p.databinding.ViewSelectedCategoryItemBinding
+import com.p2p.databinding.ViewWriteCategoryItemBinding
+import com.p2p.presentation.tuttifrutti.create.Category
 
 
 /** The adapter used to show the list of selected categories. */
-class TuttiFruttiWriteCategoriesAdapter(private val onDeleteCategory: (Category) -> Unit) :
+class TuttiFruttiWriteCategoriesAdapter(private val categories: List<Category>, private val onWrittenCategory: (Category, String?) -> Unit) :
     RecyclerView.Adapter<TuttiFruttiWriteCategoriesAdapter.ViewHolder>() {
 
-    /** The list of the selected categories */
-    var selectedCategories = listOf<Category>()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            ViewSelectedCategoryItemBinding.inflate(
+            ViewWriteCategoryItemBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -28,20 +24,20 @@ class TuttiFruttiWriteCategoriesAdapter(private val onDeleteCategory: (Category)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        return holder.bind(selectedCategories[position])
+        return holder.bind(categories[position])
     }
 
-    override fun getItemCount() = selectedCategories.size
+    override fun getItemCount() = categories.size
 
-    inner class ViewHolder(private val binding: ViewSelectedCategoryItemBinding) :
+    inner class ViewHolder(private val binding: ViewWriteCategoryItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         /** Show the given [category] into the view. */
         fun bind(category: Category) = with(binding) {
-            categoryToMaybeDelete.text = category
-            categoryToMaybeDelete.setOnClickListener {
-                onDeleteCategory.invoke(category)
+            textField.doOnTextChanged { inputText, _, _, _ ->
+                onWrittenCategory.invoke(category, inputText.toString())
             }
+            input.hint = category
         }
     }
 

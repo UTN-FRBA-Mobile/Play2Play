@@ -3,13 +3,12 @@ package com.p2p.presentation.tuttifrutti.create
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.p2p.data.tuttifrutti.TuttiFruttiMetadata
 import com.p2p.databinding.FragmentCreateTuttiFruttiBinding
 import com.p2p.presentation.basegame.BaseGameFragment
 import com.p2p.presentation.home.games.Game
-import com.p2p.presentation.home.games.GamesFragment
 import com.p2p.presentation.tuttifrutti.play.PlayTuttiFruttiFragment
 
 class CreateTuttiFruttiFragment :
@@ -27,7 +26,7 @@ class CreateTuttiFruttiFragment :
 
     override var instructions: String? = null
 
-    private lateinit var tuttiFruttiCategoriesAadapter: TuttiFruttiCategoriesAdapter
+    private lateinit var tuttiFruttiCategoriesAdapter: TuttiFruttiCategoriesAdapter
     private lateinit var tuttiFruttiSelectedCategoriesAdapter: TuttiFruttiSelectedCategoriesAdapter
 
 
@@ -43,9 +42,9 @@ class CreateTuttiFruttiFragment :
     }
 
     override fun setupObservers() = with(viewModel) {
-        allCategories.observe(viewLifecycleOwner) { tuttiFruttiCategoriesAadapter.categories = it }
+        allCategories.observe(viewLifecycleOwner) { tuttiFruttiCategoriesAdapter.categories = it }
         selectedCategories.observe(viewLifecycleOwner) {
-            tuttiFruttiCategoriesAadapter.selectedCategories = it
+            tuttiFruttiCategoriesAdapter.selectedCategories = it
             tuttiFruttiSelectedCategoriesAdapter.selectedCategories = it
         }
         continueButtonEnabled.observe(viewLifecycleOwner) {
@@ -57,15 +56,14 @@ class CreateTuttiFruttiFragment :
     open override fun onEvent(event: TuttiFruttiCategoriesEvents) = when (event) {
         //TODO call next step of creating game instead of BREN fragment
         ContinueCreatingGame -> {
-
-            setFragmentResult(
-                "creationData",
-                bundleOf(
-                    "roundsCount" to 10,
-                    "selectedCategories" to viewModel.selectedCategories.value
-                )
+            val selectedCategories = ArrayList(viewModel.selectedCategories.value)
+            addFragment(
+                PlayTuttiFruttiFragment.newInstance(
+                    instructions!!,
+                    TuttiFruttiMetadata(totalRounds = 10, selectedCategories)
+                ),
+                shouldAddToBackStack = true
             )
-            addFragment(PlayTuttiFruttiFragment.newInstance(instructions!!), shouldAddToBackStack = true)
 
         }
     }
@@ -73,7 +71,7 @@ class CreateTuttiFruttiFragment :
     private fun setupCategoriesRecycler() = with(gameBinding.categoriesRecycler) {
         layoutManager = LinearLayoutManager(context)
         adapter = TuttiFruttiCategoriesAdapter(viewModel::changeCategorySelection).also {
-            this@CreateTuttiFruttiFragment.tuttiFruttiCategoriesAadapter = it
+            this@CreateTuttiFruttiFragment.tuttiFruttiCategoriesAdapter = it
         }
     }
 

@@ -57,7 +57,7 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/categories_input"
+        android:id="@+id/categories_recycler"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/big"
@@ -68,7 +68,7 @@
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
         app:layout_constraintTop_toBottomOf="@id/letter"
-        tools:listitem="@layout/write_category_item" />
+        tools:listitem="@layout/view_write_category_item" />
 
     <Button
         android:id="@+id/finish_round_button"

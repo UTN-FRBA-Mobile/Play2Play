@@ -46,8 +46,8 @@ abstract class BaseFragment<VB : ViewBinding, E : Any, VM : BaseViewModel<E>> : 
         super.onViewCreated(view, savedInstanceState)
         viewModel.singleTimeEvent.observe(viewLifecycleOwner) { onEvent(it) }
         viewModel.message.observe(viewLifecycleOwner) { showSnackBar(it) }
-        initUI()
         initValues()
+        initUI()
         setupObservers()
     }
 
