@@ -51,8 +51,10 @@ dependencies {
     implementation libraries.androidx.ktx.fragment
     implementation libraries.androidx.ktx.lifecycle
 
+    implementation libraries.jackson.core
+    implementation libraries.jackson.annotations
+    implementation libraries.jackson.databind
     implementation libraries.material
-    implementation libraries.gson
 
     implementation libraries.leakCanary
 

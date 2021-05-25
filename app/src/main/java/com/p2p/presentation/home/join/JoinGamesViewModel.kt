@@ -3,6 +3,7 @@ package com.p2p.presentation.home.join
 import android.bluetooth.BluetoothDevice
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.p2p.R
 import com.p2p.data.bluetooth.BluetoothDeviceFinder
 import com.p2p.presentation.base.BaseViewModel
 
@@ -23,7 +24,11 @@ class JoinGamesViewModel(bluetoothDeviceFinder: BluetoothDeviceFinder) : BaseVie
     }
 
     fun connect() {
-        // TODO("Not yet implemented")
+        selectedDevice?.let {
+            dispatchSingleTimeEvent(JoinGame(it))
+        } ?: run {
+            dispatchMessage(MessageData(R.string.join_game_select_device, type = MessageData.Type.ERROR))
+        }
     }
 
     fun selectDevice(device: BluetoothDevice?) {

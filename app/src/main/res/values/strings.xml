@@ -17,6 +17,7 @@
     <!-- Join games -->
     <string name="join_games_title">Seleccioná el celular de quien creó el juego</string>
     <string name="join_game_troubleshoot">En caso de no encontrar el celular deben conectarse manualmente. Hacé click acá y sigan las instrucciones en ambos celulares.</string>
+    <string name="join_game_select_device">Tenés que seleccionar un dispositivo</string>
 
     <!-- Games names -->
     <string name="games_tutti_frutti">Tutti Frutti</string>
