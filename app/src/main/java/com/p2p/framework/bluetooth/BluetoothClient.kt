@@ -29,11 +29,11 @@ class BluetoothClient(
         // Cancel discovery because it otherwise slows down the connection.
         bluetoothAdapter?.cancelDiscovery()
 
-        Logger.d(TAG, "Try connect to the socket: $connectionSocket")
         tryConnection()
     }
 
     private fun tryConnection(pendingRetries: Int = RETRY_COUNT) {
+        Logger.d(TAG, "Try connect to the socket: $connectionSocket (attempts left: $pendingRetries)")
         connectionSocket?.let { socket ->
             // Connect to the remote device through the socket. This call blocks
             // until it succeeds or throws an exception.

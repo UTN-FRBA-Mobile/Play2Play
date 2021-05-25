@@ -2,7 +2,7 @@ package com.p2p.framework.bluetooth.basemessage
 
 import com.p2p.data.bluetooth.Message
 
-data class HandshakeMessage(private val name: String) : Message(TYPE) {
+data class HandshakeMessage(val name: String) : Message(TYPE) {
 
     companion object {
 

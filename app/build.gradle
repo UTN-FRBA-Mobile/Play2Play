@@ -52,6 +52,7 @@ dependencies {
     implementation libraries.androidx.ktx.lifecycle
 
     implementation libraries.jackson.core
+    implementation libraries.jackson.kotlin
     implementation libraries.jackson.annotations
     implementation libraries.jackson.databind
     implementation libraries.material
