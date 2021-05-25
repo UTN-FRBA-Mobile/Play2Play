@@ -15,8 +15,7 @@ class InstructionsLocalResourcesSource(private val context: Context) : Instructi
     private fun getForGame(resourceId: Int): String =
         context.resources.openRawResource(resourceId).getString()
 
-    override fun getInstructions(game: Game): String =
-        instructionsByGame[game]!!
+    override fun getInstructions(game: Game): String = getForGame(game)
 
 
 }
