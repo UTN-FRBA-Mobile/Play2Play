@@ -6,6 +6,14 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 
+/**
+ * The broadcast receiver is used to be informed about the requested device's events.
+ *
+ * In this case we are registering it on the fragment with the requested event: [BluetoothDevice.ACTION_FOUND]
+ * that will inform us when a bluetooth device is found.
+ *
+ * If you want to see how to find bluetooth devices, see [BluetoothDeviceFinderImp].
+ */
 class BluetoothDeviceFinderReceiver : BroadcastReceiver() {
 
     val intentFilter = IntentFilter(BluetoothDevice.ACTION_FOUND)
