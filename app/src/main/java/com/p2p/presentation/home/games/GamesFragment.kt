@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.p2p.databinding.FragmentGamesBinding
 import com.p2p.presentation.base.BaseFragment
 import com.p2p.presentation.extensions.clearAndAppend
+import com.p2p.presentation.home.join.JoinGamesBottomSheetFragment
 import com.p2p.presentation.tuttifrutti.TuttiFruttiActivity
 
 class GamesFragment : BaseFragment<FragmentGamesBinding, GamesEvents, GamesViewModel>() {
@@ -29,9 +30,9 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesEvents, GamesViewM
         createButtonEnabled.observe(viewLifecycleOwner) { binding.createButton.isEnabled = it }
     }
 
-
     override fun onEvent(event: GamesEvents) = when(event){
         GoToCreateTuttiFrutti -> TuttiFruttiActivity.start(requireContext())
+        JoinGame -> JoinGamesBottomSheetFragment.newInstance().show(parentFragmentManager, null)
     }
 
     private fun setupGamesRecycler() = with(binding.gamesRecycler) {

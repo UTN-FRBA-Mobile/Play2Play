@@ -6,16 +6,20 @@
 
     <!-- Common -->
     <string name="continue_button">Continuar</string>
+    <string name="connect">Conectarse</string>
 
     <!-- Games -->
     <string name="games_user_name">Tu nombre</string>
     <string name="games_join">Unirse</string>
     <string name="games_create">Crear partida</string>
 
+    <!-- Join games -->
+    <string name="join_games_title">Seleccioná el celular de quien creó el juego</string>
+    <string name="join_game_troubleshoot">En caso de no encontrar el celular, hacé click acá y seguí los pasos</string>
+
     <!-- Games names -->
     <string name="games_tutti_frutti">Tutti Frutti</string>
     <string name="games_name_error">¡Para jugar primero tenés que decirnos tu nombre!</string>
-
 
     <!-- Tutti Frutti - Categories -->
     <string name="tf_categories_selected_categories">Categorías seleccionadas</string>

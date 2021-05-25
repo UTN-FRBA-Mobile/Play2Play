@@ -4,3 +4,5 @@ package com.p2p.presentation.home.games
 sealed class GamesEvents
 
 object GoToCreateTuttiFrutti : GamesEvents()
+
+object JoinGame : GamesEvents()
