@@ -39,7 +39,7 @@ class CreateTuttiFruttiFragment :
 
 
     override fun onEvent(event: TuttiFruttiCategoriesEvents) = when (event) {
-        GoToSelectRounds -> RoundsNumberFragment().show(childFragmentManager, "RoundsNumberDialog")
+        GoToSelectRounds -> RoundsNumberFragment.newInstance().show(childFragmentManager, "RoundsNumberDialog")
     }
 
     private fun setupCategoriesRecycler() = with(binding.categoriesRecycler) {
