@@ -1,14 +1,18 @@
 package com.p2p.presentation.base
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.annotation.CallSuper
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.viewbinding.ViewBinding
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
 import com.p2p.R
@@ -20,9 +24,11 @@ import com.p2p.R
  * [VM]: BaseViewModel with the same event defined
  */
 // TODO: reduce boilerplate with flor's PR
-abstract class BaseBottomSheetDialogFragment<VB : ViewBinding, E : Any, VM : BaseViewModel<E>> : BottomSheetDialogFragment() {
+abstract class BaseBottomSheetDialogFragment<VB : ViewBinding, E : Any, VM : BaseViewModel<E>> :
+    BottomSheetDialogFragment() {
 
     protected abstract val viewModel: VM
+    protected open val isCollapsable = true
 
     /** The binding is used to access to the views declared on the layout [VB]. */
     private var _binding: VB? = null
@@ -50,6 +56,32 @@ abstract class BaseBottomSheetDialogFragment<VB : ViewBinding, E : Any, VM : Bas
         viewModel.message.observe(viewLifecycleOwner) { showSnackBar(it) }
         initUI()
         setupObservers()
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return super.onCreateDialog(savedInstanceState).apply {
+            if (!isCollapsable) {
+                setOnShowListener {
+                    val dialog = it as BottomSheetDialog
+                    val bottomSheet = dialog
+                        .findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
+                        ?: return@setOnShowListener
+                    BottomSheetBehavior.from(bottomSheet).apply {
+                        state = BottomSheetBehavior.STATE_EXPANDED
+                        addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+                            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                                if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
+                                    state = BottomSheetBehavior.STATE_EXPANDED
+                                }
+                            }
+
+                            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                            }
+                        })
+                    }
+                }
+            }
+        }
     }
 
     @CallSuper
