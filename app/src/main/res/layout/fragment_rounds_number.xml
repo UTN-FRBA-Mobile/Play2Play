@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:background="@color/green_eden">
+    android:background="@color/colorBackground">
 
     <include layout="@layout/view_guidelines" />
 
@@ -16,7 +16,6 @@
         android:layout_marginBottom="@dimen/medium_extra"
         android:text="@string/tutti_frutti_rounds"
         android:textAlignment="center"
-        android:textColor="@color/wild_sand"
         android:textSize="@dimen/font_large"
         app:layout_constraintBottom_toTopOf="@id/number"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
@@ -44,7 +43,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAlignment="center"
-        android:textColor="@color/wild_sand"
         android:textSize="@dimen/font_huge"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/create_button"
