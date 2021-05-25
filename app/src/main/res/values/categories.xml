@@ -8,5 +8,17 @@
         <item>Comidas</item>
         <item>Películas</item>
         <item>Colores</item>
+        <item>Juegos</item>
+        <item>Series</item>
+        <item>Excusas por llegar tarde</item>
+        <item>Partes anatómicas</item>
+        <item>Equipos de fútbol</item>
+        <item>Bandas</item>
+        <item>Frases para enamorar</item>
+        <item>Objeto</item>
+        <item>Fruta o verdura</item>
+        <item>Excusas para no ir al colegio</item>
+        <item>Libro</item>
+        <item>Canción</item>
     </string-array>
 </resources>

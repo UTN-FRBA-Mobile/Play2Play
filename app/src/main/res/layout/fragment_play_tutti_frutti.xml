@@ -39,6 +39,7 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/font_big"
         android:textStyle="bold"
+        android:layout_marginEnd="@dimen/medium"
         app:layout_constraintTop_toTopOf="@id/guideline_top"
         app:layout_constraintEnd_toStartOf="@id/round_number"
         android:text="@string/tf_round"
@@ -49,7 +50,6 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/font_big"
         android:textStyle="bold"
-        android:layout_marginStart="@dimen/medium"
         app:layout_constraintTop_toTopOf="@id/guideline_top"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         tools:text="1/5"
@@ -64,6 +64,7 @@
         android:layout_marginBottom="@dimen/large"
         android:orientation="vertical"
         android:requiresFadingEdge="vertical"
+        android:fadingEdgeLength="@dimen/largest_extra"
         app:layout_constraintBottom_toTopOf="@id/finish_round_button"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
@@ -78,7 +79,7 @@
         app:layout_constraintBottom_toBottomOf="@id/guideline_bottom"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
-        style="@style/Widget.P2P.Button.SecondOptionButton" />
+        style="@style/Widget.P2P.Button" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,7 +15,6 @@ class PlayTuttiFruttiFragment :
 
     override val viewModel: PlayTuttiFruttiViewModel by viewModels()
 
-
     override var instructions: String? = null
 
     override val gameInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentPlayTuttiFruttiBinding =
@@ -29,6 +28,10 @@ class PlayTuttiFruttiFragment :
     override fun initUI() {
         super.initUI()
         setupCategoriesRecycler()
+        with(gameBinding){
+            roundLetter.text = "A"
+            roundNumber.text = "1/" + viewModel.metadata?.totalRounds ?: ""
+        }
     }
 
     override fun initValues() {
@@ -45,7 +48,7 @@ class PlayTuttiFruttiFragment :
 
 
     open override fun onEvent(event: TuttiFruttiPlayingEvents) = when (event) {
-        //TODO end game for all
+        //TODO end round and pass to next stage
         EndRound -> {
         }
     }
