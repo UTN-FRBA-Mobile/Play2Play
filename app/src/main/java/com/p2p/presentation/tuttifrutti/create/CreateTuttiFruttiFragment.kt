@@ -54,7 +54,7 @@ class CreateTuttiFruttiFragment :
 
 
     open override fun onEvent(event: TuttiFruttiCategoriesEvents) = when (event) {
-        //TODO call next step of creating game instead of BREN fragment
+        //TODO call next step of creating game instead of game fragment
         ContinueCreatingGame -> {
             val selectedCategories = ArrayList(viewModel.selectedCategories.value)
             addFragment(
