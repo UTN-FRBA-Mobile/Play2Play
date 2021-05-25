@@ -29,6 +29,6 @@ class BluetoothConnectionCreatorImp(looper: Looper) : BluetoothConnectionCreator
 
     companion object {
 
-        private const val TAG = "BluetoothConnectionCreatorImp"
+        private const val TAG = "P2P_BluetoothConnectionCreatorImp"
     }
 }
