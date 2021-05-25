@@ -26,12 +26,12 @@
     <string name="tf_categories_selected_categories">Categorías seleccionadas</string>
     <string name="tf_categories_count_error">¡Debes seleccionar al menos 5!</string>
 
-    <!-- Bluetooth screen -->
+    <!-- Turn on Bluetooth screen -->
     <string name="turn_on_bluetooth_title">¡Necesitamos que enciendas el bluetooth!</string>
     <string name="turn_on_bluetooth_description">Para poder conectarte y jugar con otras personas, tenés que tener el Bluetooth activado.</string>
     <string name="turn_on_bluetooth">Encender el bluetooth</string>
 
-    <!-- How to connnect Bluetooth screen -->
+    <!-- How to connect Bluetooth screen -->
     <string name="how_to_connect_bluetooth_title">¿Cómo conectarse con otro dispositivo Bluetooth?</string>
 
 </resources>

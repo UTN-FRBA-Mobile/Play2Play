@@ -19,7 +19,7 @@ class ListDevicesAdapter(private val onSelectedChanged: (BluetoothDevice?) -> Un
             notifyDataSetChanged()
         }
 
-    /** The current selected game on the list. */
+    /** The current selected device on the list. */
     var selected: BluetoothDevice? = null
         private set(value) {
             if (field == value) return
@@ -27,7 +27,6 @@ class ListDevicesAdapter(private val onSelectedChanged: (BluetoothDevice?) -> Un
             onSelectedChanged.invoke(value)
             notifyDataSetChanged()
         }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(

@@ -27,8 +27,8 @@ class JoinGamesViewModel(bluetoothDeviceFinder: BluetoothDeviceFinder) : BaseVie
     }
 
     fun selectDevice(device: BluetoothDevice?) {
-        _connectButtonEnabled.value = device != null
         selectedDevice = device
+        _connectButtonEnabled.value = device != null
     }
 
     fun troubleshoot() = dispatchSingleTimeEvent(GoToHowToConnectBluetooth)
