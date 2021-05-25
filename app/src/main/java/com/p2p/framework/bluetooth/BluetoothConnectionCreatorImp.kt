@@ -8,7 +8,6 @@ import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.bluetooth.Message
 import com.p2p.framework.bluetooth.BluetoothConnectionThread.Companion.MESSAGE_READ
 import com.p2p.utils.Logger
-import java.util.Arrays
 
 class BluetoothConnectionCreatorImp(looper: Looper) : BluetoothConnectionCreator {
 
