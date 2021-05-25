@@ -19,6 +19,7 @@ import com.p2p.R
  * [E]: Event
  * [VM]: BaseViewModel with the same event defined
  */
+// TODO: reduce boilerplate with flor's PR
 abstract class BaseBottomSheetDialogFragment<VB : ViewBinding, E : Any, VM : BaseViewModel<E>> : BottomSheetDialogFragment() {
 
     protected abstract val viewModel: VM
