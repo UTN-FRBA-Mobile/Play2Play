@@ -9,7 +9,7 @@ class HomeActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (savedInstanceState == null) {
+        if (savedInstanceState == null) { // TODO: should we ask location permission?
             addFragment(GamesFragment.newInstance(), shouldAddToBackStack = true)
             window.setBackgroundDrawableResource(R.color.colorBackground)
         }
