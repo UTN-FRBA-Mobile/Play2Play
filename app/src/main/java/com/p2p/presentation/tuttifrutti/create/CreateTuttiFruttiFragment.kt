@@ -2,6 +2,7 @@ package com.p2p.presentation.tuttifrutti.create
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.p2p.databinding.FragmentCreateTuttiFruttiBinding
@@ -9,7 +10,7 @@ import com.p2p.presentation.basegame.BaseGameFragment
 import com.p2p.presentation.home.games.Game
 
 class CreateTuttiFruttiFragment :
-    BaseGameFragment<FragmentCreateTuttiFruttiBinding, TuttiFruttiCategoriesEvents, CreateTuttiFruttiViewModel>(){
+    BaseGameFragment<FragmentCreateTuttiFruttiBinding, TuttiFruttiCategoriesEvents, CreateTuttiFruttiViewModel>() {
 
     override val viewModel: CreateTuttiFruttiViewModel by viewModels {
         CreateTuttiFruttiViewModelFactory(
@@ -21,6 +22,8 @@ class CreateTuttiFruttiFragment :
 
     override val gameData = Game.TUTTI_FRUTTI
 
+    override var instructions: String? = null
+
     private lateinit var tuttiFruttiCategoriesAadapter: TuttiFruttiCategoriesAdapter
     private lateinit var tuttiFruttiSelectedCategoriesAdapter: TuttiFruttiSelectedCategoriesAdapter
 
@@ -30,6 +33,10 @@ class CreateTuttiFruttiFragment :
         setupCategoriesRecycler()
         setupCategoriesSelectedRecycler()
         gameBinding.continueButton.setOnClickListener { viewModel.continueToNextScreen() }
+    }
+
+    override fun initValues() {
+        instructions = requireArguments().getString(INSTRUCTIONS_KEY)!!
     }
 
     override fun setupObservers() = with(viewModel) {
@@ -67,7 +74,12 @@ class CreateTuttiFruttiFragment :
 
     companion object {
 
+        const val INSTRUCTIONS_KEY = "Instructions"
+
         /** Create a new instance of the [CreateTuttiFruttiFragment]. */
-        fun newInstance() = CreateTuttiFruttiFragment()
+        fun newInstance(instructions: String) =
+            CreateTuttiFruttiFragment().apply {
+                arguments = bundleOf(INSTRUCTIONS_KEY to instructions)
+            }
     }
 }
