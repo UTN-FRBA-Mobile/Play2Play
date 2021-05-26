@@ -62,7 +62,7 @@ class BluetoothClient(
         }
     }
 
-    fun onConnected(action: (BluetoothConnection) -> Unit) {
+    override fun onConnected(action: (BluetoothConnection) -> Unit) {
         if (connectedSocket != null) {
             action(this)
         } else {

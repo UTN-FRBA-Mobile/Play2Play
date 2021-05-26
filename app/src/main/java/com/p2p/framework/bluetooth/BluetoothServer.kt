@@ -3,6 +3,7 @@ package com.p2p.framework.bluetooth
 import android.bluetooth.BluetoothServerSocket
 import android.bluetooth.BluetoothSocket
 import android.os.Handler
+import com.p2p.data.bluetooth.BluetoothConnection
 import com.p2p.data.bluetooth.Message
 import com.p2p.utils.Logger
 import java.io.IOException
@@ -66,6 +67,10 @@ class BluetoothServer(
 
     override fun write(message: Message) = connectedThreads.forEach {
         writeOnConnection(it, message)
+    }
+
+    override fun onConnected(action: (BluetoothConnection) -> Unit) {
+        action(this)
     }
 
     companion object {

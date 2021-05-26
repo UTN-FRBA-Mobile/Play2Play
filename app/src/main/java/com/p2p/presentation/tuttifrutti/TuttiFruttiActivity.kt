@@ -3,43 +3,36 @@ package com.p2p.presentation.tuttifrutti
 import android.bluetooth.BluetoothDevice
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
-import com.p2p.presentation.base.BaseActivity
-import com.p2p.presentation.base.GameConnectionType
+import androidx.activity.viewModels
+import com.p2p.presentation.base.BaseMVVMActivity
+import com.p2p.presentation.base.game.GameConnectionType
 import com.p2p.presentation.tuttifrutti.create.CreateTuttiFruttiFragment
 
-class TuttiFruttiActivity : BaseActivity() {
+class TuttiFruttiActivity : BaseMVVMActivity<TuttiFruttiCreationEvent, TuttiFruttiViewModel>() {
 
-    /**
-    private val bluetoothConnectionCreator = BluetoothConnectionCreatorImp(Looper.getMainLooper())
-    private val userInfoRepository by lazy { SharedPreferencesUserInfoStorage(baseContext) }
-    **/
+    private val gameConnectionType: String by lazy {
+        intent.getStringExtra(GameConnectionType.EXTRA) ?: "UNKNOWN"
+    }
+    private val device: BluetoothDevice? by lazy { intent.getParcelableExtra(SERVER_DEVICE_EXTRA) }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if (savedInstanceState == null) {
-            // TODO: this logic shouldn't be here, it's just an example of a basic handshake.
-            /**
-            val fragment = when (intent.getStringExtra(GameConnectionType.EXTRA)) {
-                GameConnectionType.SERVER -> {
-                    bluetoothConnectionCreator.createServer()
-                    CreateTuttiFruttiFragment.newInstance()
-                }
-                GameConnectionType.CLIENT -> {
-                    val device = requireNotNull(intent.getParcelableExtra<BluetoothDevice>(SERVER_DEVICE_EXTRA)) {
-                        "A bluetooth device should be passed on the activity creation"
-                    }
-                    bluetoothConnectionCreator.createClient(device).onConnected { // TODO: should wait until connected to continue any processing
-                        it.write(HandshakeMessage(userInfoRepository.getUserName() ?: "No tengo nombre :(")) // TODO: border case
-                    }
-                    return // TODO: Return lobby fragment
-                }
-                else -> return
-            }
-            addFragment(fragment, shouldAddToBackStack = false)
-            **/
-            addFragment(CreateTuttiFruttiFragment.newInstance(), shouldAddToBackStack = true)
-        }
+    override val viewModel: TuttiFruttiViewModel by viewModels {
+        TuttiFruttiViewModelFactory(
+            baseContext,
+            gameConnectionType,
+            device
+        )
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.onStart()
+        viewModel.onCreateOrJoin() // TODO: This should be called when the creation is finished
+    }
+
+    override fun onEvent(event: TuttiFruttiCreationEvent) = when (event) {
+        GoToSelectCategories -> addFragment(CreateTuttiFruttiFragment.newInstance(), shouldAddToBackStack = false)
+        GoToClientLobby -> Unit // TODO()
+        GoToServerLobby -> Unit // TODO()
     }
 
     companion object {
