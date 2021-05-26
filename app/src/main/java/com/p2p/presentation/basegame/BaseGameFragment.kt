@@ -11,7 +11,6 @@ import com.p2p.databinding.BaseGameBinding
 import com.p2p.presentation.base.BaseFragment
 import com.p2p.presentation.base.BaseViewModel
 import com.p2p.presentation.home.games.Game
-import com.p2p.presentation.tuttifrutti.create.CreateTuttiFruttiFragment
 
 /**
  * Base implementation of a [BaseGameFragment] used to simplify boilerplate.

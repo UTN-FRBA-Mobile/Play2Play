@@ -1,4 +1,4 @@
-package com.p2p.presentation.tuttifrutti.create
+package com.p2p.presentation.tuttifrutti.create.categories
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -44,7 +44,7 @@ class CreateTuttiFruttiViewModel(repository: TuttiFruttiRepository) :
     /** Next view to show when Continue button is pressed. */
     fun continueToNextScreen() {
         if (!validateCategoriesCount()) return
-        dispatchSingleTimeEvent(ContinueCreatingGame)
+        dispatchSingleTimeEvent(GoToSelectRounds)
     }
 
     private fun validateCategoriesCount(): Boolean {
