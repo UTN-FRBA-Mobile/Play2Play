@@ -75,4 +75,4 @@ class BluetoothServer(
         private const val MAX_ACCEPTED = 6
         private const val TAG = "P2P_SERVER_BLUETOOTH"
     }
-} 
+}
