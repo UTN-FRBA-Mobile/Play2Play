@@ -25,7 +25,6 @@ class CreateTuttiFruttiViewModel(repository: TuttiFruttiRepository) :
     val selectedCategories: LiveData<List<Category>> = _selectedCategories
 
     init {
-
         _allCategories.value = repository.allCategories()
         _continueButtonEnabled.value = false
     }
@@ -63,9 +62,10 @@ class CreateTuttiFruttiViewModel(repository: TuttiFruttiRepository) :
     }
 
 
-    fun categoriesCountIsValid() = selectedCategories.value?.size?.let { it >= CATEGORIES_VALID_THRESHOLD } ?: false
+    fun categoriesCountIsValid() =
+        selectedCategories.value?.size?.let { it >= CATEGORIES_VALID_THRESHOLD } ?: false
 
-    companion object{
+    companion object {
         const val CATEGORIES_VALID_THRESHOLD: Int = 5
     }
 }

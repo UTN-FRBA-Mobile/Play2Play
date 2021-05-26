@@ -2,30 +2,40 @@ package com.p2p.presentation.tuttifrutti.create
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.p2p.databinding.FragmentCreateTuttiFruttiBinding
-import com.p2p.presentation.base.BaseFragment
+import com.p2p.presentation.basegame.BaseGameFragment
+import com.p2p.presentation.home.games.Game
 
 class CreateTuttiFruttiFragment :
-    BaseFragment<FragmentCreateTuttiFruttiBinding, TuttiFruttiCategoriesEvents, CreateTuttiFruttiViewModel>() {
+    BaseGameFragment<FragmentCreateTuttiFruttiBinding, TuttiFruttiCategoriesEvents, CreateTuttiFruttiViewModel>() {
 
     override val viewModel: CreateTuttiFruttiViewModel by viewModels {
         CreateTuttiFruttiViewModelFactory(
             requireContext()
         )
     }
-    override val inflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentCreateTuttiFruttiBinding =
+    override val gameInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentCreateTuttiFruttiBinding =
         FragmentCreateTuttiFruttiBinding::inflate
+
+    override val gameData = Game.TUTTI_FRUTTI
+
+    override val instructions: String by lazy {
+        requireNotNull(requireArguments().getString(INSTRUCTIONS_KEY))
+        { "Instructions key must be passed to fragment arguments" }
+    }
 
     private lateinit var tuttiFruttiCategoriesAadapter: TuttiFruttiCategoriesAdapter
     private lateinit var tuttiFruttiSelectedCategoriesAdapter: TuttiFruttiSelectedCategoriesAdapter
 
 
     override fun initUI() {
+        super.initUI()
         setupCategoriesRecycler()
         setupCategoriesSelectedRecycler()
-        binding.continueButton.setOnClickListener { viewModel.continueToNextScreen() }
+        gameBinding.continueButton.setOnClickListener { viewModel.continueToNextScreen() }
     }
 
     override fun setupObservers() = with(viewModel) {
@@ -34,7 +44,9 @@ class CreateTuttiFruttiFragment :
             tuttiFruttiCategoriesAadapter.selectedCategories = it
             tuttiFruttiSelectedCategoriesAdapter.selectedCategories = it
         }
-        continueButtonEnabled.observe(viewLifecycleOwner) { binding.continueButton.isEnabled = it }
+        continueButtonEnabled.observe(viewLifecycleOwner) {
+            gameBinding.continueButton.isEnabled = it
+        }
     }
 
 
@@ -44,7 +56,7 @@ class CreateTuttiFruttiFragment :
         }
     }
 
-    private fun setupCategoriesRecycler() = with(binding.categoriesRecycler) {
+    private fun setupCategoriesRecycler() = with(gameBinding.categoriesRecycler) {
         layoutManager = LinearLayoutManager(context)
         adapter = TuttiFruttiCategoriesAdapter(viewModel::changeCategorySelection).also {
             this@CreateTuttiFruttiFragment.tuttiFruttiCategoriesAadapter = it
@@ -52,7 +64,7 @@ class CreateTuttiFruttiFragment :
     }
 
 
-    private fun setupCategoriesSelectedRecycler() = with(binding.categoriesSelectedRecycler) {
+    private fun setupCategoriesSelectedRecycler() = with(gameBinding.categoriesSelectedRecycler) {
         layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         adapter = TuttiFruttiSelectedCategoriesAdapter(viewModel::changeCategorySelection).also {
             this@CreateTuttiFruttiFragment.tuttiFruttiSelectedCategoriesAdapter = it
@@ -61,7 +73,12 @@ class CreateTuttiFruttiFragment :
 
     companion object {
 
+        const val INSTRUCTIONS_KEY = "Instructions"
+
         /** Create a new instance of the [CreateTuttiFruttiFragment]. */
-        fun newInstance() = CreateTuttiFruttiFragment()
+        fun newInstance(instructions: String) =
+            CreateTuttiFruttiFragment().apply {
+                arguments = bundleOf(INSTRUCTIONS_KEY to instructions)
+            }
     }
 }

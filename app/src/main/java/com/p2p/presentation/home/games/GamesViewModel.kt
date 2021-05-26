@@ -35,7 +35,7 @@ class GamesViewModel(private val userSession: UserSession) : BaseViewModel<Games
     /** Open the view that corresponds to create the [selectedGame]. */
     fun createGame(userName: String?) {
         if (!validateAndSaveName(userName)) return
-        when(selectedGame) {
+        when (selectedGame) {
             Game.TUTTI_FRUTTI -> dispatchSingleTimeEvent(GoToCreateTuttiFrutti)
         }
     }
@@ -48,7 +48,12 @@ class GamesViewModel(private val userSession: UserSession) : BaseViewModel<Games
 
     private fun validateAndSaveName(name: String?): Boolean {
         return if (name.isNullOrBlank()) {
-            dispatchMessage(MessageData(textRes = R.string.games_name_error, type = MessageData.Type.ERROR))
+            dispatchMessage(
+                MessageData(
+                    textRes = R.string.games_name_error,
+                    type = MessageData.Type.ERROR
+                )
+            )
             false
         } else {
             saveName(name)
