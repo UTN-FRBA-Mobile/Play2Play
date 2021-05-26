@@ -22,7 +22,10 @@ class CreateTuttiFruttiFragment :
 
     override val gameData = Game.TUTTI_FRUTTI
 
-    override var instructions: String? = null
+    override val instructions: String by lazy {
+        requireNotNull(requireArguments().getString(INSTRUCTIONS_KEY))
+        { "Instructions key must be passed to fragment arguments" }
+    }
 
     private lateinit var tuttiFruttiCategoriesAadapter: TuttiFruttiCategoriesAdapter
     private lateinit var tuttiFruttiSelectedCategoriesAdapter: TuttiFruttiSelectedCategoriesAdapter
@@ -33,10 +36,6 @@ class CreateTuttiFruttiFragment :
         setupCategoriesRecycler()
         setupCategoriesSelectedRecycler()
         gameBinding.continueButton.setOnClickListener { viewModel.continueToNextScreen() }
-    }
-
-    override fun initValues() {
-        instructions = requireArguments().getString(INSTRUCTIONS_KEY)!!
     }
 
     override fun setupObservers() = with(viewModel) {
