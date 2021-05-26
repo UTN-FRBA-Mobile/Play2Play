@@ -5,13 +5,10 @@ import android.content.Context
 import android.content.Intent
 import androidx.activity.viewModels
 import com.p2p.presentation.base.BaseMVVMActivity
-import com.p2p.presentation.base.game.AbstractGameCreationEvent
-import com.p2p.presentation.base.game.GameConnectionType
-import com.p2p.presentation.base.game.GoToClientLobby
-import com.p2p.presentation.base.game.GoToServerLobby
+import com.p2p.presentation.base.game.*
 import com.p2p.presentation.tuttifrutti.create.CreateTuttiFruttiFragment
 
-class TuttiFruttiActivity : BaseMVVMActivity<AbstractGameCreationEvent, TuttiFruttiViewModel>() {
+class TuttiFruttiActivity : BaseMVVMActivity<GameCreationEvent, TuttiFruttiViewModel>() {
 
     private val gameConnectionType: String by lazy {
         intent.getStringExtra(GameConnectionType.EXTRA) ?: "UNKNOWN"
@@ -28,11 +25,10 @@ class TuttiFruttiActivity : BaseMVVMActivity<AbstractGameCreationEvent, TuttiFru
         viewModel.startConnection() // TODO: This should be called when the creation is finished, from the Lobby
     }
 
-    override fun onEvent(event: AbstractGameCreationEvent) = when (event) {
-        GoToSelectCategories -> addFragment(CreateTuttiFruttiFragment.newInstance(), shouldAddToBackStack = false)
+    override fun onEvent(event: GameCreationEvent) = when (event) {
         GoToClientLobby -> Unit // TODO()
         GoToServerLobby -> Unit // TODO()
-        else -> throw NotImplementedError("An uncaught event was dispatched.")
+        is SpecificCreationEvents -> addFragment(CreateTuttiFruttiFragment.newInstance(), shouldAddToBackStack = false)
     }
 
     companion object {

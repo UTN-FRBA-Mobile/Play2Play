@@ -9,7 +9,7 @@ abstract class GameViewModel(
     private val connectionType: ConnectionType,
     private val userSession: UserSession,
     private val bluetoothConnectionCreator: BluetoothConnectionCreator
-) : BaseViewModel<AbstractGameCreationEvent>() {
+) : BaseViewModel<GameCreationEvent>() {
 
     fun startConnection() {
         when (connectionType.type) {

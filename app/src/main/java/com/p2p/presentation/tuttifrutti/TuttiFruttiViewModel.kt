@@ -19,8 +19,4 @@ class TuttiFruttiViewModel(
             onCreateOrJoin()
         }
     }
-
-    companion object {
-        const val UNKNOWN = "Desconocido"
-    }
 }
