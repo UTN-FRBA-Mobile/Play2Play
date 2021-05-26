@@ -28,6 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/medium_extra"
         android:background="@null"
+        android:contentDescription="@string/decrease_number"
         android:paddingTop="@dimen/small"
         android:scaleType="center"
         android:src="@drawable/ic_baseline_arrow_left"
@@ -35,8 +36,7 @@
         app:layout_constraintEnd_toStartOf="@id/number"
         app:layout_constraintHorizontal_bias="1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/rounds_text"
-        tools:ignore="ContentDescription" />
+        app:layout_constraintTop_toBottomOf="@id/rounds_text" />
 
     <TextView
         android:id="@+id/number"
@@ -57,16 +57,16 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/medium_extra"
         android:background="@null"
-        android:paddingStart="@dimen/small_extra"
+        android:paddingStart="@dimen/small"
         android:paddingTop="@dimen/small"
-        android:paddingEnd="@dimen/small_extra"
+        android:paddingEnd="@dimen/small"
         android:src="@drawable/ic_baseline_arrow_right"
         app:layout_constraintBottom_toTopOf="@id/create_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toEndOf="@id/number"
         app:layout_constraintTop_toBottomOf="@id/rounds_text"
-        tools:ignore="ContentDescription" />
+        android:contentDescription="@string/increase_number" />
 
     <Button
         android:id="@+id/create_button"

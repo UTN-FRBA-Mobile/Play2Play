@@ -6,7 +6,6 @@
     <dimen name="tiniest">1dp</dimen>
     <dimen name="tiny">2dp</dimen>
     <dimen name="small">4dp</dimen>
-    <dimen name="small_extra">6dp</dimen>
     <dimen name="medium">8dp</dimen>
     <dimen name="medium_more">12dp</dimen>
     <dimen name="medium_extra">16dp</dimen>
