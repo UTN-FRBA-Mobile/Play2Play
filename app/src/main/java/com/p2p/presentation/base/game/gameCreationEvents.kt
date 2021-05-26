@@ -1,4 +1,4 @@
-package com.p2p.presentation.tuttifrutti
+package com.p2p.presentation.base.game
 
 interface AbstractGameCreationEvent
 

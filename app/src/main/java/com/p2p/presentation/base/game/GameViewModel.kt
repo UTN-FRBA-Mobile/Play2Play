@@ -4,9 +4,6 @@ import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.userInfo.UserSession
 import com.p2p.framework.bluetooth.basemessage.HandshakeMessage
 import com.p2p.presentation.base.BaseViewModel
-import com.p2p.presentation.tuttifrutti.AbstractGameCreationEvent
-import com.p2p.presentation.tuttifrutti.GoToClientLobby
-import com.p2p.presentation.tuttifrutti.GoToServerLobby
 
 abstract class GameViewModel(
     private val connectionType: ConnectionType,
@@ -40,4 +37,3 @@ abstract class GameViewModel(
         const val UNKNOWN = "Desconocido"
     }
 }
-

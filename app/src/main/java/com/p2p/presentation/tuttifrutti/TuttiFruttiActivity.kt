@@ -5,7 +5,10 @@ import android.content.Context
 import android.content.Intent
 import androidx.activity.viewModels
 import com.p2p.presentation.base.BaseMVVMActivity
+import com.p2p.presentation.base.game.AbstractGameCreationEvent
 import com.p2p.presentation.base.game.GameConnectionType
+import com.p2p.presentation.base.game.GoToClientLobby
+import com.p2p.presentation.base.game.GoToServerLobby
 import com.p2p.presentation.tuttifrutti.create.CreateTuttiFruttiFragment
 
 class TuttiFruttiActivity : BaseMVVMActivity<AbstractGameCreationEvent, TuttiFruttiViewModel>() {
@@ -16,17 +19,13 @@ class TuttiFruttiActivity : BaseMVVMActivity<AbstractGameCreationEvent, TuttiFru
     private val device: BluetoothDevice? by lazy { intent.getParcelableExtra(SERVER_DEVICE_EXTRA) }
 
     override val viewModel: TuttiFruttiViewModel by viewModels {
-        TuttiFruttiViewModelFactory(
-            baseContext,
-            gameConnectionType,
-            device
-        )
+        TuttiFruttiViewModelFactory(baseContext, gameConnectionType, device)
     }
 
     override fun onStart() {
         super.onStart()
         viewModel.onStart()
-        viewModel.startConnection() // TODO: This should be called when the creation is finished from the Lobby
+        viewModel.startConnection() // TODO: This should be called when the creation is finished, from the Lobby
     }
 
     override fun onEvent(event: AbstractGameCreationEvent) = when (event) {
