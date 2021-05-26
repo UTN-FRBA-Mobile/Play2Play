@@ -1,7 +1,5 @@
 package com.p2p.presentation.tuttifrutti
 
-sealed class TuttiFruttiCreationEvent
+sealed class TuttiFruttiCreationEvents : AbstractGameCreationEvent
 
-object GoToSelectCategories : TuttiFruttiCreationEvent()
-object GoToServerLobby : TuttiFruttiCreationEvent()
-object GoToClientLobby : TuttiFruttiCreationEvent()
+object GoToSelectCategories : TuttiFruttiCreationEvents()

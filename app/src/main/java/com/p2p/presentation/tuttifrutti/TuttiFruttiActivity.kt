@@ -8,7 +8,7 @@ import com.p2p.presentation.base.BaseMVVMActivity
 import com.p2p.presentation.base.game.GameConnectionType
 import com.p2p.presentation.tuttifrutti.create.CreateTuttiFruttiFragment
 
-class TuttiFruttiActivity : BaseMVVMActivity<TuttiFruttiCreationEvent, TuttiFruttiViewModel>() {
+class TuttiFruttiActivity : BaseMVVMActivity<AbstractGameCreationEvent, TuttiFruttiViewModel>() {
 
     private val gameConnectionType: String by lazy {
         intent.getStringExtra(GameConnectionType.EXTRA) ?: "UNKNOWN"
@@ -26,13 +26,14 @@ class TuttiFruttiActivity : BaseMVVMActivity<TuttiFruttiCreationEvent, TuttiFrut
     override fun onStart() {
         super.onStart()
         viewModel.onStart()
-        viewModel.onCreateOrJoin() // TODO: This should be called when the creation is finished
+        viewModel.startConnection() // TODO: This should be called when the creation is finished from the Lobby
     }
 
-    override fun onEvent(event: TuttiFruttiCreationEvent) = when (event) {
+    override fun onEvent(event: AbstractGameCreationEvent) = when (event) {
         GoToSelectCategories -> addFragment(CreateTuttiFruttiFragment.newInstance(), shouldAddToBackStack = false)
         GoToClientLobby -> Unit // TODO()
         GoToServerLobby -> Unit // TODO()
+        else -> throw NotImplementedError("An uncaught event was dispatched.")
     }
 
     companion object {
