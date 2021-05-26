@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.p2p.databinding.FragmentGamesBinding
+import com.p2p.framework.InstructionsLocalResourcesSource
 import com.p2p.presentation.base.BaseFragment
 import com.p2p.presentation.extensions.clearAndAppend
 import com.p2p.presentation.tuttifrutti.TuttiFruttiActivity

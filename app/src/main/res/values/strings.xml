@@ -6,6 +6,7 @@
 
     <!-- Common -->
     <string name="continue_button">Continuar</string>
+    <string name="ok_button">Ok</string>
 
     <!-- Games -->
     <string name="games_user_name">Tu nombre</string>
