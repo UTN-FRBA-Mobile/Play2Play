@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.p2p.data.tuttifrutti.TuttiFruttiMetadata
+import com.p2p.model.tuttifrutti.TuttiFruttiInfo
 import com.p2p.databinding.FragmentCreateTuttiFruttiBinding
 import com.p2p.presentation.basegame.BaseGameFragment
 import com.p2p.presentation.home.games.Game
@@ -24,7 +24,10 @@ class CreateTuttiFruttiFragment :
 
     override val gameData = Game.TUTTI_FRUTTI
 
-    override var instructions: String? = null
+    override val instructions: String by lazy {
+        requireNotNull(requireArguments().getString(INSTRUCTIONS_KEY))
+        { "Instructions key must be passed to fragment arguments" }
+    }
 
     private lateinit var tuttiFruttiCategoriesAdapter: TuttiFruttiCategoriesAdapter
     private lateinit var tuttiFruttiSelectedCategoriesAdapter: TuttiFruttiSelectedCategoriesAdapter
@@ -35,10 +38,6 @@ class CreateTuttiFruttiFragment :
         setupCategoriesRecycler()
         setupCategoriesSelectedRecycler()
         gameBinding.continueButton.setOnClickListener { viewModel.continueToNextScreen() }
-    }
-
-    override fun initValues() {
-        instructions = requireArguments().getString(INSTRUCTIONS_KEY)!!
     }
 
     override fun setupObservers() = with(viewModel) {
@@ -59,8 +58,8 @@ class CreateTuttiFruttiFragment :
             val selectedCategories = ArrayList(viewModel.selectedCategories.value)
             addFragment(
                 PlayTuttiFruttiFragment.newInstance(
-                    instructions!!,
-                    TuttiFruttiMetadata(totalRounds = 10, selectedCategories)
+                    instructions,
+                    TuttiFruttiInfo(totalRounds = 10, selectedCategories)
                 ),
                 shouldAddToBackStack = true
             )

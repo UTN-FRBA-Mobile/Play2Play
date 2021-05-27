@@ -11,6 +11,7 @@ import com.p2p.databinding.BaseGameBinding
 import com.p2p.presentation.base.BaseFragment
 import com.p2p.presentation.base.BaseViewModel
 import com.p2p.presentation.home.games.Game
+import com.p2p.presentation.tuttifrutti.create.CreateTuttiFruttiFragment
 
 /**
  * Base implementation of a [BaseGameFragment] used to simplify boilerplate.
@@ -25,7 +26,7 @@ abstract class BaseGameFragment<GVB : ViewBinding, E : Any, VM : BaseViewModel<E
     /** Common properties of games to be shown in the layout */
     abstract val gameData: Game
 
-    abstract var instructions: String?
+    abstract val instructions: String
 
     override val inflater: (LayoutInflater, ViewGroup?, Boolean) -> BaseGameBinding =
         { inflater, container, boolean ->
@@ -64,7 +65,7 @@ abstract class BaseGameFragment<GVB : ViewBinding, E : Any, VM : BaseViewModel<E
 
     private fun showInstructions() =
         MaterialAlertDialogBuilder(requireContext())
-            .setMessage(instructions!!)
+            .setMessage(instructions)
             //It is positive to be shown on the right
             .setPositiveButton(resources.getString(R.string.ok_button)) { _, _ ->
                 // Respond to positive button press

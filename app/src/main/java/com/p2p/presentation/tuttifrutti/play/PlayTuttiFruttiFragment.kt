@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.p2p.data.tuttifrutti.TuttiFruttiMetadata
+import com.p2p.model.tuttifrutti.TuttiFruttiInfo
 import com.p2p.databinding.FragmentPlayTuttiFruttiBinding
 import com.p2p.presentation.basegame.BaseGameFragment
 import com.p2p.presentation.home.games.Game
@@ -15,7 +15,10 @@ class PlayTuttiFruttiFragment :
 
     override val viewModel: PlayTuttiFruttiViewModel by viewModels()
 
-    override var instructions: String? = null
+    override val instructions: String by lazy {
+        requireNotNull(requireArguments().getString(INSTRUCTIONS_KEY))
+        { "Instructions key must be passed to fragment arguments" }
+    }
 
     override val gameInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentPlayTuttiFruttiBinding =
         FragmentPlayTuttiFruttiBinding::inflate
@@ -36,8 +39,6 @@ class PlayTuttiFruttiFragment :
     }
 
     override fun initValues() {
-        val arguments = requireArguments()
-        instructions = arguments.getString(INSTRUCTIONS_KEY)!!
         viewModel.setMetadata(arguments.getParcelable(GAME_METADATA_KEY)!!)
     }
 
@@ -69,11 +70,11 @@ class PlayTuttiFruttiFragment :
         const val GAME_METADATA_KEY = "GameMetadata"
 
         /** Create a new instance of the [PlayTuttiFruttiFragment]. */
-        fun newInstance(instructions: String, tuttiFruttiMetadata: TuttiFruttiMetadata) =
+        fun newInstance(instructions: String, tuttiFruttiInfo: TuttiFruttiInfo) =
             PlayTuttiFruttiFragment().apply {
                 arguments = bundleOf(
                     INSTRUCTIONS_KEY to instructions,
-                    GAME_METADATA_KEY to tuttiFruttiMetadata
+                    GAME_METADATA_KEY to tuttiFruttiInfo
                 )
             }
     }

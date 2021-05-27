@@ -2,7 +2,7 @@ package com.p2p.presentation.tuttifrutti.play
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.p2p.data.tuttifrutti.TuttiFruttiMetadata
+import com.p2p.model.tuttifrutti.TuttiFruttiInfo
 import com.p2p.presentation.base.BaseViewModel
 import com.p2p.presentation.tuttifrutti.create.Category
 
@@ -11,22 +11,16 @@ class PlayTuttiFruttiViewModel :
 
     val categoriesData = mutableMapOf<Category, String>()
 
-    /** Whether the continue button is enabled or not. */
+    /** Whether the stop button is enabled or not. */
     private val _stopButtonEnabled = MutableLiveData<Boolean>()
     val stopButtonEnabled: LiveData<Boolean> = _stopButtonEnabled
 
+    private val _info: TuttiFruttiInfo by lazy {
 
-
-    /** Whether the continue button is enabled or not. */
-    private var _metadata: TuttiFruttiMetadata? = null
-    val metadata: TuttiFruttiMetadata = _metadata!!
+    }
 
     init {
         _stopButtonEnabled.value = false
-    }
-
-    fun setMetadata(metadata: TuttiFruttiMetadata){
-        _metadata = metadata
     }
 
     fun onWrittenCategory(category: Category, value: String?) {
