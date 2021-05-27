@@ -7,7 +7,7 @@ import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.framework.InstructionsLocalResourcesSource
 import com.p2p.presentation.base.BaseActivity
 import com.p2p.presentation.home.games.Game
-import com.p2p.presentation.tuttifrutti.create.CreateTuttiFruttiFragment
+import com.p2p.presentation.tuttifrutti.create.categories.CreateTuttiFruttiFragment
 
 class TuttiFruttiActivity : BaseActivity() {
 
