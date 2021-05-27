@@ -51,7 +51,7 @@ class BluetoothConnectionThread(
     // Call this from the main activity to send data to the remote device.
     fun write(bytes: ByteArray, offset: Int, length: Int) {
         try {
-            Logger.d(TAG, "Writting...")
+            Logger.d(TAG, "Writing...")
             outputStream.write(bytes, offset, length)
         } catch (e: IOException) {
             Log.e(TAG, "Error occurred when sending data", e)
