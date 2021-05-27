@@ -1,5 +1,7 @@
 package com.p2p.presentation.base.game
 
+import com.p2p.R
+import com.p2p.data.bluetooth.BluetoothConnection
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.userInfo.UserSession
 import com.p2p.framework.bluetooth.basemessage.HandshakeMessage
@@ -9,31 +11,32 @@ abstract class GameViewModel(
     private val connectionType: ConnectionType,
     private val userSession: UserSession,
     private val bluetoothConnectionCreator: BluetoothConnectionCreator
-) : BaseViewModel<GameCreationEvent>() {
+) : BaseViewModel<GameEvent>() {
+
+    lateinit var connection: BluetoothConnection
 
     fun startConnection() {
-        when (connectionType.type) {
+        connection = when (connectionType.type) {
             GameConnectionType.SERVER -> bluetoothConnectionCreator.createServer()
-            GameConnectionType.CLIENT -> {
+            else -> {
                 val device = requireNotNull(connectionType.device) {
                     "A bluetooth device should be passed on the activity creation"
                 }
-                bluetoothConnectionCreator.createClient(device)
-                    .onConnected { // TODO: should wait until connected to continue any processing
-                        it.write(HandshakeMessage(userSession.getUserName() ?: UNKNOWN))
+                bluetoothConnectionCreator.createClient(device).also { client ->
+                    client.onConnected { // TODO: should wait until connected to continue any processing
+                        it.write(HandshakeMessage(userSession.getUserName() ?: R.string.unknown.toString()))
                     }
+                }
             }
         }
     }
 
-    fun onCreateOrJoin() {
+    fun createOrJoin() {
         when (connectionType.type) {
-            GameConnectionType.SERVER -> dispatchSingleTimeEvent(GoToServerLobby)
+            GameConnectionType.SERVER -> dispatchSingleTimeEvent(creationEvent())
             GameConnectionType.CLIENT -> dispatchSingleTimeEvent(GoToClientLobby)
         }
     }
 
-    companion object {
-        const val UNKNOWN = "Desconocido"
-    }
+    protected abstract fun creationEvent(): GameEvent
 }

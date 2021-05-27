@@ -1,5 +1,5 @@
 package com.p2p.presentation.tuttifrutti
 
-import com.p2p.presentation.base.game.SpecificCreationEvents
+import com.p2p.presentation.base.game.SpecificGameEvents
 
-object GoToSelectCategories : SpecificCreationEvents()
+object GoToSelectCategories : SpecificGameEvents()

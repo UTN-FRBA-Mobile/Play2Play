@@ -8,6 +8,7 @@
     <string name="continue_button">Continuar</string>
     <string name="connect">Conectarse</string>
     <string name="understood">Entendido</string>
+    <string name="unknown">Desconocido</string>
 
     <!-- Games -->
     <string name="games_user_name">Tu nombre</string>
