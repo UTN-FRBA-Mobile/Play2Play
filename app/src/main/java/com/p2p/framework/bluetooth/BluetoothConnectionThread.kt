@@ -54,7 +54,7 @@ class BluetoothConnectionThread(
             Logger.d(TAG, "Writing...")
             outputStream.write(bytes, offset, length)
         } catch (e: IOException) {
-            Log.e(TAG, "Error occurred when sending data", e)
+            Logger.e(TAG, "Error occurred when sending data", e)
 
             // Send a failure message back to the activity.
             val writeErrorMsg = handler.obtainMessage(MESSAGE_TOAST)
