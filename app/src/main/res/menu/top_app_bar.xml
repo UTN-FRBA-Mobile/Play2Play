@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/search"
+        android:id="@+id/instructions"
         android:icon="@drawable/ic_baseline_info_24"
         app:showAsAction="ifRoom"
         android:title="Info" />
