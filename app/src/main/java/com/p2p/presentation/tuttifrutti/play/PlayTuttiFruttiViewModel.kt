@@ -32,8 +32,7 @@ class PlayTuttiFruttiViewModel :
     }
 
     private fun allCategoriesAreFilled(): Boolean {
-        val filledCategoriesCount = categoriesData.filter { it.value.isNotBlank() }.size
-        return filledCategoriesCount == metadata.categories.size
+        return categoriesData.all { it.value.isNotBlank() }
     }
 
 
