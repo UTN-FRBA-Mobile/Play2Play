@@ -27,7 +27,7 @@ class TuttiFruttiActivity : BaseMVVMActivity<GameEvent, TuttiFruttiViewModel>() 
     override fun onEvent(event: GameEvent) = when (event) {
         GoToClientLobby -> Unit // TODO()
         GoToServerLobby -> Unit // TODO()
-        is SpecificGameEvents -> addFragment(CreateTuttiFruttiFragment.newInstance(),shouldAddToBackStack = false)
+        is SpecificGameEvents -> addFragment(CreateTuttiFruttiFragment.newInstance(), shouldAddToBackStack = false)
     }
 
     companion object {
