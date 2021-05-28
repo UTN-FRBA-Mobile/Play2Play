@@ -21,7 +21,7 @@ class TuttiFruttiCountdownFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val applicationContext = requireActivity().applicationContext
+        val applicationContext = requireContext()
 
         val countdownView = view.findViewById<ImageView>(R.id.countdown)
 
