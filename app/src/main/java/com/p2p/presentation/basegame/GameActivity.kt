@@ -58,29 +58,31 @@ abstract class GameActivity<E : SpecificGameEvent, VM : GameViewModel>(
         }
     }
     private val gameConnectionType: String by lazy {
-        intent.getStringExtra(GameConnectionType.EXTRA) ?: "UNKNOWN"
+        requireNotNull(intent.getStringExtra(GameConnectionType.EXTRA)) {
+            "The server device wasn't sent. Use the start method of [GameActivity]."
+        }
     }
     private val device: BluetoothDevice? by lazy { intent.getParcelableExtra(SERVER_DEVICE_EXTRA) }
     private val objectMapper by lazy { jacksonObjectMapper() }
 
-        final override fun onEvent(event: GameEvent) = when (event) {
-            GoToCreate -> goToCreate()
-            GoToClientLobby -> goToClientLobby()
-            GoToServerLobby -> goToServerLobby()
-            GoToPlay -> goToPlay()
-            is OpenInstructions -> showInstructions(event.instructions)
-            is SpecificGameEvent -> {
-                try {
-                    @Suppress("UNCHECKED_CAST") // Read the catch-throw message to understand this :)
-                    onGameEvent(event as E)
-                } catch (e: ClassCastException) {
-                    throw IllegalStateException(
-                        "On a specific implementation of a game view model must be " +
-                                "dispatched specific game events only of the current game.", e
-                    )
-                }
+    final override fun onEvent(event: GameEvent) = when (event) {
+        GoToCreate -> goToCreate()
+        GoToClientLobby -> goToClientLobby()
+        GoToServerLobby -> goToServerLobby()
+        GoToPlay -> goToPlay()
+        is OpenInstructions -> showInstructions(event.instructions)
+        is SpecificGameEvent -> {
+            try {
+                @Suppress("UNCHECKED_CAST") // Read the catch-throw message to understand this :)
+                onGameEvent(event as E)
+            } catch (e: ClassCastException) {
+                throw IllegalStateException(
+                    "On a specific implementation of a game view model must be " +
+                            "dispatched specific game events only of the current game.", e
+                )
             }
         }
+    }
 
     protected abstract fun goToCreate()
 
