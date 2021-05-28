@@ -8,6 +8,7 @@ import android.os.Looper
 import androidx.activity.viewModels
 import androidx.annotation.LayoutRes
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.p2p.R
 import com.p2p.framework.bluetooth.BluetoothConnectionThread.Companion.MESSAGE_READ
 import com.p2p.framework.bluetooth.BluetoothConnectionThread.Companion.MESSAGE_WRITE_ERROR
@@ -19,7 +20,7 @@ import com.p2p.presentation.base.BaseMVVMActivity
 import com.p2p.utils.Logger
 import kotlin.reflect.KClass
 
-abstract class GameActivity<VM : GameViewModel>(
+abstract class GameActivity<E : SpecificGameEvent, VM : GameViewModel>(
     @LayoutRes layout: Int = R.layout.activity_base
 ) : BaseMVVMActivity<GameEvent, VM>(layout) {
 
@@ -62,7 +63,46 @@ abstract class GameActivity<VM : GameViewModel>(
     private val device: BluetoothDevice? by lazy { intent.getParcelableExtra(SERVER_DEVICE_EXTRA) }
     private val objectMapper by lazy { jacksonObjectMapper() }
 
+        final override fun onEvent(event: GameEvent) = when (event) {
+            GoToCreate -> goToCreate()
+            GoToClientLobby -> goToClientLobby()
+            GoToServerLobby -> goToServerLobby()
+            GoToPlay -> goToPlay()
+            is OpenInstructions -> showInstructions(event.instructions)
+            is SpecificGameEvent -> {
+                try {
+                    @Suppress("UNCHECKED_CAST") // Read the catch-throw message to understand this :)
+                    onGameEvent(event as E)
+                } catch (e: ClassCastException) {
+                    throw IllegalStateException(
+                        "On a specific implementation of a game view model must be " +
+                                "dispatched specific game events only of the current game.", e
+                    )
+                }
+            }
+        }
+
+    protected abstract fun goToCreate()
+
+    protected abstract fun goToPlay()
+
+    protected abstract fun goToClientLobby()
+
+    protected abstract fun goToServerLobby()
+
+    protected open fun onGameEvent(event: E) {}
+
     protected inline fun <reified VM : GameViewModel> gameViewModels() = viewModels<VM> { gameViewModelFactory }
+
+    private fun showInstructions(instructions: String) {
+        MaterialAlertDialogBuilder(baseContext)
+            .setMessage(instructions)
+            //It is positive to be shown on the right
+            .setPositiveButton(resources.getString(android.R.string.ok)) { _, _ ->
+                // Respond to positive button press
+            }
+            .show()
+    }
 
     private fun android.os.Message.toMessage(): Message {
         val byteArray = (obj as ByteArray).copyOfRange(0, arg1)

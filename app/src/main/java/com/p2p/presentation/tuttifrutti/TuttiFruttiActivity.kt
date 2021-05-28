@@ -6,13 +6,9 @@ import android.os.Bundle
 import android.widget.TextView
 import com.p2p.R
 import com.p2p.presentation.basegame.GameActivity
-import com.p2p.presentation.basegame.GameEvent
-import com.p2p.presentation.basegame.GoToClientLobby
-import com.p2p.presentation.basegame.GoToServerLobby
-import com.p2p.presentation.basegame.SpecificGameEvent
 import com.p2p.presentation.tuttifrutti.create.categories.CreateTuttiFruttiFragment
 
-class TuttiFruttiActivity : GameActivity<TuttiFruttiViewModel>() {
+class TuttiFruttiActivity : GameActivity<TuttiFruttiSpecificGameEvent, TuttiFruttiViewModel>() {
 
     override val viewModel: TuttiFruttiViewModel by gameViewModels()
 
@@ -21,12 +17,13 @@ class TuttiFruttiActivity : GameActivity<TuttiFruttiViewModel>() {
         viewModel.players.observe(this) { findViewById<TextView>(R.id.players).text = it.joinToString() }
     }
 
-    override fun onEvent(event: GameEvent) = when (event) {
-        GoToClientLobby -> Unit // TODO()
-        GoToServerLobby -> Unit // TODO()
-        is SpecificGameEvent -> addFragment(CreateTuttiFruttiFragment.newInstance(), shouldAddToBackStack = false)
-        else -> Unit // Do nothing, it's not necessary to be exhaustive on game events
-    }
+    override fun goToCreate() = addFragment(CreateTuttiFruttiFragment.newInstance(), shouldAddToBackStack = false)
+
+    override fun goToPlay() = Unit // TODO: addFragment(CountdownTuttiFruttiFragment.newInstance(), shouldAddToBackStack = false)
+
+    override fun goToClientLobby() = Unit // TODO: addFragment(ClientLobbyTuttiFruttiFragment.newInstance(), shouldAddToBackStack = false)
+
+    override fun goToServerLobby() = Unit // TODO: addFragment(ServerLobbyTuttiFruttiFragment.newInstance(), shouldAddToBackStack = false)
 
     companion object {
 
