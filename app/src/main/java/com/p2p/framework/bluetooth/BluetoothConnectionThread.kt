@@ -2,7 +2,7 @@ package com.p2p.framework.bluetooth
 
 import android.bluetooth.BluetoothSocket
 import android.os.Handler
-import android.util.Log
+import androidx.core.os.bundleOf
 import com.p2p.utils.Logger
 import java.io.IOException
 import java.io.InputStream
@@ -43,6 +43,7 @@ class BluetoothConnectionThread(
             onMessageReceived?.invoke(numBytes, buffer)
             handler
                 .obtainMessage(MESSAGE_READ, numBytes, -1, buffer)
+                .apply { data = bundleOf(SENDER_ID to this@BluetoothConnectionThread.id) }
                 .sendToTarget()
         }
     }
@@ -80,9 +81,10 @@ class BluetoothConnectionThread(
 
     companion object {
 
-        const val MESSAGE_READ: Int = 0
-        const val MESSAGE_WRITE_SUCCESS: Int = 1
-        const val MESSAGE_WRITE_ERROR: Int = 2
+        const val MESSAGE_READ = 0
+        const val MESSAGE_WRITE_SUCCESS = 1
+        const val MESSAGE_WRITE_ERROR = 2
+        const val SENDER_ID = "SENDER"
         const val TAG = "P2P_BLUETOOTH_SERVICE"
     }
 }

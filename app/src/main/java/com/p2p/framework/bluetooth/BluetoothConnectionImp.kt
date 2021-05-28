@@ -3,10 +3,9 @@ package com.p2p.framework.bluetooth
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothSocket
 import android.os.Handler
-import android.util.Log
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.p2p.data.bluetooth.BluetoothConnection
-import com.p2p.data.bluetooth.Message
+import com.p2p.model.message.Message
 
 abstract class BluetoothConnectionImp(private val handler: Handler) : Thread(), BluetoothConnection {
 

@@ -4,7 +4,8 @@ import android.bluetooth.BluetoothServerSocket
 import android.bluetooth.BluetoothSocket
 import android.os.Handler
 import com.p2p.data.bluetooth.BluetoothConnection
-import com.p2p.data.bluetooth.Message
+import com.p2p.model.message.Message
+import com.p2p.model.message.MessageReceived
 import com.p2p.utils.Logger
 import java.io.IOException
 
@@ -50,13 +51,7 @@ class BluetoothServer(
         }
     }
 
-    fun stopAccepting() {
-        Logger.d(TAG, "Stop accepting new connections")
-        serverSocket?.close()
-        shouldLoop = false
-    }
-
-    fun close() {
+    override fun close() {
         Logger.d(TAG, "Close the server")
         try {
             serverSocket?.close()
@@ -65,8 +60,20 @@ class BluetoothServer(
         }
     }
 
+    fun stopAccepting() {
+        Logger.d(TAG, "Stop accepting new connections")
+        serverSocket?.close() // TODO: I'm not sure that we should close this socket.
+        shouldLoop = false
+    }
+
     override fun write(message: Message) = connectedThreads.forEach {
         writeOnConnection(it, message)
+    }
+
+    override fun answer(messageReceived: MessageReceived, sendMessage: Message) {
+        connectedThreads
+            .firstOrNull { it.id == messageReceived.senderId }
+            ?.let { writeOnConnection(it, sendMessage) }
     }
 
     override fun onConnected(action: (BluetoothConnection) -> Unit) {

@@ -1,9 +1,13 @@
 package com.p2p.presentation.base
 
 import android.os.Bundle
+import androidx.annotation.LayoutRes
+import com.p2p.R
 import com.p2p.presentation.basegame.GameEvent
 
-abstract class BaseMVVMActivity<E : GameEvent, VM : BaseViewModel<out E>> : BaseActivity() {
+abstract class BaseMVVMActivity<E : GameEvent, VM : BaseViewModel<out E>>(
+    @LayoutRes layout: Int = R.layout.activity_base
+) : BaseActivity(layout) {
 
     protected abstract val viewModel: VM
 

@@ -6,16 +6,22 @@ import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import androidx.activity.viewModels
+import androidx.annotation.LayoutRes
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.p2p.data.bluetooth.Message
+import com.p2p.R
 import com.p2p.framework.bluetooth.BluetoothConnectionThread.Companion.MESSAGE_READ
 import com.p2p.framework.bluetooth.BluetoothConnectionThread.Companion.MESSAGE_WRITE_ERROR
 import com.p2p.framework.bluetooth.BluetoothConnectionThread.Companion.MESSAGE_WRITE_SUCCESS
+import com.p2p.framework.bluetooth.BluetoothConnectionThread.Companion.SENDER_ID
+import com.p2p.model.message.Message
+import com.p2p.model.message.MessageReceived
 import com.p2p.presentation.base.BaseMVVMActivity
 import com.p2p.utils.Logger
 import kotlin.reflect.KClass
 
-abstract class GameActivity<VM : GameViewModel> : BaseMVVMActivity<GameEvent, VM>() {
+abstract class GameActivity<VM : GameViewModel>(
+    @LayoutRes layout: Int = R.layout.activity_base
+) : BaseMVVMActivity<GameEvent, VM>(layout) {
 
     protected val gameViewModelFactory: GameViewModelFactory
         get() = GameViewModelFactory(baseContext, gameViewModelFactoryData)
@@ -32,7 +38,7 @@ abstract class GameActivity<VM : GameViewModel> : BaseMVVMActivity<GameEvent, VM
             MESSAGE_READ -> {
                 val message = it.toMessage()
                 Logger.d(TAG, "Read: $message")
-                viewModel.readMessage(message)
+                viewModel.receiveMessage(MessageReceived(message, it.data.getLong(SENDER_ID)))
                 true
             }
             MESSAGE_WRITE_SUCCESS -> {

@@ -4,7 +4,8 @@ import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothSocket
 import android.os.Handler
 import com.p2p.data.bluetooth.BluetoothConnection
-import com.p2p.data.bluetooth.Message
+import com.p2p.model.message.Message
+import com.p2p.model.message.MessageReceived
 import com.p2p.utils.Logger
 import java.io.IOException
 import java.util.UUID
@@ -51,8 +52,7 @@ class BluetoothClient(
         }
     }
 
-    // Closes the client socket and causes the thread to finish.
-    fun close() {
+    override fun close() {
         Logger.d(TAG, "Close the client")
         try {
             connectionSocket?.close()
@@ -71,6 +71,14 @@ class BluetoothClient(
 
     override fun write(message: Message) {
         connectedSocket?.let { writeOnConnection(it, message) }
+    }
+
+    override fun answer(messageReceived: MessageReceived, sendMessage: Message) {
+        if (connectedSocket?.id == messageReceived.senderId) {
+            write(sendMessage)
+        } else {
+            Logger.e(TAG, "Cannot answer to the given sender id")
+        }
     }
 
     companion object {

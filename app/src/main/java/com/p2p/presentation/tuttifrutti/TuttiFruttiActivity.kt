@@ -3,6 +3,8 @@ package com.p2p.presentation.tuttifrutti
 import android.bluetooth.BluetoothDevice
 import android.content.Context
 import android.os.Bundle
+import android.widget.TextView
+import com.p2p.R
 import com.p2p.presentation.basegame.GameActivity
 import com.p2p.presentation.basegame.GameEvent
 import com.p2p.presentation.basegame.GoToClientLobby
@@ -13,6 +15,11 @@ import com.p2p.presentation.tuttifrutti.create.categories.CreateTuttiFruttiFragm
 class TuttiFruttiActivity : GameActivity<TuttiFruttiViewModel>() {
 
     override val viewModel: TuttiFruttiViewModel by gameViewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.players.observe(this) { findViewById<TextView>(R.id.players).text = it.joinToString() }
+    }
 
     override fun onEvent(event: GameEvent) = when (event) {
         GoToClientLobby -> Unit // TODO()
