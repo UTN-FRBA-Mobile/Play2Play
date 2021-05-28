@@ -64,10 +64,14 @@ class GamesViewModelTest : BaseTest() {
         gamesViewModel.createGame(null)
 
         // THEN
-        assertThat(gamesViewModel.message.value, `is`(BaseViewModel.MessageData(
-            textRes = R.string.games_name_error,
-            type = BaseViewModel.MessageData.Type.ERROR
-        )))
+        assertThat(
+            gamesViewModel.message.value, `is`(
+                BaseViewModel.MessageData(
+                    textRes = R.string.games_name_error,
+                    type = BaseViewModel.MessageData.Type.ERROR
+                )
+            )
+        )
     }
 
     @Test
@@ -77,9 +81,13 @@ class GamesViewModelTest : BaseTest() {
         gamesViewModel.createGame(null)
 
         // THEN
-        assertThat(gamesViewModel.message.value, `is`(BaseViewModel.MessageData(
-            textRes = R.string.games_name_error,
-            type = BaseViewModel.MessageData.Type.ERROR
-        )))
+        assertThat(
+            gamesViewModel.message.value, `is`(
+                BaseViewModel.MessageData(
+                    textRes = R.string.games_name_error,
+                    type = BaseViewModel.MessageData.Type.ERROR
+                )
+            )
+        )
     }
 }

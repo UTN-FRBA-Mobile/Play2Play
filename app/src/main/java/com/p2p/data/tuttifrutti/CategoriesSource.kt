@@ -1,5 +1,5 @@
 package com.p2p.data.tuttifrutti
-import com.p2p.presentation.tuttifrutti.create.Category
+import com.p2p.presentation.tuttifrutti.create.categories.Category
 
 /** This interface brings the capacity to show all categories from the game. */
 interface CategoriesSource {

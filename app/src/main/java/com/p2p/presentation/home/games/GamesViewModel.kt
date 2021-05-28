@@ -22,7 +22,7 @@ class GamesViewModel(
 
     /** The current saved user name. */
     private val _userName = MutableLiveData(userSession.getUserName())
-    val userName: LiveData<String> = _userName
+    val userName: LiveData<String?> = _userName
 
     private var selectedGame: Game? = null
 
@@ -58,7 +58,12 @@ class GamesViewModel(
 
     private fun validateAndSaveName(name: String?): Boolean {
         return if (name.isNullOrBlank()) {
-            dispatchMessage(MessageData(textRes = R.string.games_name_error, type = MessageData.Type.ERROR))
+            dispatchMessage(
+                MessageData(
+                    textRes = R.string.games_name_error,
+                    type = MessageData.Type.ERROR
+                )
+            )
             false
         } else {
             saveName(name)
