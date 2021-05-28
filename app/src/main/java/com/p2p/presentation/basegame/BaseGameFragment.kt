@@ -51,7 +51,7 @@ abstract class BaseGameFragment<GVB : ViewBinding, E : Any, VM : BaseViewModel<E
         setHeaderEvents(binding.header)
     }
 
-    private fun setHeaderEvents(header: MaterialToolbar) =
+    private fun setHeaderEvents(header: MaterialToolbar) {
         header.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.instructions -> {
@@ -61,6 +61,8 @@ abstract class BaseGameFragment<GVB : ViewBinding, E : Any, VM : BaseViewModel<E
                 else -> false
             }
         }
+        header.setNavigationOnClickListener { activity?.onBackPressed() }
+    }
 
     private fun showInstructions() =
         MaterialAlertDialogBuilder(requireContext())
@@ -70,5 +72,4 @@ abstract class BaseGameFragment<GVB : ViewBinding, E : Any, VM : BaseViewModel<E
                 // Respond to positive button press
             }
             .show()
-
 }

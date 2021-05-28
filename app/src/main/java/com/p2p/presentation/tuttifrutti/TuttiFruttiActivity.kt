@@ -21,7 +21,7 @@ class TuttiFruttiActivity : BaseActivity() {
 
             addFragment(
                 CreateTuttiFruttiFragment.newInstance(instructions),
-                shouldAddToBackStack = true
+                shouldAddToBackStack = false
             )
         }
     }
