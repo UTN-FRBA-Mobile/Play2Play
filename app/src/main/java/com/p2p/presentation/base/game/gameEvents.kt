@@ -5,4 +5,4 @@ sealed class GameEvent
 object GoToServerLobby : GameEvent()
 object GoToClientLobby : GameEvent()
 
-open class SpecificGameEvents : GameEvent()
+open class SpecificGameEvent : GameEvent()

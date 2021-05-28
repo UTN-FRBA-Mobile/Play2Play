@@ -1,6 +1,5 @@
 package com.p2p.presentation.base.game
 
-import com.p2p.R
 import com.p2p.data.bluetooth.BluetoothConnection
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.userInfo.UserSession
@@ -23,8 +22,8 @@ abstract class GameViewModel(
                     "A bluetooth device should be passed on the activity creation"
                 }
                 bluetoothConnectionCreator.createClient(device).also { client ->
-                    client.onConnected { // TODO: should wait until connected to continue any processing
-                        it.write(HandshakeMessage(userSession.getUserName() ?: R.string.unknown.toString()))
+                    client.onConnected {
+                        it.write(HandshakeMessage(userSession.getUserNameOrEmpty()))
                     }
                 }
             }
@@ -33,10 +32,10 @@ abstract class GameViewModel(
 
     fun createOrJoin() {
         when (connectionType.type) {
-            GameConnectionType.SERVER -> dispatchSingleTimeEvent(creationEvent())
+            GameConnectionType.SERVER -> dispatchSingleTimeEvent(getCreationEvent())
             GameConnectionType.CLIENT -> dispatchSingleTimeEvent(GoToClientLobby)
         }
     }
 
-    protected abstract fun creationEvent(): GameEvent
+    protected abstract fun getCreationEvent(): GameEvent
 }

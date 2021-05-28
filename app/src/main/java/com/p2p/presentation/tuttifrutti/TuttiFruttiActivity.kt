@@ -19,15 +19,10 @@ class TuttiFruttiActivity : BaseMVVMActivity<GameEvent, TuttiFruttiViewModel>() 
         TuttiFruttiViewModelFactory(baseContext, gameConnectionType, device)
     }
 
-    init {
-        viewModel.createOrJoin()
-        viewModel.startConnection() // TODO: This should be called when the creation is finished, from the Lobby
-    }
-
     override fun onEvent(event: GameEvent) = when (event) {
         GoToClientLobby -> Unit // TODO()
         GoToServerLobby -> Unit // TODO()
-        is SpecificGameEvents -> addFragment(CreateTuttiFruttiFragment.newInstance(), shouldAddToBackStack = false)
+        is SpecificGameEvent -> addFragment(CreateTuttiFruttiFragment.newInstance(), shouldAddToBackStack = false)
     }
 
     companion object {

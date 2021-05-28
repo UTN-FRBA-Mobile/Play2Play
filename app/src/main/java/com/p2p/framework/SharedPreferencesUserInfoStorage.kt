@@ -18,6 +18,8 @@ class SharedPreferencesUserInfoStorage(private val context: Context) : UserInfoS
 
     override fun getUserName(): String? = sharedPreferences.getString(USER_NAME_KEY, null)
 
+    override fun getUserNameOrEmpty(): String = getUserName() ?: context.resources.getString(R.string.unknown)
+
     companion object {
 
         @VisibleForTesting

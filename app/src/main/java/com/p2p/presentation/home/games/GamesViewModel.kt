@@ -22,7 +22,7 @@ class GamesViewModel(
 
     /** The current saved user name. */
     private val _userName = MutableLiveData(userSession.getUserName())
-    val userName: LiveData<String?> = _userName
+    val userName: LiveData<String> = _userName
 
     private var selectedGame: Game? = null
 

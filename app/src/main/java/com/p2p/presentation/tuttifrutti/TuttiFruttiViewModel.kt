@@ -3,7 +3,6 @@ package com.p2p.presentation.tuttifrutti
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.userInfo.UserSession
 import com.p2p.presentation.base.game.ConnectionType
-import com.p2p.presentation.base.game.GameConnectionType
 import com.p2p.presentation.base.game.GameEvent
 import com.p2p.presentation.base.game.GameViewModel
 
@@ -13,5 +12,10 @@ class TuttiFruttiViewModel(
     bluetoothConnectionCreator: BluetoothConnectionCreator
 ) : GameViewModel(connectionType, userSession, bluetoothConnectionCreator) {
 
-    override fun creationEvent(): GameEvent = GoToSelectCategories
+    init {
+        createOrJoin()
+        startConnection() // TODO: This should be called when the creation is finished, from the Lobby
+    }
+
+    override fun getCreationEvent(): GameEvent = GoToSelectCategories
 }
