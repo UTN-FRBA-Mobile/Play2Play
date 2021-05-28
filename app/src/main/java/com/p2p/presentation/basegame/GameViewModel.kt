@@ -92,18 +92,16 @@ abstract class GameViewModel(
     fun showInstructions() = dispatchSingleTimeEvent(OpenInstructions(instructions))
 
     override fun onCleared() {
-        super.onCleared()
         connection.close()
     }
 
     private fun createOrJoin() {
         when (connectionType.type) {
-            GameConnectionType.SERVER -> dispatchSingleTimeEvent(getCreationEvent())
+            GameConnectionType.SERVER -> dispatchSingleTimeEvent(GoToCreate)
             GameConnectionType.CLIENT -> dispatchSingleTimeEvent(GoToClientLobby)
         }
     }
 
     private fun isServer() = connectionType.type == GameConnectionType.SERVER
 
-    protected abstract fun getCreationEvent(): GameEvent
 }
