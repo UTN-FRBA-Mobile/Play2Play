@@ -5,10 +5,9 @@
     <string name="shared_preferences">P2P_GAME_SHARED_PREFERENCES</string>
 
     <!-- Common -->
-    <string name="continue_button">Continuar</string>
+    <string name="continue_">Continuar</string> <!-- The `_` should be because continue is a reserved symbol :( -->
     <string name="connect">Conectarse</string>
     <string name="understood">Entendido</string>
-    <string name="ok_button">Ok</string>
     <string name="unknown">Desconocido</string>
 
     <!-- Games -->
