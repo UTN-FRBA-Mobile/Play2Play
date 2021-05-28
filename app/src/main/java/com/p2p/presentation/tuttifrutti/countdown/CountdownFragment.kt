@@ -10,12 +10,12 @@ import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import com.p2p.R
 
-class CountdownFragment : Fragment() {
+class TuttiFruttiCountdownFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_countdown, container, false)
+        return inflater.inflate(R.layout.fragment_tutti_frutti_countdown, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -62,7 +62,7 @@ class CountdownFragment : Fragment() {
     }
 
     companion object {
-        /** Create a new instance of the [CountdownFragment]. */
-        fun newInstance() = CountdownFragment()
+        /** Create a new instance of the [TuttiFruttiCountdownFragment]. */
+        fun newInstance() = TuttiFruttiCountdownFragment()
     }
 }
