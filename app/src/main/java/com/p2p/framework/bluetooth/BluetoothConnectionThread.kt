@@ -58,7 +58,7 @@ class BluetoothConnectionThread(
 
             // Send a failure message back to the activity.
             handler
-                .obtainMessage(MESSAGE_WRITE_ERROR)
+                .obtainMessage(MESSAGE_WRITE_ERROR, length, -1, bytes)
                 .sendToTarget()
             return
         }
