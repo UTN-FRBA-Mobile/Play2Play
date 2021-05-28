@@ -2,9 +2,6 @@ package com.p2p.presentation.tuttifrutti
 
 import android.bluetooth.BluetoothDevice
 import android.content.Context
-import android.os.Bundle
-import android.widget.TextView
-import com.p2p.R
 import com.p2p.presentation.basegame.GameActivity
 import com.p2p.presentation.tuttifrutti.create.categories.CreateTuttiFruttiFragment
 
