@@ -1,4 +1,4 @@
-package com.p2p.presentation.tuttifrutti.create
+package com.p2p.presentation.tuttifrutti.create.categories
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

@@ -4,41 +4,27 @@ import android.bluetooth.BluetoothDevice
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import com.p2p.data.instructions.InstructionsRepository
+import com.p2p.framework.InstructionsLocalResourcesSource
 import com.p2p.presentation.base.BaseActivity
 import com.p2p.presentation.base.GameConnectionType
-import com.p2p.presentation.tuttifrutti.create.CreateTuttiFruttiFragment
+import com.p2p.presentation.home.games.Game
+import com.p2p.presentation.tuttifrutti.create.categories.CreateTuttiFruttiFragment
 
 class TuttiFruttiActivity : BaseActivity() {
-
-    /**
-    private val bluetoothConnectionCreator = BluetoothConnectionCreatorImp(Looper.getMainLooper())
-    private val userInfoRepository by lazy { SharedPreferencesUserInfoStorage(baseContext) }
-    **/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null) {
-            // TODO: this logic shouldn't be here, it's just an example of a basic handshake.
-            /**
-            val fragment = when (intent.getStringExtra(GameConnectionType.EXTRA)) {
-                GameConnectionType.SERVER -> {
-                    bluetoothConnectionCreator.createServer()
-                    CreateTuttiFruttiFragment.newInstance()
-                }
-                GameConnectionType.CLIENT -> {
-                    val device = requireNotNull(intent.getParcelableExtra<BluetoothDevice>(SERVER_DEVICE_EXTRA)) {
-                        "A bluetooth device should be passed on the activity creation"
-                    }
-                    bluetoothConnectionCreator.createClient(device).onConnected { // TODO: should wait until connected to continue any processing
-                        it.write(HandshakeMessage(userInfoRepository.getUserName() ?: "No tengo nombre :(")) // TODO: border case
-                    }
-                    return // TODO: Return lobby fragment
-                }
-                else -> return
-            }
-            addFragment(fragment, shouldAddToBackStack = false)
-            **/
-            addFragment(CreateTuttiFruttiFragment.newInstance(), shouldAddToBackStack = true)
+             val instructions =
+                InstructionsRepository(InstructionsLocalResourcesSource(applicationContext)).getInstructions(
+                    Game.TUTTI_FRUTTI
+                )
+
+            addFragment(
+                CreateTuttiFruttiFragment.newInstance(instructions),
+                shouldAddToBackStack = true
+            )
         }
     }
 

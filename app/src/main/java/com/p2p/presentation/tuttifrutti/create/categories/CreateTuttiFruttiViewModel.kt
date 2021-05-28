@@ -1,4 +1,4 @@
-package com.p2p.presentation.tuttifrutti.create
+package com.p2p.presentation.tuttifrutti.create.categories
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -25,7 +25,6 @@ class CreateTuttiFruttiViewModel(repository: TuttiFruttiRepository) :
     val selectedCategories: LiveData<List<Category>> = _selectedCategories
 
     init {
-
         _allCategories.value = repository.allCategories()
         _continueButtonEnabled.value = false
     }
@@ -45,7 +44,7 @@ class CreateTuttiFruttiViewModel(repository: TuttiFruttiRepository) :
     /** Next view to show when Continue button is pressed. */
     fun continueToNextScreen() {
         if (!validateCategoriesCount()) return
-        dispatchSingleTimeEvent(ContinueCreatingGame)
+        dispatchSingleTimeEvent(GoToSelectRounds)
     }
 
     private fun validateCategoriesCount(): Boolean {
@@ -63,9 +62,10 @@ class CreateTuttiFruttiViewModel(repository: TuttiFruttiRepository) :
     }
 
 
-    fun categoriesCountIsValid() = selectedCategories.value?.size?.let { it >= CATEGORIES_VALID_THRESHOLD } ?: false
+    fun categoriesCountIsValid() =
+        selectedCategories.value?.size?.let { it >= CATEGORIES_VALID_THRESHOLD } ?: false
 
-    companion object{
+    companion object {
         const val CATEGORIES_VALID_THRESHOLD: Int = 5
     }
 }
