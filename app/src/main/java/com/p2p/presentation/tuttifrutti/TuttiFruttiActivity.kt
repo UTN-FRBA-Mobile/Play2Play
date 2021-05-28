@@ -12,11 +12,6 @@ class TuttiFruttiActivity : GameActivity<TuttiFruttiSpecificGameEvent, TuttiFrut
 
     override val viewModel: TuttiFruttiViewModel by gameViewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.players.observe(this) { findViewById<TextView>(R.id.players).text = it.joinToString() }
-    }
-
     override fun goToCreate() = addFragment(CreateTuttiFruttiFragment.newInstance(), shouldAddToBackStack = false)
 
     override fun goToPlay() = Unit // TODO: addFragment(CountdownTuttiFruttiFragment.newInstance(), shouldAddToBackStack = false)
