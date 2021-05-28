@@ -33,7 +33,7 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesEvents, GamesViewM
     }
 
     override fun onEvent(event: GamesEvents) = when (event) {
-        GoToCreateTuttiFrutti -> TuttiFruttiActivity.start(requireContext())
+        GoToCreateTuttiFrutti -> TuttiFruttiActivity.startCreate(requireContext())
         JoinGame -> JoinGamesBottomSheetFragment.newInstance().show(parentFragmentManager, null)
         TurnOnBluetooth -> TurnOnBluetoothActivity.start(requireContext())
     }
