@@ -38,9 +38,12 @@ class GamesViewModel(
 
     /** Open the view that corresponds to create the [selectedGame]. */
     fun createGame(userName: String?) {
-        if (!validateAndSaveName(userName)) return
-        when (selectedGame) {
-            Game.TUTTI_FRUTTI -> dispatchSingleTimeEvent(GoToCreateTuttiFrutti)
+        when {
+            !validateAndSaveName(userName) -> return
+            !bluetoothStateProvider.isEnabled() -> dispatchSingleTimeEvent(TurnOnBluetooth)
+            else -> when (selectedGame) {
+                Game.TUTTI_FRUTTI -> dispatchSingleTimeEvent(GoToCreateTuttiFrutti)
+            }
         }
     }
 
