@@ -14,6 +14,11 @@ abstract class GameViewModel(
 
     lateinit var connection: BluetoothConnection
 
+    init {
+        createOrJoin()
+        startConnection() // TODO: This should be called when the creation is finished, from the Lobby
+    }
+
     fun startConnection() {
         connection = when (connectionType.type) {
             GameConnectionType.SERVER -> bluetoothConnectionCreator.createServer()

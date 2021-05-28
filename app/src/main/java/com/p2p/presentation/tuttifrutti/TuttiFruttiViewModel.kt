@@ -12,10 +12,5 @@ class TuttiFruttiViewModel(
     bluetoothConnectionCreator: BluetoothConnectionCreator
 ) : GameViewModel(connectionType, userSession, bluetoothConnectionCreator) {
 
-    init {
-        createOrJoin()
-        startConnection() // TODO: This should be called when the creation is finished, from the Lobby
-    }
-
     override fun getCreationEvent(): GameEvent = GoToSelectCategories
 }
