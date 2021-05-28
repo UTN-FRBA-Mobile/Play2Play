@@ -76,7 +76,7 @@
             android:layout_centerHorizontal="true"
             android:layout_below="@id/categories_selected_recycler"
             android:layout_height="wrap_content"
-            android:text="@string/continue_button"/>
+            android:text="@string/continue_"/>
 
 
     </RelativeLayout>
