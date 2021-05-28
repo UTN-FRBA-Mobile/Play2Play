@@ -8,9 +8,6 @@ import android.widget.TextView
 import com.p2p.R
 import com.p2p.presentation.base.BaseActivity
 import com.p2p.utils.getString
-import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStreamReader
 
 class HowToConnectBluetoothActivity : BaseActivity(R.layout.activity_how_to_connect_bluetooth) {
 
