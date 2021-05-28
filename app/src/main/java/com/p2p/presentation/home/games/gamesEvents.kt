@@ -4,3 +4,7 @@ package com.p2p.presentation.home.games
 sealed class GamesEvents
 
 object GoToCreateTuttiFrutti : GamesEvents()
+
+object TurnOnBluetooth : GamesEvents()
+
+object JoinGame : GamesEvents()

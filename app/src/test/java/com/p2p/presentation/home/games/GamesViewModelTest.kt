@@ -2,6 +2,7 @@ package com.p2p.presentation.home.games
 
 import com.p2p.BaseTest
 import com.p2p.R
+import com.p2p.data.bluetooth.BluetoothStateProvider
 import com.p2p.data.userInfo.UserSession
 import com.p2p.presentation.base.BaseViewModel
 import io.mockk.impl.annotations.MockK
@@ -19,11 +20,14 @@ class GamesViewModelTest : BaseTest() {
     @MockK
     lateinit var userSession: UserSession
 
+    @MockK
+    lateinit var bluetoothStateProvider: BluetoothStateProvider
+
     private lateinit var gamesViewModel: GamesViewModel
 
     @Before
     fun setup() {
-        gamesViewModel = GamesViewModel(userSession)
+        gamesViewModel = GamesViewModel(userSession, bluetoothStateProvider)
     }
 
     @Test
@@ -60,10 +64,14 @@ class GamesViewModelTest : BaseTest() {
         gamesViewModel.createGame(null)
 
         // THEN
-        assertThat(gamesViewModel.message.value, `is`(BaseViewModel.MessageData(
-            textRes = R.string.games_name_error,
-            type = BaseViewModel.MessageData.Type.ERROR
-        )))
+        assertThat(
+            gamesViewModel.message.value, `is`(
+                BaseViewModel.MessageData(
+                    textRes = R.string.games_name_error,
+                    type = BaseViewModel.MessageData.Type.ERROR
+                )
+            )
+        )
     }
 
     @Test
@@ -73,9 +81,13 @@ class GamesViewModelTest : BaseTest() {
         gamesViewModel.createGame(null)
 
         // THEN
-        assertThat(gamesViewModel.message.value, `is`(BaseViewModel.MessageData(
-            textRes = R.string.games_name_error,
-            type = BaseViewModel.MessageData.Type.ERROR
-        )))
+        assertThat(
+            gamesViewModel.message.value, `is`(
+                BaseViewModel.MessageData(
+                    textRes = R.string.games_name_error,
+                    type = BaseViewModel.MessageData.Type.ERROR
+                )
+            )
+        )
     }
 }
