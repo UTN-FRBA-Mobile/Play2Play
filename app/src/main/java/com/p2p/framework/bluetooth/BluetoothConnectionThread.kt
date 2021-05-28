@@ -71,7 +71,8 @@ class BluetoothConnectionThread(
     }
 
     // Call this method from the main activity to shut down the connection.
-    fun cancel() {
+    fun close() {
+        Logger.d(TAG, "Close the socket #$id")
         try {
             socket.close()
         } catch (e: IOException) {

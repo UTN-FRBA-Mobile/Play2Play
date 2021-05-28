@@ -56,6 +56,7 @@ class BluetoothClient(
         Logger.d(TAG, "Close the client")
         try {
             connectionSocket?.close()
+            connectedSocket?.close()
         } catch (e: IOException) {
             Logger.e(TAG, "Could not close the client socket", e)
         }

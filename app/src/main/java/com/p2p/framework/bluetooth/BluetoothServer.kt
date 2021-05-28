@@ -31,7 +31,7 @@ class BluetoothServer(
                 Logger.d(TAG, "Accepting new connection, blocking this thread")
                 serverSocket?.accept()
             } catch (e: IOException) {
-                Logger.e(TAG, "Socket's accept() method failed", e)
+                Logger.d(TAG, "Socket's accept() method failed", e)
                 shouldLoop = false
                 null
             } ?: continue
@@ -55,15 +55,10 @@ class BluetoothServer(
         Logger.d(TAG, "Close the server")
         try {
             serverSocket?.close()
+            connectedThreads.forEach { it.close() }
         } catch (e: IOException) {
             Logger.e(TAG, "Could not close the connect socket", e)
         }
-    }
-
-    fun stopAccepting() {
-        Logger.d(TAG, "Stop accepting new connections")
-        serverSocket?.close() // TODO: I'm not sure that we should close this socket.
-        shouldLoop = false
     }
 
     override fun write(message: Message) = connectedThreads.forEach {
@@ -78,6 +73,12 @@ class BluetoothServer(
 
     override fun onConnected(action: (BluetoothConnection) -> Unit) {
         action(this)
+    }
+
+    fun stopAccepting() {
+        Logger.d(TAG, "Stop accepting new connections")
+        serverSocket?.close() // TODO: I'm not sure that we should close this socket.
+        shouldLoop = false
     }
 
     companion object {

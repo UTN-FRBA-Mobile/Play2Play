@@ -74,17 +74,14 @@ abstract class GameViewModel(
     open fun onSentError(message: Message) = connection.write(message)
 
     fun startConnection() {
-        connection = when {
-            isServer() -> {
-                bluetoothConnectionCreator.createServer()
+        connection = if (isServer()) {
+            bluetoothConnectionCreator.createServer()
+        } else {
+            val device = requireNotNull(connectionType.device) {
+                "A bluetooth device should be passed on the activity creation"
             }
-            else -> {
-                val device = requireNotNull(connectionType.device) {
-                    "A bluetooth device should be passed on the activity creation"
-                }
-                bluetoothConnectionCreator.createClient(device).also { client ->
-                    client.onConnected { it.write(ClientHandshakeMessage(userName)) }
-                }
+            bluetoothConnectionCreator.createClient(device).also { client ->
+                client.onConnected { it.write(ClientHandshakeMessage(userName)) }
             }
         }
     }
@@ -96,9 +93,10 @@ abstract class GameViewModel(
     }
 
     private fun createOrJoin() {
-        when (connectionType.type) {
-            GameConnectionType.SERVER -> dispatchSingleTimeEvent(GoToCreate)
-            GameConnectionType.CLIENT -> dispatchSingleTimeEvent(GoToClientLobby)
+        if (isServer()) {
+            dispatchSingleTimeEvent(GoToCreate)
+        } else {
+            dispatchSingleTimeEvent(GoToClientLobby)
         }
     }
 
