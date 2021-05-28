@@ -25,7 +25,6 @@ class GamesAdapter(private val onSelectedChanged: (Game?) -> Unit) :
             notifyDataSetChanged()
         }
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             ViewGamesItemBinding.inflate(

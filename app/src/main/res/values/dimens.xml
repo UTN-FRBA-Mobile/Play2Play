@@ -32,10 +32,14 @@
 
     <!-- General dimensions -->
     <dimen name="screen_padding">@dimen/medium_extra</dimen>
+    <dimen name="divider_height">1dp</dimen>
 
     <!-- Splash screen -->
     <dimen name="logo_size">@dimen/huge_extra</dimen>
 
     <!-- Games -->
     <dimen name="games_item_corner_radius">8dp</dimen>
+
+    <!-- Turn on bluetooth -->
+    <dimen name="turn_on_bluetooth_icon_size">120dp</dimen>
 </resources>

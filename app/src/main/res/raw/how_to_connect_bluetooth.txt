@@ -1,0 +1,15 @@
+1
+Deslizá el dedo hacia abajo desde la parte superior de la pantalla.
+
+2
+Mantené presionada la opción Bluetooth.
+
+3
+Presioná Sincronizar dispositivo nuevo.
+Si no encontrás la opción Sincronizar dispositivo nuevo, revisá "Dispositivos disponibles" o presioná los tres puntitos, luego la flecha para la derecha y finalmente Actualizar.
+
+4
+Presioná el nombre del dispositivo Bluetooth que quieras vincular.
+
+5
+Seguí las instrucciones en pantalla.

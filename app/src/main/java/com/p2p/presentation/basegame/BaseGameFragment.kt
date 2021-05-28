@@ -68,7 +68,7 @@ abstract class BaseGameFragment<GVB : ViewBinding, E : Any, VM : BaseViewModel<E
         MaterialAlertDialogBuilder(requireContext())
             .setMessage(instructions)
             //It is positive to be shown on the right
-            .setPositiveButton(resources.getString(R.string.ok_button)) { _, _ ->
+            .setPositiveButton(resources.getString(android.R.string.ok)) { _, _ ->
                 // Respond to positive button press
             }
             .show()
