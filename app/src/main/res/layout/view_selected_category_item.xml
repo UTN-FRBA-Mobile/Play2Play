@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/small"
-    android:background="@android:color/transparent">
+    android:background="@android:color/transparent"
+    tools:background="@android:color/black">
 
     <com.google.android.material.chip.Chip
         android:id="@+id/category_to_maybe_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:chipIcon="@drawable/ic_baseline_delete_24"
+        android:textColor="@color/turquoise"
+        android:textSize="@dimen/font_medium_extra"
+        android:textStyle="bold"
+        app:chipBackgroundColor="#FFF"
+        app:chipCornerRadius="8dp"
+        app:closeIcon="@drawable/ic_close"
+        app:closeIconEnabled="true"
+        app:closeIconTint="@color/turquoise"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
