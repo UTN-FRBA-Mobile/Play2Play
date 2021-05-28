@@ -35,7 +35,7 @@ class BluetoothServer(
             } ?: continue
 
             Logger.d(TAG, "Accepted socket: ${socket.remoteDevice.name}")
-            val bluetoothConnectionThread = manageMyConnectedSocket(socket)
+            val bluetoothConnectionThread = createConnectionThread(socket)
             bluetoothConnectionThread.onMessageReceived = { length, buffer ->
                 Logger.d(TAG, "Received message and broadcasting")
                 connectedThreads

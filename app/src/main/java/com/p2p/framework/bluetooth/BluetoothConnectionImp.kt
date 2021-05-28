@@ -14,7 +14,7 @@ abstract class BluetoothConnectionImp(private val handler: Handler) : Thread(), 
 
     protected val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
 
-    protected fun manageMyConnectedSocket(bluetoothSocket: BluetoothSocket): BluetoothConnectionThread {
+    protected fun createConnectionThread(bluetoothSocket: BluetoothSocket): BluetoothConnectionThread {
         return BluetoothConnectionThread(handler, bluetoothSocket)
     }
 

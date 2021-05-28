@@ -3,7 +3,6 @@ package com.p2p.framework.bluetooth
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothSocket
 import android.os.Handler
-import android.util.Log
 import com.p2p.data.bluetooth.BluetoothConnection
 import com.p2p.data.bluetooth.Message
 import com.p2p.utils.Logger
@@ -43,7 +42,7 @@ class BluetoothClient(
                 // The connection attempt succeeded. Perform work associated with
                 // the connection in a separate thread.
                 Logger.d(TAG, "Connection succeed")
-                connectedSocket = manageMyConnectedSocket(socket)
+                connectedSocket = createConnectionThread(socket)
                 onConnectedActions.forEach { it(this) }
                 onConnectedActions.clear()
             } catch (exception: IOException) {

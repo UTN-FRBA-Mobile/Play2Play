@@ -78,7 +78,7 @@ class BluetoothConnectionThread(
         try {
             socket.close()
         } catch (e: IOException) {
-            Log.e(TAG, "Could not close the connect socket", e)
+            Logger.e(TAG, "Could not close the connect socket", e)
         }
     }
 

@@ -16,7 +16,7 @@ class BluetoothConnectionCreatorImp(looper: Looper) : BluetoothConnectionCreator
             MESSAGE_READ -> {
                 val byteArray = (it.obj as ByteArray).copyOfRange(0, it.arg1)
                 val message = jacksonObjectMapper().readValue(byteArray, Message::class.java)
-                Logger.d(TAG, "Read: $message")
+                Logger.d(TAG, "Read: $message") // TODO: Do something real
                 true
             }
             else -> false
