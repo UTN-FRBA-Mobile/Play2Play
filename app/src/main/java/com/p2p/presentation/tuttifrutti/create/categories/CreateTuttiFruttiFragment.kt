@@ -21,7 +21,7 @@ class CreateTuttiFruttiFragment : BaseGameFragment<
         CreateTuttiFruttiViewModelFactory(requireContext())
     }
     override val gameInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentCreateTuttiFruttiBinding =
-        FragmentCreateTuttiFruttiBinding::inflate
+            FragmentCreateTuttiFruttiBinding::inflate
 
     private lateinit var tuttiFruttiCategoriesAadapter: TuttiFruttiCategoriesAdapter
     private lateinit var tuttiFruttiSelectedCategoriesAdapter: TuttiFruttiSelectedCategoriesAdapter
