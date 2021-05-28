@@ -1,11 +1,14 @@
 package com.p2p.presentation.base
 
-abstract class BaseMVVMActivity<E : Any, VM : BaseViewModel<E>> : BaseActivity() {
+import android.os.Bundle
+import com.p2p.presentation.basegame.GameEvent
+
+abstract class BaseMVVMActivity<E : GameEvent, VM : BaseViewModel<out E>> : BaseActivity() {
 
     protected abstract val viewModel: VM
 
-    override fun onStart() {
-        super.onStart()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         viewModel.singleTimeEvent.observe(this) { onEvent(it) }
     }
 

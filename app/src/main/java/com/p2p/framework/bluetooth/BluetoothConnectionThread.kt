@@ -1,7 +1,6 @@
 package com.p2p.framework.bluetooth
 
 import android.bluetooth.BluetoothSocket
-import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import com.p2p.utils.Logger
@@ -57,19 +56,16 @@ class BluetoothConnectionThread(
             Logger.e(TAG, "Error occurred when sending data", e)
 
             // Send a failure message back to the activity.
-            val writeErrorMsg = handler.obtainMessage(MESSAGE_TOAST)
-            val bundle = Bundle().apply {
-                putString("toast", "Couldn't send data to the other device")
-            }
-            writeErrorMsg.data = bundle
-            handler.sendMessage(writeErrorMsg)
+            handler
+                .obtainMessage(MESSAGE_WRITE_ERROR)
+                .sendToTarget()
             return
         }
 
         // Share the sent message with the UI activity.
         Logger.d(TAG, "Write succeed")
         handler
-            .obtainMessage(MESSAGE_WRITE, length, -1, bytes)
+            .obtainMessage(MESSAGE_WRITE_SUCCESS, length, -1, bytes)
             .sendToTarget()
     }
 
@@ -85,8 +81,8 @@ class BluetoothConnectionThread(
     companion object {
 
         const val MESSAGE_READ: Int = 0
-        const val MESSAGE_WRITE: Int = 1
-        const val MESSAGE_TOAST: Int = 2
+        const val MESSAGE_WRITE_SUCCESS: Int = 1
+        const val MESSAGE_WRITE_ERROR: Int = 2
         const val TAG = "P2P_BLUETOOTH_SERVICE"
     }
 }
