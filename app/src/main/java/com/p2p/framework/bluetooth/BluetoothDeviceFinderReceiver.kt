@@ -25,10 +25,8 @@ class BluetoothDeviceFinderReceiver : BroadcastReceiver() {
             BluetoothDevice.ACTION_FOUND -> {
                 // Discovery has found a device. Get the BluetoothDevice
                 // object and its info from the Intent.
-                val device: BluetoothDevice? = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
-                if (device?.name?.isNotBlank() == true) {
-                    onFound?.invoke(listOf(device))
-                }
+                val device: BluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE) ?: return
+                onFound?.invoke(listOf(device))
             }
         }
     }
