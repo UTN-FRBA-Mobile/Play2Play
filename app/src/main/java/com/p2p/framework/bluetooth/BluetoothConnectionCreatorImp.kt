@@ -23,6 +23,7 @@ class BluetoothConnectionCreatorImp(
     override fun createClient(serverDevice: BluetoothDevice) = BluetoothClient(handler, serverDevice)
 
     companion object {
+
         private const val MAX_DISCOVERABLE_DURATION_SEC = 300
     }
 }

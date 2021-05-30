@@ -10,6 +10,10 @@
     <string name="understood">Entendido</string>
     <string name="unknown">Desconocido</string>
 
+    <!-- Request location permission -->
+    <string name="request_location_title">Lo necesitás para jugar</string>
+    <string name="request_location_description">La tecnología Bluetooth requiere que tengamos los permisos de tu ubicación, en caso de no otorgárnoslo tendremos que cerrar la aplicación :(</string>
+
     <!-- Games -->
     <string name="games_user_name">Tu nombre</string>
     <string name="games_join">Unirse</string>
