@@ -94,8 +94,6 @@ abstract class GameActivity<E : SpecificGameEvent, VM : GameViewModel>(
 
     protected open fun onGameEvent(event: E) {}
 
-    protected inline fun <reified VM : GameViewModel> gameViewModels() = viewModels<VM> { gameViewModelFactory }
-
     private fun showInstructions(instructions: String) {
         MaterialAlertDialogBuilder(baseContext)
             .setMessage(instructions)
