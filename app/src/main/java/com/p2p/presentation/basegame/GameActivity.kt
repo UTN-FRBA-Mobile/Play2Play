@@ -25,7 +25,7 @@ abstract class GameActivity<E : SpecificGameEvent, VM : GameViewModel>(
 ) : BaseMVVMActivity<GameEvent, VM>(layout) {
 
     protected val gameViewModelFactory: GameViewModelFactory
-        get() = GameViewModelFactory(baseContext, gameViewModelFactoryData)
+        get() = GameViewModelFactory(this, gameViewModelFactoryData)
 
     protected val gameViewModelFactoryData: GameViewModelFactory.Data
         get() = GameViewModelFactory.Data(

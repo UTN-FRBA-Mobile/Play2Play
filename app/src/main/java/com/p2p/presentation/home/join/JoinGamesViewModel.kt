@@ -19,7 +19,7 @@ class JoinGamesViewModel(bluetoothDeviceFinder: BluetoothDeviceFinder) : BaseVie
 
     init {
         bluetoothDeviceFinder.listDevices { newDevices ->
-            _devices.value = _devices.value?.let { it + newDevices } ?: newDevices.toSet()
+            _devices.value = _devices.value?.let { newDevices.toSet() + it } ?: newDevices.toSet()
         }
     }
 
