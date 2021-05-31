@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.p2p.R
 import com.p2p.data.bluetooth.BluetoothDeviceFinder
+import com.p2p.framework.bluetooth.isPhone
 import com.p2p.presentation.base.BaseViewModel
 
 class JoinGamesViewModel(bluetoothDeviceFinder: BluetoothDeviceFinder) : BaseViewModel<JoinGamesEvent>() {
@@ -19,7 +20,7 @@ class JoinGamesViewModel(bluetoothDeviceFinder: BluetoothDeviceFinder) : BaseVie
 
     init {
         bluetoothDeviceFinder.listDevices { newDevicesList ->
-            val newDevices = newDevicesList.filterNot { it.name.isNullOrBlank() }.toSet()
+            val newDevices = newDevicesList.filter { it.name?.isNotBlank() == true && it.isPhone() }.toSet()
             _devices.value = _devices.value?.let { newDevices + it } ?: newDevices
         }
     }

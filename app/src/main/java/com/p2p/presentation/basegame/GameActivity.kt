@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
-import androidx.activity.viewModels
 import androidx.annotation.LayoutRes
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
