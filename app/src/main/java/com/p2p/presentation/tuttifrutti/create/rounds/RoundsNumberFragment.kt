@@ -14,6 +14,11 @@ class RoundsNumberFragment :
         FragmentRoundsNumberBinding::inflate
 
     override fun initUI() {
+        // Set dialog size on screen
+        val width = (resources.displayMetrics.widthPixels * 0.9).toInt()
+        val height = (resources.displayMetrics.heightPixels * 0.4).toInt()
+        dialog?.window?.setLayout(width, height);
+
         binding.arrowRight.setOnClickListener { viewModel.increase() }
         binding.arrowLeft.setOnClickListener { viewModel.decrease() }
         binding.createButton.setOnClickListener { viewModel.continueCreatingGame() }
