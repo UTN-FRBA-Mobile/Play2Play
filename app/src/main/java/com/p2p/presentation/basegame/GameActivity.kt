@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
-import androidx.activity.viewModels
 import androidx.annotation.LayoutRes
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -59,7 +58,7 @@ abstract class GameActivity<E : SpecificGameEvent, VM : GameViewModel>(
     }
     private val gameConnectionType: String by lazy {
         requireNotNull(intent.getStringExtra(GameConnectionType.EXTRA)) {
-            "The server device wasn't sent. Use the start method of [GameActivity]."
+            "The connection type wasn't sent. Use the start method of [GameActivity]."
         }
     }
     private val device: BluetoothDevice? by lazy { intent.getParcelableExtra(SERVER_DEVICE_EXTRA) }
@@ -95,7 +94,7 @@ abstract class GameActivity<E : SpecificGameEvent, VM : GameViewModel>(
     protected open fun onGameEvent(event: E) {}
 
     private fun showInstructions(instructions: String) {
-        MaterialAlertDialogBuilder(baseContext)
+        MaterialAlertDialogBuilder(this)
             .setMessage(instructions)
             //It is positive to be shown on the right
             .setPositiveButton(resources.getString(android.R.string.ok)) { _, _ ->
