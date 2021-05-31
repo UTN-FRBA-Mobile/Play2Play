@@ -8,4 +8,7 @@ class UserSession(private val storage: UserInfoStorage) {
 
     /** Returns the user saved name. */
     fun getUserName(): String? = storage.getUserName()
+
+    /** Returns the saved user name or a default value. */
+    fun getUserNameOrEmpty(): String = storage.getUserNameOrEmpty()
 }

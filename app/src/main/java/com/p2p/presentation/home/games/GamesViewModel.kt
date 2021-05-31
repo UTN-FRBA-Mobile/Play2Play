@@ -3,10 +3,14 @@ package com.p2p.presentation.home.games
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.p2p.R
+import com.p2p.data.bluetooth.BluetoothStateProvider
 import com.p2p.data.userInfo.UserSession
 import com.p2p.presentation.base.BaseViewModel
 
-class GamesViewModel(private val userSession: UserSession) : BaseViewModel<GamesEvents>() {
+class GamesViewModel(
+    private val userSession: UserSession,
+    private val bluetoothStateProvider: BluetoothStateProvider
+) : BaseViewModel<GamesEvents>() {
 
     /** The list of games available to play. */
     private val _games = MutableLiveData<List<Game>>()
@@ -34,16 +38,22 @@ class GamesViewModel(private val userSession: UserSession) : BaseViewModel<Games
 
     /** Open the view that corresponds to create the [selectedGame]. */
     fun createGame(userName: String?) {
-        if (!validateAndSaveName(userName)) return
-        when (selectedGame) {
-            Game.TUTTI_FRUTTI -> dispatchSingleTimeEvent(GoToCreateTuttiFrutti)
+        when {
+            !validateAndSaveName(userName) -> return
+            !bluetoothStateProvider.isEnabled() -> dispatchSingleTimeEvent(TurnOnBluetooth)
+            else -> when (selectedGame) {
+                Game.TUTTI_FRUTTI -> dispatchSingleTimeEvent(GoToCreateTuttiFrutti)
+            }
         }
     }
 
     /** Open the view to join to a game. */
     fun joinGame(userName: String?) {
-        if (!validateAndSaveName(userName)) return
-        // TODO: perform actions for joinGame (create an event JoinGame and dispatch it)
+        when {
+            !validateAndSaveName(userName) -> return
+            !bluetoothStateProvider.isEnabled() -> dispatchSingleTimeEvent(TurnOnBluetooth)
+            else -> dispatchSingleTimeEvent(JoinGame)
+        }
     }
 
     private fun validateAndSaveName(name: String?): Boolean {

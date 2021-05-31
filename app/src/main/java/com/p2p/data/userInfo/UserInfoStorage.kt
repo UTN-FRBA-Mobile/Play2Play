@@ -8,4 +8,7 @@ interface UserInfoStorage {
 
     /** Returns the saved user name. */
     fun getUserName(): String?
+
+    /** Returns the saved user name or a default value. */
+    fun getUserNameOrEmpty(): String
 }

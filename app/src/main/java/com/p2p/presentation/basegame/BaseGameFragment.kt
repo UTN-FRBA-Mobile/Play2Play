@@ -51,7 +51,7 @@ abstract class BaseGameFragment<GVB : ViewBinding, E : Any, VM : BaseViewModel<E
         setHeaderEvents(binding.header)
     }
 
-    private fun setHeaderEvents(header: MaterialToolbar) =
+    private fun setHeaderEvents(header: MaterialToolbar) {
         header.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.instructions -> {
@@ -61,14 +61,15 @@ abstract class BaseGameFragment<GVB : ViewBinding, E : Any, VM : BaseViewModel<E
                 else -> false
             }
         }
+        header.setNavigationOnClickListener { activity?.onBackPressed() }
+    }
 
     private fun showInstructions() =
         MaterialAlertDialogBuilder(requireContext())
             .setMessage(instructions)
             //It is positive to be shown on the right
-            .setPositiveButton(resources.getString(R.string.ok_button)) { _, _ ->
+            .setPositiveButton(resources.getString(android.R.string.ok)) { _, _ ->
                 // Respond to positive button press
             }
             .show()
-
 }

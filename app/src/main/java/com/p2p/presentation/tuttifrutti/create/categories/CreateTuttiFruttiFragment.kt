@@ -54,18 +54,6 @@ class CreateTuttiFruttiFragment :
 
     override fun onEvent(event: TuttiFruttiCategoriesEvents) = when (event) {
         GoToSelectRounds -> RoundsNumberFragment.newInstance().show(childFragmentManager, "RoundsNumberDialog")
-        //TODO call next step of creating game instead of game fragment
-        ContinueCreatingGame -> {
-            val selectedCategories = ArrayList(viewModel.selectedCategories.value)
-            addFragment(
-                PlayTuttiFruttiFragment.newInstance(
-                    instructions,
-                    TuttiFruttiInfo(totalRounds = 10, selectedCategories)
-                ),
-                shouldAddToBackStack = true
-            )
-
-        }
     }
 
     private fun setupCategoriesRecycler() = with(gameBinding.categoriesRecycler) {
@@ -87,9 +75,6 @@ class CreateTuttiFruttiFragment :
         const val INSTRUCTIONS_KEY = "Instructions"
 
         /** Create a new instance of the [CreateTuttiFruttiFragment]. */
-        fun newInstance(instructions: String) =
-            CreateTuttiFruttiFragment().apply {
-                arguments = bundleOf(INSTRUCTIONS_KEY to instructions)
-            }
+        fun newInstance() = CreateTuttiFruttiFragment()
     }
 }
