@@ -3,9 +3,7 @@ package com.p2p.presentation.home
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.content.pm.PackageManager.PERMISSION_GRANTED
-import android.os.Build
 import android.os.Bundle
-import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -57,11 +55,7 @@ class HomeActivity : BaseActivity() {
 
     private fun removeSplashStyle() = with(window) {
         setBackgroundDrawableResource(R.color.colorBackground)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            insetsController?.show(WindowInsets.Type.statusBars())
-        } else {
-            clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
-        }
+        clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
     }
 
     companion object {
