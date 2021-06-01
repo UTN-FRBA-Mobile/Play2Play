@@ -2,37 +2,31 @@ package com.p2p.presentation.tuttifrutti.play
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.p2p.model.tuttifrutti.TuttiFruttiInfo
 import com.p2p.presentation.base.BaseViewModel
-import com.p2p.presentation.tuttifrutti.create.Category
+import com.p2p.presentation.tuttifrutti.create.categories.Category
 
 class PlayTuttiFruttiViewModel :
     BaseViewModel<TuttiFruttiPlayingEvents>() {
 
-    val categoriesData = mutableMapOf<Category, String>()
+    /** Categories with the values. */
+    private val categoryValues: MutableMap<Category, String?> = mutableMapOf()
 
-    /** Whether the stop button is enabled or not. */
-    private val _stopButtonEnabled = MutableLiveData<Boolean>()
-    val stopButtonEnabled: LiveData<Boolean> = _stopButtonEnabled
-
-    private val _info: TuttiFruttiInfo by lazy {
-
-    }
-
-    init {
-        _stopButtonEnabled.value = false
-    }
-
-    fun onWrittenCategory(category: Category, value: String?) {
+    fun onFocusOut(category: Category, value: String?) {
         value?.run {
-            categoriesData[category] = this
+            categoryValues.put(category, this)
         }
-
-        _stopButtonEnabled.value = allCategoriesAreFilled()
     }
 
-    private fun allCategoriesAreFilled(): Boolean {
-        return categoriesData.all { it.value.isNotBlank() }
+    fun finishRound(gameCategories: List<Category>) {
+        val event = if (allCategoriesAreFilled(gameCategories)) EndRound else InvalidInputs
+        dispatchSingleTimeEvent(event)
+    }
+
+    private fun allCategoriesAreFilled(gameCategories: List<Category>): Boolean {
+        val filledCategoriesCount = categoryValues.filter { it.value?.isNotBlank() ?: false }.size
+        return filledCategoriesCount == gameCategories.size
     }
 
 

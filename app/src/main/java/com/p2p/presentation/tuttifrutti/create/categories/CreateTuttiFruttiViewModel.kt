@@ -44,7 +44,7 @@ class CreateTuttiFruttiViewModel(repository: TuttiFruttiRepository) :
     /** Next view to show when Continue button is pressed. */
     fun continueToNextScreen() {
         if (!validateCategoriesCount()) return
-        dispatchSingleTimeEvent(GoToSelectRounds)
+        dispatchSingleTimeEvent(GoToSelectRounds(selectedCategories.value!!))
     }
 
     private fun validateCategoriesCount(): Boolean {

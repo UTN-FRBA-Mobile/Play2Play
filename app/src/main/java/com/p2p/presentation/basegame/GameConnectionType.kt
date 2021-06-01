@@ -1,4 +1,4 @@
-package com.p2p.presentation.base.game
+package com.p2p.presentation.basegame
 
 object GameConnectionType {
 

@@ -7,10 +7,20 @@ import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import com.p2p.R
+import com.p2p.model.tuttifrutti.TuttiFruttiInfo
+import com.p2p.presentation.tuttifrutti.create.rounds.RoundsNumberFragment
+import com.p2p.presentation.tuttifrutti.play.PlayTuttiFruttiFragment
 
 class TuttiFruttiCountdownFragment : Fragment() {
+
+    private val gameInfo: TuttiFruttiInfo by lazy {
+        requireNotNull(requireArguments().getParcelable(GAME_INFO_KEY))
+        { "Game info must be passed to fragment arguments" }
+    }
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -58,11 +68,23 @@ class TuttiFruttiCountdownFragment : Fragment() {
     }
 
     private fun startGame() {
-        // TODO: Start the PlayTuttiFruttiFragment to start the game
+        parentFragmentManager.commit {
+            replace(R.id.fragment_container_view,
+                PlayTuttiFruttiFragment.newInstance(gameInfo) as Fragment)
+            addToBackStack(null)
+        }
     }
 
     companion object {
+
+        const val GAME_INFO_KEY = "GameInfo"
+
         /** Create a new instance of the [TuttiFruttiCountdownFragment]. */
-        fun newInstance() = TuttiFruttiCountdownFragment()
+        fun newInstance(gameInfo: TuttiFruttiInfo) =
+            TuttiFruttiCountdownFragment().apply {
+                arguments = bundleOf(
+                    GAME_INFO_KEY to gameInfo
+                )
+            }
     }
 }

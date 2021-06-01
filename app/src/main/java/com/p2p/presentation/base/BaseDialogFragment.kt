@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.snackbar.Snackbar
@@ -51,7 +52,7 @@ abstract class BaseDialogFragment<VB : ViewBinding, E : Any, VM : BaseViewModel<
     }
 
     /** Add the [fragment] to the activity and if [shouldAddToBackStack] it'll added to the fragments stack */
-    protected fun addFragment(fragment: BaseFragment<*, *, *>, shouldAddToBackStack: Boolean) {
+    protected fun addFragment(fragment: Fragment, shouldAddToBackStack: Boolean) {
         parentFragmentManager.commit {
             replace(R.id.fragment_container_view, fragment)
             if (shouldAddToBackStack) addToBackStack(null)

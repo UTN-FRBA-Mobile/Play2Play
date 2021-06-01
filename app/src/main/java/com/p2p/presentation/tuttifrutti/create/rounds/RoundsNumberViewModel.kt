@@ -24,7 +24,7 @@ class RoundsNumberViewModel : BaseViewModel<RoundsNumberEvent>() {
 
     /** Next view to show when Create button is pressed. */
     fun continueCreatingGame() {
-        dispatchSingleTimeEvent(GoToTuttiFruttiLobby)
+        dispatchSingleTimeEvent(GoToTuttiFruttiLobby(roundsNumber.value!!))
     }
 
     private fun number(): Int = _roundsNumber.value ?: DEFAULT_ROUNDS_NUMBER

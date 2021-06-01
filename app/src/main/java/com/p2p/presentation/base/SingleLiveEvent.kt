@@ -10,23 +10,31 @@ import java.util.concurrent.atomic.AtomicBoolean
 class SingleLiveEvent<T> : MutableLiveData<T>() {
 
     private val isPending = AtomicBoolean(false)
+    private val observers = mutableSetOf<Observer<in T>>()
 
-    @MainThread
-    override fun observe(owner: LifecycleOwner, observer: Observer<in T>) {
-        super.observe(owner) {
-            if (isPending.compareAndSet(true, false)) {
-                observer.onChanged(it)
-            }
+    private val internalObserver = Observer<T> { t ->
+        if (isPending.compareAndSet(true, false)) {
+            observers.forEach { observer -> observer.onChanged(t) }
         }
     }
 
     @MainThread
-    override fun observeForever(observer: Observer<in T>) {
-        super.observeForever {
-            if (isPending.compareAndSet(true, false)) {
-                observer.onChanged(it)
-            }
+    override fun observe(owner: LifecycleOwner, observer: Observer<in T>) {
+        observers.add(observer)
+
+        if (!hasObservers()) {
+            super.observe(owner, internalObserver)
         }
+    }
+
+    override fun removeObservers(owner: LifecycleOwner) {
+        observers.clear()
+        super.removeObservers(owner)
+    }
+
+    override fun removeObserver(observer: Observer<in T>) {
+        observers.remove(observer)
+        super.removeObserver(observer)
     }
 
     @MainThread

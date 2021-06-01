@@ -4,3 +4,5 @@ package com.p2p.presentation.tuttifrutti.play
 sealed class TuttiFruttiPlayingEvents
 
 object EndRound : TuttiFruttiPlayingEvents()
+
+object InvalidInputs : TuttiFruttiPlayingEvents()

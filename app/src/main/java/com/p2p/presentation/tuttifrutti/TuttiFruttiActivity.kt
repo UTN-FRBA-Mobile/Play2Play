@@ -2,55 +2,35 @@ package com.p2p.presentation.tuttifrutti
 
 import android.bluetooth.BluetoothDevice
 import android.content.Context
-import android.content.Intent
 import androidx.activity.viewModels
-import com.p2p.data.instructions.InstructionsRepository
-import com.p2p.framework.InstructionsLocalResourcesSource
-import com.p2p.presentation.base.BaseMVVMActivity
-import com.p2p.presentation.base.game.*
-import com.p2p.presentation.home.games.Game
+import com.p2p.model.GameInfo
+import com.p2p.model.tuttifrutti.TuttiFruttiInfo
+import com.p2p.presentation.basegame.GameActivity
+import com.p2p.presentation.tuttifrutti.countdown.TuttiFruttiCountdownFragment
 import com.p2p.presentation.tuttifrutti.create.categories.CreateTuttiFruttiFragment
 
-class TuttiFruttiActivity : BaseMVVMActivity<GameEvent, TuttiFruttiViewModel>() {
+class TuttiFruttiActivity : GameActivity<TuttiFruttiSpecificGameEvent, TuttiFruttiViewModel>() {
 
-    private val gameConnectionType: String by lazy {
-        intent.getStringExtra(GameConnectionType.EXTRA) ?: "UNKNOWN"
-    }
-    private val device: BluetoothDevice? by lazy { intent.getParcelableExtra(SERVER_DEVICE_EXTRA) }
+    override val viewModel: TuttiFruttiViewModel by viewModels { gameViewModelFactory }
 
-    override val viewModel: TuttiFruttiViewModel by viewModels {
-        TuttiFruttiViewModelFactory(baseContext, gameConnectionType, device)
-    }
+    override fun goToCreate() = addFragment(CreateTuttiFruttiFragment.newInstance(), shouldAddToBackStack = false)
 
-    private val instructions by lazy {
-        InstructionsRepository(InstructionsLocalResourcesSource(applicationContext)).getInstructions(
-            Game.TUTTI_FRUTTI
-        )
-    }
+    override fun goToPlay(gameInfo: GameInfo) =
+        addFragment(TuttiFruttiCountdownFragment.newInstance(gameInfo as TuttiFruttiInfo),
+            shouldAddToBackStack = false)
 
-    override fun onEvent(event: GameEvent) = when (event) {
-        GoToClientLobby -> Unit // TODO()
-        GoToServerLobby -> Unit // TODO()
-        is SpecificGameEvent -> addFragment(
-            CreateTuttiFruttiFragment.newInstance(), shouldAddToBackStack = false
-        )
-    }
+    override fun goToClientLobby() =
+        Unit // TODO: addFragment(ClientLobbyTuttiFruttiFragment.newInstance(), shouldAddToBackStack = false)
+
+    override fun goToServerLobby() =
+        Unit // TODO: addFragment(ServerLobbyTuttiFruttiFragment.newInstance(), shouldAddToBackStack = false)
 
     companion object {
 
-        private const val SERVER_DEVICE_EXTRA = "SERVER_DEVICE_EXTRA"
-
-        fun startCreate(context: Context) {
-            context.startActivity(Intent(context, TuttiFruttiActivity::class.java).apply {
-                putExtra(GameConnectionType.EXTRA, GameConnectionType.SERVER)
-            })
-        }
+        fun startCreate(context: Context) = startCreate(TuttiFruttiActivity::class, context)
 
         fun startJoin(context: Context, serverDevice: BluetoothDevice) {
-            context.startActivity(Intent(context, TuttiFruttiActivity::class.java).apply {
-                putExtra(GameConnectionType.EXTRA, GameConnectionType.CLIENT)
-                putExtra(SERVER_DEVICE_EXTRA, serverDevice)
-            })
+            startJoin(TuttiFruttiActivity::class, context, serverDevice)
         }
     }
 }

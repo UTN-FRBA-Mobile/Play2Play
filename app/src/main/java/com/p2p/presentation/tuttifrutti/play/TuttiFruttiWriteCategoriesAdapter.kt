@@ -2,16 +2,14 @@ package com.p2p.presentation.tuttifrutti.play
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.RecyclerView
 import com.p2p.databinding.ViewWriteCategoryItemBinding
-import com.p2p.presentation.tuttifrutti.create.Category
+import com.p2p.presentation.tuttifrutti.create.categories.Category
 
 
 /** The adapter used to show the list of selected categories and be written. */
-class TuttiFruttiWriteCategoriesAdapter(private val categories: List<Category>, private val onWrittenCategory: (Category, String?) -> Unit) :
+class TuttiFruttiWriteCategoriesAdapter(private val categories: List<Category>, val onFocusOut: (Category, String?) -> Unit) :
     RecyclerView.Adapter<TuttiFruttiWriteCategoriesAdapter.ViewHolder>() {
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
@@ -34,8 +32,10 @@ class TuttiFruttiWriteCategoriesAdapter(private val categories: List<Category>, 
 
         /** Show the given [category] into the view. */
         fun bind(category: Category) = with(binding) {
-            textField.doOnTextChanged { inputText, _, _, _ ->
-                onWrittenCategory.invoke(category, inputText.toString())
+            textField.setOnFocusChangeListener{ _, focus ->
+                if(!focus){
+                    onFocusOut(category, textField.text.toString())
+                }
             }
             input.hint = category
         }
