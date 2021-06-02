@@ -1,7 +1,6 @@
 package com.p2p.presentation.basegame
 
 import android.bluetooth.BluetoothDevice
-import android.content.Context
 import android.os.Handler
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
