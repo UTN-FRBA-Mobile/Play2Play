@@ -80,9 +80,9 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
     override fun onEvent(event: TuttiFruttiPlayingEvents) = when (event) {
         //TODO end round and pass to next stage
         is EndRound -> {
-            gameViewModel.finishRound(event.categoriesWithValues)
             //TODO delete when review is done
             showSuccessMessage(event.categoriesWithValues)
+            gameViewModel.finishRound(event.categoriesWithValues)
         }
         InvalidInputs -> markErrors()
     }

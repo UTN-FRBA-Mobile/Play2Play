@@ -13,9 +13,7 @@ class TuttiFruttiActivity : GameActivity<TuttiFruttiSpecificGameEvent, TuttiFrut
 
     override fun goToCreate() = addFragment(CreateTuttiFruttiFragment.newInstance(), shouldAddToBackStack = false)
 
-    override fun goToPlay() =
-        addFragment(TuttiFruttiCountdownFragment.newInstance(),
-            shouldAddToBackStack = false)
+    override fun goToPlay() = addFragment(TuttiFruttiCountdownFragment.newInstance(), shouldAddToBackStack = false)
 
     override fun goToClientLobby() =
         Unit // TODO: addFragment(ClientLobbyTuttiFruttiFragment.newInstance(), shouldAddToBackStack = false)

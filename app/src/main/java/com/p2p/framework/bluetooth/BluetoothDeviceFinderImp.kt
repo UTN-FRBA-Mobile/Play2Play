@@ -12,6 +12,7 @@ class BluetoothDeviceFinderImp(private val receiver: BluetoothDeviceFinderReceiv
 
         // Search the available devices
         receiver.onFound = onFound
+        bluetoothAdapter?.cancelDiscovery()
         bluetoothAdapter?.startDiscovery()
 
         // Get the already bonded devices

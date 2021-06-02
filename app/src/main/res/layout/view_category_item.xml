@@ -11,14 +11,13 @@
         android:layout_height="match_parent"
         android:layout_marginStart="@dimen/screen_padding"
         android:layout_marginEnd="@dimen/screen_padding"
-        android:buttonTint="@color/colorSecondary"
         android:paddingStart="@dimen/screen_padding"
         android:paddingTop="@dimen/large"
         android:paddingEnd="@dimen/screen_padding"
         android:paddingBottom="@dimen/large"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/font_medium_extra"
+        android:textSize="@dimen/font_large"
         android:textStyle="bold"
-        tools:text="Category" />
+        tools:text="Category"
+        style="@style/Widget.P2P.CircleCheckbox" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

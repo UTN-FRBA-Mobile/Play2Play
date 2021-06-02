@@ -13,7 +13,7 @@ import com.p2p.framework.SharedPreferencesUserInfoStorage
 import com.p2p.framework.bluetooth.BluetoothConnectionCreatorImp
 
 open class GameViewModelFactory(
-    private val context: Context,
+    private val activity: GameActivity<*, *>,
     private val data: Data
 ) : ViewModelProvider.Factory {
 
@@ -21,13 +21,13 @@ open class GameViewModelFactory(
         get() = ConnectionType(data.gameConnectionType, data.device)
 
     protected val userSession: UserSession
-        get() = UserSession(SharedPreferencesUserInfoStorage(context))
+        get() = UserSession(SharedPreferencesUserInfoStorage(activity.baseContext))
 
     protected val bluetoothConnectionCreator: BluetoothConnectionCreator
-        get() = BluetoothConnectionCreatorImp(data.handler)
+        get() = BluetoothConnectionCreatorImp(activity, data.handler)
 
     protected val instructionsRepository: InstructionsRepository
-        get() = InstructionsRepository(InstructionsLocalResourcesSource(context))
+        get() = InstructionsRepository(InstructionsLocalResourcesSource(activity.baseContext))
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T = modelClass
         .getConstructor(
