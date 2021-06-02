@@ -68,10 +68,8 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
     override fun setupObservers() {
         super.setupObservers()
         with(gameViewModel) {
-            actualRound.observe(viewLifecycleOwner)
-            {
-                gameBinding.round.text =
-                    resources.getString(R.string.tf_round, it, totalRounds.value)
+            actualRound.observe(viewLifecycleOwner) {
+                gameBinding.round.text = resources.getString(R.string.tf_round, it, totalRounds.value)
             }
             actualLetter.observe(viewLifecycleOwner)
             { gameBinding.letter.text = resources.getString(R.string.tf_letter, it) }
@@ -81,8 +79,8 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
     override fun onEvent(event: TuttiFruttiPlayingEvents) = when (event) {
         //TODO end round and pass to next stage
         is EndRound -> {
-            //TODO delete when review is done
             clearValues()
+            //TODO delete when review is done
             showSuccessMessage(event.categoriesWithValues)
             gameViewModel.finishRound(event.categoriesWithValues)
         }
@@ -105,7 +103,7 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
     private fun showSuccessMessage(categoriesWithValues: Map<Category, String>) {
         MaterialAlertDialogBuilder(requireContext())
             .setMessage("Las categorias que llenaste son: \n" +
-                    categoriesWithValues.map { it.key + " : "  + it.value + "\n" })
+                    categoriesWithValues.map { it.key + " : " + it.value + "\n" })
             //It is positive to be shown on the right
             .setPositiveButton(resources.getString(android.R.string.ok)) { _, _ ->
                 // Respond to positive button press
@@ -117,7 +115,6 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
     companion object {
 
         /** Create a new instance of the [PlayTuttiFruttiFragment]. */
-        fun newInstance() =
-            PlayTuttiFruttiFragment()
+        fun newInstance() = PlayTuttiFruttiFragment()
     }
 }
