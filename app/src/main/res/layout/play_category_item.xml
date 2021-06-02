@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/medium_extra"
-    app:cardCornerRadius="@dimen/games_item_corner_radius"
+    app:layout_goneMarginBottom="@dimen/medium"
     app:cardElevation="0dp"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
