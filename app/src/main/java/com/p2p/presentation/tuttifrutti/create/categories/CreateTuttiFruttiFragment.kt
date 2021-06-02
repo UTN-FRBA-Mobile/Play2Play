@@ -2,31 +2,26 @@ package com.p2p.presentation.tuttifrutti.create.categories
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.p2p.databinding.FragmentCreateTuttiFruttiBinding
 import com.p2p.presentation.basegame.BaseGameFragment
-import com.p2p.presentation.home.games.Game
+import com.p2p.presentation.tuttifrutti.TuttiFruttiViewModel
 import com.p2p.presentation.tuttifrutti.create.rounds.RoundsNumberFragment
 
-class CreateTuttiFruttiFragment :
-        BaseGameFragment<FragmentCreateTuttiFruttiBinding, TuttiFruttiCategoriesEvents, CreateTuttiFruttiViewModel>() {
+class CreateTuttiFruttiFragment : BaseGameFragment<
+        FragmentCreateTuttiFruttiBinding,
+        TuttiFruttiCategoriesEvents,
+        CreateTuttiFruttiViewModel,
+        TuttiFruttiViewModel>() {
 
+    override val gameViewModel: TuttiFruttiViewModel by activityViewModels()
     override val viewModel: CreateTuttiFruttiViewModel by viewModels {
-        CreateTuttiFruttiViewModelFactory(
-                requireContext()
-        )
+        CreateTuttiFruttiViewModelFactory(requireContext())
     }
     override val gameInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentCreateTuttiFruttiBinding =
             FragmentCreateTuttiFruttiBinding::inflate
-
-    override val gameData = Game.TUTTI_FRUTTI
-
-    override val instructions: String by lazy {
-        requireNotNull(requireArguments().getString(INSTRUCTIONS_KEY))
-        { "Instructions key must be passed to fragment arguments" }
-    }
 
     private lateinit var tuttiFruttiCategoriesAadapter: TuttiFruttiCategoriesAdapter
     private lateinit var tuttiFruttiSelectedCategoriesAdapter: TuttiFruttiSelectedCategoriesAdapter
@@ -47,6 +42,7 @@ class CreateTuttiFruttiFragment :
         continueButtonEnabled.observe(viewLifecycleOwner) {
             gameBinding.continueButton.isEnabled = it
         }
+        super.setupObservers()
     }
 
 
@@ -70,12 +66,7 @@ class CreateTuttiFruttiFragment :
 
     companion object {
 
-        const val INSTRUCTIONS_KEY = "Instructions"
-
         /** Create a new instance of the [CreateTuttiFruttiFragment]. */
-        fun newInstance(instructions: String) =
-            CreateTuttiFruttiFragment().apply {
-                arguments = bundleOf(INSTRUCTIONS_KEY to instructions)
-            }
+        fun newInstance() = CreateTuttiFruttiFragment()
     }
 }
