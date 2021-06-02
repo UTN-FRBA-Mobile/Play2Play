@@ -3,8 +3,6 @@ package com.p2p.presentation.tuttifrutti
 import android.bluetooth.BluetoothDevice
 import android.content.Context
 import androidx.activity.viewModels
-import com.p2p.model.GameInfo
-import com.p2p.model.tuttifrutti.TuttiFruttiInfo
 import com.p2p.presentation.basegame.GameActivity
 import com.p2p.presentation.tuttifrutti.countdown.TuttiFruttiCountdownFragment
 import com.p2p.presentation.tuttifrutti.create.categories.CreateTuttiFruttiFragment
@@ -15,8 +13,8 @@ class TuttiFruttiActivity : GameActivity<TuttiFruttiSpecificGameEvent, TuttiFrut
 
     override fun goToCreate() = addFragment(CreateTuttiFruttiFragment.newInstance(), shouldAddToBackStack = false)
 
-    override fun goToPlay(gameInfo: GameInfo) =
-        addFragment(TuttiFruttiCountdownFragment.newInstance(gameInfo as TuttiFruttiInfo),
+    override fun goToPlay() =
+        addFragment(TuttiFruttiCountdownFragment.newInstance(),
             shouldAddToBackStack = false)
 
     override fun goToClientLobby() =

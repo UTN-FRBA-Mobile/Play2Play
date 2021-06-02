@@ -1,2 +1,2 @@
 rootProject.name = "P2P"
-include ':play2play'
+include ':app'

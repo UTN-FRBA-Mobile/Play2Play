@@ -48,7 +48,8 @@ class CreateTuttiFruttiFragment : BaseGameFragment<
 
     override fun onEvent(event: TuttiFruttiCategoriesEvents) = when (event) {
         is GoToSelectRounds -> {
-            RoundsNumberFragment.newInstance(event.categories).show(childFragmentManager, "RoundsNumberDialog")
+            gameViewModel.setSelectedCategories(event.categories)
+            RoundsNumberFragment.newInstance().show(childFragmentManager, "RoundsNumberDialog")
         }
     }
 

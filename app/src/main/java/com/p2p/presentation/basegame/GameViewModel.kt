@@ -88,6 +88,8 @@ abstract class GameViewModel(
 
     fun showInstructions() = dispatchSingleTimeEvent(OpenInstructions(instructions))
 
+    fun goToPlay() = dispatchSingleTimeEvent(GoToPlay)
+
     override fun onCleared() {
         connection.close()
     }

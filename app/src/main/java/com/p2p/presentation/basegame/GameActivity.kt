@@ -13,7 +13,6 @@ import com.p2p.framework.bluetooth.BluetoothConnectionThread.Companion.MESSAGE_R
 import com.p2p.framework.bluetooth.BluetoothConnectionThread.Companion.MESSAGE_WRITE_ERROR
 import com.p2p.framework.bluetooth.BluetoothConnectionThread.Companion.MESSAGE_WRITE_SUCCESS
 import com.p2p.framework.bluetooth.BluetoothConnectionThread.Companion.SENDER_ID
-import com.p2p.model.GameInfo
 import com.p2p.model.message.Message
 import com.p2p.model.message.MessageReceived
 import com.p2p.presentation.base.BaseMVVMActivity
@@ -69,7 +68,7 @@ abstract class GameActivity<E : SpecificGameEvent, VM : GameViewModel>(
         GoToCreate -> goToCreate()
         GoToClientLobby -> goToClientLobby()
         GoToServerLobby -> goToServerLobby()
-        is GoToPlay -> goToPlay(event.gameInfo)
+        GoToPlay -> goToPlay()
         is OpenInstructions -> showInstructions(event.instructions)
         is SpecificGameEvent -> {
             try {
@@ -86,7 +85,7 @@ abstract class GameActivity<E : SpecificGameEvent, VM : GameViewModel>(
 
     protected abstract fun goToCreate()
 
-    protected abstract fun goToPlay(gameInfo: GameInfo)
+    protected abstract fun goToPlay()
 
     protected abstract fun goToClientLobby()
 

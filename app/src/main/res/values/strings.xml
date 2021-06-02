@@ -42,7 +42,7 @@
     <string name="how_to_connect_bluetooth_title">¿Cómo conectarse con otro dispositivo Bluetooth?</string>
 
     <!-- Tutti Frutti - Game -->
-    <string name="tf_letter">Letra:</string>
-    <string name="tf_round">Ronda:</string>
+    <string name="tf_letter">Letra: %s</string>
+    <string name="tf_round">Ronda: %d/%d</string>
     <string name="tf_finish_round">¡Basta para mi, basta para todos!</string>
 </resources>

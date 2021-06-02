@@ -16,21 +16,8 @@
         android:textSize="@dimen/font_big"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="@id/guideline_top"
-        app:layout_constraintEnd_toStartOf="@id/round_letter"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
         android:text="@string/tf_letter"
-        />
-
-    <TextView
-        android:id="@+id/round_letter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/font_big"
-        android:textStyle="bold"
-        android:layout_marginStart="@dimen/medium"
-        app:layout_constraintTop_toTopOf="@id/guideline_top"
-        app:layout_constraintStart_toEndOf="@id/letter"
-        tools:text="C"
         />
 
     <TextView
@@ -41,35 +28,20 @@
         android:textStyle="bold"
         android:layout_marginEnd="@dimen/medium"
         app:layout_constraintTop_toTopOf="@id/guideline_top"
-        app:layout_constraintEnd_toStartOf="@id/round_number"
+        app:layout_constraintEnd_toStartOf="@id/guideline_end"
         android:text="@string/tf_round"
         />
-    <TextView
-        android:id="@+id/round_number"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/font_big"
-        android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="@id/guideline_top"
-        app:layout_constraintEnd_toEndOf="@id/guideline_end"
-        tools:text="1/5"
-        />
-
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/categories_recycler"
+    <LinearLayout
+        android:id="@+id/categories_list"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:orientation="vertical"
         android:layout_marginTop="@dimen/big"
         android:layout_marginBottom="@dimen/large"
-        android:orientation="vertical"
-        android:requiresFadingEdge="vertical"
-        android:fadingEdgeLength="@dimen/largest_extra"
         app:layout_constraintBottom_toTopOf="@id/finish_round_button"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
-        app:layout_constraintTop_toBottomOf="@id/letter"
-        tools:listitem="@layout/view_write_category_item" />
+        app:layout_constraintTop_toBottomOf="@id/letter"/>
 
     <Button
         android:id="@+id/finish_round_button"
