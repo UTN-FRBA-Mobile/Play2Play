@@ -37,6 +37,12 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="Widget.P2P.CircleCheckbox" parent="@style/Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/circle_checkbox</item>
+        <item name="android:buttonTint">@color/coral</item>
+        <item name="android:textColor">@color/green_black</item>
+    </style>
+
     <!-- Text styles -->
     <style name="P2P_Title">
         <item name="android:textSize">@dimen/font_big</item>
