@@ -84,18 +84,14 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
             //TODO delete when review is done
             showSuccessMessage(event.categoriesWithValues)
         }
-        InvalidInputs -> showErrorMessage()
+        InvalidInputs -> markErrors()
     }
 
     //TODO validation inputs
-    private fun showErrorMessage() {
-        MaterialAlertDialogBuilder(requireContext())
-            .setMessage("Te falto llenar alguna categoria")
-            //It is positive to be shown on the right
-            .setPositiveButton(resources.getString(android.R.string.ok)) { _, _ ->
-                // Respond to positive button press
-            }
-            .show()
+    private fun markErrors() {
+        textViews().filter { it.text().isBlank() }.forEach {
+            it.error = resources.getString(R.string.tf_validation_error)
+        }
     }
 
 
