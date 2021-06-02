@@ -15,6 +15,7 @@ import com.p2p.databinding.PlayCategoryItemBinding
 import com.p2p.presentation.basegame.BaseGameFragment
 import com.p2p.presentation.tuttifrutti.TuttiFruttiViewModel
 import com.p2p.presentation.tuttifrutti.create.categories.Category
+import com.p2p.utils.clear
 import com.p2p.utils.text
 
 class PlayTuttiFruttiFragment : BaseGameFragment<
@@ -81,6 +82,7 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
         //TODO end round and pass to next stage
         is EndRound -> {
             //TODO delete when review is done
+            clearValues()
             showSuccessMessage(event.categoriesWithValues)
             gameViewModel.finishRound(event.categoriesWithValues)
         }
@@ -92,6 +94,10 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
         textViews().filter { it.text().isBlank() }.forEach {
             it.error = resources.getString(R.string.tf_validation_error)
         }
+    }
+
+    private fun clearValues() {
+        textViews().forEach { it.clear() }
     }
 
 
