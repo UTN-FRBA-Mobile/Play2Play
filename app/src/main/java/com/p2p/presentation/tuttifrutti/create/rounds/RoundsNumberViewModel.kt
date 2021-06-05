@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.p2p.presentation.base.BaseViewModel
 
-class RoundsNumberViewModel : BaseViewModel<RoundsNumberEvent>() {
+class RoundsNumberViewModel : BaseViewModel<Unit>() {
 
     /** The number of rounds to play. */
     private val _roundsNumber = MutableLiveData<Int>()
@@ -20,11 +20,6 @@ class RoundsNumberViewModel : BaseViewModel<RoundsNumberEvent>() {
 
     fun decrease() {
         _roundsNumber.value = (number() - 1).coerceAtLeast(1)
-    }
-
-    /** Next view to show when Create button is pressed. */
-    fun continueCreatingGame() {
-        dispatchSingleTimeEvent(GoToTuttiFruttiLobby(roundsNumber.value!!))
     }
 
     private fun number(): Int = _roundsNumber.value ?: DEFAULT_ROUNDS_NUMBER

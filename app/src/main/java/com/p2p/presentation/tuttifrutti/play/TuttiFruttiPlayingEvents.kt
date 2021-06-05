@@ -6,4 +6,4 @@ sealed class TuttiFruttiPlayingEvents
 
 object InvalidInputs : TuttiFruttiPlayingEvents()
 
-class EndRound(val categoriesWithValues: Map<Category, String>): TuttiFruttiPlayingEvents()
+class FinishRound(val categoriesWithValues: Map<Category, String>): TuttiFruttiPlayingEvents()

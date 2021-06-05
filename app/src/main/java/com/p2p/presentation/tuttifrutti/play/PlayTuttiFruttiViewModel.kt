@@ -4,13 +4,15 @@ import com.p2p.model.tuttifrutti.RoundInfo
 import com.p2p.presentation.base.BaseViewModel
 import com.p2p.presentation.tuttifrutti.create.categories.Category
 
-class PlayTuttiFruttiViewModel() :
+class PlayTuttiFruttiViewModel :
     BaseViewModel<TuttiFruttiPlayingEvents>() {
 
-    fun onEndRound(categoriesWithValues: Map<Category, String>) {
-        val event = if (allCategoriesAreFilled(categoriesWithValues))
-            EndRound(categoriesWithValues)
-        else InvalidInputs
+    fun onFinishRound(categoriesWithValues: Map<Category, String>) {
+        val event = if (allCategoriesAreFilled(categoriesWithValues)) {
+            FinishRound(categoriesWithValues)
+        } else {
+            InvalidInputs
+        }
         dispatchSingleTimeEvent(event)
     }
 

@@ -3,7 +3,6 @@ package com.p2p.presentation.tuttifrutti.play
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import androidx.cardview.widget.CardView
 import androidx.core.view.children
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -28,11 +27,13 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
 
     override val viewModel: PlayTuttiFruttiViewModel by viewModels()
 
+    private val categoriesInputs: MutableMap<Category, TextInputLayout> = mutableMapOf()
+
     override val gameInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentPlayTuttiFruttiBinding =
         FragmentPlayTuttiFruttiBinding::inflate
 
     override fun initValues() {
-        gameViewModel.startGame()
+        gameViewModel.generateNextRoundValues()
     }
 
     override fun initUI() {
@@ -40,28 +41,28 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
         with(gameBinding) {
             setUpCategoriesList(categoriesList)
             finishRoundButton.setOnClickListener {
-                val values = textViews().map { it.text() }
-                val categoriesWithValues =
-                    gameViewModel.selectedCategories.value!!.zip(values).toMap()
-                viewModel.onEndRound(categoriesWithValues)
+                val values = categoriesInputs.map { it.key to it.value.text() }.toMap()
+                viewModel.onFinishRound(values)
             }
         }
     }
 
-    private fun textViews(): List<TextInputLayout> {
+    private fun getCategoriesTextInputs(): List<TextInputLayout> {
         val textViews = gameBinding.categoriesList
             .children
-            .flatMap { (it as CardView).children.map { it as TextInputLayout } }
+            .map { it as TextInputLayout }
         return textViews.toList()
     }
 
-    private fun setUpCategoriesList(list: LinearLayout) {
-        gameViewModel.selectedCategories.value?.map { category ->
-            with(PlayCategoryItemBinding.inflate(layoutInflater)) {
-                input.hint = category
-                list.addView(this.root)
+    private fun setUpCategoriesList(list: LinearLayout) = with(gameViewModel) {
+        selectedCategories.observe(viewLifecycleOwner) {
+            it.map { category ->
+                with(PlayCategoryItemBinding.inflate(layoutInflater)) {
+                    input.hint = category
+                    categoriesInputs[category] = input
+                    list.addView(this.root)
+                }
             }
-
         }
     }
 
@@ -69,16 +70,16 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
         super.setupObservers()
         with(gameViewModel) {
             actualRound.observe(viewLifecycleOwner) {
-                gameBinding.round.text = resources.getString(R.string.tf_round, it, totalRounds.value)
+                gameBinding.round.text =
+                    resources.getString(R.string.tf_round, it.number, totalRounds.value)
+                gameBinding.letter.text = resources.getString(R.string.tf_letter, it.letter)
             }
-            actualLetter.observe(viewLifecycleOwner)
-            { gameBinding.letter.text = resources.getString(R.string.tf_letter, it) }
         }
     }
 
     override fun onEvent(event: TuttiFruttiPlayingEvents) = when (event) {
         //TODO end round and pass to next stage
-        is EndRound -> {
+        is FinishRound -> {
             clearValues()
             //TODO delete when review is done
             showSuccessMessage(event.categoriesWithValues)
@@ -89,13 +90,13 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
 
     //TODO validation inputs
     private fun markErrors() {
-        textViews().filter { it.text().isBlank() }.forEach {
+        getCategoriesTextInputs().filter { it.text().isBlank() }.forEach {
             it.error = resources.getString(R.string.tf_validation_error)
         }
     }
 
     private fun clearValues() {
-        textViews().forEach { it.clear() }
+        getCategoriesTextInputs().forEach { it.clear() }
     }
 
 

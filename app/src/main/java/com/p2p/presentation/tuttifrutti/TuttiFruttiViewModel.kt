@@ -5,13 +5,15 @@ import androidx.lifecycle.MutableLiveData
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.userInfo.UserSession
+import com.p2p.model.tuttifrutti.FinishedRoundInfo
 import com.p2p.model.tuttifrutti.RoundInfo
 import com.p2p.presentation.basegame.ConnectionType
 import com.p2p.presentation.basegame.GameViewModel
+import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.home.games.Game
 import com.p2p.presentation.tuttifrutti.create.categories.Category
 
-class TuttiFruttiViewModel(
+open class TuttiFruttiViewModel(
     connectionType: ConnectionType,
     userSession: UserSession,
     bluetoothConnectionCreator: BluetoothConnectionCreator,
@@ -25,7 +27,7 @@ class TuttiFruttiViewModel(
 ) {
 
     /**Data for all game*/
-    private val roundsInfo = mutableListOf<RoundInfo>()
+    private val roundsInfo = mutableListOf<FinishedRoundInfo>()
 
     private val lettersByRound: List<Char> by lazy { getRandomLetters() }
 
@@ -37,55 +39,52 @@ class TuttiFruttiViewModel(
 
 
     /**Data for actual round*/
-    private val _actualRoundNumber = MutableLiveData<Int>()
-    val actualRoundNumer: LiveData<Int> = _actualRoundNumber
-    private val _actualRountLetter = MutableLiveData<Char>()
-    val actualRoundLetter: LiveData<Char> = _actualRoundLetter
+    private val _actualRound = MutableLiveData<RoundInfo>()
+    val actualRound: LiveData<RoundInfo> = _actualRound
 
 
     /**Before playing game*/
-    fun setSelectedCategories(categories: List<Category>) { _selectedCategories.value = categories }
+    fun setSelectedCategories(categories: List<Category>) {
+        _selectedCategories.value = categories
+    }
 
-    fun setTotalRounds(totalRounds: Int) { _totalRounds.value = totalRounds }
-
-    fun setInitialRoundValues() {
-        _actualRound.value = 1
-        _actualLetter.value = lettersByRound[0]
+    fun setTotalRounds(totalRounds: Int) {
+        _totalRounds.value = totalRounds
     }
 
     private fun getRandomLetters(): List<Char> =
-        availableLetters.map { it }.shuffled().subList(0, totalRounds.value!!)
+        availableLetters.map { it }.shuffled().toList().take(totalRounds.requireValue())
 
 
     /**On Playing game*/
     fun finishRound(categoriesWithValues: Map<Category, String>) {
-        if (gameContinues()) {
-            generateNextRoundValues()
-        }
-        roundsInfo.add(RoundInfo(actualLetter.value!!, categoriesWithValues))
+        roundsInfo.add(actualRound.requireValue().finish(categoriesWithValues))
         goToReviewOrWait()
     }
 
+    //TODO this should be called after review
     private fun gameContinues(): Boolean {
         val totalRounds: Int = totalRounds.requireValue()
-        val actualRound: Int = actualRound.requireValue()
+        val actualRound: Int = actualRound.requireValue().number
         return actualRound <= totalRounds
     }
 
-    private fun goToReview() {
+    private fun goToReviewOrWait() {
 
         //TODO throw when done
         // dispatchSingleTimeEvent(GoToReview)
     }
 
-    private fun generateNextRoundValues() {
-        _actualRound.value = actualRound.value?.plus(1)
-        _actualLetter.value = lettersByRound[actualRound.value!!.minus(1)]
+    fun generateNextRoundValues() {
+        //TODO this should be recieved by the server on the client, and in the server is ok
+        //See how to do this logic
+        val actualRoundNumber: Int = actualRound.value?.number?.plus(1) ?: 1
+        _actualRound.value =
+            RoundInfo(lettersByRound[actualRoundNumber.minus(1)], actualRoundNumber)
     }
 
 
     companion object {
-        //TODO check if we want to delete some letter (e.g: W), if we want all we could put ('A'..'Z')
-        const val availableLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        const val availableLetters = "ABCDEFGHIJKLMNOPRSTUVY"
     }
 }

@@ -5,5 +5,8 @@ import com.google.android.material.textfield.TextInputLayout
 fun TextInputLayout.text(): String = this.editText?.text.toString()
 
 fun TextInputLayout.clear(){
-    this.editText?.setText("")
+    this.editText?.run {
+        setText("")
+        error = null
+    }
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.p2p.R
 import com.p2p.data.tuttifrutti.TuttiFruttiRepository
 import com.p2p.presentation.base.BaseViewModel
+import com.p2p.presentation.extensions.requireValue
 
 class CreateTuttiFruttiViewModel(repository: TuttiFruttiRepository) :
     BaseViewModel<TuttiFruttiCategoriesEvents>() {
@@ -44,7 +45,7 @@ class CreateTuttiFruttiViewModel(repository: TuttiFruttiRepository) :
     /** Next view to show when Continue button is pressed. */
     fun continueToNextScreen() {
         if (!validateCategoriesCount()) return
-        dispatchSingleTimeEvent(GoToSelectRounds(selectedCategories.value!!))
+        dispatchSingleTimeEvent(GoToSelectRounds(selectedCategories.requireValue()))
     }
 
     private fun validateCategoriesCount(): Boolean {

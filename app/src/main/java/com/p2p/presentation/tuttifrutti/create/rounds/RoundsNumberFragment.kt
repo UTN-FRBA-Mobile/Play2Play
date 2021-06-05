@@ -12,11 +12,13 @@ import com.p2p.presentation.tuttifrutti.create.categories.Category
 
 class RoundsNumberFragment :
 //TODO change GameEvent for RoundsNumberEvent when lobby is done
-    BaseDialogFragment<FragmentRoundsNumberBinding, RoundsNumberEvent, RoundsNumberViewModel>() {
+    BaseDialogFragment<FragmentRoundsNumberBinding, Unit, RoundsNumberViewModel>() {
 
     override val viewModel: RoundsNumberViewModel by viewModels()
 
     private val gameViewModel: TuttiFruttiViewModel by activityViewModels()
+
+    private var roundsNumber: Int? = null
 
     override val inflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentRoundsNumberBinding =
         FragmentRoundsNumberBinding::inflate
@@ -27,16 +29,18 @@ class RoundsNumberFragment :
         binding.createButton.setOnClickListener {
             //TODO discoment when lobby is done
             // viewModel.continueCreatingGame(categories)
-            gameViewModel.setTotalRounds(viewModel.roundsNumber.value!!)
+            gameViewModel.setTotalRounds(
+                requireNotNull(roundsNumber)
+                { "Round number must be defined when create button is pressed" })
             gameViewModel.goToPlay()
         }
     }
 
-    override fun setupObservers() = with(viewModel) {
-        roundsNumber.observe(viewLifecycleOwner) {
+    override fun setupObservers() =
+        viewModel.roundsNumber.observe(viewLifecycleOwner) {
+            roundsNumber = it
             binding.number.text = it.toString()
         }
-    }
 
 
     companion object {

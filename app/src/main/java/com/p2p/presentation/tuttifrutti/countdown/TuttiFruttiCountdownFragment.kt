@@ -63,8 +63,7 @@ class TuttiFruttiCountdownFragment : Fragment() {
     private fun startGame() {
         parentFragmentManager.commit {
             replace(R.id.fragment_container_view,
-                PlayTuttiFruttiFragment.newInstance() as Fragment)
-            addToBackStack(null)
+                PlayTuttiFruttiFragment.newInstance())
         }
     }
 
