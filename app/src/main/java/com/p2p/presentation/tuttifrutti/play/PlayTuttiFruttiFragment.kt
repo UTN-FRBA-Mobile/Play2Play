@@ -84,7 +84,7 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
             showSuccessMessage(event.categoriesWithValues)
             gameViewModel.finishRound(event.categoriesWithValues)
         }
-        InvalidInputs -> markErrors()
+        ShowInvalidInputs -> markErrors()
     }
 
     //TODO validation inputs
