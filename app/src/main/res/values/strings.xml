@@ -48,6 +48,6 @@
     <!-- Tutti Frutti - Game -->
     <string name="tf_letter">Letra: %s</string>
     <string name="tf_round">Ronda: %d/%d</string>
-    <string name="tf_validation_error">* Falta completar!</string>
+    <string name="tf_validation_error">¡Falta completar!</string>
     <string name="tf_finish_round">¡Basta para mi, basta para todos!</string>
 </resources>
