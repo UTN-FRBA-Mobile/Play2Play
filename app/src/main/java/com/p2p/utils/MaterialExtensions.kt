@@ -7,6 +7,6 @@ fun TextInputLayout.text(): String = this.editText?.text.toString()
 fun TextInputLayout.clear(){
     this.editText?.run {
         setText("")
-        error = null
+        isErrorEnabled = false
     }
 }
