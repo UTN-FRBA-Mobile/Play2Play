@@ -48,7 +48,7 @@ class TuttiFruttiViewModel(
 
     fun setTotalRounds(totalRounds: Int) { _totalRounds.value = totalRounds }
 
-    fun startGame() {
+    fun setInitialRoundValues() {
         _actualRound.value = 1
         _actualLetter.value = lettersByRound[0]
     }
