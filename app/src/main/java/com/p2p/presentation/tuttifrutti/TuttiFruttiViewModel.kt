@@ -67,8 +67,8 @@ class TuttiFruttiViewModel(
     }
 
     private fun gameContinues(): Boolean {
-        val totalRounds: Int = totalRounds.value!!
-        val actualRound: Int = actualRound.value!!
+        val totalRounds: Int = totalRounds.requireValue()
+        val actualRound: Int = actualRound.requireValue()
         return actualRound <= totalRounds
     }
 
