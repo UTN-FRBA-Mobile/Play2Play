@@ -63,7 +63,7 @@ class TuttiFruttiViewModel(
             generateNextRoundValues()
         }
         roundsInfo.add(RoundInfo(actualLetter.value!!, categoriesWithValues))
-        goToReview()
+        goToReviewOrWait()
     }
 
     private fun gameContinues(): Boolean {
