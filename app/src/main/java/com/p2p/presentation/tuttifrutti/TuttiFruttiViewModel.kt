@@ -53,7 +53,7 @@ open class TuttiFruttiViewModel(
     }
 
     private fun getRandomLetters(): List<Char> =
-        availableLetters.map { it }.shuffled().toList().take(totalRounds.requireValue())
+        availableLetters.toList().shuffled().take(totalRounds.requireValue())
 
 
     /**On Playing game*/
