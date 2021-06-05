@@ -37,10 +37,10 @@ class TuttiFruttiViewModel(
 
 
     /**Data for actual round*/
-    private val _actualRound = MutableLiveData<Int>()
-    val actualRound: LiveData<Int> = _actualRound
-    private val _actualLetter = MutableLiveData<Char>()
-    val actualLetter: LiveData<Char> = _actualLetter
+    private val _actualRoundNumber = MutableLiveData<Int>()
+    val actualRoundNumer: LiveData<Int> = _actualRoundNumber
+    private val _actualRountLetter = MutableLiveData<Char>()
+    val actualRoundLetter: LiveData<Char> = _actualRoundLetter
 
 
     /**Before playing game*/
