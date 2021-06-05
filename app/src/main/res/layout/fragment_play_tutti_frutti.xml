@@ -31,6 +31,7 @@
         app:layout_constraintEnd_toStartOf="@id/guideline_end"
         android:text="@string/tf_round"
         />
+
     <LinearLayout
         android:id="@+id/categories_list"
         android:layout_width="0dp"
