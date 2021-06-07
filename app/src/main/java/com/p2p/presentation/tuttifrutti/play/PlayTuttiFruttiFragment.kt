@@ -47,13 +47,6 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
         }
     }
 
-    private fun getCategoriesTextInputs(): List<TextInputLayout> {
-        val textViews = gameBinding.categoriesList
-            .children
-            .map { it as TextInputLayout }
-        return textViews.toList()
-    }
-
     private fun setUpCategoriesList(list: LinearLayout) = with(gameViewModel) {
         selectedCategories.observe(viewLifecycleOwner) {
             it.map { category ->
@@ -88,15 +81,14 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
         ShowInvalidInputs -> markErrors()
     }
 
-    //TODO validation inputs
     private fun markErrors() {
-        getCategoriesTextInputs().filter { it.text().isBlank() }.forEach {
+        categoriesInputs.values.filter { it.text().isBlank() }.forEach {
             it.error = resources.getString(R.string.tf_validation_error)
         }
     }
 
     private fun clearValues() {
-        getCategoriesTextInputs().forEach { it.clear() }
+        categoriesInputs.values.forEach { it.clear() }
     }
 
 
