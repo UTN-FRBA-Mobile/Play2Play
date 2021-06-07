@@ -3,17 +3,23 @@ package com.p2p.presentation.basegame
 import androidx.annotation.CallSuper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.p2p.data.bluetooth.BluetoothConnection
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.userInfo.UserSession
-import com.p2p.model.message.ClientHandshakeMessage
-import com.p2p.model.message.Message
-import com.p2p.model.message.MessageReceived
-import com.p2p.model.message.ServerHandshakeMessage
+import com.p2p.model.base.message.ClientHandshakeMessage
+import com.p2p.model.base.message.Message
+import com.p2p.model.base.message.MessageReceived
+import com.p2p.model.base.message.ServerHandshakeMessage
 import com.p2p.presentation.base.BaseViewModel
 import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.home.games.Game
+import com.p2p.presentation.tuttifrutti.TuttiFruttiViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 abstract class GameViewModel(
     private val connectionType: ConnectionType,
@@ -27,15 +33,21 @@ abstract class GameViewModel(
     private val instructions by lazy { instructionsRepository.getInstructions(game.requireValue()) }
 
     protected lateinit var connection: BluetoothConnection
+    protected var connectedPlayers = emptyList<Pair<Long, String>>()
+        set(value) {
+            field = value
+            _players.value = value.map { it.second }
+        }
 
     private val _game = MutableLiveData<Game>()
     val game: LiveData<Game> = _game
 
-    private val _players = MutableLiveData(listOf(userName))
+    private val _players = MutableLiveData(emptyList<String>())
     val players: LiveData<List<String>> = _players
 
     init {
         _game.value = theGame
+        connectedPlayers = listOf(MYSELF_ID to userName)
         createOrJoin()
         startConnection() // TODO: This should be called when the creation is finished, from the Lobby
     }
@@ -49,12 +61,13 @@ abstract class GameViewModel(
     open fun receiveMessage(messageReceived: MessageReceived) {
         when (val message = messageReceived.message) {
             is ClientHandshakeMessage -> {
-                val actualPlayers = players.requireValue()
-                if (isServer()) connection.answer(messageReceived, ServerHandshakeMessage(actualPlayers))
-                _players.value = actualPlayers + message.name
+                if (isServer()) {
+                    connection.answer(messageReceived, ServerHandshakeMessage(connectedPlayers.map { it.second }))
+                }
+                connectedPlayers = connectedPlayers + (messageReceived.senderId to message.name)
             }
             is ServerHandshakeMessage -> {
-                _players.value = players.requireValue() + message.players
+                connectedPlayers = connectedPlayers + message.players.map { 0L to it }
             }
         }
     }
@@ -94,14 +107,26 @@ abstract class GameViewModel(
         connection.close()
     }
 
+    protected fun isServer() = connectionType.type == GameConnectionType.SERVER
+
     private fun createOrJoin() {
         if (isServer()) {
             dispatchSingleTimeEvent(GoToCreate)
         } else {
-            dispatchSingleTimeEvent(GoToClientLobby)
+            // TODO: revert this
+            if (this is TuttiFruttiViewModel) {
+                viewModelScope.launch(Dispatchers.Main) {
+                    withContext(Dispatchers.Default) { delay(2_000) }
+                    setTotalRounds(5)
+                    setSelectedCategories(listOf("Animales", "Nombres", "Países", "Comidas", "Peliculas"))
+                    dispatchSingleTimeEvent(GoToPlay)
+                }
+            }
         }
     }
 
-    private fun isServer() = connectionType.type == GameConnectionType.SERVER
+    companion object {
 
+        const val MYSELF_ID = -1L
+    }
 }

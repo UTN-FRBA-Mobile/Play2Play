@@ -1,12 +1,10 @@
 package com.p2p.presentation.tuttifrutti
 
+import com.p2p.model.tuttifrutti.FinishedRoundInfo
 import com.p2p.presentation.basegame.SpecificGameEvent
-import com.p2p.presentation.tuttifrutti.create.categories.Category
 
 sealed class TuttiFruttiSpecificGameEvent : SpecificGameEvent()
 
-object InvalidInputs : TuttiFruttiSpecificGameEvent()
+object ObtainWords : TuttiFruttiSpecificGameEvent()
 
-class FinishRound(val categoriesWithValues: Map<Category, String>): TuttiFruttiSpecificGameEvent()
-
-object GoToReview : TuttiFruttiSpecificGameEvent()
+class GoToReview(val finishedRoundInfo: List<FinishedRoundInfo>) : TuttiFruttiSpecificGameEvent()

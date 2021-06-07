@@ -1,12 +1,16 @@
 package com.p2p.presentation.tuttifrutti
 
+import androidx.annotation.CallSuper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.userInfo.UserSession
+import com.p2p.model.base.message.MessageReceived
 import com.p2p.model.tuttifrutti.FinishedRoundInfo
 import com.p2p.model.tuttifrutti.RoundInfo
+import com.p2p.model.tuttifrutti.message.TuttiFruttiEnoughForMeEnoughForAllMessage
+import com.p2p.model.tuttifrutti.message.TuttiFruttiSendWordsMessage
 import com.p2p.presentation.basegame.ConnectionType
 import com.p2p.presentation.basegame.GameViewModel
 import com.p2p.presentation.extensions.requireValue
@@ -26,9 +30,7 @@ open class TuttiFruttiViewModel(
     Game.TUTTI_FRUTTI
 ) {
 
-    /**Data for all game*/
-    private val roundsInfo = mutableListOf<FinishedRoundInfo>()
-
+    private val behaviour = if (isServer()) ServerTuttiFruttiBehaviour() else ClientTuttiFruttiBehaviour()
     private val lettersByRound: List<Char> by lazy { getRandomLetters() }
 
     private val _totalRounds = MutableLiveData<Int>()
@@ -37,13 +39,11 @@ open class TuttiFruttiViewModel(
     private val _selectedCategories = MutableLiveData<List<Category>>()
     val selectedCategories: LiveData<List<Category>> = _selectedCategories
 
-
-    /**Data for actual round*/
+    /** Data for the actual round. */
     private val _actualRound = MutableLiveData<RoundInfo>()
     val actualRound: LiveData<RoundInfo> = _actualRound
 
-
-    /**Before playing game*/
+    /** Set the categories selected by the user when creating the game. */
     fun setSelectedCategories(categories: List<Category>) {
         _selectedCategories.value = categories
     }
@@ -52,28 +52,9 @@ open class TuttiFruttiViewModel(
         _totalRounds.value = totalRounds
     }
 
-    private fun getRandomLetters(): List<Char> =
-        availableLetters.toList().shuffled().take(totalRounds.requireValue())
+    fun enoughForMeEnoughForAll() = behaviour.enoughForMeEnoughForAll()
 
-
-    /**On Playing game*/
-    fun finishRound(categoriesWithValues: Map<Category, String>) {
-        roundsInfo.add(actualRound.requireValue().finish(categoriesWithValues))
-        goToReviewOrWait()
-    }
-
-    //TODO this should be called after review
-    private fun gameContinues(): Boolean {
-        val totalRounds: Int = totalRounds.requireValue()
-        val actualRound: Int = actualRound.requireValue().number
-        return actualRound <= totalRounds
-    }
-
-    private fun goToReviewOrWait() {
-
-        //TODO throw when done
-        // dispatchSingleTimeEvent(GoToReview)
-    }
+    fun sendWords(categoriesWords: Map<Category, String>) = behaviour.sendWords(categoriesWords)
 
     fun generateNextRoundValues() {
         //TODO this should be recieved by the server on the client, and in the server is ok
@@ -83,6 +64,90 @@ open class TuttiFruttiViewModel(
             RoundInfo(lettersByRound[actualRoundNumber.minus(1)], actualRoundNumber)
     }
 
+    override fun receiveMessage(messageReceived: MessageReceived) {
+        super.receiveMessage(messageReceived)
+        when (val message = messageReceived.message) {
+            is TuttiFruttiEnoughForMeEnoughForAllMessage -> behaviour.stopRound(messageReceived)
+            is TuttiFruttiSendWordsMessage -> behaviour.acceptWords(messageReceived, message.words)
+        }
+    }
+
+    private fun showLoading() {
+        // TODO: show overlay loading
+    }
+
+    private fun getRandomLetters() = availableLetters.toList().shuffled().take(totalRounds.requireValue())
+
+    private inner class ServerTuttiFruttiBehaviour : TuttiFruttiBehaviour() {
+
+        private var categoriesWordsPerPlayer = mutableMapOf<Long, Map<Category, String>>()
+
+        override fun sendWords(categoriesWords: Map<Category, String>) {
+            super.sendWords(categoriesWords)
+            categoriesWordsPerPlayer[MYSELF_ID] = categoriesWords
+            goToReviewIfCorresponds()
+        }
+
+        override fun acceptWords(messageReceived: MessageReceived, categoriesWords: Map<Category, String>) {
+            super.acceptWords(messageReceived, categoriesWords)
+            categoriesWordsPerPlayer[messageReceived.senderId] = categoriesWords
+            goToReviewIfCorresponds()
+        }
+
+        private fun goToReviewIfCorresponds() {
+            if (categoriesWordsPerPlayer.size == connectedPlayers.size) {
+                // When all the players send their words, go to the review and clean the players round words.
+                val finishedRoundInfos = categoriesWordsPerPlayer.map { (playerId, categoriesWords) ->
+                    FinishedRoundInfo(
+                        player = connectedPlayers.first { it.first == playerId }.second,
+                        categoriesWords = categoriesWords
+                    )
+                }
+                dispatchSingleTimeEvent(GoToReview(finishedRoundInfos))
+                categoriesWordsPerPlayer = mutableMapOf()
+            }
+        }
+    }
+
+    private inner class ClientTuttiFruttiBehaviour : TuttiFruttiBehaviour() {
+
+        private var stopRoundMessageReceived: MessageReceived? = null
+
+        override fun stopRound(messageReceived: MessageReceived) {
+            super.stopRound(messageReceived)
+            stopRoundMessageReceived = messageReceived
+        }
+
+        override fun sendWords(categoriesWords: Map<Category, String>) {
+            super.sendWords(categoriesWords)
+            stopRoundMessageReceived?.let { connection.answer(it, TuttiFruttiSendWordsMessage(categoriesWords)) }
+        }
+    }
+
+    private abstract inner class TuttiFruttiBehaviour {
+
+        @CallSuper
+        open fun enoughForMeEnoughForAll() {
+            // TODO: why it's not working the first time? (checked from the server, check from the client and with more than two connected devices)
+            showLoading()
+            connection.write(TuttiFruttiEnoughForMeEnoughForAllMessage())
+            dispatchSingleTimeEvent(ObtainWords)
+        }
+
+        @CallSuper
+        open fun stopRound(messageReceived: MessageReceived) {
+            showLoading()
+            dispatchSingleTimeEvent(ObtainWords)
+        }
+
+        @CallSuper
+        open fun sendWords(categoriesWords: Map<Category, String>) {
+        }
+
+        @CallSuper
+        open fun acceptWords(messageReceived: MessageReceived, categoriesWords: Map<Category, String>) {
+        }
+    }
 
     companion object {
         const val availableLetters = "ABCDEFGHIJKLMNOPRSTUVY"

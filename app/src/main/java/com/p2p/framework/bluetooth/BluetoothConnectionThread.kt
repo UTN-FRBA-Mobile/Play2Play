@@ -4,6 +4,8 @@ import android.bluetooth.BluetoothSocket
 import android.os.Handler
 import androidx.core.os.bundleOf
 import com.p2p.utils.Logger
+import com.p2p.utils.toBoolean
+import com.p2p.utils.toByteArray
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
@@ -13,7 +15,7 @@ class BluetoothConnectionThread(
     private val socket: BluetoothSocket
 ) : Thread() {
 
-    var onMessageReceived: ((length: Int, buffer: ByteArray) -> Unit)? = null
+    var onMessageReceived: ((isAnswer: Boolean, length: Int, buffer: ByteArray) -> Unit)? = null
 
     private val inputStream: InputStream = socket.inputStream
     private val outputStream: OutputStream = socket.outputStream
@@ -40,19 +42,21 @@ class BluetoothConnectionThread(
 
             // Send the obtained bytes to the UI activity.
             Logger.d(TAG, "Message arrived")
-            onMessageReceived?.invoke(numBytes, buffer)
+            val isAnswer = buffer[0].toInt().toBoolean()
+            val byteArray = buffer.copyOfRange(1, numBytes + 1)
+            onMessageReceived?.invoke(isAnswer, numBytes, byteArray)
             handler
-                .obtainMessage(MESSAGE_READ, numBytes, -1, buffer)
+                .obtainMessage(MESSAGE_READ, -1, -1, byteArray)
                 .apply { data = bundleOf(SENDER_ID to this@BluetoothConnectionThread.id) }
                 .sendToTarget()
         }
     }
 
     // Call this from the main activity to send data to the remote device.
-    fun write(bytes: ByteArray, offset: Int, length: Int) {
+    fun write(bytes: ByteArray, length: Int, isAnswer: Boolean) {
         try {
             Logger.d(TAG, "Writing...")
-            outputStream.write(bytes, offset, length)
+            outputStream.write(isAnswer.toByteArray() + bytes, 0 , length + 1)
         } catch (e: IOException) {
             Logger.e(TAG, "Error occurred when sending data", e)
 

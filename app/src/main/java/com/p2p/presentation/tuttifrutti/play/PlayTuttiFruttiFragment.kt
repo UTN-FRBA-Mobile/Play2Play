@@ -6,15 +6,17 @@ import android.widget.LinearLayout
 import androidx.core.view.children
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputLayout
 import com.p2p.R
 import com.p2p.databinding.FragmentPlayTuttiFruttiBinding
 import com.p2p.databinding.PlayCategoryItemBinding
 import com.p2p.presentation.basegame.BaseGameFragment
+import com.p2p.presentation.tuttifrutti.GoToReview
+import com.p2p.presentation.tuttifrutti.ObtainWords
+import com.p2p.presentation.tuttifrutti.TuttiFruttiSpecificGameEvent
 import com.p2p.presentation.tuttifrutti.TuttiFruttiViewModel
 import com.p2p.presentation.tuttifrutti.create.categories.Category
-import com.p2p.utils.clear
+import com.p2p.presentation.tuttifrutti.review.TuttiFruttiReviewFragment
 import com.p2p.utils.text
 
 class PlayTuttiFruttiFragment : BaseGameFragment<
@@ -40,10 +42,7 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
         super.initUI()
         with(gameBinding) {
             setUpCategoriesList(categoriesList)
-            finishRoundButton.setOnClickListener {
-                val values = categoriesInputs.map { it.key to it.value.text() }.toMap()
-                viewModel.onFinishRound(values)
-            }
+            finishRoundButton.setOnClickListener { viewModel.tryToFinishRound(getCategoriesValues()) }
         }
     }
 
@@ -69,6 +68,7 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
     override fun setupObservers() {
         super.setupObservers()
         with(gameViewModel) {
+            singleTimeEvent.observe(viewLifecycleOwner) { onGameEvent(it as TuttiFruttiSpecificGameEvent) }
             actualRound.observe(viewLifecycleOwner) {
                 gameBinding.round.text =
                     resources.getString(R.string.tf_round, it.number, totalRounds.value)
@@ -78,15 +78,21 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
     }
 
     override fun onEvent(event: TuttiFruttiPlayingEvents) = when (event) {
-        //TODO end round and pass to next stage
-        is FinishRound -> {
-            clearValues()
-            //TODO delete when review is done
-            showSuccessMessage(event.categoriesWithValues)
-            gameViewModel.finishRound(event.categoriesWithValues)
-        }
+        is FinishRound -> gameViewModel.enoughForMeEnoughForAll()
         ShowInvalidInputs -> markErrors()
     }
+
+    private fun onGameEvent(event: TuttiFruttiSpecificGameEvent) {
+        when (event) {
+            ObtainWords -> gameViewModel.sendWords(getCategoriesValues())
+            is GoToReview -> addFragment(
+                TuttiFruttiReviewFragment.newInstance(event.finishedRoundInfo),
+                shouldAddToBackStack = false
+            )
+        }
+    }
+
+    private fun getCategoriesValues() = categoriesInputs.mapValues { it.value.text() }
 
     //TODO validation inputs
     private fun markErrors() {
@@ -94,24 +100,6 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
             it.error = resources.getString(R.string.tf_validation_error)
         }
     }
-
-    private fun clearValues() {
-        getCategoriesTextInputs().forEach { it.clear() }
-    }
-
-
-    //TODO delete when review is done
-    private fun showSuccessMessage(categoriesWithValues: Map<Category, String>) {
-        MaterialAlertDialogBuilder(requireContext())
-            .setMessage("Las categorias que llenaste son: \n" +
-                    categoriesWithValues.map { it.key + " : " + it.value + "\n" })
-            //It is positive to be shown on the right
-            .setPositiveButton(resources.getString(android.R.string.ok)) { _, _ ->
-                // Respond to positive button press
-            }
-            .show()
-    }
-
 
     companion object {
 

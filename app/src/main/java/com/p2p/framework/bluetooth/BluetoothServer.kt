@@ -4,8 +4,8 @@ import android.bluetooth.BluetoothServerSocket
 import android.bluetooth.BluetoothSocket
 import android.os.Handler
 import com.p2p.data.bluetooth.BluetoothConnection
-import com.p2p.model.message.Message
-import com.p2p.model.message.MessageReceived
+import com.p2p.model.base.message.Message
+import com.p2p.model.base.message.MessageReceived
 import com.p2p.utils.Logger
 import java.io.IOException
 
@@ -38,11 +38,13 @@ class BluetoothServer(
 
             Logger.d(TAG, "Accepted socket: ${socket.remoteDevice.name}")
             val bluetoothConnectionThread = createConnectionThread(socket)
-            bluetoothConnectionThread.onMessageReceived = { length, buffer ->
-                Logger.d(TAG, "Received message and broadcasting")
-                connectedThreads
-                    .filterNot { it == bluetoothConnectionThread }
-                    .forEach { it.write(buffer, 0, length) }
+            bluetoothConnectionThread.onMessageReceived = { isAnswer, length, buffer ->
+                if (!isAnswer) {
+                    Logger.d(TAG, "Received message and broadcasting")
+                    connectedThreads
+                        .filterNot { it == bluetoothConnectionThread }
+                        .forEach { it.write(buffer, length, false) }
+                }
             }
             connectedThreads.add(bluetoothConnectionThread)
             if (connectedThreads.size >= maxAccepted) {
@@ -62,13 +64,13 @@ class BluetoothServer(
     }
 
     override fun write(message: Message) = connectedThreads.forEach {
-        writeOnConnection(it, message)
+        writeOnConnection(it, message, isAnswer = false)
     }
 
     override fun answer(messageReceived: MessageReceived, sendMessage: Message) {
         connectedThreads
             .firstOrNull { it.id == messageReceived.senderId }
-            ?.let { writeOnConnection(it, sendMessage) }
+            ?.let { writeOnConnection(it, sendMessage, isAnswer = true) }
     }
 
     override fun onConnected(action: (BluetoothConnection) -> Unit) {
