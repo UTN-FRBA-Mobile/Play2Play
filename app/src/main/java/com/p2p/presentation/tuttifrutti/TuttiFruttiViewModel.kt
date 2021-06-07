@@ -13,7 +13,7 @@ import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.home.games.Game
 import com.p2p.presentation.tuttifrutti.create.categories.Category
 
-open class TuttiFruttiViewModel(
+abstract class TuttiFruttiViewModel(
     connectionType: ConnectionType,
     userSession: UserSession,
     bluetoothConnectionCreator: BluetoothConnectionCreator,
