@@ -28,7 +28,6 @@ class ClientTuttiFruttiViewModel(
     }
 
     override fun sendWords(categoriesWords: Map<Category, String>) {
-        super.sendWords(categoriesWords)
         stopRoundMessageReceived?.let { connection.answer(it, TuttiFruttiSendWordsMessage(categoriesWords)) }
     }
 }

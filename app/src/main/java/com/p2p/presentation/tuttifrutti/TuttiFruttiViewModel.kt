@@ -57,9 +57,7 @@ abstract class TuttiFruttiViewModel(
             RoundInfo(lettersByRound[actualRoundNumber.minus(1)], actualRoundNumber)
     }
 
-    @CallSuper
-    open fun sendWords(categoriesWords: Map<Category, String>) {
-    }
+    abstract fun sendWords(categoriesWords: Map<Category, String>)
 
     @CallSuper
     open fun enoughForMeEnoughForAll() {

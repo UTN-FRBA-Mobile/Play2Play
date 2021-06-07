@@ -31,7 +31,6 @@ class ServerTuttiFruttiViewModel(
     }
 
     override fun sendWords(categoriesWords: Map<Category, String>) {
-        super.sendWords(categoriesWords)
         categoriesWordsPerPlayer[MYSELF_ID] = categoriesWords
         goToReviewIfCorresponds()
     }
