@@ -1,5 +1,8 @@
-package com.p2p.model.message
+package com.p2p.model.base.message
 
+import com.fasterxml.jackson.annotation.JsonTypeName
+
+@JsonTypeName(value = ClientHandshakeMessage.TYPE)
 data class ClientHandshakeMessage(val name: String) : Message(TYPE) {
 
     companion object {

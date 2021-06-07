@@ -4,8 +4,8 @@ import android.bluetooth.BluetoothServerSocket
 import android.bluetooth.BluetoothSocket
 import android.os.Handler
 import com.p2p.data.bluetooth.BluetoothConnection
-import com.p2p.model.message.Message
-import com.p2p.model.message.MessageReceived
+import com.p2p.model.base.message.Message
+import com.p2p.model.base.message.MessageReceived
 import com.p2p.utils.Logger
 import java.io.IOException
 

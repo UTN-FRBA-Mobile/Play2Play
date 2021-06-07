@@ -13,8 +13,8 @@ import com.p2p.framework.bluetooth.BluetoothConnectionThread.Companion.MESSAGE_R
 import com.p2p.framework.bluetooth.BluetoothConnectionThread.Companion.MESSAGE_WRITE_ERROR
 import com.p2p.framework.bluetooth.BluetoothConnectionThread.Companion.MESSAGE_WRITE_SUCCESS
 import com.p2p.framework.bluetooth.BluetoothConnectionThread.Companion.SENDER_ID
-import com.p2p.model.message.Message
-import com.p2p.model.message.MessageReceived
+import com.p2p.model.base.message.Message
+import com.p2p.model.base.message.MessageReceived
 import com.p2p.presentation.base.BaseMVVMActivity
 import com.p2p.utils.Logger
 import kotlin.reflect.KClass

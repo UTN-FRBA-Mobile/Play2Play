@@ -26,9 +26,8 @@ open class TuttiFruttiViewModel(
     Game.TUTTI_FRUTTI
 ) {
 
-    /**Data for all game*/
+    private val behaviour = if (isServer()) ServerTuttiFruttiBehaviour() else ClientTuttiFruttiBehaviour()
     private val roundsInfo = mutableListOf<FinishedRoundInfo>()
-
     private val lettersByRound: List<Char> by lazy { getRandomLetters() }
 
     private val _totalRounds = MutableLiveData<Int>()
@@ -37,13 +36,11 @@ open class TuttiFruttiViewModel(
     private val _selectedCategories = MutableLiveData<List<Category>>()
     val selectedCategories: LiveData<List<Category>> = _selectedCategories
 
-
-    /**Data for actual round*/
+    /** Data for the actual round. */
     private val _actualRound = MutableLiveData<RoundInfo>()
     val actualRound: LiveData<RoundInfo> = _actualRound
 
-
-    /**Before playing game*/
+    /** Set the categories selected by the user when creating the game. */
     fun setSelectedCategories(categories: List<Category>) {
         _selectedCategories.value = categories
     }
@@ -83,6 +80,14 @@ open class TuttiFruttiViewModel(
             RoundInfo(lettersByRound[actualRoundNumber.minus(1)], actualRoundNumber)
     }
 
+    private inner class ServerTuttiFruttiBehaviour : TuttiFruttiBehaviour() {
+    }
+
+    private inner class ClientTuttiFruttiBehaviour : TuttiFruttiBehaviour() {
+    }
+
+    private abstract inner class TuttiFruttiBehaviour {
+    }
 
     companion object {
         const val availableLetters = "ABCDEFGHIJKLMNOPRSTUVY"

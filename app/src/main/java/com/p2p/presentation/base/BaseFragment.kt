@@ -58,7 +58,7 @@ abstract class BaseFragment<VB : ViewBinding, E : Any, VM : BaseViewModel<E>> : 
     }
 
     /** Add the [fragment] to the activity and if [shouldAddToBackStack] it'll added to the fragments stack */
-    protected fun addFragment(fragment: BaseFragment<*, *, *>, shouldAddToBackStack: Boolean) {
+    protected fun addFragment(fragment: Fragment, shouldAddToBackStack: Boolean) {
         parentFragmentManager.commit {
             replace(R.id.fragment_container_view, fragment)
             if (shouldAddToBackStack) addToBackStack(null)
