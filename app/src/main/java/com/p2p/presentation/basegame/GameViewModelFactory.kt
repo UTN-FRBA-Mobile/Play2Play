@@ -13,7 +13,7 @@ import com.p2p.framework.bluetooth.BluetoothConnectionCreatorImp
 
 open class GameViewModelFactory(
     private val activity: GameActivity<*, *>,
-    private val data: Data
+    protected val data: Data
 ) : ViewModelProvider.Factory {
 
     protected val connectionType: ConnectionType

@@ -7,7 +7,6 @@ import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.userInfo.UserSession
 import com.p2p.model.base.message.MessageReceived
-import com.p2p.model.tuttifrutti.FinishedRoundInfo
 import com.p2p.model.tuttifrutti.RoundInfo
 import com.p2p.model.tuttifrutti.message.TuttiFruttiEnoughForMeEnoughForAllMessage
 import com.p2p.model.tuttifrutti.message.TuttiFruttiSendWordsMessage
@@ -17,7 +16,7 @@ import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.home.games.Game
 import com.p2p.presentation.tuttifrutti.create.categories.Category
 
-open class TuttiFruttiViewModel(
+abstract class TuttiFruttiViewModel(
     connectionType: ConnectionType,
     userSession: UserSession,
     bluetoothConnectionCreator: BluetoothConnectionCreator,
@@ -30,7 +29,6 @@ open class TuttiFruttiViewModel(
     Game.TUTTI_FRUTTI
 ) {
 
-    private val behaviour = if (isServer()) ServerTuttiFruttiBehaviour() else ClientTuttiFruttiBehaviour()
     private val lettersByRound: List<Char> by lazy { getRandomLetters() }
 
     private val _totalRounds = MutableLiveData<Int>()
@@ -52,10 +50,6 @@ open class TuttiFruttiViewModel(
         _totalRounds.value = totalRounds
     }
 
-    fun enoughForMeEnoughForAll() = behaviour.enoughForMeEnoughForAll()
-
-    fun sendWords(categoriesWords: Map<Category, String>) = behaviour.sendWords(categoriesWords)
-
     fun generateNextRoundValues() {
         //TODO this should be recieved by the server on the client, and in the server is ok
         //See how to do this logic
@@ -64,12 +58,34 @@ open class TuttiFruttiViewModel(
             RoundInfo(lettersByRound[actualRoundNumber.minus(1)], actualRoundNumber)
     }
 
+    @CallSuper
+    open fun sendWords(categoriesWords: Map<Category, String>) {
+    }
+
+    @CallSuper
+    open fun enoughForMeEnoughForAll() {
+        // TODO: why it's not working the first time? (checked from the server, check from the client and with more than two connected devices)
+        showLoading()
+        connection.write(TuttiFruttiEnoughForMeEnoughForAllMessage())
+        dispatchSingleTimeEvent(ObtainWords)
+    }
+
     override fun receiveMessage(messageReceived: MessageReceived) {
         super.receiveMessage(messageReceived)
         when (val message = messageReceived.message) {
-            is TuttiFruttiEnoughForMeEnoughForAllMessage -> behaviour.stopRound(messageReceived)
-            is TuttiFruttiSendWordsMessage -> behaviour.acceptWords(messageReceived, message.words)
+            is TuttiFruttiEnoughForMeEnoughForAllMessage -> stopRound(messageReceived)
+            is TuttiFruttiSendWordsMessage -> acceptWords(messageReceived, message.words)
         }
+    }
+
+    @CallSuper
+    protected open fun stopRound(messageReceived: MessageReceived) {
+        showLoading()
+        dispatchSingleTimeEvent(ObtainWords)
+    }
+
+    @CallSuper
+    protected open fun acceptWords(messageReceived: MessageReceived, categoriesWords: Map<Category, String>) {
     }
 
     private fun showLoading() {
@@ -77,77 +93,6 @@ open class TuttiFruttiViewModel(
     }
 
     private fun getRandomLetters() = availableLetters.toList().shuffled().take(totalRounds.requireValue())
-
-    private inner class ServerTuttiFruttiBehaviour : TuttiFruttiBehaviour() {
-
-        private var categoriesWordsPerPlayer = mutableMapOf<Long, Map<Category, String>>()
-
-        override fun sendWords(categoriesWords: Map<Category, String>) {
-            super.sendWords(categoriesWords)
-            categoriesWordsPerPlayer[MYSELF_ID] = categoriesWords
-            goToReviewIfCorresponds()
-        }
-
-        override fun acceptWords(messageReceived: MessageReceived, categoriesWords: Map<Category, String>) {
-            super.acceptWords(messageReceived, categoriesWords)
-            categoriesWordsPerPlayer[messageReceived.senderId] = categoriesWords
-            goToReviewIfCorresponds()
-        }
-
-        private fun goToReviewIfCorresponds() {
-            if (categoriesWordsPerPlayer.size == connectedPlayers.size) {
-                // When all the players send their words, go to the review and clean the players round words.
-                val finishedRoundInfos = categoriesWordsPerPlayer.map { (playerId, categoriesWords) ->
-                    FinishedRoundInfo(
-                        player = connectedPlayers.first { it.first == playerId }.second,
-                        categoriesWords = categoriesWords
-                    )
-                }
-                dispatchSingleTimeEvent(GoToReview(finishedRoundInfos))
-                categoriesWordsPerPlayer = mutableMapOf()
-            }
-        }
-    }
-
-    private inner class ClientTuttiFruttiBehaviour : TuttiFruttiBehaviour() {
-
-        private var stopRoundMessageReceived: MessageReceived? = null
-
-        override fun stopRound(messageReceived: MessageReceived) {
-            super.stopRound(messageReceived)
-            stopRoundMessageReceived = messageReceived
-        }
-
-        override fun sendWords(categoriesWords: Map<Category, String>) {
-            super.sendWords(categoriesWords)
-            stopRoundMessageReceived?.let { connection.answer(it, TuttiFruttiSendWordsMessage(categoriesWords)) }
-        }
-    }
-
-    private abstract inner class TuttiFruttiBehaviour {
-
-        @CallSuper
-        open fun enoughForMeEnoughForAll() {
-            // TODO: why it's not working the first time? (checked from the server, check from the client and with more than two connected devices)
-            showLoading()
-            connection.write(TuttiFruttiEnoughForMeEnoughForAllMessage())
-            dispatchSingleTimeEvent(ObtainWords)
-        }
-
-        @CallSuper
-        open fun stopRound(messageReceived: MessageReceived) {
-            showLoading()
-            dispatchSingleTimeEvent(ObtainWords)
-        }
-
-        @CallSuper
-        open fun sendWords(categoriesWords: Map<Category, String>) {
-        }
-
-        @CallSuper
-        open fun acceptWords(messageReceived: MessageReceived, categoriesWords: Map<Category, String>) {
-        }
-    }
 
     companion object {
         const val availableLetters = "ABCDEFGHIJKLMNOPRSTUVY"
