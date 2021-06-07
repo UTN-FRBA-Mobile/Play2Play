@@ -5,6 +5,7 @@ import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.userInfo.UserSession
 import com.p2p.model.base.message.MessageReceived
 import com.p2p.model.tuttifrutti.FinishedRoundInfo
+import com.p2p.model.tuttifrutti.message.TuttiFruttiSendWordsMessage
 import com.p2p.presentation.basegame.ConnectionType
 import com.p2p.presentation.tuttifrutti.create.categories.Category
 
@@ -22,14 +23,20 @@ class ServerTuttiFruttiViewModel(
 
     private var categoriesWordsPerPlayer = mutableMapOf<Long, Map<Category, String>>()
 
+    override fun receiveMessage(messageReceived: MessageReceived) {
+        super.receiveMessage(messageReceived)
+        when (val message = messageReceived.message) {
+            is TuttiFruttiSendWordsMessage -> acceptWords(messageReceived, message.words)
+        }
+    }
+
     override fun sendWords(categoriesWords: Map<Category, String>) {
         super.sendWords(categoriesWords)
         categoriesWordsPerPlayer[MYSELF_ID] = categoriesWords
         goToReviewIfCorresponds()
     }
 
-    override fun acceptWords(messageReceived: MessageReceived, categoriesWords: Map<Category, String>) {
-        super.acceptWords(messageReceived, categoriesWords)
+    private fun acceptWords(messageReceived: MessageReceived, categoriesWords: Map<Category, String>) {
         categoriesWordsPerPlayer[messageReceived.senderId] = categoriesWords
         goToReviewIfCorresponds()
     }

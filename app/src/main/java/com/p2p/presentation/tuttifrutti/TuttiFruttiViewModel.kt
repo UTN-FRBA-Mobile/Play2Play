@@ -9,7 +9,6 @@ import com.p2p.data.userInfo.UserSession
 import com.p2p.model.base.message.MessageReceived
 import com.p2p.model.tuttifrutti.RoundInfo
 import com.p2p.model.tuttifrutti.message.TuttiFruttiEnoughForMeEnoughForAllMessage
-import com.p2p.model.tuttifrutti.message.TuttiFruttiSendWordsMessage
 import com.p2p.presentation.basegame.ConnectionType
 import com.p2p.presentation.basegame.GameViewModel
 import com.p2p.presentation.extensions.requireValue
@@ -70,11 +69,11 @@ abstract class TuttiFruttiViewModel(
         dispatchSingleTimeEvent(ObtainWords)
     }
 
+    @CallSuper
     override fun receiveMessage(messageReceived: MessageReceived) {
         super.receiveMessage(messageReceived)
-        when (val message = messageReceived.message) {
+        when (messageReceived.message) {
             is TuttiFruttiEnoughForMeEnoughForAllMessage -> stopRound(messageReceived)
-            is TuttiFruttiSendWordsMessage -> acceptWords(messageReceived, message.words)
         }
     }
 
@@ -82,10 +81,6 @@ abstract class TuttiFruttiViewModel(
     protected open fun stopRound(messageReceived: MessageReceived) {
         showLoading()
         dispatchSingleTimeEvent(ObtainWords)
-    }
-
-    @CallSuper
-    protected open fun acceptWords(messageReceived: MessageReceived, categoriesWords: Map<Category, String>) {
     }
 
     private fun showLoading() {
