@@ -15,4 +15,6 @@ class ClientTuttiFruttiViewModel(
     userSession,
     bluetoothConnectionCreator,
     instructionsRepository
-)
+) {
+
+}
