@@ -9,7 +9,9 @@ import com.p2p.presentation.tuttifrutti.create.categories.CreateTuttiFruttiFragm
 
 class TuttiFruttiActivity : GameActivity<TuttiFruttiSpecificGameEvent, TuttiFruttiViewModel>() {
 
-    override val viewModel: TuttiFruttiViewModel by viewModels { gameViewModelFactory }
+    override val viewModel: TuttiFruttiViewModel by viewModels {
+        TuttiFruttiViewModelFactory(this, gameViewModelFactoryData)
+    }
 
     override fun goToCreate() = addFragment(CreateTuttiFruttiFragment.newInstance(), shouldAddToBackStack = false)
 
