@@ -3,7 +3,10 @@ package com.p2p.presentation.tuttifrutti
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.userInfo.UserSession
+import com.p2p.model.base.message.Message
+import com.p2p.model.tuttifrutti.StartGame
 import com.p2p.presentation.basegame.ConnectionType
+import com.p2p.presentation.extensions.requireValue
 
 class ServerTuttiFruttiViewModel(
     connectionType: ConnectionType,
@@ -16,5 +19,25 @@ class ServerTuttiFruttiViewModel(
     bluetoothConnectionCreator,
     instructionsRepository
 ) {
+    private var gameAlreadyStarted = false
+
+    /** Be careful: this will be called for every client on a broadcast. */
+    override fun onSentSuccessfully(message: Message) {
+        super.onSentSuccessfully(message)
+        when (message) {
+            is StartGame -> if (!gameAlreadyStarted) {
+                goToPlay()
+                gameAlreadyStarted = true
+            }
+        }
+    }
+
+    override fun startGame() {
+        lettersByRound = getRandomLetters()
+        connection.write(StartGame(lettersByRound, categoriesToPlay.requireValue()))
+    }
+
+    private fun getRandomLetters(): List<Char> =
+        availableLetters.toList().shuffled().take(totalRounds.requireValue())
 
 }

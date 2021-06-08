@@ -3,6 +3,8 @@ package com.p2p.presentation.tuttifrutti
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.userInfo.UserSession
+import com.p2p.model.base.message.MessageReceived
+import com.p2p.model.tuttifrutti.StartGame
 import com.p2p.presentation.basegame.ConnectionType
 
 class ClientTuttiFruttiViewModel(
@@ -16,5 +18,21 @@ class ClientTuttiFruttiViewModel(
     bluetoothConnectionCreator,
     instructionsRepository
 ) {
+
+    override fun receiveMessage(messageReceived: MessageReceived) {
+        super.receiveMessage(messageReceived)
+        when (val message = messageReceived.message) {
+            is StartGame -> {
+                lettersByRound = message.letters
+                _totalRounds.value = message.letters.count()
+                setCategoriesToPlay(message.categories)
+                startGame()
+            }
+        }
+    }
+
+    override fun startGame() {
+        goToPlay()
+    }
 
 }
