@@ -51,6 +51,7 @@ class ServerTuttiFruttiViewModel(
             }
             dispatchSingleTimeEvent(GoToReview(finishedRoundInfos))
             categoriesWordsPerPlayer = mutableMapOf()
+            _isLoading.value = false
         }
     }
 }

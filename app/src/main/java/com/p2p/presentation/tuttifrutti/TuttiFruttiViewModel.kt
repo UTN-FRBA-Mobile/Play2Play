@@ -30,6 +30,9 @@ abstract class TuttiFruttiViewModel(
 
     private val lettersByRound: List<Char> by lazy { getRandomLetters() }
 
+    protected val _isLoading = MutableLiveData(false)
+    val isLoading: LiveData<Boolean> = _isLoading
+
     private val _totalRounds = MutableLiveData<Int>()
     val totalRounds: LiveData<Int> = _totalRounds
 
@@ -61,7 +64,7 @@ abstract class TuttiFruttiViewModel(
 
     @CallSuper
     open fun enoughForMeEnoughForAll() {
-        showLoading()
+        _isLoading.value = true
         connection.write(TuttiFruttiEnoughForMeEnoughForAllMessage())
         dispatchSingleTimeEvent(ObtainWords)
     }
@@ -76,12 +79,8 @@ abstract class TuttiFruttiViewModel(
 
     @CallSuper
     protected open fun stopRound(messageReceived: MessageReceived) {
-        showLoading()
+        _isLoading.value = true
         dispatchSingleTimeEvent(ObtainWords)
-    }
-
-    private fun showLoading() {
-        // TODO: show overlay loading
     }
 
     private fun getRandomLetters() = availableLetters.toList().shuffled().take(totalRounds.requireValue())
