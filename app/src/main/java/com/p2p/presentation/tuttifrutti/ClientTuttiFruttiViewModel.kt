@@ -24,7 +24,7 @@ class ClientTuttiFruttiViewModel(
         when (val message = messageReceived.message) {
             is StartGame -> {
                 lettersByRound = message.letters
-                _totalRounds.value = message.letters.count()
+                setTotalRounds(message.letters.count())
                 setCategoriesToPlay(message.categories)
                 startGame()
             }
