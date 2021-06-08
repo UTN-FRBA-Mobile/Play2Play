@@ -11,7 +11,6 @@ import com.p2p.presentation.tuttifrutti.TuttiFruttiViewModel
 import com.p2p.presentation.tuttifrutti.create.categories.Category
 
 class RoundsNumberFragment :
-//TODO change GameEvent for RoundsNumberEvent when lobby is done
     BaseDialogFragment<FragmentRoundsNumberBinding, Unit, RoundsNumberViewModel>() {
 
     override val viewModel: RoundsNumberViewModel by viewModels()

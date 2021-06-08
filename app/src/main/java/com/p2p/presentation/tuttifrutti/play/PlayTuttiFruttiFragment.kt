@@ -3,7 +3,6 @@ package com.p2p.presentation.tuttifrutti.play
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import androidx.core.view.children
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.google.android.material.textfield.TextInputLayout
@@ -44,13 +43,6 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
             setUpCategoriesList(categoriesList)
             finishRoundButton.setOnClickListener { viewModel.tryToFinishRound(getCategoriesValues()) }
         }
-    }
-
-    private fun getCategoriesTextInputs(): List<TextInputLayout> {
-        val textViews = gameBinding.categoriesList
-            .children
-            .map { it as TextInputLayout }
-        return textViews.toList()
     }
 
     private fun setUpCategoriesList(list: LinearLayout) = with(gameViewModel) {
@@ -96,7 +88,7 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
 
     //TODO validation inputs
     private fun markErrors() {
-        getCategoriesTextInputs().filter { it.text().isBlank() }.forEach {
+        categoriesInputs.values.filter { it.text().isBlank() }.forEach {
             it.error = resources.getString(R.string.tf_validation_error)
         }
     }
