@@ -49,10 +49,9 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
     private fun setUpCategoriesList(list: LinearLayout) = with(gameViewModel) {
         selectedCategories.observe(viewLifecycleOwner) {
             it.map { category ->
-                with(PlayCategoryItemBinding.inflate(layoutInflater)) {
+                categoriesInputs[category] = PlayCategoryItemBinding.inflate(layoutInflater, list, true).run {
                     input.hint = category
-                    categoriesInputs[category] = input
-                    list.addView(this.root)
+                    root
                 }
             }
         }

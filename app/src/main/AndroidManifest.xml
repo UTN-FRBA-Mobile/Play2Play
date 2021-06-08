@@ -31,7 +31,8 @@
 
         <activity
             android:name=".presentation.tuttifrutti.TuttiFruttiActivity"
-            android:theme="@style/Theme.P2P" />
+            android:theme="@style/Theme.P2P"
+            android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name=".presentation.bluetooth.TurnOnBluetoothActivity"
