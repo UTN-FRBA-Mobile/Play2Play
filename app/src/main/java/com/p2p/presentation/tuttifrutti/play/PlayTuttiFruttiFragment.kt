@@ -84,14 +84,13 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
         }
     }
 
-    private fun getCategoriesValues() = categoriesInputs.mapValues { it.value.text() }
-
-    //TODO validation inputs
     private fun markErrors() {
         categoriesInputs.values.filter { it.text().isBlank() }.forEach {
             it.error = resources.getString(R.string.tf_validation_error)
         }
     }
+
+    private fun getCategoriesValues() = categoriesInputs.mapValues { it.value.text() }
 
     companion object {
 
