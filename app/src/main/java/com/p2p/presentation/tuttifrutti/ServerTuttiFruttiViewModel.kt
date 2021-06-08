@@ -4,7 +4,7 @@ import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.userInfo.UserSession
 import com.p2p.model.base.message.Message
-import com.p2p.model.tuttifrutti.StartGame
+import com.p2p.model.tuttifrutti.TuttiFruttiStartGame
 import com.p2p.presentation.basegame.ConnectionType
 import com.p2p.presentation.extensions.requireValue
 
@@ -25,8 +25,8 @@ class ServerTuttiFruttiViewModel(
     override fun onSentSuccessfully(message: Message) {
         super.onSentSuccessfully(message)
         when (message) {
-            is StartGame -> if (!gameAlreadyStarted) {
-                goToPlay()
+            is TuttiFruttiStartGame -> if (!gameAlreadyStarted) {
+                goToPlay() // starts the game when the first StartGame message was sent successfully.
                 gameAlreadyStarted = true
             }
         }
@@ -34,7 +34,7 @@ class ServerTuttiFruttiViewModel(
 
     override fun startGame() {
         lettersByRound = getRandomLetters()
-        connection.write(StartGame(lettersByRound, categoriesToPlay.requireValue()))
+        connection.write(TuttiFruttiStartGame(lettersByRound, categoriesToPlay.requireValue()))
     }
 
     private fun getRandomLetters(): List<Char> =
