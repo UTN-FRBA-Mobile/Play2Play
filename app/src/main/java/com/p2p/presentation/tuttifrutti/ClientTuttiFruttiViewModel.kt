@@ -23,8 +23,8 @@ class ClientTuttiFruttiViewModel(
     private var stopRoundMessageReceived: MessageReceived? = null
 
     override fun stopRound(messageReceived: MessageReceived) {
-        super.stopRound(messageReceived)
         stopRoundMessageReceived = messageReceived
+        super.stopRound(messageReceived)
     }
 
     override fun sendWords(categoriesWords: Map<Category, String>) {

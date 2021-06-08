@@ -43,8 +43,8 @@ class BluetoothConnectionThread(
             // Send the obtained bytes to the UI activity.
             Logger.d(TAG, "Message arrived")
             val isAnswer = buffer[0].toInt().toBoolean()
-            val byteArray = buffer.copyOfRange(1, numBytes + 1)
-            onMessageReceived?.invoke(isAnswer, numBytes, byteArray)
+            val byteArray = buffer.copyOfRange(1, numBytes)
+            onMessageReceived?.invoke(isAnswer, numBytes - 1, byteArray)
             handler
                 .obtainMessage(MESSAGE_READ, -1, -1, byteArray)
                 .apply { data = bundleOf(SENDER_ID to this@BluetoothConnectionThread.id) }

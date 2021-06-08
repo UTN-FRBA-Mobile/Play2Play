@@ -61,7 +61,6 @@ abstract class TuttiFruttiViewModel(
 
     @CallSuper
     open fun enoughForMeEnoughForAll() {
-        // TODO: why it's not working the first time? (checked from the server, check from the client and with more than two connected devices)
         showLoading()
         connection.write(TuttiFruttiEnoughForMeEnoughForAllMessage())
         dispatchSingleTimeEvent(ObtainWords)
