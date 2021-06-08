@@ -9,7 +9,6 @@ data class StartGame(val letters: List<Char>, val categories: List<Category>) : 
 
     companion object {
 
-        const val TYPE = "start_game"
+        const val TYPE = "tf_start_game"
     }
 }
-
