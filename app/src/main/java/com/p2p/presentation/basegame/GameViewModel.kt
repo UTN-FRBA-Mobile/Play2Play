@@ -7,10 +7,10 @@ import com.p2p.data.bluetooth.BluetoothConnection
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.userInfo.UserSession
-import com.p2p.model.message.ClientHandshakeMessage
-import com.p2p.model.message.Message
-import com.p2p.model.message.MessageReceived
-import com.p2p.model.message.ServerHandshakeMessage
+import com.p2p.model.base.message.ClientHandshakeMessage
+import com.p2p.model.base.message.Message
+import com.p2p.model.base.message.MessageReceived
+import com.p2p.model.base.message.ServerHandshakeMessage
 import com.p2p.presentation.base.BaseViewModel
 import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.home.games.Game
@@ -94,6 +94,8 @@ abstract class GameViewModel(
         connection.close()
     }
 
+    protected fun isServer() = connectionType.type == GameConnectionType.SERVER
+
     private fun createOrJoin() {
         if (isServer()) {
             dispatchSingleTimeEvent(GoToCreate)
@@ -101,7 +103,4 @@ abstract class GameViewModel(
             dispatchSingleTimeEvent(GoToClientLobby)
         }
     }
-
-    private fun isServer() = connectionType.type == GameConnectionType.SERVER
-
 }
