@@ -3,23 +3,17 @@ package com.p2p.presentation.basegame
 import androidx.annotation.CallSuper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.p2p.data.bluetooth.BluetoothConnection
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.userInfo.UserSession
 import com.p2p.model.base.message.ClientHandshakeMessage
-import com.p2p.model.base.message.Message
 import com.p2p.model.base.message.ConversationMessage
+import com.p2p.model.base.message.Message
 import com.p2p.model.base.message.ServerHandshakeMessage
 import com.p2p.presentation.base.BaseViewModel
 import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.home.games.Game
-import com.p2p.presentation.tuttifrutti.TuttiFruttiViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 abstract class GameViewModel(
     private val connectionType: ConnectionType,
@@ -113,15 +107,7 @@ abstract class GameViewModel(
         if (isServer()) {
             dispatchSingleTimeEvent(GoToCreate)
         } else {
-            // TODO: revert this
-            if (this is TuttiFruttiViewModel) {
-                viewModelScope.launch(Dispatchers.Main) {
-                    withContext(Dispatchers.Default) { delay(2_000) }
-                    setTotalRounds(5)
-                    setSelectedCategories(listOf("Animales", "Nombres", "Países", "Comidas", "Peliculas"))
-                    dispatchSingleTimeEvent(GoToPlay)
-                }
-            }
+            dispatchSingleTimeEvent(GoToClientLobby)
         }
     }
 
