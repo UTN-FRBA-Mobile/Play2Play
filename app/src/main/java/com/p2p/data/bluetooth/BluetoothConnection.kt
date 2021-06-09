@@ -8,7 +8,7 @@ interface BluetoothConnection {
     /** Writing on a bluetooth connection implies writing a message that will be sent to all the room. */
     fun write(message: Message)
 
-    /** Talks implies send a message **only** to the conversation with the [ConversationMessage.peer]. */
+    /** Talking implies sending a message **only** to the conversation with the [ConversationMessage.peer]. */
     fun talk(conversationMessage: ConversationMessage, sendMessage: Message)
 
     /** Runs an action when the connection to the room is established. */
