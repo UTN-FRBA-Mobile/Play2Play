@@ -51,14 +51,6 @@ abstract class TuttiFruttiViewModel(
         _totalRounds.value = totalRounds
     }
 
-    fun generateNextRoundValues() {
-        //TODO this should be recieved by the server on the client, and in the server is ok
-        //See how to do this logic
-        val actualRoundNumber: Int = actualRound.value?.number?.plus(1) ?: 1
-        _actualRound.value =
-            RoundInfo(lettersByRound[actualRoundNumber.minus(1)], actualRoundNumber)
-    }
-
     fun startRound() {
         generateNextRoundValues()
     }
@@ -82,6 +74,12 @@ abstract class TuttiFruttiViewModel(
     }
 
     protected open fun onReceiveEnoughForAll(conversationMessage: ConversationMessage) = stopRound()
+
+    private fun generateNextRoundValues() {
+        val actualRoundNumber: Int = actualRound.value?.number?.plus(1) ?: 1
+        _actualRound.value =
+            RoundInfo(lettersByRound[actualRoundNumber.minus(1)], actualRoundNumber)
+    }
 
     private fun stopRound() {
         _isLoading.value = true
