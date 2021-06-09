@@ -24,7 +24,7 @@ class ServerTuttiFruttiViewModel(
 ) {
     private var gameAlreadyStarted = false
 
-    private var categoriesWordsPerPlayer = mutableMapOf<Long, Map<Category, String>>()
+    private val finishedRoundInfos = mutableListOf<FinishedRoundInfo>()
 
     /** Be careful: this will be called for every client on a broadcast. */
     override fun onSentSuccessfully(conversationMessage: ConversationMessage) {
@@ -50,12 +50,14 @@ class ServerTuttiFruttiViewModel(
     }
 
     override fun sendWords(categoriesWords: Map<Category, String>) {
-        categoriesWordsPerPlayer[MYSELF_ID] = categoriesWords
+        finishedRoundInfos.add(FinishedRoundInfo(getPlayerById(MYSELF_ID), categoriesWords))
         goToReviewIfCorresponds()
     }
 
+    private fun getPlayerById(playerId: Long) = connectedPlayers.first { it.first == playerId }.second
+
     private fun acceptWords(conversationMessage: ConversationMessage, categoriesWords: Map<Category, String>) {
-        categoriesWordsPerPlayer[conversationMessage.peer] = categoriesWords
+        finishedRoundInfos.add(FinishedRoundInfo(getPlayerById(conversationMessage.peer), categoriesWords))
         goToReviewIfCorresponds()
     }
 
@@ -63,16 +65,10 @@ class ServerTuttiFruttiViewModel(
         availableLetters.toList().shuffled().take(totalRounds.requireValue())
 
     private fun goToReviewIfCorresponds() {
-        if (categoriesWordsPerPlayer.size == connectedPlayers.size) {
+        if (finishedRoundInfos.size == connectedPlayers.size) {
             // When all the players send their words, go to the review and clean the players round words.
-            val finishedRoundInfos = categoriesWordsPerPlayer.map { (playerId, categoriesWords) ->
-                FinishedRoundInfo(
-                    player = connectedPlayers.first { it.first == playerId }.second,
-                    categoriesWords = categoriesWords
-                )
-            }
             dispatchSingleTimeEvent(GoToReview(finishedRoundInfos))
-            categoriesWordsPerPlayer = mutableMapOf()
+            finishedRoundInfos.clear()
             _isLoading.value = false
         }
     }
