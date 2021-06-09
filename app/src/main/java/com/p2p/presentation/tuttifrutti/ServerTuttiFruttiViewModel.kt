@@ -24,6 +24,8 @@ class ServerTuttiFruttiViewModel(
 ) {
     private var gameAlreadyStarted = false
 
+    private var categoriesWordsPerPlayer = mutableMapOf<Long, Map<Category, String>>()
+
     /** Be careful: this will be called for every client on a broadcast. */
     override fun onSentSuccessfully(conversationMessage: ConversationMessage) {
         super.onSentSuccessfully(conversationMessage)
@@ -39,11 +41,6 @@ class ServerTuttiFruttiViewModel(
         lettersByRound = getRandomLetters()
         connection.write(TuttiFruttiStartGame(lettersByRound, categoriesToPlay.requireValue()))
     }
-
-    private fun getRandomLetters(): List<Char> =
-        availableLetters.toList().shuffled().take(totalRounds.requireValue())
-
-    private var categoriesWordsPerPlayer = mutableMapOf<Long, Map<Category, String>>()
 
     override fun receiveMessage(conversationMessage: ConversationMessage) {
         super.receiveMessage(conversationMessage)
@@ -61,6 +58,9 @@ class ServerTuttiFruttiViewModel(
         categoriesWordsPerPlayer[conversationMessage.peer] = categoriesWords
         goToReviewIfCorresponds()
     }
+
+    private fun getRandomLetters(): List<Char> =
+        availableLetters.toList().shuffled().take(totalRounds.requireValue())
 
     private fun goToReviewIfCorresponds() {
         if (categoriesWordsPerPlayer.size == connectedPlayers.size) {
