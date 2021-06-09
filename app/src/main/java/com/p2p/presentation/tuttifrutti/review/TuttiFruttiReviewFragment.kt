@@ -1,22 +1,32 @@
 package com.p2p.presentation.tuttifrutti.review
 
 import android.content.Context
-import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import com.p2p.R
 import com.p2p.model.tuttifrutti.FinishedRoundInfo
 
 class TuttiFruttiReviewFragment : Fragment() {
 
+    // TODO: Clean this
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        Log.d("P2P_REVIEW", arguments
-            ?.getParcelableArray(FINISHED_ROUND_INFO_EXTRA)
-            ?.toList()
-            ?.filterIsInstance<FinishedRoundInfo>()
-            ?.joinToString("\n\n") { "${it.player} --> ${it.categoriesWords}" } ?: "No arguments")
+        val finishedRoundInfo = requireNotNull(
+            arguments
+                ?.getParcelableArrayList<FinishedRoundInfo>(FINISHED_ROUND_INFO_EXTRA)
+                ?.toList()
+        ) {
+            "No FinishedRoundInfo sent. Use the TuttiFruttiReviewFragment.newInstance."
+        }
+        Log.d(
+            "P2P_REVIEW",
+            finishedRoundInfo.joinToString("\n\n") { "${it.player} --> ${it.categoriesWords}" }
+        )
+        // Delete this! It's awful and we should neve do this.
+        activity?.findViewById<View>(R.id.activity_progress_overlay)?.isVisible = false
     }
 
     companion object {
