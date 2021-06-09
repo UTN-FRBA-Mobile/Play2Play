@@ -4,6 +4,7 @@ import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.userInfo.UserSession
 import com.p2p.model.base.message.ConversationMessage
+import com.p2p.model.tuttifrutti.TuttiFruttiStartGame
 import com.p2p.model.tuttifrutti.message.TuttiFruttiEnoughForMeEnoughForAllMessage
 import com.p2p.model.tuttifrutti.message.TuttiFruttiSendWordsMessage
 import com.p2p.presentation.basegame.ConnectionType
@@ -23,6 +24,18 @@ class ClientTuttiFruttiViewModel(
 
     private var stopRoundConversationMessage: ConversationMessage? = null
 
+    override fun receiveMessage(conversationMessage: ConversationMessage) {
+        super.receiveMessage(conversationMessage)
+        when (val message = conversationMessage.message) {
+            is TuttiFruttiStartGame -> {
+                lettersByRound = message.letters
+                setTotalRounds(message.letters.count())
+                setCategoriesToPlay(message.categories)
+                startGame()
+            }
+        }
+    }
+
     override fun onSentSuccessfully(conversationMessage: ConversationMessage) {
         when (conversationMessage.message) {
             is TuttiFruttiEnoughForMeEnoughForAllMessage -> receiveMessage(conversationMessage)
@@ -38,4 +51,6 @@ class ClientTuttiFruttiViewModel(
     override fun sendWords(categoriesWords: Map<Category, String>) {
         stopRoundConversationMessage?.let { connection.talk(it, TuttiFruttiSendWordsMessage(categoriesWords)) }
     }
+
+    override fun startGame() = goToPlay()
 }

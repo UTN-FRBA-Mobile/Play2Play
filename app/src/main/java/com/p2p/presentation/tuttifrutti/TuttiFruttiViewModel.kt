@@ -11,7 +11,6 @@ import com.p2p.model.tuttifrutti.RoundInfo
 import com.p2p.model.tuttifrutti.message.TuttiFruttiEnoughForMeEnoughForAllMessage
 import com.p2p.presentation.basegame.ConnectionType
 import com.p2p.presentation.basegame.GameViewModel
-import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.home.games.Game
 import com.p2p.presentation.tuttifrutti.create.categories.Category
 
@@ -28,24 +27,24 @@ abstract class TuttiFruttiViewModel(
     Game.TUTTI_FRUTTI
 ) {
 
-    private val lettersByRound: List<Char> by lazy { getRandomLetters() }
+    protected lateinit var lettersByRound: List<Char>
 
     protected val _isLoading = MutableLiveData(false)
     val isLoading: LiveData<Boolean> = _isLoading
 
-    private val _totalRounds = MutableLiveData<Int>()
+    protected val _totalRounds = MutableLiveData<Int>()
     val totalRounds: LiveData<Int> = _totalRounds
 
-    private val _selectedCategories = MutableLiveData<List<Category>>()
-    val selectedCategories: LiveData<List<Category>> = _selectedCategories
+    private val _categoriesToPlay = MutableLiveData<List<Category>>()
+    val categoriesToPlay: LiveData<List<Category>> = _categoriesToPlay
 
     /** Data for the actual round. */
     private val _actualRound = MutableLiveData<RoundInfo>()
     val actualRound: LiveData<RoundInfo> = _actualRound
 
-    /** Set the categories selected by the user when creating the game. */
-    fun setSelectedCategories(categories: List<Category>) {
-        _selectedCategories.value = categories
+    /** Set the categories selected by the user when creating the game . */
+    fun setCategoriesToPlay(categories: List<Category>) {
+        _categoriesToPlay.value = categories
     }
 
     fun setTotalRounds(totalRounds: Int) {
@@ -59,6 +58,13 @@ abstract class TuttiFruttiViewModel(
         _actualRound.value =
             RoundInfo(lettersByRound[actualRoundNumber.minus(1)], actualRoundNumber)
     }
+
+    fun startRound() {
+        generateNextRoundValues()
+    }
+
+    // TODO: this should be called from the server lobby when startGame button is clicked.
+    abstract fun startGame()
 
     fun enoughForMeEnoughForAll() {
         _isLoading.value = true
@@ -81,8 +87,6 @@ abstract class TuttiFruttiViewModel(
         _isLoading.value = true
         dispatchSingleTimeEvent(ObtainWords)
     }
-
-    private fun getRandomLetters() = availableLetters.toList().shuffled().take(totalRounds.requireValue())
 
     companion object {
         const val availableLetters = "ABCDEFGHIJKLMNOPRSTUVY"
