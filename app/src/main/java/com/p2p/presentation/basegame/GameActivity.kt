@@ -13,7 +13,7 @@ import com.p2p.framework.bluetooth.BluetoothConnectionThread.Companion.MESSAGE_R
 import com.p2p.framework.bluetooth.BluetoothConnectionThread.Companion.MESSAGE_WRITE_ERROR
 import com.p2p.framework.bluetooth.BluetoothConnectionThread.Companion.MESSAGE_WRITE_SUCCESS
 import com.p2p.framework.bluetooth.BluetoothConnectionThread.Companion.PEER_ID
-import com.p2p.model.base.message.ConversationMessage
+import com.p2p.model.base.message.Conversation
 import com.p2p.model.base.message.Message
 import com.p2p.presentation.base.BaseMVVMActivity
 import com.p2p.utils.Logger
@@ -37,13 +37,13 @@ abstract class GameActivity<E : SpecificGameEvent, VM : GameViewModel>(
         when (it.what) {
             MESSAGE_READ -> {
                 val conversationMessage = it.toConversationMessage()
-                Logger.d(TAG, "Read: ${conversationMessage.message}")
+                Logger.d(TAG, "Read: ${conversationMessage.lastMessage}")
                 viewModel.receiveMessage(conversationMessage)
                 true
             }
             MESSAGE_WRITE_SUCCESS -> {
                 val conversationMessage = it.toConversationMessage()
-                Logger.d(TAG, "Sent successfully: ${conversationMessage.message}")
+                Logger.d(TAG, "Sent successfully: ${conversationMessage.lastMessage}")
                 viewModel.onSentSuccessfully(conversationMessage)
                 true
             }
@@ -103,8 +103,8 @@ abstract class GameActivity<E : SpecificGameEvent, VM : GameViewModel>(
             .show()
     }
 
-    private fun android.os.Message.toConversationMessage(): ConversationMessage {
-        return ConversationMessage(this.toMessage(), data.getLong(PEER_ID))
+    private fun android.os.Message.toConversationMessage(): Conversation {
+        return Conversation(this.toMessage(), data.getLong(PEER_ID))
     }
 
     private fun android.os.Message.toMessage(): Message {

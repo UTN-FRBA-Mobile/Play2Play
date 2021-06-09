@@ -3,7 +3,7 @@ package com.p2p.presentation.tuttifrutti
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.userInfo.UserSession
-import com.p2p.model.base.message.ConversationMessage
+import com.p2p.model.base.message.Conversation
 import com.p2p.model.tuttifrutti.FinishedRoundInfo
 import com.p2p.model.tuttifrutti.TuttiFruttiStartGame
 import com.p2p.model.tuttifrutti.message.TuttiFruttiSendWordsMessage
@@ -27,9 +27,9 @@ class ServerTuttiFruttiViewModel(
     private val finishedRoundInfos = mutableListOf<FinishedRoundInfo>()
 
     /** Be careful: this will be called for every client on a broadcast. */
-    override fun onSentSuccessfully(conversationMessage: ConversationMessage) {
-        super.onSentSuccessfully(conversationMessage)
-        when (conversationMessage.message) {
+    override fun onSentSuccessfully(conversation: Conversation) {
+        super.onSentSuccessfully(conversation)
+        when (conversation.lastMessage) {
             is TuttiFruttiStartGame -> if (!gameAlreadyStarted) {
                 goToPlay() // starts the game when the first StartGame message was sent successfully.
                 gameAlreadyStarted = true
@@ -42,10 +42,10 @@ class ServerTuttiFruttiViewModel(
         connection.write(TuttiFruttiStartGame(lettersByRound, categoriesToPlay.requireValue()))
     }
 
-    override fun receiveMessage(conversationMessage: ConversationMessage) {
-        super.receiveMessage(conversationMessage)
-        when (val message = conversationMessage.message) {
-            is TuttiFruttiSendWordsMessage -> acceptWords(conversationMessage, message.words)
+    override fun receiveMessage(conversation: Conversation) {
+        super.receiveMessage(conversation)
+        when (val message = conversation.lastMessage) {
+            is TuttiFruttiSendWordsMessage -> acceptWords(conversation, message.words)
         }
     }
 
@@ -56,8 +56,8 @@ class ServerTuttiFruttiViewModel(
 
     private fun getPlayerById(playerId: Long) = connectedPlayers.first { it.first == playerId }.second
 
-    private fun acceptWords(conversationMessage: ConversationMessage, categoriesWords: Map<Category, String>) {
-        finishedRoundInfos.add(FinishedRoundInfo(getPlayerById(conversationMessage.peer), categoriesWords))
+    private fun acceptWords(conversation: Conversation, categoriesWords: Map<Category, String>) {
+        finishedRoundInfos.add(FinishedRoundInfo(getPlayerById(conversation.peer), categoriesWords))
         goToReviewIfCorresponds()
     }
 

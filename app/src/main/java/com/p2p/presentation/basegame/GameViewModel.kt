@@ -8,7 +8,7 @@ import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.userInfo.UserSession
 import com.p2p.model.base.message.ClientHandshakeMessage
-import com.p2p.model.base.message.ConversationMessage
+import com.p2p.model.base.message.Conversation
 import com.p2p.model.base.message.Message
 import com.p2p.model.base.message.ServerHandshakeMessage
 import com.p2p.presentation.base.BaseViewModel
@@ -52,13 +52,13 @@ abstract class GameViewModel(
      * Override if needed but always call super.
      */
     @CallSuper
-    open fun receiveMessage(conversationMessage: ConversationMessage) {
-        when (val message = conversationMessage.message) {
+    open fun receiveMessage(conversation: Conversation) {
+        when (val message = conversation.lastMessage) {
             is ClientHandshakeMessage -> {
                 if (isServer()) {
-                    connection.talk(conversationMessage, ServerHandshakeMessage(connectedPlayers.map { it.second }))
+                    connection.talk(conversation, ServerHandshakeMessage(connectedPlayers.map { it.second }))
                 }
-                connectedPlayers = connectedPlayers + (conversationMessage.peer to message.name)
+                connectedPlayers = connectedPlayers + (conversation.peer to message.name)
             }
             is ServerHandshakeMessage -> {
                 connectedPlayers = connectedPlayers + message.players.map { 0L to it }
@@ -71,7 +71,7 @@ abstract class GameViewModel(
      *
      * Override if needed.
      */
-    open fun onSentSuccessfully(conversationMessage: ConversationMessage) {}
+    open fun onSentSuccessfully(conversation: Conversation) {}
 
     /**
      * Invoked when there was an error sending a message.

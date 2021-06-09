@@ -3,7 +3,7 @@ package com.p2p.presentation.tuttifrutti
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.userInfo.UserSession
-import com.p2p.model.base.message.ConversationMessage
+import com.p2p.model.base.message.Conversation
 import com.p2p.model.tuttifrutti.TuttiFruttiStartGame
 import com.p2p.model.tuttifrutti.message.TuttiFruttiEnoughForMeEnoughForAllMessage
 import com.p2p.model.tuttifrutti.message.TuttiFruttiSendWordsMessage
@@ -22,11 +22,11 @@ class ClientTuttiFruttiViewModel(
     instructionsRepository
 ) {
 
-    private var stopRoundConversationMessage: ConversationMessage? = null
+    private var stopRoundConversation: Conversation? = null
 
-    override fun receiveMessage(conversationMessage: ConversationMessage) {
-        super.receiveMessage(conversationMessage)
-        when (val message = conversationMessage.message) {
+    override fun receiveMessage(conversation: Conversation) {
+        super.receiveMessage(conversation)
+        when (val message = conversation.lastMessage) {
             is TuttiFruttiStartGame -> {
                 lettersByRound = message.letters
                 setTotalRounds(message.letters.count())
@@ -36,20 +36,20 @@ class ClientTuttiFruttiViewModel(
         }
     }
 
-    override fun onSentSuccessfully(conversationMessage: ConversationMessage) {
-        when (conversationMessage.message) {
-            is TuttiFruttiEnoughForMeEnoughForAllMessage -> receiveMessage(conversationMessage)
+    override fun onSentSuccessfully(conversation: Conversation) {
+        when (conversation.lastMessage) {
+            is TuttiFruttiEnoughForMeEnoughForAllMessage -> receiveMessage(conversation)
         }
-        super.onSentSuccessfully(conversationMessage)
+        super.onSentSuccessfully(conversation)
     }
 
-    override fun onReceiveEnoughForAll(conversationMessage: ConversationMessage) {
-        stopRoundConversationMessage = conversationMessage
-        super.onReceiveEnoughForAll(conversationMessage)
+    override fun onReceiveEnoughForAll(conversation: Conversation) {
+        stopRoundConversation = conversation
+        super.onReceiveEnoughForAll(conversation)
     }
 
     override fun sendWords(categoriesWords: Map<Category, String>) {
-        stopRoundConversationMessage?.let { connection.talk(it, TuttiFruttiSendWordsMessage(categoriesWords)) }
+        stopRoundConversation?.let { connection.talk(it, TuttiFruttiSendWordsMessage(categoriesWords)) }
     }
 
     override fun startGame() = goToPlay()

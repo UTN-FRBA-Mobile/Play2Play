@@ -5,7 +5,7 @@ import android.bluetooth.BluetoothSocket
 import android.os.Handler
 import com.p2p.data.bluetooth.BluetoothConnection
 import com.p2p.model.base.message.Message
-import com.p2p.model.base.message.ConversationMessage
+import com.p2p.model.base.message.Conversation
 import com.p2p.utils.Logger
 import java.io.IOException
 import java.util.UUID
@@ -72,8 +72,8 @@ class BluetoothClient(
 
     override fun write(message: Message) = write(message, isConversation = false)
 
-    override fun talk(conversationMessage: ConversationMessage, sendMessage: Message) {
-        if (connectedSocket?.id == conversationMessage.peer) {
+    override fun talk(conversation: Conversation, sendMessage: Message) {
+        if (connectedSocket?.id == conversation.peer) {
             write(sendMessage, isConversation = true)
         } else {
             Logger.e(TAG, "Cannot answer to the given sender id")

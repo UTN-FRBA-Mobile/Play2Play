@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.userInfo.UserSession
-import com.p2p.model.base.message.ConversationMessage
+import com.p2p.model.base.message.Conversation
 import com.p2p.model.tuttifrutti.RoundInfo
 import com.p2p.model.tuttifrutti.message.TuttiFruttiEnoughForMeEnoughForAllMessage
 import com.p2p.presentation.basegame.ConnectionType
@@ -66,14 +66,14 @@ abstract class TuttiFruttiViewModel(
     abstract fun sendWords(categoriesWords: Map<Category, String>)
 
     @CallSuper
-    override fun receiveMessage(conversationMessage: ConversationMessage) {
-        super.receiveMessage(conversationMessage)
-        when (conversationMessage.message) {
-            is TuttiFruttiEnoughForMeEnoughForAllMessage -> onReceiveEnoughForAll(conversationMessage)
+    override fun receiveMessage(conversation: Conversation) {
+        super.receiveMessage(conversation)
+        when (conversation.lastMessage) {
+            is TuttiFruttiEnoughForMeEnoughForAllMessage -> onReceiveEnoughForAll(conversation)
         }
     }
 
-    protected open fun onReceiveEnoughForAll(conversationMessage: ConversationMessage) = stopRound()
+    protected open fun onReceiveEnoughForAll(conversation: Conversation) = stopRound()
 
     private fun generateNextRoundValues() {
         val actualRoundNumber: Int = actualRound.value?.number?.plus(1) ?: 1

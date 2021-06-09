@@ -4,7 +4,7 @@ import android.bluetooth.BluetoothServerSocket
 import android.bluetooth.BluetoothSocket
 import android.os.Handler
 import com.p2p.data.bluetooth.BluetoothConnection
-import com.p2p.model.base.message.ConversationMessage
+import com.p2p.model.base.message.Conversation
 import com.p2p.model.base.message.Message
 import com.p2p.utils.Logger
 import java.io.IOException
@@ -67,9 +67,9 @@ class BluetoothServer(
         writeOnConnection(it, message, isConversation = false)
     }
 
-    override fun talk(conversationMessage: ConversationMessage, sendMessage: Message) {
+    override fun talk(conversation: Conversation, sendMessage: Message) {
         connectedThreads
-            .firstOrNull { it.id == conversationMessage.peer }
+            .firstOrNull { it.id == conversation.peer }
             ?.let { writeOnConnection(it, sendMessage, isConversation = true) }
     }
 
