@@ -22,7 +22,7 @@ class ClientTuttiFruttiViewModel(
     instructionsRepository
 ) {
 
-    private var stopRoundConversation: Conversation? = null
+    private var enoughForAllConversation: Conversation? = null
 
     override fun receiveMessage(conversation: Conversation) {
         super.receiveMessage(conversation)
@@ -44,12 +44,13 @@ class ClientTuttiFruttiViewModel(
     }
 
     override fun onReceiveEnoughForAll(conversation: Conversation) {
-        stopRoundConversation = conversation
+        enoughForAllConversation = conversation
         super.onReceiveEnoughForAll(conversation)
     }
 
     override fun sendWords(categoriesWords: Map<Category, String>) {
-        stopRoundConversation?.let { connection.talk(it, TuttiFruttiSendWordsMessage(categoriesWords)) }
+        enoughForAllConversation?.let { connection.talk(it, TuttiFruttiSendWordsMessage(categoriesWords)) }
+        enoughForAllConversation = null
     }
 
     override fun startGame() = goToPlay()
