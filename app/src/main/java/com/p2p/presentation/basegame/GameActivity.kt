@@ -36,13 +36,13 @@ abstract class GameActivity<E : SpecificGameEvent, VM : GameViewModel>(
     private val handler = Handler(Looper.getMainLooper()) {
         when (it.what) {
             MESSAGE_READ -> {
-                val conversationMessage = it.toConversationMessage()
+                val conversationMessage = it.toConversation()
                 Logger.d(TAG, "Read: ${conversationMessage.lastMessage}")
                 viewModel.receiveMessage(conversationMessage)
                 true
             }
             MESSAGE_WRITE_SUCCESS -> {
-                val conversationMessage = it.toConversationMessage()
+                val conversationMessage = it.toConversation()
                 Logger.d(TAG, "Sent successfully: ${conversationMessage.lastMessage}")
                 viewModel.onSentSuccessfully(conversationMessage)
                 true
@@ -103,7 +103,7 @@ abstract class GameActivity<E : SpecificGameEvent, VM : GameViewModel>(
             .show()
     }
 
-    private fun android.os.Message.toConversationMessage(): Conversation {
+    private fun android.os.Message.toConversation(): Conversation {
         return Conversation(this.toMessage(), data.getLong(PEER_ID))
     }
 
