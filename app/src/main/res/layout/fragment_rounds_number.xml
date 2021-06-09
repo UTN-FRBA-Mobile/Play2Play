@@ -13,12 +13,13 @@
         android:id="@+id/rounds_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/big_extra"
         android:layout_marginHorizontal="@dimen/large"
+        android:layout_marginBottom="@dimen/big_extra"
+        android:gravity="center"
         android:text="@string/tutti_frutti_rounds"
         android:textAlignment="center"
-        android:textSize="@dimen/font_large"
         android:textColor="@color/green_black"
+        android:textSize="@dimen/font_large"
         app:layout_constraintBottom_toTopOf="@id/number"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintStart_toEndOf="@id/guideline_begin"
@@ -45,9 +46,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAlignment="center"
+        android:textColor="@color/green_eden"
         android:textSize="@dimen/font_huge"
         android:textStyle="bold"
-        android:textColor="@color/green_eden"
         app:layout_constraintBottom_toTopOf="@id/create_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -60,6 +61,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/medium_extra"
         android:background="@null"
+        android:contentDescription="@string/increase_number"
         android:paddingStart="@dimen/small"
         android:paddingTop="@dimen/small"
         android:paddingEnd="@dimen/small"
@@ -68,23 +70,23 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toEndOf="@id/number"
-        app:layout_constraintTop_toBottomOf="@id/rounds_text"
-        android:contentDescription="@string/increase_number" />
+        app:layout_constraintTop_toBottomOf="@id/rounds_text" />
 
     <Button
         android:id="@+id/create_button"
-        android:layout_width="match_parent"
+        style="@style/Widget.P2P.Button.SecondOptionButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/big_extra"
         android:paddingStart="@dimen/largest_extra"
         android:paddingEnd="@dimen/largest_extra"
         android:text="@string/games_create"
         android:textAlignment="center"
+        app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="@id/guideline_bottom"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
-        app:layout_constraintTop_toBottomOf="@id/number"
-        style="@style/Widget.P2P.Button.SecondOptionButton"/>
+        app:layout_constraintTop_toBottomOf="@id/number" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
