@@ -12,9 +12,9 @@ import com.p2p.R
 import com.p2p.framework.bluetooth.BluetoothConnectionThread.Companion.MESSAGE_READ
 import com.p2p.framework.bluetooth.BluetoothConnectionThread.Companion.MESSAGE_WRITE_ERROR
 import com.p2p.framework.bluetooth.BluetoothConnectionThread.Companion.MESSAGE_WRITE_SUCCESS
-import com.p2p.framework.bluetooth.BluetoothConnectionThread.Companion.SENDER_ID
+import com.p2p.framework.bluetooth.BluetoothConnectionThread.Companion.PEER_ID
+import com.p2p.model.base.message.ConversationMessage
 import com.p2p.model.base.message.Message
-import com.p2p.model.base.message.MessageReceived
 import com.p2p.presentation.base.BaseMVVMActivity
 import com.p2p.utils.Logger
 import kotlin.reflect.KClass
@@ -36,15 +36,15 @@ abstract class GameActivity<E : SpecificGameEvent, VM : GameViewModel>(
     private val handler = Handler(Looper.getMainLooper()) {
         when (it.what) {
             MESSAGE_READ -> {
-                val message = it.toMessage()
-                Logger.d(TAG, "Read: $message")
-                viewModel.receiveMessage(MessageReceived(message, it.data.getLong(SENDER_ID)))
+                val conversationMessage = it.toConversationMessage()
+                Logger.d(TAG, "Read: ${conversationMessage.message}")
+                viewModel.receiveMessage(conversationMessage)
                 true
             }
             MESSAGE_WRITE_SUCCESS -> {
-                val message = it.toMessage()
-                Logger.d(TAG, "Sent successfully: $message")
-                viewModel.onSentSuccessfully(message)
+                val conversationMessage = it.toConversationMessage()
+                Logger.d(TAG, "Sent successfully: ${conversationMessage.message}")
+                viewModel.onSentSuccessfully(conversationMessage)
                 true
             }
             MESSAGE_WRITE_ERROR -> {
@@ -101,6 +101,10 @@ abstract class GameActivity<E : SpecificGameEvent, VM : GameViewModel>(
                 // Respond to positive button press
             }
             .show()
+    }
+
+    private fun android.os.Message.toConversationMessage(): ConversationMessage {
+        return ConversationMessage(this.toMessage(), data.getLong(PEER_ID))
     }
 
     private fun android.os.Message.toMessage(): Message {

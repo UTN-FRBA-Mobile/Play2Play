@@ -51,6 +51,7 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
             it.map { category ->
                 categoriesInputs[category] = PlayCategoryItemBinding.inflate(layoutInflater, list, true).run {
                     input.hint = category
+                    textField.setText(gameViewModel.actualRound.requireValue().letter + category)
                     root
                 }
             }

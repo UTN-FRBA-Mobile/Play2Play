@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.userInfo.UserSession
-import com.p2p.model.base.message.MessageReceived
+import com.p2p.model.base.message.ConversationMessage
 import com.p2p.model.tuttifrutti.RoundInfo
 import com.p2p.model.tuttifrutti.message.TuttiFruttiEnoughForMeEnoughForAllMessage
 import com.p2p.presentation.basegame.ConnectionType
@@ -60,25 +60,24 @@ abstract class TuttiFruttiViewModel(
             RoundInfo(lettersByRound[actualRoundNumber.minus(1)], actualRoundNumber)
     }
 
+    fun enoughForMeEnoughForAll() {
+        _isLoading.value = true
+        connection.write(TuttiFruttiEnoughForMeEnoughForAllMessage())
+    }
+
     abstract fun sendWords(categoriesWords: Map<Category, String>)
 
     @CallSuper
-    open fun enoughForMeEnoughForAll() {
-        _isLoading.value = true
-        connection.write(TuttiFruttiEnoughForMeEnoughForAllMessage())
-        dispatchSingleTimeEvent(ObtainWords)
-    }
-
-    @CallSuper
-    override fun receiveMessage(messageReceived: MessageReceived) {
-        super.receiveMessage(messageReceived)
-        when (messageReceived.message) {
-            is TuttiFruttiEnoughForMeEnoughForAllMessage -> stopRound(messageReceived)
+    override fun receiveMessage(conversationMessage: ConversationMessage) {
+        super.receiveMessage(conversationMessage)
+        when (conversationMessage.message) {
+            is TuttiFruttiEnoughForMeEnoughForAllMessage -> onReceiveEnoughForAll(conversationMessage)
         }
     }
 
-    @CallSuper
-    protected open fun stopRound(messageReceived: MessageReceived) {
+    protected open fun onReceiveEnoughForAll(conversationMessage: ConversationMessage) = stopRound()
+
+    private fun stopRound() {
         _isLoading.value = true
         dispatchSingleTimeEvent(ObtainWords)
     }

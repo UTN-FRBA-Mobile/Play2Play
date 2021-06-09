@@ -3,7 +3,7 @@ package com.p2p.presentation.tuttifrutti
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.userInfo.UserSession
-import com.p2p.model.base.message.MessageReceived
+import com.p2p.model.base.message.ConversationMessage
 import com.p2p.model.tuttifrutti.FinishedRoundInfo
 import com.p2p.model.tuttifrutti.message.TuttiFruttiSendWordsMessage
 import com.p2p.presentation.basegame.ConnectionType
@@ -23,10 +23,10 @@ class ServerTuttiFruttiViewModel(
 
     private var categoriesWordsPerPlayer = mutableMapOf<Long, Map<Category, String>>()
 
-    override fun receiveMessage(messageReceived: MessageReceived) {
-        super.receiveMessage(messageReceived)
-        when (val message = messageReceived.message) {
-            is TuttiFruttiSendWordsMessage -> acceptWords(messageReceived, message.words)
+    override fun receiveMessage(conversationMessage: ConversationMessage) {
+        super.receiveMessage(conversationMessage)
+        when (val message = conversationMessage.message) {
+            is TuttiFruttiSendWordsMessage -> acceptWords(conversationMessage, message.words)
         }
     }
 
@@ -35,8 +35,8 @@ class ServerTuttiFruttiViewModel(
         goToReviewIfCorresponds()
     }
 
-    private fun acceptWords(messageReceived: MessageReceived, categoriesWords: Map<Category, String>) {
-        categoriesWordsPerPlayer[messageReceived.senderId] = categoriesWords
+    private fun acceptWords(conversationMessage: ConversationMessage, categoriesWords: Map<Category, String>) {
+        categoriesWordsPerPlayer[conversationMessage.peer] = categoriesWords
         goToReviewIfCorresponds()
     }
 

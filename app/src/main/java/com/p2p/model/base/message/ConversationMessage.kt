@@ -1,6 +1,6 @@
 package com.p2p.model.base.message
 
-data class MessageReceived(
+data class ConversationMessage(
     val message: Message,
-    val senderId: Long
+    val peer: Long
 )

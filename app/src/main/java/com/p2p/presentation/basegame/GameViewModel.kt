@@ -10,7 +10,7 @@ import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.userInfo.UserSession
 import com.p2p.model.base.message.ClientHandshakeMessage
 import com.p2p.model.base.message.Message
-import com.p2p.model.base.message.MessageReceived
+import com.p2p.model.base.message.ConversationMessage
 import com.p2p.model.base.message.ServerHandshakeMessage
 import com.p2p.presentation.base.BaseViewModel
 import com.p2p.presentation.extensions.requireValue
@@ -58,13 +58,13 @@ abstract class GameViewModel(
      * Override if needed but always call super.
      */
     @CallSuper
-    open fun receiveMessage(messageReceived: MessageReceived) {
-        when (val message = messageReceived.message) {
+    open fun receiveMessage(conversationMessage: ConversationMessage) {
+        when (val message = conversationMessage.message) {
             is ClientHandshakeMessage -> {
                 if (isServer()) {
-                    connection.answer(messageReceived, ServerHandshakeMessage(connectedPlayers.map { it.second }))
+                    connection.talk(conversationMessage, ServerHandshakeMessage(connectedPlayers.map { it.second }))
                 }
-                connectedPlayers = connectedPlayers + (messageReceived.senderId to message.name)
+                connectedPlayers = connectedPlayers + (conversationMessage.peer to message.name)
             }
             is ServerHandshakeMessage -> {
                 connectedPlayers = connectedPlayers + message.players.map { 0L to it }
@@ -77,7 +77,7 @@ abstract class GameViewModel(
      *
      * Override if needed.
      */
-    open fun onSentSuccessfully(message: Message) {}
+    open fun onSentSuccessfully(conversationMessage: ConversationMessage) {}
 
     /**
      * Invoked when there was an error sending a message.

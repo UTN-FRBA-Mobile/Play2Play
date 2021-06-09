@@ -4,8 +4,8 @@ import android.bluetooth.BluetoothServerSocket
 import android.bluetooth.BluetoothSocket
 import android.os.Handler
 import com.p2p.data.bluetooth.BluetoothConnection
+import com.p2p.model.base.message.ConversationMessage
 import com.p2p.model.base.message.Message
-import com.p2p.model.base.message.MessageReceived
 import com.p2p.utils.Logger
 import java.io.IOException
 
@@ -38,8 +38,8 @@ class BluetoothServer(
 
             Logger.d(TAG, "Accepted socket: ${socket.remoteDevice.name}")
             val bluetoothConnectionThread = createConnectionThread(socket)
-            bluetoothConnectionThread.onMessageReceived = { isAnswer, length, buffer ->
-                if (!isAnswer) {
+            bluetoothConnectionThread.onMessageReceived = { isConversation, length, buffer ->
+                if (!isConversation) {
                     Logger.d(TAG, "Received message and broadcasting")
                     connectedThreads
                         .filterNot { it == bluetoothConnectionThread }
@@ -64,13 +64,13 @@ class BluetoothServer(
     }
 
     override fun write(message: Message) = connectedThreads.forEach {
-        writeOnConnection(it, message, isAnswer = false)
+        writeOnConnection(it, message, isConversation = false)
     }
 
-    override fun answer(messageReceived: MessageReceived, sendMessage: Message) {
+    override fun talk(conversationMessage: ConversationMessage, sendMessage: Message) {
         connectedThreads
-            .firstOrNull { it.id == messageReceived.senderId }
-            ?.let { writeOnConnection(it, sendMessage, isAnswer = true) }
+            .firstOrNull { it.id == conversationMessage.peer }
+            ?.let { writeOnConnection(it, sendMessage, isConversation = true) }
     }
 
     override fun onConnected(action: (BluetoothConnection) -> Unit) {
