@@ -1,54 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/review_category_container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorBackground">
+    android:layout_height="wrap_content">
 
     <include layout="@layout/view_guidelines" />
 
     <TextView
-        android:id="@+id/letter"
+        android:id="@+id/category"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="@id/guideline_top"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
-        android:text="@string/tf_letter"
-        style="@style/P2P_Title" />
+        android:textStyle="bold"
+        android:textSize="18dp"
+        android:text="Category" />
 
     <TextView
-        android:id="@+id/round"
+        android:id="@+id/points"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/medium"
         app:layout_constraintTop_toTopOf="@id/guideline_top"
         app:layout_constraintEnd_toStartOf="@id/guideline_end"
-        android:text="@string/tf_round"
-        style="@style/P2P_Title" />
+        android:textStyle="bold"
+        android:textSize="18dp"
+        android:text="@string/points" />
 
     <LinearLayout
-        android:id="@+id/categories_list"
+        android:id="@+id/review_words_list"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
-        android:layout_marginTop="@dimen/big"
+        android:layout_marginTop="@dimen/medium_more"
         android:layout_marginBottom="@dimen/large"
-        app:layout_constraintBottom_toTopOf="@id/finish_round_button"
+        app:layout_constraintBottom_toTopOf="@id/divider_line"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
-        app:layout_constraintTop_toBottomOf="@id/letter"/>
+        app:layout_constraintTop_toBottomOf="@id/category"/>
 
-    <Button
-        android:id="@+id/finish_round_button"
+    <View
+        android:id="@+id/divider_line"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/tf_finish_round"
-        app:layout_constraintBottom_toBottomOf="@id/guideline_bottom"
+        android:layout_height="@dimen/divider_height"
+        android:background="@color/colorDivider"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
-        app:layout_constraintStart_toStartOf="@id/guideline_begin"
-        style="@style/Widget.P2P.Button" />
-
+        app:layout_constraintStart_toStartOf="@id/guideline_begin" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

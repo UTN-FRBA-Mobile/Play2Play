@@ -9,6 +9,7 @@
     <string name="connect">Conectarse</string>
     <string name="understood">Entendido</string>
     <string name="unknown">Desconocido</string>
+    <string name="points">Puntos</string>
 
     <!-- Request location permission -->
     <string name="request_location_title">Lo necesitás para jugar</string>
@@ -50,4 +51,5 @@
     <string name="tf_round">Ronda: %d/%d</string>
     <string name="tf_validation_error">¡Falta completar!</string>
     <string name="tf_finish_round">¡Basta para mi, basta para todos!</string>
+    <string name="tf_enough_player">%s dijo basta</string>
 </resources>
