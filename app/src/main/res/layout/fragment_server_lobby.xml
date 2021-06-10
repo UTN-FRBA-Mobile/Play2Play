@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/view_guidelines" />
+
+    <TextView
+        android:id="@+id/connected_players"
+        style="@style/P2P_Title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/medium"
+        android:layout_marginStart="@dimen/medium"
+        android:paddingTop="@dimen/tiniest"
+        android:text="@string/lobby_connected_players"
+        android:textColor="@color/colorLink"
+        app:layout_constraintStart_toStartOf="@id/guideline_begin"
+
+        app:layout_constraintTop_toBottomOf="@id/progressBar_cyclic" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/players_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/medium"
+        android:layout_marginBottom="@dimen/medium"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintTop_toBottomOf="@id/connected_players"
+        app:layout_constraintBottom_toTopOf="@id/start_game"
+        tools:listitem="@layout/view_connected_user" />
+
+    <Button
+        android:id="@+id/start_game"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/medium_extra"
+        android:text="@string/lobby_start_game"
+        app:layout_constraintBottom_toBottomOf="@id/guideline_bottom"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintStart_toStartOf="@id/guideline_begin"
+        app:layout_constraintTop_toBottomOf="@id/instructions_container" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

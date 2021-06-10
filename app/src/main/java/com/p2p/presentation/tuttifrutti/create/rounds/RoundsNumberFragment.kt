@@ -26,12 +26,10 @@ class RoundsNumberFragment :
         binding.arrowRight.setOnClickListener { viewModel.increase() }
         binding.arrowLeft.setOnClickListener { viewModel.decrease() }
         binding.createButton.setOnClickListener {
-            //TODO discoment when lobby is done
-            // viewModel.continueCreatingGame(categories)
             gameViewModel.setTotalRounds(
                 requireNotNull(roundsNumber)
                 { "Round number must be defined when create button is pressed" })
-            gameViewModel.goToPlay()
+            gameViewModel.goToLobby()
         }
     }
 

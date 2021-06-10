@@ -4,6 +4,8 @@ import android.bluetooth.BluetoothDevice
 import android.content.Context
 import androidx.activity.viewModels
 import com.p2p.presentation.basegame.GameActivity
+import com.p2p.presentation.tuttifrutti.lobby.ClientLobbyFragment
+import com.p2p.presentation.tuttifrutti.lobby.ServerLobbyFragment
 import com.p2p.presentation.tuttifrutti.countdown.TuttiFruttiCountdownFragment
 import com.p2p.presentation.tuttifrutti.create.categories.CreateTuttiFruttiFragment
 
@@ -18,10 +20,10 @@ class TuttiFruttiActivity : GameActivity<TuttiFruttiSpecificGameEvent, TuttiFrut
     override fun goToPlay() = addFragment(TuttiFruttiCountdownFragment.newInstance(), shouldAddToBackStack = false)
 
     override fun goToClientLobby() =
-        Unit // TODO: addFragment(ClientLobbyTuttiFruttiFragment.newInstance(), shouldAddToBackStack = false)
+        addFragment(ClientLobbyFragment.newInstance(), shouldAddToBackStack = false)
 
     override fun goToServerLobby() =
-        Unit // TODO: addFragment(ServerLobbyTuttiFruttiFragment.newInstance(), shouldAddToBackStack = false)
+        addFragment(ServerLobbyFragment.newInstance(), shouldAddToBackStack = false)
 
     companion object {
 
