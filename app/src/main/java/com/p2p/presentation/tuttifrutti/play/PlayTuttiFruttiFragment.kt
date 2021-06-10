@@ -10,7 +10,6 @@ import com.p2p.R
 import com.p2p.databinding.FragmentPlayTuttiFruttiBinding
 import com.p2p.databinding.PlayCategoryItemBinding
 import com.p2p.presentation.basegame.BaseGameFragment
-import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.tuttifrutti.GoToReview
 import com.p2p.presentation.tuttifrutti.ObtainWords
 import com.p2p.presentation.tuttifrutti.TuttiFruttiSpecificGameEvent
