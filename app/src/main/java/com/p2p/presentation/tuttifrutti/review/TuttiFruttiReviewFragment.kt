@@ -34,10 +34,7 @@ class TuttiFruttiReviewFragment : BaseGameFragment<
     override fun initUI() {
         super.initUI()
         // TODO
-        }
     }
-
-
 
 
     companion object {
