@@ -1,19 +1,15 @@
 package com.p2p.presentation.tuttifrutti.review
 
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.p2p.R
 import com.p2p.databinding.FragmentReviewTuttiFruttiBinding
-import com.p2p.databinding.PlayCategoryItemBinding
-import com.p2p.model.tuttifrutti.FinishedRoundInfo
 import com.p2p.presentation.basegame.BaseGameFragment
 import com.p2p.presentation.tuttifrutti.TuttiFruttiViewModel
-import com.p2p.presentation.tuttifrutti.play.PlayTuttiFruttiFragment
-import com.p2p.presentation.tuttifrutti.play.PlayTuttiFruttiViewModel
-import com.p2p.utils.text
+import com.p2p.presentation.tuttifrutti.create.categories.TuttiFruttiReviewRoundAdapter
 
 class TuttiFruttiReviewFragment : BaseGameFragment<
         FragmentReviewTuttiFruttiBinding,
@@ -28,14 +24,36 @@ class TuttiFruttiReviewFragment : BaseGameFragment<
     override val gameInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentReviewTuttiFruttiBinding =
         FragmentReviewTuttiFruttiBinding::inflate
 
+    private lateinit var tuttiFruttiReviewRoundAdapter: TuttiFruttiReviewRoundAdapter
+
+
     override fun initValues() { //TODO
     }
 
     override fun initUI() {
         super.initUI()
-        // TODO
+        viewModel.initializeBaseRoundPoints(gameViewModel.actualRound.value!!)
+        setupReviewCategoriesRecycler()
+        gameBinding.finishReviewButton.setOnClickListener { viewModel.sendRoundPoints() }
     }
 
+    private fun setupReviewCategoriesRecycler() = with(gameBinding.reviewCategoriesRecycler) {
+        layoutManager = LinearLayoutManager(context)
+        adapter = TuttiFruttiReviewRoundAdapter(viewModel.finishedRoundInfo, viewModel.finishedRoundPointsInfo).also {
+            this@TuttiFruttiReviewFragment.tuttiFruttiReviewRoundAdapter = it
+        }
+    }
+
+    override fun setupObservers() {
+        super.setupObservers()
+        with(gameViewModel) {
+            actualRound.observe(viewLifecycleOwner) {
+                gameBinding.round.text =
+                    resources.getString(R.string.tf_round, it.number, totalRounds.value)
+                gameBinding.letter.text = resources.getString(R.string.tf_letter, it.letter)
+            }
+        }
+    }
 
     companion object {
 
