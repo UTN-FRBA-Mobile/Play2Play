@@ -77,7 +77,7 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
         when (event) {
             ObtainWords -> gameViewModel.sendWords(getCategoriesValues())
             is GoToReview -> addFragment(
-                TuttiFruttiReviewFragment.newInstance(event.finishedRoundInfo),
+                TuttiFruttiReviewFragment.newInstance(),
                 shouldAddToBackStack = false
             )
         }

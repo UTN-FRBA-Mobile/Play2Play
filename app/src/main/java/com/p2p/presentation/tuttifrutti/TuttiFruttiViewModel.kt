@@ -7,6 +7,7 @@ import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.userInfo.UserSession
 import com.p2p.model.base.message.Conversation
+import com.p2p.model.tuttifrutti.FinishedRoundInfo
 import com.p2p.model.tuttifrutti.RoundInfo
 import com.p2p.model.tuttifrutti.message.TuttiFruttiEnoughForMeEnoughForAllMessage
 import com.p2p.presentation.basegame.ConnectionType
@@ -35,10 +36,12 @@ abstract class TuttiFruttiViewModel(
     protected val _totalRounds = MutableLiveData<Int>()
     val totalRounds: LiveData<Int> = _totalRounds
 
+    protected val _finishedRoundInfos = MutableLiveData(listOf<FinishedRoundInfo>())
+    val finishedRoundInfos: LiveData<List<FinishedRoundInfo>> = _finishedRoundInfos
+
     private val _categoriesToPlay = MutableLiveData<List<Category>>()
     val categoriesToPlay: LiveData<List<Category>> = _categoriesToPlay
 
-    /** Data for the actual round. */
     private val _actualRound = MutableLiveData<RoundInfo>()
     val actualRound: LiveData<RoundInfo> = _actualRound
 
@@ -55,13 +58,13 @@ abstract class TuttiFruttiViewModel(
         generateNextRoundValues()
     }
 
-    // TODO: this should be called from the server lobby when startGame button is clicked.
-    abstract fun startGame()
-
-    fun enoughForMeEnoughForAll() {
+    open fun enoughForMeEnoughForAll() {
         _isLoading.value = true
         connection.write(TuttiFruttiEnoughForMeEnoughForAllMessage())
     }
+
+    // TODO: this should be called from the server lobby when startGame button is clicked.
+    abstract fun startGame()
 
     abstract fun sendWords(categoriesWords: Map<Category, String>)
 
@@ -75,15 +78,15 @@ abstract class TuttiFruttiViewModel(
 
     protected open fun onReceiveEnoughForAll(conversation: Conversation) = stopRound()
 
+    protected fun stopRound() {
+        _isLoading.value = true
+        dispatchSingleTimeEvent(ObtainWords)
+    }
+
     private fun generateNextRoundValues() {
         val actualRoundNumber: Int = actualRound.value?.number?.plus(1) ?: 1
         _actualRound.value =
             RoundInfo(lettersByRound[actualRoundNumber.minus(1)], actualRoundNumber)
-    }
-
-    private fun stopRound() {
-        _isLoading.value = true
-        dispatchSingleTimeEvent(ObtainWords)
     }
 
     companion object {

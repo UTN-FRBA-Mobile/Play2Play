@@ -27,6 +27,13 @@ abstract class GameViewModel(
     private val instructions by lazy { instructionsRepository.getInstructions(game.requireValue()) }
 
     protected lateinit var connection: BluetoothConnection
+
+    /**
+     * Contains all the connected players recognizing them by a [Long] id.
+     *
+     * The server will have different ids for each client, but the clients will have all players
+     * with the same id (the server id). Because of that the client should never try to recognize a player by their id.
+     */
     protected var connectedPlayers = emptyList<Pair<Long, String>>()
         set(value) {
             field = value
@@ -41,7 +48,7 @@ abstract class GameViewModel(
 
     init {
         _game.value = theGame
-        connectedPlayers = listOf(MYSELF_ID to userName)
+        connectedPlayers = listOf(MYSELF_PEER_ID to userName)
         createOrJoin()
         startConnection() // TODO: This should be called when the creation is finished, from the Lobby
     }
@@ -61,7 +68,7 @@ abstract class GameViewModel(
                 connectedPlayers = connectedPlayers + (conversation.peer to message.name)
             }
             is ServerHandshakeMessage -> {
-                connectedPlayers = connectedPlayers + message.players.map { 0L to it }
+                connectedPlayers = connectedPlayers + message.players.map { conversation.peer to it }
             }
         }
     }
@@ -103,6 +110,8 @@ abstract class GameViewModel(
 
     protected fun isServer() = connectionType.type == GameConnectionType.SERVER
 
+    protected fun getPlayerById(playerId: Long) = connectedPlayers.first { it.first == playerId }.second
+
     private fun createOrJoin() {
         if (isServer()) {
             dispatchSingleTimeEvent(GoToCreate)
@@ -113,6 +122,6 @@ abstract class GameViewModel(
 
     companion object {
 
-        const val MYSELF_ID = -1L
+        const val MYSELF_PEER_ID = -1L
     }
 }

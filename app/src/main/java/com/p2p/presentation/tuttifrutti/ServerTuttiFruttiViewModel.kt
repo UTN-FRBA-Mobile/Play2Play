@@ -23,8 +23,7 @@ class ServerTuttiFruttiViewModel(
     instructionsRepository
 ) {
     private var gameAlreadyStarted = false
-
-    private val finishedRoundInfos = mutableListOf<FinishedRoundInfo>()
+    private var saidEnoughPeer: Long? = null
 
     /** Be careful: this will be called for every client on a broadcast. */
     override fun onSentSuccessfully(conversation: Conversation) {
@@ -45,19 +44,34 @@ class ServerTuttiFruttiViewModel(
     override fun receiveMessage(conversation: Conversation) {
         super.receiveMessage(conversation)
         when (val message = conversation.lastMessage) {
-            is TuttiFruttiSendWordsMessage -> acceptWords(conversation, message.words)
+            is TuttiFruttiSendWordsMessage -> acceptWords(conversation.peer, message.words)
         }
     }
 
-    override fun sendWords(categoriesWords: Map<Category, String>) {
-        finishedRoundInfos.add(FinishedRoundInfo(getPlayerById(MYSELF_ID), categoriesWords))
-        goToReviewIfCorresponds()
+    override fun sendWords(categoriesWords: Map<Category, String>) = acceptWords(MYSELF_PEER_ID, categoriesWords)
+
+    override fun enoughForMeEnoughForAll() {
+        sayEnough(MYSELF_PEER_ID)
+        super.enoughForMeEnoughForAll()
+        stopRound()
     }
 
-    private fun getPlayerById(playerId: Long) = connectedPlayers.first { it.first == playerId }.second
+    override fun onReceiveEnoughForAll(conversation: Conversation) {
+        sayEnough(conversation.peer)
+        super.onReceiveEnoughForAll(conversation)
+    }
 
-    private fun acceptWords(conversation: Conversation, categoriesWords: Map<Category, String>) {
-        finishedRoundInfos.add(FinishedRoundInfo(getPlayerById(conversation.peer), categoriesWords))
+    private fun sayEnough(peer: Long) {
+        saidEnoughPeer = peer
+        _finishedRoundInfos.value = emptyList()
+    }
+
+    private fun acceptWords(peer: Long, categoriesWords: Map<Category, String>) {
+        _finishedRoundInfos.value = _finishedRoundInfos.requireValue() + FinishedRoundInfo(
+            player = getPlayerById(peer),
+            categoriesWords = categoriesWords,
+            saidEnough = peer == saidEnoughPeer
+        )
         goToReviewIfCorresponds()
     }
 
@@ -65,10 +79,9 @@ class ServerTuttiFruttiViewModel(
         availableLetters.toList().shuffled().take(totalRounds.requireValue())
 
     private fun goToReviewIfCorresponds() {
-        if (finishedRoundInfos.size == connectedPlayers.size) {
+        if (finishedRoundInfos.requireValue().size == connectedPlayers.size) {
             // When all the players send their words, go to the review and clean the players round words.
-            dispatchSingleTimeEvent(GoToReview(finishedRoundInfos))
-            finishedRoundInfos.clear()
+            dispatchSingleTimeEvent(GoToReview)
         }
     }
 }
