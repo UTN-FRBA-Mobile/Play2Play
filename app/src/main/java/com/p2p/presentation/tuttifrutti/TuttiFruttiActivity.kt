@@ -10,6 +10,7 @@ import com.p2p.R
 import com.p2p.presentation.basegame.GameActivity
 import com.p2p.presentation.tuttifrutti.countdown.TuttiFruttiCountdownFragment
 import com.p2p.presentation.tuttifrutti.create.categories.CreateTuttiFruttiFragment
+import com.p2p.utils.hideKeyboard
 
 class TuttiFruttiActivity : GameActivity<TuttiFruttiSpecificGameEvent, TuttiFruttiViewModel>(
     R.layout.activity_tutti_frutti
@@ -21,7 +22,10 @@ class TuttiFruttiActivity : GameActivity<TuttiFruttiSpecificGameEvent, TuttiFrut
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.isLoading.observe(this) { findViewById<View>(R.id.activity_progress_overlay).isVisible = it }
+        viewModel.isLoading.observe(this) { isLoading ->
+            if (isLoading) hideKeyboard()
+            findViewById<View>(R.id.activity_progress_overlay).isVisible = isLoading
+        }
     }
 
     override fun goToCreate() = addFragment(CreateTuttiFruttiFragment.newInstance(), shouldAddToBackStack = false)
