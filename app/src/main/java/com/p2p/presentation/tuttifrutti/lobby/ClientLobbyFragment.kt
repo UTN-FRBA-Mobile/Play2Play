@@ -7,15 +7,15 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.p2p.databinding.FragmentClientLobbyBinding
 import com.p2p.presentation.basegame.BaseGameFragment
-import com.p2p.presentation.basegame.GameViewModel
+import com.p2p.presentation.tuttifrutti.ClientTuttiFruttiViewModel
 
 class ClientLobbyFragment: BaseGameFragment<
         FragmentClientLobbyBinding,
         LobbyEvent,
         ClientLobbyViewModel,
-        GameViewModel>() {
+        ClientTuttiFruttiViewModel>() {
 
-    override val gameViewModel: GameViewModel by activityViewModels()
+    override val gameViewModel: ClientTuttiFruttiViewModel by activityViewModels()
 
     override val viewModel: ClientLobbyViewModel by viewModels()
 

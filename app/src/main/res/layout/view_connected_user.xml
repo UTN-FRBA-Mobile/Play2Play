@@ -10,8 +10,8 @@
 
     <ImageView
         android:id="@+id/avatar"
-        android:layout_width="@dimen/big_extra"
-        android:layout_height="@dimen/big_extra"
+        android:layout_width="@dimen/huge"
+        android:layout_height="@dimen/huge"
         android:layout_marginTop="@dimen/large"
         android:layout_marginBottom="@dimen/large"
         android:src="@drawable/ic_baseline_account_circle_24"
@@ -30,6 +30,7 @@
         android:ellipsize="end"
         android:lines="1"
         android:maxLines="1"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/avatar"
         app:layout_constraintTop_toTopOf="parent"

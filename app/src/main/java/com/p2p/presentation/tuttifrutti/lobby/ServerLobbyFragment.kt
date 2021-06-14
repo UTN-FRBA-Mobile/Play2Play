@@ -7,14 +7,14 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.p2p.databinding.FragmentServerLobbyBinding
 import com.p2p.presentation.basegame.BaseGameFragment
-import com.p2p.presentation.tuttifrutti.create.rounds.RoundsNumberFragment
+import com.p2p.presentation.tuttifrutti.TuttiFruttiViewModel
 
 class ServerLobbyFragment: BaseGameFragment<
         FragmentServerLobbyBinding,
         LobbyEvent,
         ServerLobbyViewModel,
-        LobbyGameViewModel>() {
-    override val gameViewModel: LobbyGameViewModel by activityViewModels()
+        TuttiFruttiViewModel>() {
+    override val gameViewModel: TuttiFruttiViewModel by activityViewModels()
 
     override val viewModel: ServerLobbyViewModel by viewModels()
 
@@ -29,6 +29,7 @@ class ServerLobbyFragment: BaseGameFragment<
         setupPlayersRecycler()
         gameBinding.startGame.setOnClickListener {
             gameViewModel.closeDiscovery()
+            gameViewModel.startGame()
             gameViewModel.goToPlay()
         }
     }
@@ -55,16 +56,9 @@ class ServerLobbyFragment: BaseGameFragment<
         }
     }
 
-    override fun onEvent(event: LobbyEvent) = when (event) {
-        is GoToPlay -> {
-            RoundsNumberFragment.newInstance().show(childFragmentManager, "RoundsNumberDialog")
-        }
-        else -> Unit
-    }
-
     companion object {
         fun newInstance() = ServerLobbyFragment()
 
-        const val LOBBY_MIN_SIZE = 2
+        const val LOBBY_MIN_SIZE = 1
     }
 }
