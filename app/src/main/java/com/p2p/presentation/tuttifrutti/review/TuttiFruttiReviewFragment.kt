@@ -9,7 +9,6 @@ import com.p2p.R
 import com.p2p.databinding.FragmentReviewTuttiFruttiBinding
 import com.p2p.presentation.basegame.BaseGameFragment
 import com.p2p.presentation.tuttifrutti.TuttiFruttiViewModel
-import com.p2p.presentation.tuttifrutti.create.categories.TuttiFruttiReviewRoundAdapter
 
 class TuttiFruttiReviewFragment : BaseGameFragment<
         FragmentReviewTuttiFruttiBinding,
@@ -45,7 +44,6 @@ class TuttiFruttiReviewFragment : BaseGameFragment<
     }
 
     override fun setupObservers() {
-        super.setupObservers()
         with(gameViewModel) {
             actualRound.observe(viewLifecycleOwner) {
                 gameBinding.round.text =
@@ -53,6 +51,7 @@ class TuttiFruttiReviewFragment : BaseGameFragment<
                 gameBinding.letter.text = resources.getString(R.string.tf_letter, it.letter)
             }
         }
+        super.setupObservers()
     }
 
     companion object {

@@ -40,12 +40,12 @@
         android:paddingTop="@dimen/medium"
         android:scaleType="center"
         android:src="@drawable/ic_baseline_substract"
-        app:layout_constraintEnd_toStartOf="@id/points"
+        app:layout_constraintEnd_toStartOf="@id/player_points"
         app:layout_constraintTop_toTopOf="@id/guideline_top"
         android:contentDescription="@string/decrease_number" />
 
     <TextView
-        android:id="@+id/points"
+        android:id="@+id/player_points"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/medium"

@@ -14,8 +14,7 @@ class TuttiFruttiActivity : GameActivity<TuttiFruttiSpecificGameEvent, TuttiFrut
         TuttiFruttiViewModelFactory(this, gameViewModelFactoryData)
     }
 
-    // TODO: sacar, esto esta para probar fragment
-    override fun goToCreate() = addFragment(TuttiFruttiReviewFragment.newInstance(), shouldAddToBackStack = false)
+    override fun goToCreate() = addFragment(CreateTuttiFruttiFragment.newInstance(), shouldAddToBackStack = false)
 
     override fun goToPlay() = addFragment(TuttiFruttiCountdownFragment.newInstance(), shouldAddToBackStack = false)
 

@@ -13,7 +13,9 @@ import com.p2p.databinding.FragmentPlayTuttiFruttiBinding
 import com.p2p.databinding.PlayCategoryItemBinding
 import com.p2p.presentation.basegame.BaseGameFragment
 import com.p2p.presentation.tuttifrutti.TuttiFruttiViewModel
+import com.p2p.presentation.tuttifrutti.countdown.TuttiFruttiCountdownFragment
 import com.p2p.presentation.tuttifrutti.create.categories.Category
+import com.p2p.presentation.tuttifrutti.review.TuttiFruttiReviewFragment
 import com.p2p.utils.clear
 import com.p2p.utils.text
 
@@ -71,12 +73,14 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
     }
 
     override fun onEvent(event: TuttiFruttiPlayingEvents) = when (event) {
-        //TODO end round and pass to next stage
+        //TODO: end round and pass to next stage
         is FinishRound -> {
             clearValues()
-            //TODO delete when review is done
+            //TODO: delete when review is done
             showSuccessMessage(event.categoriesWithValues)
             gameViewModel.finishRound(event.categoriesWithValues)
+            // TODO: delete when connections between fragments is done
+            addFragment(TuttiFruttiReviewFragment.newInstance(), shouldAddToBackStack = false)
         }
         ShowInvalidInputs -> markErrors()
     }

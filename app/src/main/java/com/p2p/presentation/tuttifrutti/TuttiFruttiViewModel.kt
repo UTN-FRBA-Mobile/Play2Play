@@ -55,7 +55,7 @@ abstract class TuttiFruttiViewModel(
 
     /**On Playing game*/
     fun finishRound(categoriesWithValues: Map<Category, String>) {
-        roundsInfo.add(actualRound.requireValue().finish(categoriesWithValues))
+        // roundsInfo.add(actualRound.requireValue().finish(categoriesWithValues))
         goToReviewOrWait()
     }
 

@@ -1,22 +1,18 @@
-package com.p2p.presentation.tuttifrutti.create.categories
+package com.p2p.presentation.tuttifrutti.review
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewbinding.ViewBinding
 import com.p2p.R
-import com.p2p.databinding.ViewCategoryItemBinding
+import com.p2p.databinding.ViewReviewCategoryItemBinding
+import com.p2p.databinding.ViewReviewWordItemBinding
 import com.p2p.model.tuttifrutti.FinishedRoundInfo
 import com.p2p.model.tuttifrutti.FinishedRoundPointsInfo
+import com.p2p.presentation.tuttifrutti.create.categories.Category
 import com.p2p.utils.isEven
-
-// (Ver en Play tutti frutti fragment) observo el actual round obtengo Ronda número y letra para setear en la vista
-// Fragment inicializa view model, observa lista de finished round y setea esa lista al adapter
-// Agarrar lista finish round del view model, después limpiarla
-// Seteo lista en el View model
-
-// Dependiendo de la posición de la vista decido si es un título o un item , 1 vista para el título y N vistas por cantidad de jugadores
 
 // En el OnClick de los puntajes voy agregando o restando a un objeto que me guarde el estado (mapa review points)
 // Cuando toco continue se manda ese objeto o un resumen de ese objeto
@@ -27,19 +23,26 @@ import com.p2p.utils.isEven
 /** The adapter used to show the list of round reviews. */
 class TuttiFruttiReviewRoundAdapter(
     private val finishedRoundInfo: List<FinishedRoundInfo>,
-    private val finishedRoundPointsInfo: MutableLiveData<List<FinishedRoundPointsInfo>>) :
-    RecyclerView.Adapter<TuttiFruttiReviewRoundAdapter.ViewHolder>() {
+    private val finishedRoundPointsInfo: LiveData<List<FinishedRoundPointsInfo>>) :
+    RecyclerView.Adapter<TuttiFruttiReviewRoundAdapter.RecyclerViewHolder>() {
 
     override fun getItemViewType(position: Int): Int {
-        return super.getItemViewType(position) // ver cuenta para ver si la posicion de la vista es de tipo titulo o de tipo palabra/jugador.
-        // dependiendo de la posicion en la que estoy tengo que devolver uno u otro.
-        // ej. posicion 0 titulo, posicion 1 a 5 palabra/jugador, posicion 6 titulo, y asi.... ver que cuenta tengo que hacer, modulo?
+        // If the the modulus number of players plus one is zero, then we get the category title view
+        return position % (finishedRoundInfo.count() + 1)
     }
 
-    // este metodo se llama con el view type que declare arriba, asi se que vista tengo que inflar.
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(
-            ViewCategoryItemBinding.inflate(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder {
+        if (viewType == 0) {
+            return ReviewCategoryViewHolder(
+                ViewReviewCategoryItemBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
+        }
+        return ReviewWordViewHolder(
+            ViewReviewWordItemBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -48,32 +51,59 @@ class TuttiFruttiReviewRoundAdapter(
     }
 
     // ver que vista estoy bindeando, segun la vista que tenga (titulo, o palabra/persona) tengo que mostrar sus elemntos
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        return holder.bind(categories[position], position)
+    override fun onBindViewHolder(holder: RecyclerViewHolder, position: Int) {
+        val viewIndex = getItemViewType(position)
+        val viewHolderParams = RecyclerViewHolderParameters()
+        val categoryIndex = position / (finishedRoundInfo.count() + 1)
+        val viewCategory = getCategory(categoryIndex)
+
+        if (viewIndex == 0) {
+            viewHolderParams.category = viewCategory
+        } else {
+            viewHolderParams.player = finishedRoundInfo[viewIndex - 1].player
+            viewHolderParams.word = finishedRoundInfo[viewIndex - 1].categoriesWords[viewCategory]!!
+            // TODO: ver por que se esta inicializando todos los valores en cero. initializeRoundPoints values no se esta invocando? Debuggear
+            viewHolderParams.points = finishedRoundPointsInfo.value!!.find {
+                it.player == viewHolderParams.player
+            }!!.wordsPoints[categoryIndex]
+        }
+
+        return holder.bind(viewHolderParams, position)
     }
 
-    override fun getItemCount() = categories.size // cant jugadores * cant categorias
+    // Return the number of players multiplied by the number of categories
+    override fun getItemCount() = finishedRoundInfo.count() * finishedRoundInfo.first().categoriesWords.count()
+
+    private fun getCategory(categoryIndex: Int): Category {
+        return finishedRoundInfo.first().categoriesWords.keys.toTypedArray()[categoryIndex]
+    }
 
     private fun getBackgroundColor(index: Int) =
         if (index.isEven()) R.color.colorBackground else R.color.wild_sand
 
-    //
-    inner class ViewHolder(private val binding: ViewCategoryItemBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
+    inner class ReviewCategoryViewHolder(private val binding: ViewReviewCategoryItemBinding) : RecyclerViewHolder(binding) {
         /** Show the given [category] into the view. */
-        fun bind(category: Category, position: Int) = with(binding) {
-            item.text = category
-            categoryItem.setBackgroundColor(
+        override fun bind(viewHolderParams: RecyclerViewHolderParameters, position: Int) = with(binding) {
+            categoryTitle.text = viewHolderParams.category
+        }
+    }
+
+    inner class ReviewWordViewHolder(private val binding: ViewReviewWordItemBinding) : RecyclerViewHolder(binding) {
+        /** Show the given [review] into the view. */
+        override fun bind(viewHolderParams: RecyclerViewHolderParameters, position: Int) = with(binding) {
+            playerName.text = viewHolderParams.player
+            playerWord.text = viewHolderParams.word
+            playerPoints.text = viewHolderParams.points.toString()
+            reviewWordContainer.setBackgroundColor(
                 ContextCompat.getColor(
                     itemView.context,
                     getBackgroundColor(position)
                 )
             )
-
-            item.isChecked = selectedCategories?.contains(category) ?: false
         }
     }
+
+    abstract class RecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHolder(binding.root) {
+        abstract fun bind(viewHolderParams : RecyclerViewHolderParameters, position: Int)
+    }
 }
-
-

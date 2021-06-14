@@ -12,17 +12,22 @@ import java.text.Normalizer
 class TuttiFruttiReviewViewModel :
     BaseViewModel<TuttiFruttiReviewEvents>() {
 
-    // esto tiene que ser de tipo mutable live data???? voy a agregarle elementos desde el adapter.
-    val finishedRoundPointsInfo = MutableLiveData<List<FinishedRoundPointsInfo>>()
+    /** List with the finished round review points */
+    private val _finishedRoundPointsInfo = MutableLiveData<List<FinishedRoundPointsInfo>>()
+    val finishedRoundPointsInfo: LiveData<List<FinishedRoundPointsInfo>> = _finishedRoundPointsInfo
 
     /** Whether the continue button is enabled or not. */
     private val _continueButtonEnabled = MutableLiveData<Boolean>()
     val continueButtonEnabled: LiveData<Boolean> = _continueButtonEnabled
 
-    // TODO: This values are for mocking the obtained finishedRoundInfo, delete it when the communication is done
-    private val firstPlayer = FinishedRoundInfo("Lisa", mapOf("Nombres" to "Adela", "Animales" to "Aguila", "Comidas" to "Alfajor"), true)
-    private val secondPlayer = FinishedRoundInfo("Homero", mapOf("Nombres" to "Oso", "Animales" to "A", "Comidas" to ""), false)
-    private val thirdPlayer = FinishedRoundInfo("Bart", mapOf("Nombres" to "Ambar", "Animales" to "Anguila", "Comidas" to "Alfajor"), false)
+
+    // TODO: This values are for mocking the obtained finishedRoundInfo, delete it when the communication is done. We should observe it.
+    private val firstPlayer = FinishedRoundInfo("Lisa",
+        mapOf("Nombres" to "Adela", "Animales" to "Aguila", "Comidas" to "Alfajor") as LinkedHashMap<Category, String>, true)
+    private val secondPlayer = FinishedRoundInfo("Homero",
+        mapOf("Nombres" to "Oso", "Animales" to "A", "Comidas" to "") as LinkedHashMap<Category, String>, false)
+    private val thirdPlayer = FinishedRoundInfo("Bart",
+        mapOf("Nombres" to "Ambar", "Animales" to "Anguila", "Comidas" to "Alfajor") as LinkedHashMap<Category, String>, false)
     val finishedRoundInfo: List<FinishedRoundInfo> = listOf(firstPlayer, secondPlayer, thirdPlayer)
 
     /** Process the finishedRoundInfo list to take the base points for all the players */
@@ -40,7 +45,7 @@ class TuttiFruttiReviewViewModel :
             roundInitialPoints.add(playerPoints)
         }
 
-        finishedRoundPointsInfo.value = roundInitialPoints
+        _finishedRoundPointsInfo.value = roundInitialPoints
     }
 
     private fun getCategoryWords(category: Category) : List<String> =
