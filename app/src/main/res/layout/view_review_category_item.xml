@@ -8,6 +8,15 @@
 
     <include layout="@layout/view_guidelines" />
 
+    <View
+        android:id="@+id/divider_line"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/divider_height"
+        android:background="@color/colorDivider"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintStart_toStartOf="@id/guideline_begin" />
+
     <TextView
         android:id="@+id/category_title"
         android:layout_width="wrap_content"
@@ -36,18 +45,8 @@
         android:orientation="vertical"
         android:layout_marginTop="@dimen/medium_more"
         android:layout_marginBottom="@dimen/large"
-        app:layout_constraintBottom_toTopOf="@id/divider_line"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
         app:layout_constraintTop_toBottomOf="@id/category_title"/>
-
-    <View
-        android:id="@+id/divider_line"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/divider_height"
-        android:background="@color/colorDivider"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/guideline_end"
-        app:layout_constraintStart_toStartOf="@id/guideline_begin" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

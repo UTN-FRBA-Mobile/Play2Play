@@ -36,9 +36,10 @@ class TuttiFruttiReviewViewModel :
 
         finishedRoundInfo.forEach {
             val pointsList = mutableListOf<Int>()
-            it.categoriesWords.forEach() { playerResponse ->
+            it.categoriesWords.forEach { playerResponse ->
                 val categoryWords = getCategoryWords(playerResponse.key)
-                pointsList.add(getPointsForWord(playerResponse.value, actualRound.letter, categoryWords))
+                // TODO: Stop hardcoding the letter for testing, it should be actualRound.letter
+                pointsList.add(getPointsForWord(playerResponse.value, 'A', categoryWords))
             }
 
             val playerPoints = FinishedRoundPointsInfo(it.player, pointsList, pointsList.sum())
@@ -54,7 +55,7 @@ class TuttiFruttiReviewViewModel :
     private fun getPointsForWord(word: String, roundLetter: Char, categoryWords: List<String>) : Int {
         val categoryWord = Normalizer.normalize(word, Normalizer.Form.NFD)
         if(categoryWord.startsWith(roundLetter, ignoreCase = true) && categoryWord.length > 2) {
-            if(categoryWords.count{ it.equals(categoryWord, ignoreCase = true) } > 1) {
+            if(categoryWords.count{ it.equals(categoryWord, ignoreCase = true) } >= 2) {
                 return 5
             }
             return 10

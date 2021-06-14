@@ -55,7 +55,7 @@
         android:textColor="@color/green_eden"
         app:layout_constraintTop_toTopOf="@id/guideline_top"
         app:layout_constraintEnd_toStartOf="@id/button_add"
-        tools:text="5" />
+        tools:text="10" />
 
     <ImageButton
         android:id="@+id/button_add"
@@ -70,13 +70,5 @@
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintTop_toTopOf="@id/guideline_top"
         android:contentDescription="@string/increase_number" />
-
-    <View
-        android:layout_width="0dp"
-        android:layout_height="@dimen/divider_height"
-        android:background="@color/colorDivider"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/guideline_end"
-        app:layout_constraintStart_toStartOf="@id/guideline_begin" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

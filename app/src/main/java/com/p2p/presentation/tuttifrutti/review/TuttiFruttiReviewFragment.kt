@@ -26,12 +26,12 @@ class TuttiFruttiReviewFragment : BaseGameFragment<
     private lateinit var tuttiFruttiReviewRoundAdapter: TuttiFruttiReviewRoundAdapter
 
 
-    override fun initValues() { //TODO
+    override fun initValues() {
+        viewModel.initializeBaseRoundPoints(gameViewModel.actualRound.value!!)
     }
 
     override fun initUI() {
         super.initUI()
-        viewModel.initializeBaseRoundPoints(gameViewModel.actualRound.value!!)
         setupReviewCategoriesRecycler()
         gameBinding.finishReviewButton.setOnClickListener { viewModel.sendRoundPoints() }
     }
@@ -51,6 +51,10 @@ class TuttiFruttiReviewFragment : BaseGameFragment<
                 gameBinding.letter.text = resources.getString(R.string.tf_letter, it.letter)
             }
         }
+        gameBinding.enoughPlayer.text =
+            resources.getString(R.string.tf_enough_player,
+                                viewModel.finishedRoundInfo.find { it.saidEnough }!!.player)
+
         super.setupObservers()
     }
 

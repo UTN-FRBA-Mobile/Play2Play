@@ -62,7 +62,6 @@ class TuttiFruttiReviewRoundAdapter(
         } else {
             viewHolderParams.player = finishedRoundInfo[viewIndex - 1].player
             viewHolderParams.word = finishedRoundInfo[viewIndex - 1].categoriesWords[viewCategory]!!
-            // TODO: ver por que se esta inicializando todos los valores en cero. initializeRoundPoints values no se esta invocando? Debuggear
             viewHolderParams.points = finishedRoundPointsInfo.value!!.find {
                 it.player == viewHolderParams.player
             }!!.wordsPoints[categoryIndex]
@@ -71,8 +70,11 @@ class TuttiFruttiReviewRoundAdapter(
         return holder.bind(viewHolderParams, position)
     }
 
-    // Return the number of players multiplied by the number of categories
-    override fun getItemCount() = finishedRoundInfo.count() * finishedRoundInfo.first().categoriesWords.count()
+    // Return the number of players multiplied by the number of categories plus the number of categories (for the titles)
+    override fun getItemCount(): Int {
+        val numberOfCategories = finishedRoundInfo.first().categoriesWords.count()
+        return finishedRoundInfo.count() * numberOfCategories + numberOfCategories
+    }
 
     private fun getCategory(categoryIndex: Int): Category {
         return finishedRoundInfo.first().categoriesWords.keys.toTypedArray()[categoryIndex]
@@ -93,7 +95,7 @@ class TuttiFruttiReviewRoundAdapter(
         override fun bind(viewHolderParams: RecyclerViewHolderParameters, position: Int) = with(binding) {
             playerName.text = viewHolderParams.player
             playerWord.text = viewHolderParams.word
-            playerPoints.text = viewHolderParams.points.toString()
+            playerPoints.text = viewHolderParams.points.toString().padStart(2, ' ')
             reviewWordContainer.setBackgroundColor(
                 ContextCompat.getColor(
                     itemView.context,
