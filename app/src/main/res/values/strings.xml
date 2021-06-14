@@ -50,4 +50,10 @@
     <string name="tf_round">Ronda: %d/%d</string>
     <string name="tf_validation_error">¡Falta completar!</string>
     <string name="tf_finish_round">¡Basta para mi, basta para todos!</string>
+
+    <!-- Tutti Frutti - Final Score -->
+    <string name="tf_winner">Ganó %s</string>
+    <string name="tf_points">%d puntos</string>
+    <string name="tf_exit">Salir</string>
+
 </resources>
