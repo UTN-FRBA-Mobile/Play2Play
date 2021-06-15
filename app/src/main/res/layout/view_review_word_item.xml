@@ -46,16 +46,17 @@
 
     <TextView
         android:id="@+id/player_points"
-        android:layout_width="wrap_content"
+        android:layout_width="35dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/medium"
         android:paddingTop="@dimen/small"
         android:textSize="@dimen/font_huge"
         android:textStyle="bold"
         android:textColor="@color/green_eden"
+        android:textAlignment="center"
         app:layout_constraintTop_toTopOf="@id/guideline_top"
         app:layout_constraintEnd_toStartOf="@id/button_add"
-        tools:text="10" />
+        tools:text="5" />
 
     <ImageButton
         android:id="@+id/button_add"

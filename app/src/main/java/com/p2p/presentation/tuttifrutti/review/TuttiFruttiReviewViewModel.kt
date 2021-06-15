@@ -20,11 +20,7 @@ class TuttiFruttiReviewViewModel :
     private val _finishedRoundPointsInfo = MutableLiveData(listOf<FinishedRoundPointsInfo>())
     val finishedRoundPointsInfo: LiveData<List<FinishedRoundPointsInfo>> = _finishedRoundPointsInfo
 
-    /** Whether the continue button is enabled or not. */
-    private val _continueButtonEnabled = MutableLiveData<Boolean>()
-    val continueButtonEnabled: LiveData<Boolean> = _continueButtonEnabled
-
-    // TODO: This values are for mocking the obtained finishedRoundInfo, delete it when the communication is done. We should observe it.
+    // TODO: This values are for mocking the obtained finishedRoundInfo, delete it when the communication is done.
     private val firstPlayer = FinishedRoundInfo("Lisa",
         mapOf("Nombres" to "Adela", "Animales" to "Aguila", "Comidas" to "Alfajor") as LinkedHashMap<Category, String>, true)
     private val secondPlayer = FinishedRoundInfo("Homero",
@@ -34,20 +30,18 @@ class TuttiFruttiReviewViewModel :
 
     init {
         _finishedRoundInfo.value = listOf(firstPlayer, secondPlayer, thirdPlayer)
-        _continueButtonEnabled.value = false
     }
 
-    //[categoryIndex] = previousPoints.plus(5)
-
     fun onChangeRoundPoints(action: String, player: String, categoryIndex: Int) {
-        if(action == "add") {
-            finishedRoundPointsInfo.value?.find { it.player == player }!!.wordsPoints[categoryIndex].plus(5)
-        } else {
-            finishedRoundPointsInfo.value?.find { it.player == player }!!.wordsPoints[categoryIndex].minus(5)
-        }
+        val updatedFinishedRoundPoints = finishedRoundPointsInfo.value!!.toMutableList()
 
-        // TODO: No se actualiza, ver que puede ser :(
-        _finishedRoundPointsInfo.value = finishedRoundPointsInfo.value
+        if(action == "add") {
+            updatedFinishedRoundPoints.find { it.player == player }!!.wordsPoints[categoryIndex] += 5
+
+        } else {
+            updatedFinishedRoundPoints.find { it.player == player }!!.wordsPoints[categoryIndex] -= 5
+        }
+        _finishedRoundPointsInfo.value = updatedFinishedRoundPoints
     }
 
     /** Process the finishedRoundInfo list to take the base points for all the players */

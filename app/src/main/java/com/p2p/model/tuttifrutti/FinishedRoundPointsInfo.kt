@@ -2,6 +2,6 @@ package com.p2p.model.tuttifrutti
 
 data class FinishedRoundPointsInfo (
     val player: String,
-    val wordsPoints: List<Int>,
+    val wordsPoints: MutableList<Int>,
     val totalPoints: Int
 )

@@ -99,13 +99,22 @@ class TuttiFruttiReviewRoundAdapter(private val onChangeRoundPoints: (String, St
         override fun bind(viewHolderParams: RecyclerViewHolderParameters, position: Int) = with(binding) {
             playerName.text = viewHolderParams.player
             playerWord.text = viewHolderParams.word
-            playerPoints.text = viewHolderParams.points.toString().padStart(2, ' ')
+            playerPoints.text = viewHolderParams.points.toString()
             reviewWordContainer.setBackgroundColor(
                 ContextCompat.getColor(
                     itemView.context,
                     getBackgroundColor(position)
                 )
             )
+
+            if (viewHolderParams.points == 10) {
+                buttonAdd.isEnabled = false
+                buttonSubstract.isEnabled = true
+            } else if (viewHolderParams.points == 0){
+                buttonAdd.isEnabled = true
+                buttonSubstract.isEnabled = false
+            }
+
             buttonAdd.setOnClickListener {
                 onChangeRoundPoints.invoke("add", viewHolderParams.player, getCategoryIndex(position))
             }
