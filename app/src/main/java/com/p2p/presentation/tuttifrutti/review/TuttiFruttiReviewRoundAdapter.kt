@@ -101,12 +101,19 @@ class TuttiFruttiReviewRoundAdapter(private val onChangeRoundPoints: (String, St
                 )
             )
 
-            if (viewHolderParams.points == 10) {
-                buttonAdd.isEnabled = false
-                buttonSubstract.isEnabled = true
-            } else if (viewHolderParams.points == 0){
-                buttonAdd.isEnabled = true
-                buttonSubstract.isEnabled = false
+            when (viewHolderParams.points) {
+                10 -> {
+                    buttonAdd.isEnabled = false
+                    buttonSubstract.isEnabled = true
+                }
+                0 -> {
+                    buttonAdd.isEnabled = true
+                    buttonSubstract.isEnabled = false
+                }
+                else -> {
+                    buttonAdd.isEnabled = true
+                    buttonSubstract.isEnabled = true
+                }
             }
 
             buttonAdd.setOnClickListener {

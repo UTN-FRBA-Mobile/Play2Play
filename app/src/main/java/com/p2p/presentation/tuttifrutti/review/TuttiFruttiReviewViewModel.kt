@@ -24,7 +24,7 @@ class TuttiFruttiReviewViewModel :
     private val firstPlayer = FinishedRoundInfo("Lisa",
         mapOf("Nombres" to "Adela", "Animales" to "Aguila", "Comidas" to "Alfajor") as LinkedHashMap<Category, String>, true)
     private val secondPlayer = FinishedRoundInfo("Homero",
-        mapOf("Nombres" to "Oso", "Animales" to "A", "Comidas" to "") as LinkedHashMap<Category, String>, false)
+        mapOf("Nombres" to "Oso", "Animales" to "A", "Comidas" to "Algo asi como una comida ponele, pero no se cual") as LinkedHashMap<Category, String>, false)
     private val thirdPlayer = FinishedRoundInfo("Bart",
         mapOf("Nombres" to "Ambar", "Animales" to "Anguila", "Comidas" to "Alfajor") as LinkedHashMap<Category, String>, false)
 
