@@ -57,7 +57,7 @@
         android:paddingTop="@dimen/small"
         android:textSize="@dimen/font_huge"
         android:textStyle="bold"
-        android:textColor="@color/green_eden"
+        android:textColor="@color/coral"
         android:textAlignment="center"
         app:layout_constraintEnd_toStartOf="@id/button_add"
         app:layout_constraintTop_toTopOf="parent"

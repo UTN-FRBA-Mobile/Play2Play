@@ -47,8 +47,10 @@ class TuttiFruttiReviewFragment : BaseGameFragment<
     override fun setupObservers() {
         with(gameViewModel) {
             actualRound.observe(viewLifecycleOwner) {
-                gameBinding.round.text =
-                    resources.getString(R.string.tf_round, it.number, totalRounds.value)
+                gameBinding.actualRound.text =
+                    resources.getString(R.string.tf_actual_round, it.number)
+                gameBinding.totalRounds.text =
+                    resources.getString(R.string.tf_total_rounds, totalRounds.value)
                 gameBinding.letter.text = resources.getString(R.string.tf_letter, it.letter)
             }
         }

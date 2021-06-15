@@ -10,22 +10,53 @@
     <include layout="@layout/view_guidelines" />
 
     <TextView
-        android:id="@+id/letter"
+        android:id="@+id/text_letter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="@id/guideline_top"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
-        android:text="@string/tf_letter"
+        android:text="@string/tf_text_letter"
         style="@style/P2P_Title" />
 
     <TextView
-        android:id="@+id/round"
+        android:id="@+id/letter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/medium"
+        app:layout_constraintTop_toTopOf="@id/guideline_top"
+        app:layout_constraintStart_toEndOf="@id/text_letter"
+        android:text="@string/tf_letter"
+        android:textColor="@color/coral"
+        style="@style/P2P_Title" />
+
+    <TextView
+        android:id="@+id/round_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/medium"
+        app:layout_constraintTop_toTopOf="@id/guideline_top"
+        app:layout_constraintEnd_toStartOf="@id/actual_round"
+        android:text="@string/tf_round_text"
+        style="@style/P2P_Title" />
+
+    <TextView
+        android:id="@+id/actual_round"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/guideline_top"
+        app:layout_constraintEnd_toStartOf="@id/total_rounds"
+        android:text="@string/tf_actual_round"
+        android:textColor="@color/coral"
+        style="@style/P2P_Title" />
+
+    <TextView
+        android:id="@+id/total_rounds"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/medium"
         app:layout_constraintTop_toTopOf="@id/guideline_top"
         app:layout_constraintEnd_toStartOf="@id/guideline_end"
-        android:text="@string/tf_round"
+        android:text="@string/tf_total_rounds"
         style="@style/P2P_Title" />
 
     <TextView
@@ -36,7 +67,9 @@
         app:layout_constraintTop_toBottomOf="@id/letter"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
         android:text="@string/tf_enough_player"
+        android:textColor="@color/green_eden"
         style="@style/P2P_Description" />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/review_categories_recycler"
