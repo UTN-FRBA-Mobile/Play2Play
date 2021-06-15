@@ -13,12 +13,6 @@ import com.p2p.model.tuttifrutti.FinishedRoundPointsInfo
 import com.p2p.presentation.tuttifrutti.create.categories.Category
 import com.p2p.utils.isEven
 
-// En el OnClick de los puntajes voy agregando o restando a un objeto que me guarde el estado (mapa review points)
-// Cuando toco continue se manda ese objeto o un resumen de ese objeto
-
-// Lista de puntos por persona, mando mensaje al viewmodel de finishReview  --> ANTES updetear total de puntos
-// Y el viewmodel va a mandar mensaje a los demás de iniciar siguiente ronda (esto esta en otra tarea)
-
 /** The adapter used to show the list of round reviews. */
 class TuttiFruttiReviewRoundAdapter(private val onChangeRoundPoints: (String, String, Int) -> Unit) :
     RecyclerView.Adapter<TuttiFruttiReviewRoundAdapter.RecyclerViewHolder>() {

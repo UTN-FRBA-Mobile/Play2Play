@@ -77,8 +77,13 @@ class TuttiFruttiReviewViewModel :
         return 0
     }
 
+    private fun calculateTotalRoundPoints() {
+        _finishedRoundPointsInfo.value!!.forEach { it.totalPoints = it.wordsPoints.sum() }
+    }
+
     /** Next view to show when Continue button is pressed. */
     fun sendRoundPoints() {
+        calculateTotalRoundPoints()
         // TODO: send a finalized round revision event with the finalizedRoundPointsInfo.
         // The server saves this and accumulates these points. Then we continue to the next round,
         // or we finish the game and go to view the final points
