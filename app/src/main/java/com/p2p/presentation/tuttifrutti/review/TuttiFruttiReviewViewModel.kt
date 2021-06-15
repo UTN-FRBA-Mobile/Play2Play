@@ -37,8 +37,17 @@ class TuttiFruttiReviewViewModel :
         _continueButtonEnabled.value = false
     }
 
+    //[categoryIndex] = previousPoints.plus(5)
 
-    fun onChangeRoundPoints() { // TODO : on click? ndea
+    fun onChangeRoundPoints(action: String, player: String, categoryIndex: Int) {
+        if(action == "add") {
+            finishedRoundPointsInfo.value?.find { it.player == player }!!.wordsPoints[categoryIndex].plus(5)
+        } else {
+            finishedRoundPointsInfo.value?.find { it.player == player }!!.wordsPoints[categoryIndex].minus(5)
+        }
+
+        // TODO: No se actualiza, ver que puede ser :(
+        _finishedRoundPointsInfo.value = finishedRoundPointsInfo.value
     }
 
     /** Process the finishedRoundInfo list to take the base points for all the players */

@@ -20,11 +20,15 @@ import com.p2p.utils.isEven
 // Y el viewmodel va a mandar mensaje a los demás de iniciar siguiente ronda (esto esta en otra tarea)
 
 /** The adapter used to show the list of round reviews. */
-class TuttiFruttiReviewRoundAdapter(private val onChangeRoundPoints: () -> Unit) :
+class TuttiFruttiReviewRoundAdapter(private val onChangeRoundPoints: (String, String, Int) -> Unit) :
     RecyclerView.Adapter<TuttiFruttiReviewRoundAdapter.RecyclerViewHolder>() {
 
     var finishedRoundInfo = listOf<FinishedRoundInfo>()
     var finishedRoundPointsInfo = listOf<FinishedRoundPointsInfo>()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     override fun getItemViewType(position: Int): Int {
         // If the the modulus number of players plus one is zero, then we get the category title view
@@ -50,11 +54,10 @@ class TuttiFruttiReviewRoundAdapter(private val onChangeRoundPoints: () -> Unit)
         )
     }
 
-    // ver que vista estoy bindeando, segun la vista que tenga (titulo, o palabra/persona) tengo que mostrar sus elemntos
     override fun onBindViewHolder(holder: RecyclerViewHolder, position: Int) {
         val viewIndex = getItemViewType(position)
         val viewHolderParams = RecyclerViewHolderParameters()
-        val categoryIndex = position / (finishedRoundInfo.count() + 1)
+        val categoryIndex = getCategoryIndex(position)
         val viewCategory = getCategory(categoryIndex)
 
         if (viewIndex == 0) {
@@ -79,6 +82,8 @@ class TuttiFruttiReviewRoundAdapter(private val onChangeRoundPoints: () -> Unit)
         return finishedRoundInfo.first().categoriesWords.keys.toTypedArray()[categoryIndex]
     }
 
+    private fun getCategoryIndex(actualPosition: Int) = actualPosition / (finishedRoundInfo.count() + 1)
+
     private fun getBackgroundColor(index: Int) =
         if (index.isEven()) R.color.colorBackground else R.color.wild_sand
 
@@ -102,11 +107,10 @@ class TuttiFruttiReviewRoundAdapter(private val onChangeRoundPoints: () -> Unit)
                 )
             )
             buttonAdd.setOnClickListener {
-                //onSelectedChanges.invoke(category)
+                onChangeRoundPoints.invoke("add", viewHolderParams.player, getCategoryIndex(position))
             }
             buttonSubstract.setOnClickListener {
-                finishedRoundPointsInfo.find { it.player == viewHolderParams.player }!!.wordsPoints
-                //onSelectedChanges.invoke(category)
+                onChangeRoundPoints.invoke("substract", viewHolderParams.player, getCategoryIndex(position))
             }
         }
     }
