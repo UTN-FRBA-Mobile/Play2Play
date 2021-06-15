@@ -35,7 +35,7 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
         FragmentPlayTuttiFruttiBinding::inflate
 
     override fun initValues() {
-        gameViewModel.generateNextRoundValues()
+        gameViewModel.startRound()
     }
 
     override fun initUI() {
@@ -50,7 +50,7 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
     }
 
     private fun setUpCategoriesList(list: LinearLayout) = with(gameViewModel) {
-        selectedCategories.observe(viewLifecycleOwner) {
+        categoriesToPlay.observe(viewLifecycleOwner) {
             it.map { category ->
                 with(PlayCategoryItemBinding.inflate(layoutInflater)) {
                     input.hint = category

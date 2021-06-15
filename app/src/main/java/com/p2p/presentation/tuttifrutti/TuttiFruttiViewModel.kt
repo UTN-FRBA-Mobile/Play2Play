@@ -26,37 +26,46 @@ abstract class TuttiFruttiViewModel(
     Game.TUTTI_FRUTTI
 ) {
 
-    /**Data for all game*/
+    /** Data for all game */
     private val roundsInfo = mutableListOf<FinishedRoundInfo>()
-    private val lettersByRound: List<Char> by lazy { getRandomLetters() }
+    protected lateinit var lettersByRound: List<Char>
 
-    private val _totalRounds = MutableLiveData<Int>()
+    protected val _totalRounds = MutableLiveData<Int>()
     val totalRounds: LiveData<Int> = _totalRounds
 
-    private val _selectedCategories = MutableLiveData<List<Category>>()
-    val selectedCategories: LiveData<List<Category>> = _selectedCategories
+    private val _categoriesToPlay = MutableLiveData<List<Category>>()
+    val categoriesToPlay: LiveData<List<Category>> = _categoriesToPlay
 
     /** Data for the actual round. */
     private val _actualRound = MutableLiveData<RoundInfo>()
     val actualRound: LiveData<RoundInfo> = _actualRound
 
-    /** Set the categories selected by the user when creating the game. */
-    fun setSelectedCategories(categories: List<Category>) {
-        _selectedCategories.value = categories
+    /** Set the categories selected by the user when creating the game . */
+    fun setCategoriesToPlay(categories: List<Category>) {
+        _categoriesToPlay.value = categories
     }
 
     fun setTotalRounds(totalRounds: Int) {
         _totalRounds.value = totalRounds
     }
 
-    private fun getRandomLetters(): List<Char> =
-        availableLetters.toList().shuffled().take(totalRounds.requireValue())
+    fun startRound() {
+        generateNextRoundValues()
+    }
 
+    // TODO: this should be called from the server lobby when startGame button is clicked.
+    abstract fun startGame()
 
-    /**On Playing game*/
+    /** On Playing game */
     fun finishRound(categoriesWithValues: Map<Category, String>) {
         // roundsInfo.add(actualRound.requireValue().finish(categoriesWithValues))
         goToReviewOrWait()
+    }
+
+    private fun generateNextRoundValues() {
+        val actualRoundNumber: Int = actualRound.value?.number?.plus(1) ?: 1
+        _actualRound.value =
+            RoundInfo(lettersByRound[actualRoundNumber.minus(1)], actualRoundNumber)
     }
 
     //TODO this should be called after review
@@ -71,15 +80,6 @@ abstract class TuttiFruttiViewModel(
         //TODO throw when done
         // dispatchSingleTimeEvent(GoToReview)
     }
-
-    fun generateNextRoundValues() {
-        //TODO this should be recieved by the server on the client, and in the server is ok
-        //See how to do this logic
-        val actualRoundNumber: Int = actualRound.value?.number?.plus(1) ?: 1
-        _actualRound.value =
-            RoundInfo(lettersByRound[actualRoundNumber.minus(1)], actualRoundNumber)
-    }
-
 
     companion object {
         const val availableLetters = "ABCDEFGHIJKLMNOPRSTUVY"
