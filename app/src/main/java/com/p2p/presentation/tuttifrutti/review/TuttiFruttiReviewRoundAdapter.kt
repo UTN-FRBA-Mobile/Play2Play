@@ -3,7 +3,6 @@ package com.p2p.presentation.tuttifrutti.review
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.p2p.R
@@ -21,10 +20,11 @@ import com.p2p.utils.isEven
 // Y el viewmodel va a mandar mensaje a los demás de iniciar siguiente ronda (esto esta en otra tarea)
 
 /** The adapter used to show the list of round reviews. */
-class TuttiFruttiReviewRoundAdapter(
-    private val finishedRoundInfo: List<FinishedRoundInfo>,
-    private val finishedRoundPointsInfo: LiveData<List<FinishedRoundPointsInfo>>) :
+class TuttiFruttiReviewRoundAdapter(private val onChangeRoundPoints: () -> Unit) :
     RecyclerView.Adapter<TuttiFruttiReviewRoundAdapter.RecyclerViewHolder>() {
+
+    var finishedRoundInfo = listOf<FinishedRoundInfo>()
+    var finishedRoundPointsInfo = listOf<FinishedRoundPointsInfo>()
 
     override fun getItemViewType(position: Int): Int {
         // If the the modulus number of players plus one is zero, then we get the category title view
@@ -62,7 +62,7 @@ class TuttiFruttiReviewRoundAdapter(
         } else {
             viewHolderParams.player = finishedRoundInfo[viewIndex - 1].player
             viewHolderParams.word = finishedRoundInfo[viewIndex - 1].categoriesWords[viewCategory]!!
-            viewHolderParams.points = finishedRoundPointsInfo.value!!.find {
+            viewHolderParams.points = finishedRoundPointsInfo.find {
                 it.player == viewHolderParams.player
             }!!.wordsPoints[categoryIndex]
         }
@@ -71,10 +71,9 @@ class TuttiFruttiReviewRoundAdapter(
     }
 
     // Return the number of players multiplied by the number of categories plus the number of categories (for the titles)
-    override fun getItemCount(): Int {
-        val numberOfCategories = finishedRoundInfo.first().categoriesWords.count()
-        return finishedRoundInfo.count() * numberOfCategories + numberOfCategories
-    }
+    override fun getItemCount() = finishedRoundInfo.count() * numberOfCategories() + numberOfCategories()
+
+    private fun numberOfCategories() = finishedRoundInfo.first().categoriesWords.count()
 
     private fun getCategory(categoryIndex: Int): Category {
         return finishedRoundInfo.first().categoriesWords.keys.toTypedArray()[categoryIndex]
@@ -102,6 +101,13 @@ class TuttiFruttiReviewRoundAdapter(
                     getBackgroundColor(position)
                 )
             )
+            buttonAdd.setOnClickListener {
+                //onSelectedChanges.invoke(category)
+            }
+            buttonSubstract.setOnClickListener {
+                finishedRoundPointsInfo.find { it.player == viewHolderParams.player }!!.wordsPoints
+                //onSelectedChanges.invoke(category)
+            }
         }
     }
 

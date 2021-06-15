@@ -38,11 +38,12 @@ class TuttiFruttiReviewFragment : BaseGameFragment<
 
     private fun setupReviewCategoriesRecycler() = with(gameBinding.reviewCategoriesRecycler) {
         layoutManager = LinearLayoutManager(context)
-        adapter = TuttiFruttiReviewRoundAdapter(viewModel.finishedRoundInfo, viewModel.finishedRoundPointsInfo).also {
+        adapter = TuttiFruttiReviewRoundAdapter(viewModel::onChangeRoundPoints).also {
             this@TuttiFruttiReviewFragment.tuttiFruttiReviewRoundAdapter = it
         }
     }
 
+    //viewModel.finishedRoundInfo, viewModel.finishedRoundPointsInfo
     override fun setupObservers() {
         with(gameViewModel) {
             actualRound.observe(viewLifecycleOwner) {
@@ -51,9 +52,16 @@ class TuttiFruttiReviewFragment : BaseGameFragment<
                 gameBinding.letter.text = resources.getString(R.string.tf_letter, it.letter)
             }
         }
-        gameBinding.enoughPlayer.text =
-            resources.getString(R.string.tf_enough_player,
-                                viewModel.finishedRoundInfo.find { it.saidEnough }!!.player)
+        with(viewModel) {
+            finishedRoundPointsInfo.observe(viewLifecycleOwner) {
+                tuttiFruttiReviewRoundAdapter.finishedRoundPointsInfo = it
+            }
+            finishedRoundInfo.observe(viewLifecycleOwner) { finishedRoundInfo ->
+                tuttiFruttiReviewRoundAdapter.finishedRoundInfo = finishedRoundInfo
+                gameBinding.enoughPlayer.text =
+                    resources.getString(R.string.tf_enough_player, finishedRoundInfo.find { it.saidEnough }!!.player)
+            }
+        }
 
         super.setupObservers()
     }
