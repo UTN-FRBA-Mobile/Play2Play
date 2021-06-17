@@ -5,32 +5,30 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.p2p.databinding.FragmentServerLobbyBinding
+import com.p2p.databinding.FragmentTuttiFruttiServerLobbyBinding
 import com.p2p.presentation.basegame.BaseGameFragment
 import com.p2p.presentation.tuttifrutti.TuttiFruttiViewModel
 
-class ServerLobbyFragment: BaseGameFragment<
-        FragmentServerLobbyBinding,
+class ServerTuttiFruttiLobbyFragment: BaseGameFragment<
+        FragmentTuttiFruttiServerLobbyBinding,
         LobbyEvent,
-        ServerLobbyViewModel,
+        ServerTuttiFruttiLobbyViewModel,
         TuttiFruttiViewModel>() {
     override val gameViewModel: TuttiFruttiViewModel by activityViewModels()
 
-    override val viewModel: ServerLobbyViewModel by viewModels()
+    override val viewModel: ServerTuttiFruttiLobbyViewModel by viewModels()
 
-    override val gameInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentServerLobbyBinding =
-        FragmentServerLobbyBinding::inflate
+    override val gameInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentTuttiFruttiServerLobbyBinding =
+        FragmentTuttiFruttiServerLobbyBinding::inflate
 
-    private lateinit var connectedPlayersAdapter: ConnectedPlayersAdapter
+    private lateinit var connectedPlayersTuttiFruttiAdapter: ConnectedPlayersTuttiFruttiAdapter
 
     override fun initUI() {
         super.initUI()
         gameBinding.startGame.isEnabled = false
         setupPlayersRecycler()
         gameBinding.startGame.setOnClickListener {
-            gameViewModel.closeDiscovery()
             gameViewModel.startGame()
-            gameViewModel.goToPlay()
         }
     }
 
@@ -38,26 +36,21 @@ class ServerLobbyFragment: BaseGameFragment<
         super.setupObservers()
         with(gameViewModel) {
             players.observe(viewLifecycleOwner) {
-                connectedPlayersAdapter.players = it
+                connectedPlayersTuttiFruttiAdapter.players = it
                 if (it.size >= LOBBY_MIN_SIZE) gameBinding.startGame.isEnabled = true
-            }
-        }
-        with(viewModel) {
-            goToPlayButtonEnabled.observe(viewLifecycleOwner) {
-                gameBinding.startGame.isEnabled = it
             }
         }
     }
 
     private fun setupPlayersRecycler() = with(gameBinding.playersRecycler) {
         layoutManager = LinearLayoutManager(context)
-        adapter = ConnectedPlayersAdapter().also {
-            this@ServerLobbyFragment.connectedPlayersAdapter = it
+        adapter = ConnectedPlayersTuttiFruttiAdapter().also {
+            this@ServerTuttiFruttiLobbyFragment.connectedPlayersTuttiFruttiAdapter = it
         }
     }
 
     companion object {
-        fun newInstance() = ServerLobbyFragment()
+        fun newInstance() = ServerTuttiFruttiLobbyFragment()
 
         const val LOBBY_MIN_SIZE = 1
     }

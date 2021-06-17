@@ -35,6 +35,8 @@ class ServerTuttiFruttiViewModel(
     override fun startGame() {
         lettersByRound = getRandomLetters()
         connection.write(TuttiFruttiStartGame(lettersByRound, categoriesToPlay.requireValue()))
+        closeDiscovery()
+        goToPlay()
     }
 
     private fun getRandomLetters(): List<Char> =

@@ -95,7 +95,7 @@ abstract class GameViewModel(
 
     fun closeDiscovery() {
         when(connection) {
-            is BluetoothServer -> (connection as BluetoothServer).stopAccepting()
+            is BluetoothServer -> (connection as BluetoothServer).stopAccepting() //TODO prettify
             else -> Unit
         }
     }

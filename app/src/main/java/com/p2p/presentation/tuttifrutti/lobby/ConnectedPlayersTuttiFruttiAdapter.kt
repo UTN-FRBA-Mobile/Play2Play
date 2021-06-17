@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.p2p.databinding.ViewConnectedUserBinding
 
-class ConnectedPlayersAdapter: RecyclerView.Adapter<ConnectedPlayersAdapter.ViewHolder>() {
+class ConnectedPlayersTuttiFruttiAdapter: RecyclerView.Adapter<ConnectedPlayersTuttiFruttiAdapter.ViewHolder>() {
 
     var players = listOf<String>()
         set(value) {
@@ -32,8 +32,8 @@ class ConnectedPlayersAdapter: RecyclerView.Adapter<ConnectedPlayersAdapter.View
     inner class ViewHolder(private val binding: ViewConnectedUserBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(category: String) = with(binding) {
-            name.text = category
+        fun bind(connectedPlayer: String) = with(binding) {
+            name.text = connectedPlayer
         }
     }
 }

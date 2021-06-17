@@ -16,10 +16,9 @@
         android:layout_marginStart="@dimen/medium"
         android:paddingTop="@dimen/tiniest"
         android:text="@string/lobby_connected_players"
-        android:textColor="@color/colorLink"
-        app:layout_constraintTop_toBottomOf="@id/progressBar_cyclic"
+        android:textColor="@color/green_black"
+        app:layout_constraintTop_toTopOf="@id/guideline_top"
         app:layout_constraintStart_toStartOf="@id/guideline_begin" />
-    <!-- PR REVIEW: esto no aplica un margin top, alguien sabe por que?-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/players_recycler"
@@ -43,7 +42,5 @@
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
         app:layout_constraintTop_toBottomOf="@id/instructions_container" />
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
