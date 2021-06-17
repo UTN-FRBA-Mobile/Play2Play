@@ -34,6 +34,7 @@
     <dimen name="screen_padding">@dimen/medium_extra</dimen>
     <dimen name="divider_height">1dp</dimen>
     <dimen name="checkbox_icon_size">26dp</dimen>
+    <dimen name="progress_bar_size">100dp</dimen>
 
     <!-- Splash screen -->
     <dimen name="logo_size">@dimen/huge_extra</dimen>

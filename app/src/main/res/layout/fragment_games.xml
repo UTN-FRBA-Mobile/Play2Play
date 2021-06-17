@@ -35,6 +35,7 @@
             android:id="@+id/user_name_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="text"
             android:maxLines="1"
             android:paddingStart="@dimen/small"
             android:paddingEnd="@dimen/small" />
@@ -75,12 +76,12 @@
 
     <Button
         android:id="@+id/join_button"
+        style="@style/Widget.P2P.Button.SecondOptionButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/games_join"
         app:layout_constraintBottom_toBottomOf="@id/guideline_bottom"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
-        app:layout_constraintStart_toStartOf="@id/guideline_begin"
-        style="@style/Widget.P2P.Button.SecondOptionButton" />
+        app:layout_constraintStart_toStartOf="@id/guideline_begin" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
