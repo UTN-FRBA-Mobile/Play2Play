@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground">
@@ -11,75 +10,80 @@
 
     <TextView
         android:id="@+id/text_letter"
+        style="@style/P2P_Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="@id/guideline_top"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
-        android:text="@string/tf_text_letter"
-        style="@style/P2P_Title" />
+        android:text="@string/tf_text_letter" />
 
     <TextView
         android:id="@+id/letter"
+        style="@style/P2P_Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingStart="@dimen/medium"
         app:layout_constraintTop_toTopOf="@id/guideline_top"
         app:layout_constraintStart_toEndOf="@id/text_letter"
         android:text="@string/tf_letter"
-        android:textColor="@color/coral"
-        style="@style/P2P_Title" />
+        android:textColor="@color/coral" />
 
     <TextView
         android:id="@+id/round_text"
+        style="@style/P2P_Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/medium"
         app:layout_constraintTop_toTopOf="@id/guideline_top"
         app:layout_constraintEnd_toStartOf="@id/actual_round"
-        android:text="@string/tf_round_text"
-        style="@style/P2P_Title" />
+        android:text="@string/tf_round_text" />
 
     <TextView
         android:id="@+id/actual_round"
+        style="@style/P2P_Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="@id/guideline_top"
         app:layout_constraintEnd_toStartOf="@id/total_rounds"
         android:text="@string/tf_actual_round"
-        android:textColor="@color/coral"
-        style="@style/P2P_Title" />
+        android:textColor="@color/coral" />
 
     <TextView
         android:id="@+id/total_rounds"
+        style="@style/P2P_Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/medium"
         app:layout_constraintTop_toTopOf="@id/guideline_top"
         app:layout_constraintEnd_toStartOf="@id/guideline_end"
-        android:text="@string/tf_total_rounds"
-        style="@style/P2P_Title" />
+        android:text="@string/tf_total_rounds" />
 
-    <LinearLayout
-        android:id="@+id/categories_list"
-        android:layout_width="0dp"
+    <ScrollView
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:orientation="vertical"
-        android:layout_marginTop="@dimen/big"
-        android:layout_marginBottom="@dimen/large"
+        android:requiresFadingEdge="vertical"
         app:layout_constraintBottom_toTopOf="@id/finish_round_button"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
-        app:layout_constraintTop_toBottomOf="@id/letter"/>
+        app:layout_constraintTop_toBottomOf="@id/letter">
+
+        <LinearLayout
+            android:id="@+id/categories_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/screen_padding"
+            android:paddingBottom="@dimen/medium_extra" />
+    </ScrollView>
 
     <Button
         android:id="@+id/finish_round_button"
+        style="@style/Widget.P2P.Button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="@string/tf_finish_round"
         app:layout_constraintBottom_toBottomOf="@id/guideline_bottom"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
-        app:layout_constraintStart_toStartOf="@id/guideline_begin"
-        style="@style/Widget.P2P.Button" />
-
+        app:layout_constraintStart_toStartOf="@id/guideline_begin" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

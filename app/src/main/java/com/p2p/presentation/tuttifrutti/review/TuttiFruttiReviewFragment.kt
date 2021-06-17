@@ -70,6 +70,5 @@ class TuttiFruttiReviewFragment : BaseGameFragment<
 
         /** Create a new instance of the [TuttiFruttiReviewFragment]. */
         fun newInstance() = TuttiFruttiReviewFragment()
-
     }
 }

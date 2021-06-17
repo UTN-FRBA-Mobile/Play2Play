@@ -8,8 +8,8 @@ import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.userInfo.UserSession
 import com.p2p.model.base.message.ClientHandshakeMessage
+import com.p2p.model.base.message.Conversation
 import com.p2p.model.base.message.Message
-import com.p2p.model.base.message.MessageReceived
 import com.p2p.model.base.message.ServerHandshakeMessage
 import com.p2p.presentation.base.BaseViewModel
 import com.p2p.presentation.extensions.requireValue
@@ -28,14 +28,27 @@ abstract class GameViewModel(
 
     protected lateinit var connection: BluetoothConnection
 
+    /**
+     * Contains all the connected players recognizing them by a [Long] id.
+     *
+     * The server will have different ids for each client, but the clients will have all players
+     * with the same id (the server id). Because of that the client should never try to recognize a player by their id.
+     */
+    protected var connectedPlayers = emptyList<Pair<Long, String>>()
+        set(value) {
+            field = value
+            _players.value = value.map { it.second }
+        }
+
     private val _game = MutableLiveData<Game>()
     val game: LiveData<Game> = _game
 
-    private val _players = MutableLiveData(listOf(userName))
+    private val _players = MutableLiveData(emptyList<String>())
     val players: LiveData<List<String>> = _players
 
     init {
         _game.value = theGame
+        connectedPlayers = listOf(MYSELF_PEER_ID to userName)
         createOrJoin()
         startConnection() // TODO: This should be called when the creation is finished, from the Lobby
     }
@@ -46,15 +59,16 @@ abstract class GameViewModel(
      * Override if needed but always call super.
      */
     @CallSuper
-    open fun receiveMessage(messageReceived: MessageReceived) {
-        when (val message = messageReceived.message) {
+    open fun receiveMessage(conversation: Conversation) {
+        when (val message = conversation.lastMessage) {
             is ClientHandshakeMessage -> {
-                val actualPlayers = players.requireValue()
-                if (isServer()) connection.answer(messageReceived, ServerHandshakeMessage(actualPlayers))
-                _players.value = actualPlayers + message.name
+                if (isServer()) {
+                    connection.talk(conversation, ServerHandshakeMessage(connectedPlayers.map { it.second }))
+                }
+                connectedPlayers = connectedPlayers + (conversation.peer to message.name)
             }
             is ServerHandshakeMessage -> {
-                _players.value = players.requireValue() + message.players
+                connectedPlayers = connectedPlayers + message.players.map { conversation.peer to it }
             }
         }
     }
@@ -64,7 +78,7 @@ abstract class GameViewModel(
      *
      * Override if needed.
      */
-    open fun onSentSuccessfully(message: Message) {}
+    open fun onSentSuccessfully(conversation: Conversation) {}
 
     /**
      * Invoked when there was an error sending a message.
@@ -96,11 +110,18 @@ abstract class GameViewModel(
 
     protected fun isServer() = connectionType.type == GameConnectionType.SERVER
 
+    protected fun getPlayerById(playerId: Long) = connectedPlayers.first { it.first == playerId }.second
+
     private fun createOrJoin() {
         if (isServer()) {
             dispatchSingleTimeEvent(GoToCreate)
         } else {
             dispatchSingleTimeEvent(GoToClientLobby)
         }
+    }
+
+    companion object {
+
+        const val MYSELF_PEER_ID = -1L
     }
 }
