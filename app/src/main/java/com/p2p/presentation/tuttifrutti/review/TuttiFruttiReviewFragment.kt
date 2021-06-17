@@ -59,14 +59,17 @@ class TuttiFruttiReviewFragment : BaseGameFragment<
                 gameBinding.enoughPlayer.text =
                     resources.getString(R.string.tf_enough_player, finishedRoundInfo.find { it.saidEnough }!!.player)
             }
-        }
-        with(viewModel) {
-            finishedRoundPointsInfo.observe(viewLifecycleOwner) {
+            finishedRoundPointsInfos.observe(viewLifecycleOwner) {
                 tuttiFruttiReviewRoundAdapter.finishedRoundPointsInfo = it
+                viewModel.finishedRoundPointsInfo = it
             }
         }
 
         super.setupObservers()
+    }
+
+    override fun onEvent(event: TuttiFruttiReviewEvents) = when (event) {
+        FinishRoundReview -> gameViewModel.setFinishedRoundPointsInfos(viewModel.finishedRoundPointsInfo)
     }
 
     companion object {

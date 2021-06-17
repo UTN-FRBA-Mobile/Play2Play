@@ -12,12 +12,10 @@ import java.text.Normalizer
 class TuttiFruttiReviewViewModel :
     BaseViewModel<TuttiFruttiReviewEvents>() {
 
-    /** List with the finished round review points */
-    private val _finishedRoundPointsInfo = MutableLiveData(listOf<FinishedRoundPointsInfo>())
-    val finishedRoundPointsInfo: LiveData<List<FinishedRoundPointsInfo>> = _finishedRoundPointsInfo
+    lateinit var finishedRoundPointsInfo: List<FinishedRoundPointsInfo>
 
     fun onChangeRoundPoints(action: String, player: String, categoryIndex: Int) {
-        val updatedFinishedRoundPoints = finishedRoundPointsInfo.value!!.toMutableList()
+        val updatedFinishedRoundPoints = finishedRoundPointsInfo.toMutableList()
 
         if(action == "add") {
             updatedFinishedRoundPoints.find { it.player == player }!!.wordsPoints[categoryIndex] += 5
@@ -25,7 +23,7 @@ class TuttiFruttiReviewViewModel :
         } else {
             updatedFinishedRoundPoints.find { it.player == player }!!.wordsPoints[categoryIndex] -= 5
         }
-        _finishedRoundPointsInfo.value = updatedFinishedRoundPoints
+        finishedRoundPointsInfo = updatedFinishedRoundPoints
     }
 
     /** Process the finishedRoundInfo list to take the base points for all the players */
@@ -43,7 +41,7 @@ class TuttiFruttiReviewViewModel :
             roundInitialPoints.add(playerPoints)
         }
 
-        _finishedRoundPointsInfo.value = roundInitialPoints
+        finishedRoundPointsInfo = roundInitialPoints
     }
 
     private fun getCategoryWords(category: Category, finishedRoundInfos: List<FinishedRoundInfo>) : List<String> =
@@ -61,14 +59,12 @@ class TuttiFruttiReviewViewModel :
     }
 
     private fun calculateTotalRoundPoints() {
-        _finishedRoundPointsInfo.value!!.forEach { it.totalPoints = it.wordsPoints.sum() }
+        finishedRoundPointsInfo.forEach { it.totalPoints = it.wordsPoints.sum() }
     }
 
     /** Next view to show when Continue button is pressed. */
     fun sendRoundPoints() {
         calculateTotalRoundPoints()
-        // TODO: send a finalized round revision event with the finalizedRoundPointsInfo.
-        // The server saves this and accumulates these points. Then we continue to the next round,
-        // or we finish the game and go to view the final points
+        dispatchSingleTimeEvent(FinishRoundReview)
     }
 }
