@@ -1,4 +1,59 @@
 package com.p2p.presentation.tuttifrutti.finalscore
 
-class FinalScoreTuttiFruttiFragment {
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.p2p.R
+import com.p2p.databinding.FragmentTuttiFruttiFinalScoreBinding
+import com.p2p.presentation.basegame.BaseGameFragment
+import com.p2p.presentation.extensions.requireValue
+import com.p2p.presentation.tuttifrutti.TuttiFruttiViewModel
+
+class FinalScoreTuttiFruttiFragment : BaseGameFragment<
+        FragmentTuttiFruttiFinalScoreBinding,
+        TuttiFruttiFinalScoreEvent,
+        FinalScoreTuttiFruttiViewModel,
+        TuttiFruttiViewModel>() {
+    override val gameViewModel: TuttiFruttiViewModel by activityViewModels()
+
+    override val gameInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentTuttiFruttiFinalScoreBinding =
+        FragmentTuttiFruttiFinalScoreBinding::inflate
+
+    override val viewModel: FinalScoreTuttiFruttiViewModel by viewModels()
+
+    private lateinit var tuttiFruttiFinalScoreAdapter: TuttiFruttiFinalScoreAdapter
+
+    override fun initUI() {
+        super.initUI()
+        setupObservers()
+        setupScoreRecycler()
+        gameBinding.exitButton.setOnClickListener { viewModel.exit() }
+    }
+
+    override fun setupObservers() = with(viewModel) {
+        super.setupObservers()
+        finalScores.observe(viewLifecycleOwner) {
+            tuttiFruttiFinalScoreAdapter.results = it
+            val players = finalScores.requireValue()
+            gameBinding.winner.text = resources.getString(R.string.tf_winner, players[0].player)
+        }
+    }
+
+    private fun setupScoreRecycler() { with(gameBinding.playersScores) {
+            layoutManager = LinearLayoutManager(context)
+            adapter = TuttiFruttiFinalScoreAdapter().also {
+                this@FinalScoreTuttiFruttiFragment.tuttiFruttiFinalScoreAdapter = it
+            }
+        }
+    }
+
+    override fun onEvent(event: TuttiFruttiFinalScoreEvent) = when(event){
+        is EndTuttiFruttiGame -> requireActivity().finish()
+    }
+
+    companion object {
+        fun newInstance() = FinalScoreTuttiFruttiFragment()
+    }
 }

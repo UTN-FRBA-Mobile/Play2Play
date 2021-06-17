@@ -1,13 +1,24 @@
 package com.p2p.presentation.tuttifrutti.finalscore
 
+import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.p2p.R
+import com.p2p.databinding.ViewCategoryItemBinding
+import com.p2p.databinding.ViewTuttiFruttiFinalScoreItemBinding
 import com.p2p.presentation.tuttifrutti.create.categories.TuttiFruttiCategoriesAdapter
 import com.p2p.utils.isEven
 
 class TuttiFruttiFinalScoreAdapter :
     RecyclerView.Adapter<TuttiFruttiFinalScoreAdapter.ViewHolder>() {
+
+    var results = listOf<TuttiFruttiFinalScore>()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     private fun getBackgroundColor(index: Int) =
         if (index.isEven()) R.color.colorBackground else R.color.wild_sand
@@ -16,16 +27,36 @@ class TuttiFruttiFinalScoreAdapter :
         parent: ViewGroup,
         viewType: Int
     ): TuttiFruttiFinalScoreAdapter.ViewHolder {
-        TODO("Not yet implemented")
+        return ViewHolder(
+            ViewTuttiFruttiFinalScoreItemBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: TuttiFruttiFinalScoreAdapter.ViewHolder, position: Int) {
-        TODO("Not yet implemented")
+        return holder.bind(results[position], position)
     }
 
-    override fun getItemCount(): Int {
-        TODO("Not yet implemented")
+    override fun getItemCount() = results.size
+
+    inner class ViewHolder(private val binding: ViewTuttiFruttiFinalScoreItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        /** Show the given [category] into the view. */
+        fun bind(userFinalScore: TuttiFruttiFinalScore, position: Int) = with(binding) {
+            finalPosition.text = (position + 1).toString()
+            playerName.text = userFinalScore.player
+            points.text = userFinalScore.points.toString()
+            if(position != 0) bigCrown.visibility = View.INVISIBLE
+            finalScoreItem.setBackgroundColor(
+                ContextCompat.getColor(
+                    itemView.context,
+                    getBackgroundColor(position)
+                )
+            )
+        }
     }
-
-
 }

@@ -53,9 +53,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/medium"
         app:layout_constrainedHeight="true"
+        tools:itemCount="3"
         app:layout_constraintTop_toBottomOf="@id/top_background"
-        app:layout_constraintBottom_toTopOf="@+id/exit_button_background"
-        tools:listitem="@layout/view_final_score_item" />
+        tools:listitem="@layout/view_tutti_frutti_final_score_item" />
 
     <LinearLayout
         android:id="@+id/exit_button_background"
@@ -63,7 +63,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-        app:layout_constraintTop_toBottomOf="@id/playersScores"
         app:layout_constraintBottom_toBottomOf="parent"
         android:gravity="center">
 
@@ -76,11 +75,5 @@
             app:layout_constraintBottom_toBottomOf="parent"
             style="@style/Widget.P2P.Button"
         />
-            <!--
-                    <item name="android:textStyle">bold</item>
-        <item name="android:textAllCaps">false</item>
-        <item name="android:textSize">@dimen/font_large</item>
-            -->
-
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

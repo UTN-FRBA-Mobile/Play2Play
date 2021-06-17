@@ -6,6 +6,7 @@ import androidx.activity.viewModels
 import com.p2p.presentation.basegame.GameActivity
 import com.p2p.presentation.tuttifrutti.countdown.TuttiFruttiCountdownFragment
 import com.p2p.presentation.tuttifrutti.create.categories.CreateTuttiFruttiFragment
+import com.p2p.presentation.tuttifrutti.finalscore.FinalScoreTuttiFruttiFragment
 
 class TuttiFruttiActivity : GameActivity<TuttiFruttiSpecificGameEvent, TuttiFruttiViewModel>() {
 
@@ -13,7 +14,7 @@ class TuttiFruttiActivity : GameActivity<TuttiFruttiSpecificGameEvent, TuttiFrut
         TuttiFruttiViewModelFactory(this, gameViewModelFactoryData)
     }
 
-    override fun goToCreate() = addFragment(CreateTuttiFruttiFragment.newInstance(), shouldAddToBackStack = false)
+    override fun goToCreate() = addFragment(FinalScoreTuttiFruttiFragment.newInstance(), shouldAddToBackStack = false)
 
     override fun goToPlay() = addFragment(TuttiFruttiCountdownFragment.newInstance(), shouldAddToBackStack = false)
 
