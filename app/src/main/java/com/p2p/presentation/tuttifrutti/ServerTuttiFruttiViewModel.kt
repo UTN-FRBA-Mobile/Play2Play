@@ -51,17 +51,17 @@ class ServerTuttiFruttiViewModel(
     override fun sendWords(categoriesWords: Map<Category, String>) = acceptWords(MYSELF_PEER_ID, categoriesWords)
 
     override fun enoughForMeEnoughForAll() {
-        sayEnough(MYSELF_PEER_ID)
+        saidEnough(MYSELF_PEER_ID)
         super.enoughForMeEnoughForAll()
         stopRound()
     }
 
     override fun onReceiveEnoughForAll(conversation: Conversation) {
-        sayEnough(conversation.peer)
+        saidEnough(conversation.peer)
         super.onReceiveEnoughForAll(conversation)
     }
 
-    private fun sayEnough(peer: Long) {
+    private fun saidEnough(peer: Long) {
         saidEnoughPeer = peer
         _finishedRoundInfos.value = emptyList()
     }
