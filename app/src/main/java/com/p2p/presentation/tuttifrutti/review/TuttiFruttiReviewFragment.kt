@@ -27,7 +27,10 @@ class TuttiFruttiReviewFragment : BaseGameFragment<
 
 
     override fun initValues() {
-        viewModel.initializeBaseRoundPoints(gameViewModel.actualRound.value!!)
+        viewModel.initializeBaseRoundPoints(
+            gameViewModel.actualRound.value!!,
+            gameViewModel.finishedRoundInfos.value!!
+        )
     }
 
     override fun initUI() {
@@ -51,15 +54,15 @@ class TuttiFruttiReviewFragment : BaseGameFragment<
                 gameBinding.totalRounds.text = resources.getString(R.string.tf_total_rounds, totalRounds.value)
                 gameBinding.letter.text = resources.getString(R.string.tf_letter, it.letter)
             }
+            finishedRoundInfos.observe(viewLifecycleOwner) { finishedRoundInfo ->
+                tuttiFruttiReviewRoundAdapter.finishedRoundInfo = finishedRoundInfo
+                gameBinding.enoughPlayer.text =
+                    resources.getString(R.string.tf_enough_player, finishedRoundInfo.find { it.saidEnough }!!.player)
+            }
         }
         with(viewModel) {
             finishedRoundPointsInfo.observe(viewLifecycleOwner) {
                 tuttiFruttiReviewRoundAdapter.finishedRoundPointsInfo = it
-            }
-            finishedRoundInfo.observe(viewLifecycleOwner) { finishedRoundInfo ->
-                tuttiFruttiReviewRoundAdapter.finishedRoundInfo = finishedRoundInfo
-                gameBinding.enoughPlayer.text =
-                    resources.getString(R.string.tf_enough_player, finishedRoundInfo.find { it.saidEnough }!!.player)
             }
         }
 

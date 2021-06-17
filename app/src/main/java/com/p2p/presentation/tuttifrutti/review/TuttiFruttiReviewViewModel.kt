@@ -12,25 +12,9 @@ import java.text.Normalizer
 class TuttiFruttiReviewViewModel :
     BaseViewModel<TuttiFruttiReviewEvents>() {
 
-    /** List with the finished round values */
-    private val _finishedRoundInfo = MutableLiveData(listOf<FinishedRoundInfo>())
-    val finishedRoundInfo: LiveData<List<FinishedRoundInfo>> = _finishedRoundInfo
-
     /** List with the finished round review points */
     private val _finishedRoundPointsInfo = MutableLiveData(listOf<FinishedRoundPointsInfo>())
     val finishedRoundPointsInfo: LiveData<List<FinishedRoundPointsInfo>> = _finishedRoundPointsInfo
-
-    // TODO: This values are for mocking the obtained finishedRoundInfo, delete it when the communication is done.
-    private val firstPlayer = FinishedRoundInfo("Lisa",
-        mapOf("Nombres" to "Adela", "Animales" to "Aguila", "Comidas" to "Alfajor") as LinkedHashMap<Category, String>, true)
-    private val secondPlayer = FinishedRoundInfo("Homero",
-        mapOf("Nombres" to "Oso", "Animales" to "A", "Comidas" to "Algo asi como una comida ponele, pero no se cual") as LinkedHashMap<Category, String>, false)
-    private val thirdPlayer = FinishedRoundInfo("Bart",
-        mapOf("Nombres" to "Ambar", "Animales" to "Anguila", "Comidas" to "Alfajor") as LinkedHashMap<Category, String>, false)
-
-    init {
-        _finishedRoundInfo.value = listOf(firstPlayer, secondPlayer, thirdPlayer)
-    }
 
     fun onChangeRoundPoints(action: String, player: String, categoryIndex: Int) {
         val updatedFinishedRoundPoints = finishedRoundPointsInfo.value!!.toMutableList()
@@ -45,15 +29,14 @@ class TuttiFruttiReviewViewModel :
     }
 
     /** Process the finishedRoundInfo list to take the base points for all the players */
-    fun initializeBaseRoundPoints(actualRound: RoundInfo) {
+    fun initializeBaseRoundPoints(actualRound: RoundInfo, finishedRoundInfos: List<FinishedRoundInfo>) {
         val roundInitialPoints = mutableListOf<FinishedRoundPointsInfo>()
 
-        finishedRoundInfo.value!!.forEach {
+        finishedRoundInfos.forEach {
             val pointsList = mutableListOf<Int>()
             it.categoriesWords.forEach { playerResponse ->
-                val categoryWords = getCategoryWords(playerResponse.key)
-                // TODO: Stop hardcoding the letter for testing, it should be actualRound.letter
-                pointsList.add(getPointsForWord(playerResponse.value, 'A', categoryWords))
+                val categoryWords = getCategoryWords(playerResponse.key, finishedRoundInfos)
+                pointsList.add(getPointsForWord(playerResponse.value, actualRound.letter, categoryWords))
             }
 
             val playerPoints = FinishedRoundPointsInfo(it.player, pointsList, pointsList.sum())
@@ -63,8 +46,8 @@ class TuttiFruttiReviewViewModel :
         _finishedRoundPointsInfo.value = roundInitialPoints
     }
 
-    private fun getCategoryWords(category: Category) : List<String> =
-        finishedRoundInfo.value!!.map{ Normalizer.normalize(it.categoriesWords[category].toString(), Normalizer.Form.NFD) }
+    private fun getCategoryWords(category: Category, finishedRoundInfos: List<FinishedRoundInfo>) : List<String> =
+        finishedRoundInfos.map{ Normalizer.normalize(it.categoriesWords[category].toString(), Normalizer.Form.NFD) }
 
     private fun getPointsForWord(word: String, roundLetter: Char, categoryWords: List<String>) : Int {
         val categoryWord = Normalizer.normalize(word, Normalizer.Form.NFD)
