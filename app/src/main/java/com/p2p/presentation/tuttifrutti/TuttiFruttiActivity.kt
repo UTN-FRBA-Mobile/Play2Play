@@ -28,7 +28,7 @@ class TuttiFruttiActivity : GameActivity<TuttiFruttiSpecificGameEvent, TuttiFrut
             if (isLoading) hideKeyboard()
             findViewById<View>(R.id.activity_progress_overlay).isVisible = isLoading
         }
-        viewModel.loadingText.observe(this) { loadingText ->
+        viewModel.nextSteploadingText.observe(this) { loadingText ->
             findViewById<TextView>(R.id.progress_text).text = loadingText
         }
     }

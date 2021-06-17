@@ -35,8 +35,8 @@ abstract class TuttiFruttiViewModel(
     val isLoading: LiveData<Boolean> = _isLoading
 
 
-    protected val _loadingText = MutableLiveData<String>()
-    val loadingText: LiveData<String> = _loadingText
+    protected val _nextSteploadingText = MutableLiveData<String>()
+    val nextSteploadingText: LiveData<String> = _nextSteploadingText
 
     protected val _totalRounds = MutableLiveData<Int>()
     val totalRounds: LiveData<Int> = _totalRounds
@@ -59,13 +59,13 @@ abstract class TuttiFruttiViewModel(
         _totalRounds.value = totalRounds
     }
 
-    fun startRound() {
+    fun startRound(nextSteploadingText: String) {
         generateNextRoundValues()
+        _nextSteploadingText.value = nextSteploadingText
     }
 
-    open fun enoughForMeEnoughForAll(loadingText: String) {
+    open fun enoughForMeEnoughForAll() {
         _isLoading.value = true
-        _loadingText.value = loadingText
         connection.write(TuttiFruttiEnoughForMeEnoughForAllMessage())
     }
 

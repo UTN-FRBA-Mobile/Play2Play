@@ -34,7 +34,7 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
         FragmentPlayTuttiFruttiBinding::inflate
 
     override fun initValues() {
-        gameViewModel.startRound()
+        gameViewModel.startRound(resources.getString(R.string.tf_wait_for_results))
     }
 
     override fun initUI() {
@@ -69,7 +69,7 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
     }
 
     override fun onEvent(event: TuttiFruttiPlayingEvents) = when (event) {
-        is FinishRound -> gameViewModel.enoughForMeEnoughForAll(resources.getString(R.string.tf_wait_for_results))
+        is FinishRound -> gameViewModel.enoughForMeEnoughForAll()
         ShowInvalidInputs -> markErrors()
     }
 
