@@ -75,7 +75,7 @@ abstract class TuttiFruttiViewModel(
     // TODO: this should be called from the server lobby when startGame button is clicked.
     abstract fun startGame()
 
-    abstract fun sendWords(categoriesWords: Map<Category, String>)
+    abstract fun sendWords(categoriesWords: LinkedHashMap<Category, String>)
 
     @CallSuper
     override fun receiveMessage(conversation: Conversation) {

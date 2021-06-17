@@ -48,7 +48,7 @@ class ServerTuttiFruttiViewModel(
         }
     }
 
-    override fun sendWords(categoriesWords: Map<Category, String>) = acceptWords(MYSELF_PEER_ID, categoriesWords)
+    override fun sendWords(categoriesWords: LinkedHashMap<Category, String>) = acceptWords(MYSELF_PEER_ID, categoriesWords)
 
     override fun enoughForMeEnoughForAll() {
         saidEnough(MYSELF_PEER_ID)
@@ -66,7 +66,7 @@ class ServerTuttiFruttiViewModel(
         _finishedRoundInfos.value = emptyList()
     }
 
-    private fun acceptWords(peer: Long, categoriesWords: Map<Category, String>) {
+    private fun acceptWords(peer: Long, categoriesWords: LinkedHashMap<Category, String>) {
         _finishedRoundInfos.value = _finishedRoundInfos.requireValue() + FinishedRoundInfo(
             player = getPlayerById(peer),
             categoriesWords = categoriesWords,
