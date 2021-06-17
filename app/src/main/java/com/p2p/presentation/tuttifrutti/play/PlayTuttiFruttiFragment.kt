@@ -69,7 +69,7 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
     }
 
     override fun onEvent(event: TuttiFruttiPlayingEvents) = when (event) {
-        is FinishRound -> gameViewModel.enoughForMeEnoughForAll()
+        is FinishRound -> gameViewModel.enoughForMeEnoughForAll(resources.getString(R.string.tf_wait_for_results))
         ShowInvalidInputs -> markErrors()
     }
 

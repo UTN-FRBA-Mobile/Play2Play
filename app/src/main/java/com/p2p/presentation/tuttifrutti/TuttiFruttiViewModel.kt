@@ -3,6 +3,7 @@ package com.p2p.presentation.tuttifrutti
 import androidx.annotation.CallSuper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.p2p.R
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.userInfo.UserSession
@@ -33,6 +34,10 @@ abstract class TuttiFruttiViewModel(
     protected val _isLoading = MutableLiveData(false)
     val isLoading: LiveData<Boolean> = _isLoading
 
+
+    protected val _loadingText = MutableLiveData<String>()
+    val loadingText: LiveData<String> = _loadingText
+
     protected val _totalRounds = MutableLiveData<Int>()
     val totalRounds: LiveData<Int> = _totalRounds
 
@@ -58,8 +63,9 @@ abstract class TuttiFruttiViewModel(
         generateNextRoundValues()
     }
 
-    open fun enoughForMeEnoughForAll() {
+    open fun enoughForMeEnoughForAll(loadingText: String) {
         _isLoading.value = true
+        _loadingText.value = loadingText
         connection.write(TuttiFruttiEnoughForMeEnoughForAllMessage())
     }
 

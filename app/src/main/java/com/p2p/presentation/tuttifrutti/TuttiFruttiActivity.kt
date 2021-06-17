@@ -4,7 +4,9 @@ import android.bluetooth.BluetoothDevice
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import androidx.activity.viewModels
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import com.p2p.R
 import com.p2p.presentation.basegame.GameActivity
@@ -26,11 +28,16 @@ class TuttiFruttiActivity : GameActivity<TuttiFruttiSpecificGameEvent, TuttiFrut
             if (isLoading) hideKeyboard()
             findViewById<View>(R.id.activity_progress_overlay).isVisible = isLoading
         }
+        viewModel.loadingText.observe(this) { loadingText ->
+            findViewById<TextView>(R.id.progress_text).text = loadingText
+        }
     }
 
-    override fun goToCreate() = addFragment(CreateTuttiFruttiFragment.newInstance(), shouldAddToBackStack = false)
+    override fun goToCreate() =
+        addFragment(CreateTuttiFruttiFragment.newInstance(), shouldAddToBackStack = false)
 
-    override fun goToPlay() = addFragment(TuttiFruttiCountdownFragment.newInstance(), shouldAddToBackStack = false)
+    override fun goToPlay() =
+        addFragment(TuttiFruttiCountdownFragment.newInstance(), shouldAddToBackStack = false)
 
     override fun goToClientLobby() =
         Unit // TODO: addFragment(ClientLobbyTuttiFruttiFragment.newInstance(), shouldAddToBackStack = false)

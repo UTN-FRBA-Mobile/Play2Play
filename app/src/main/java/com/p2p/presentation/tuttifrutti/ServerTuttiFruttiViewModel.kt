@@ -50,9 +50,9 @@ class ServerTuttiFruttiViewModel(
 
     override fun sendWords(categoriesWords: Map<Category, String>) = acceptWords(MYSELF_PEER_ID, categoriesWords)
 
-    override fun enoughForMeEnoughForAll() {
+    override fun enoughForMeEnoughForAll(loadingText: String) {
         sayEnough(MYSELF_PEER_ID)
-        super.enoughForMeEnoughForAll()
+        super.enoughForMeEnoughForAll(loadingText)
         stopRound()
     }
 
