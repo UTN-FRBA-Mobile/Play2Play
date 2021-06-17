@@ -58,6 +58,15 @@ abstract class TuttiFruttiViewModel(
         generateNextRoundValues()
     }
 
+    /**
+     * Enough for me enough for all will say to the room that the round is finished.
+     *
+     * The client and the server will handle different the invocation of this method:
+     * - The client will just sent the message and just when it's sent, it'll stop the round
+     *   (that's because it needs the conversation started with the server to send their words).
+     * - The server will stop the round immediately when this is invoked because since it doesn't need
+     *   to do any more, just wait the others words.
+     */
     open fun enoughForMeEnoughForAll() {
         _isLoading.value = true
         connection.write(TuttiFruttiEnoughForMeEnoughForAllMessage())
