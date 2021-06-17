@@ -69,7 +69,7 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
     }
 
     override fun onEvent(event: TuttiFruttiPlayingEvents) = when (event) {
-        is FinishRound -> gameViewModel.enoughForMeEnoughForAll()
+        FinishRound -> gameViewModel.enoughForMeEnoughForAll()
         ShowInvalidInputs -> markErrors()
     }
 
