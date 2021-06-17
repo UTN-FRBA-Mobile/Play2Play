@@ -53,6 +53,7 @@
 
     <!-- Lobby -->
     <string name="lobby_connected_players">Jugadores listos</string>
+    <string name="lobby_waiting_players">Esperando jugadores</string>
     <string name="lobby_start_game">Comenzar juego</string>
 
 </resources>

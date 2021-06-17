@@ -7,6 +7,31 @@
 
     <include layout="@layout/view_guidelines" />
 
+    <TextView
+        android:id="@+id/connected_players"
+        style="@style/P2P_Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/medium_extra"
+        android:layout_marginStart="@dimen/medium"
+        android:paddingTop="@dimen/tiniest"
+        android:text="@string/lobby_connected_players"
+        android:textColor="@color/colorLink"
+        app:layout_constraintTop_toTopOf="@id/guideline_top"
+        app:layout_constraintStart_toStartOf="@id/guideline_begin" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/players_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/medium"
+        android:layout_marginBottom="@dimen/medium"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintTop_toBottomOf="@id/connected_players"
+        app:layout_constraintBottom_toTopOf="@id/progressBar_cyclic"
+        tools:listitem="@layout/view_connected_user" />
+
     <ProgressBar
         android:layout_weight="1"
         android:id="@+id/progressBar_cyclic"
@@ -18,30 +43,22 @@
         android:layout_marginTop="@dimen/medium"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
-        app:layout_constraintTop_toTopOf="@id/guideline_top"  />
+        app:layout_constraintBottom_toTopOf="@id/waiting_players"
+        />
 
     <TextView
-        android:id="@+id/connected_players"
-        style="@style/P2P_Title"
+        android:id="@+id/waiting_players"
+        style="@style/P2P_Description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/medium_extra"
         android:layout_marginStart="@dimen/medium"
+        android:layout_marginTop="12dp"
         android:paddingTop="@dimen/tiniest"
-        android:text="@string/lobby_connected_players"
+        android:text="@string/lobby_waiting_players"
+        android:textAlignment="center"
         android:textColor="@color/colorLink"
-        app:layout_constraintStart_toStartOf="@id/guideline_begin"
-        app:layout_constraintTop_toBottomOf="@id/progressBar_cyclic" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/players_recycler"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/medium"
-        android:layout_marginBottom="@dimen/medium"
-        app:layout_constrainedHeight="true"
-        app:layout_constraintVertical_bias="0"
-        app:layout_constraintTop_toBottomOf="@id/connected_players"
-        tools:listitem="@layout/view_connected_user" />
+        app:layout_constraintBottom_toBottomOf="@id/guideline_bottom"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintStart_toStartOf="@id/guideline_begin"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
