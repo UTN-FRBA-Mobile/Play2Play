@@ -23,11 +23,15 @@ class ServerTuttiFruttiLobbyFragment: BaseGameFragment<
 
     private lateinit var connectedPlayersTuttiFruttiAdapter: ConnectedPlayersTuttiFruttiAdapter
 
+    init {
+        gameViewModel.startConnection()
+    }
+
     override fun initUI() {
         super.initUI()
-        gameBinding.startGame.isEnabled = false
+        gameBinding.startGameButton.isEnabled = false
         setupPlayersRecycler()
-        gameBinding.startGame.setOnClickListener {
+        gameBinding.startGameButton.setOnClickListener {
             gameViewModel.startGame()
         }
     }
@@ -37,9 +41,10 @@ class ServerTuttiFruttiLobbyFragment: BaseGameFragment<
         with(gameViewModel) {
             players.observe(viewLifecycleOwner) {
                 connectedPlayersTuttiFruttiAdapter.players = it
-                if (it.size >= LOBBY_MIN_SIZE) gameBinding.startGame.isEnabled = true
+                viewModel.updatePlayers(it)
             }
         }
+        viewModel.isContinueButtonEnabled.observe(viewLifecycleOwner) { gameBinding.startGameButton.isEnabled = it}
     }
 
     private fun setupPlayersRecycler() = with(gameBinding.playersRecycler) {
@@ -49,9 +54,13 @@ class ServerTuttiFruttiLobbyFragment: BaseGameFragment<
         }
     }
 
+    override fun onEvent(event: LobbyEvent) {
+        when(event) {
+            is GoToPlay -> Unit
+        }
+    }
+
     companion object {
         fun newInstance() = ServerTuttiFruttiLobbyFragment()
-
-        const val LOBBY_MIN_SIZE = 1
     }
 }

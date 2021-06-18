@@ -53,7 +53,6 @@ abstract class TuttiFruttiViewModel(
         generateNextRoundValues()
     }
 
-    // TODO: this should be called from the server lobby when startGame button is clicked.
     abstract fun startGame()
 
     /** On Playing game */
