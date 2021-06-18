@@ -40,8 +40,8 @@ abstract class TuttiFruttiViewModel(
     protected val _finishedRoundInfos = MutableLiveData(listOf<FinishedRoundInfo>())
     val finishedRoundInfos: LiveData<List<FinishedRoundInfo>> = _finishedRoundInfos
 
-    private val _finishedRoundPointsInfos = MutableLiveData(listOf<FinishedRoundPointsInfo>())
-    val finishedRoundPointsInfos: LiveData<List<FinishedRoundPointsInfo>> = _finishedRoundPointsInfos
+    private val _finishedRoundsPointsInfos = MutableLiveData(listOf<FinishedRoundPointsInfo>())
+    val finishedRoundsPointsInfos: LiveData<List<FinishedRoundPointsInfo>> = _finishedRoundsPointsInfos
 
     private val _categoriesToPlay = MutableLiveData<List<Category>>()
     val categoriesToPlay: LiveData<List<Category>> = _categoriesToPlay
@@ -59,8 +59,8 @@ abstract class TuttiFruttiViewModel(
     }
 
     fun setFinishedRoundPointsInfos(finishedRoundPointsInfo: List<FinishedRoundPointsInfo>) {
-        _finishedRoundPointsInfos.value =
-            _finishedRoundPointsInfos.value?.plus(finishedRoundPointsInfo)
+        _finishedRoundsPointsInfos.value =
+            _finishedRoundsPointsInfos.value?.plus(finishedRoundPointsInfo)
     }
 
     fun startRound() {
@@ -80,6 +80,11 @@ abstract class TuttiFruttiViewModel(
         _isLoading.value = true
         connection.write(TuttiFruttiEnoughForMeEnoughForAllMessage())
     }
+
+    open fun stopLoading() {
+        _isLoading.value = false
+    }
+
 
     // TODO: this should be called from the server lobby when startGame button is clicked.
     abstract fun startGame()

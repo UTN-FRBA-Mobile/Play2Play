@@ -6,16 +6,19 @@ import com.p2p.model.tuttifrutti.FinishedRoundPointsInfo
 import com.p2p.model.tuttifrutti.FinishedRoundInfo
 import com.p2p.model.tuttifrutti.RoundInfo
 import com.p2p.presentation.base.BaseViewModel
+import com.p2p.presentation.basegame.GameViewModel
 import com.p2p.presentation.tuttifrutti.create.categories.Category
 import java.text.Normalizer
 
 class TuttiFruttiReviewViewModel :
     BaseViewModel<TuttiFruttiReviewEvents>() {
 
-    lateinit var finishedRoundPointsInfo: List<FinishedRoundPointsInfo>
+    /** List with the finished round review points */
+    private val _finishedRoundPointsInfo = MutableLiveData(listOf<FinishedRoundPointsInfo>())
+    val finishedRoundPointsInfo: LiveData<List<FinishedRoundPointsInfo>> = _finishedRoundPointsInfo
 
     fun onChangeRoundPoints(action: String, player: String, categoryIndex: Int) {
-        val updatedFinishedRoundPoints = finishedRoundPointsInfo.toMutableList()
+        val updatedFinishedRoundPoints = finishedRoundPointsInfo.value!!.toMutableList()
 
         if(action == "add") {
             updatedFinishedRoundPoints.find { it.player == player }!!.wordsPoints[categoryIndex] += 5
@@ -23,7 +26,7 @@ class TuttiFruttiReviewViewModel :
         } else {
             updatedFinishedRoundPoints.find { it.player == player }!!.wordsPoints[categoryIndex] -= 5
         }
-        finishedRoundPointsInfo = updatedFinishedRoundPoints
+        _finishedRoundPointsInfo.value = updatedFinishedRoundPoints
     }
 
     /** Process the finishedRoundInfo list to take the base points for all the players */
@@ -41,7 +44,7 @@ class TuttiFruttiReviewViewModel :
             roundInitialPoints.add(playerPoints)
         }
 
-        finishedRoundPointsInfo = roundInitialPoints
+        _finishedRoundPointsInfo.value = roundInitialPoints
     }
 
     private fun getCategoryWords(category: Category, finishedRoundInfos: List<FinishedRoundInfo>) : List<String> =
@@ -59,7 +62,7 @@ class TuttiFruttiReviewViewModel :
     }
 
     private fun calculateTotalRoundPoints() {
-        finishedRoundPointsInfo.forEach { it.totalPoints = it.wordsPoints.sum() }
+        finishedRoundPointsInfo.value!!.forEach { it.totalPoints = it.wordsPoints.sum() }
     }
 
     /** Next view to show when Continue button is pressed. */

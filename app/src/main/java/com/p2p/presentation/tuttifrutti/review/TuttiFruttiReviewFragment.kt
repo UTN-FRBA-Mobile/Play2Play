@@ -35,6 +35,7 @@ class TuttiFruttiReviewFragment : BaseGameFragment<
 
     override fun initUI() {
         super.initUI()
+        gameViewModel.stopLoading()
         setupReviewCategoriesRecycler()
         gameBinding.finishReviewButton.setOnClickListener { viewModel.sendRoundPoints() }
     }
@@ -46,7 +47,6 @@ class TuttiFruttiReviewFragment : BaseGameFragment<
         }
     }
 
-    //viewModel.finishedRoundInfo, viewModel.finishedRoundPointsInfo
     override fun setupObservers() {
         with(gameViewModel) {
             actualRound.observe(viewLifecycleOwner) {
@@ -59,9 +59,10 @@ class TuttiFruttiReviewFragment : BaseGameFragment<
                 gameBinding.enoughPlayer.text =
                     resources.getString(R.string.tf_enough_player, finishedRoundInfo.find { it.saidEnough }!!.player)
             }
-            finishedRoundPointsInfos.observe(viewLifecycleOwner) {
+        }
+        with(viewModel) {
+            finishedRoundPointsInfo.observe(viewLifecycleOwner) {
                 tuttiFruttiReviewRoundAdapter.finishedRoundPointsInfo = it
-                viewModel.finishedRoundPointsInfo = it
             }
         }
 
@@ -69,7 +70,7 @@ class TuttiFruttiReviewFragment : BaseGameFragment<
     }
 
     override fun onEvent(event: TuttiFruttiReviewEvents) = when (event) {
-        FinishRoundReview -> gameViewModel.setFinishedRoundPointsInfos(viewModel.finishedRoundPointsInfo)
+        FinishRoundReview -> gameViewModel.setFinishedRoundPointsInfos(viewModel.finishedRoundPointsInfo.value!!)
     }
 
     companion object {
