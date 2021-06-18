@@ -4,6 +4,8 @@ import android.bluetooth.BluetoothSocket
 import android.os.Handler
 import androidx.core.os.bundleOf
 import com.p2p.utils.Logger
+import com.p2p.utils.toBoolean
+import com.p2p.utils.toByteArray
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
@@ -13,7 +15,7 @@ class BluetoothConnectionThread(
     private val socket: BluetoothSocket
 ) : Thread() {
 
-    var onMessageReceived: ((length: Int, buffer: ByteArray) -> Unit)? = null
+    var onMessageReceived: ((isConversation: Boolean, length: Int, buffer: ByteArray) -> Unit)? = null
 
     private val inputStream: InputStream = socket.inputStream
     private val outputStream: OutputStream = socket.outputStream
@@ -40,19 +42,21 @@ class BluetoothConnectionThread(
 
             // Send the obtained bytes to the UI activity.
             Logger.d(TAG, "Message arrived")
-            onMessageReceived?.invoke(numBytes, buffer)
+            val isConversation = buffer[0].toInt().toBoolean()
+            val byteArray = buffer.copyOfRange(1, numBytes)
+            onMessageReceived?.invoke(isConversation, numBytes - 1, byteArray)
             handler
-                .obtainMessage(MESSAGE_READ, numBytes, -1, buffer)
-                .apply { data = bundleOf(SENDER_ID to this@BluetoothConnectionThread.id) }
+                .obtainMessage(MESSAGE_READ, -1, -1, byteArray)
+                .apply { data = bundleOf(PEER_ID to this@BluetoothConnectionThread.id) }
                 .sendToTarget()
         }
     }
 
     // Call this from the main activity to send data to the remote device.
-    fun write(bytes: ByteArray, offset: Int, length: Int) {
+    fun write(bytes: ByteArray, length: Int, isConversation: Boolean) {
         try {
             Logger.d(TAG, "Writing...")
-            outputStream.write(bytes, offset, length)
+            outputStream.write(isConversation.toByteArray() + bytes, 0, length + 1)
         } catch (e: IOException) {
             Logger.e(TAG, "Error occurred when sending data", e)
 
@@ -67,6 +71,7 @@ class BluetoothConnectionThread(
         Logger.d(TAG, "Write succeed")
         handler
             .obtainMessage(MESSAGE_WRITE_SUCCESS, length, -1, bytes)
+            .apply { data = bundleOf(PEER_ID to this@BluetoothConnectionThread.id) }
             .sendToTarget()
     }
 
@@ -85,7 +90,7 @@ class BluetoothConnectionThread(
         const val MESSAGE_READ = 0
         const val MESSAGE_WRITE_SUCCESS = 1
         const val MESSAGE_WRITE_ERROR = 2
-        const val SENDER_ID = "SENDER"
+        const val PEER_ID = "PEER"
         const val TAG = "P2P_BLUETOOTH_SERVICE"
     }
 }

@@ -2,17 +2,32 @@ package com.p2p.presentation.tuttifrutti
 
 import android.bluetooth.BluetoothDevice
 import android.content.Context
+import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
+import androidx.core.view.isVisible
+import com.p2p.R
 import com.p2p.presentation.basegame.GameActivity
 import com.p2p.presentation.tuttifrutti.lobby.ClientTuttiFruttiLobbyFragment
 import com.p2p.presentation.tuttifrutti.lobby.ServerTuttiFruttiLobbyFragment
 import com.p2p.presentation.tuttifrutti.countdown.TuttiFruttiCountdownFragment
 import com.p2p.presentation.tuttifrutti.create.categories.CreateTuttiFruttiFragment
+import com.p2p.utils.hideKeyboard
 
-class TuttiFruttiActivity : GameActivity<TuttiFruttiSpecificGameEvent, TuttiFruttiViewModel>() {
+class TuttiFruttiActivity : GameActivity<TuttiFruttiSpecificGameEvent, TuttiFruttiViewModel>(
+    R.layout.activity_tutti_frutti
+) {
 
     override val viewModel: TuttiFruttiViewModel by viewModels {
         TuttiFruttiViewModelFactory(this, gameViewModelFactoryData)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.isLoading.observe(this) { isLoading ->
+            if (isLoading) hideKeyboard()
+            findViewById<View>(R.id.activity_progress_overlay).isVisible = isLoading
+        }
     }
 
     override fun goToCreate() = addFragment(CreateTuttiFruttiFragment.newInstance(), shouldAddToBackStack = false)

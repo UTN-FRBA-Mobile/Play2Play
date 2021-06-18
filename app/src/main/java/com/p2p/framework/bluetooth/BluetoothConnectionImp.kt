@@ -17,8 +17,8 @@ abstract class BluetoothConnectionImp(private val handler: Handler) : Thread(), 
         return BluetoothConnectionThread(handler, bluetoothSocket)
     }
 
-    protected fun writeOnConnection(connection: BluetoothConnectionThread, message: Message) {
+    protected fun writeOnConnection(connection: BluetoothConnectionThread, message: Message, isConversation: Boolean) {
         val messageBytesArray = objectMapper.writeValueAsBytes(message)
-        connection.write(messageBytesArray, 0, messageBytesArray.size)
+        connection.write(messageBytesArray, messageBytesArray.size, isConversation)
     }
 }
