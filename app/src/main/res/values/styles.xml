@@ -6,6 +6,20 @@
         <item name="android:windowFullscreen">true</item>
     </style>
 
+    <style name="P2P.EditTextTheme" parent="Theme.P2P">
+        <!-- Text edit label colors -->
+        <item name="colorControlNormal">@color/green_eden</item>
+        <item name="colorControlActivated">@color/green_eden</item>
+        <item name="colorControlHighlight">@color/green_eden</item>
+    </style>
+
+    <style name="P2P.SecondEditTextTheme" parent="Theme.P2P">
+        <!-- Text edit label colors -->
+        <item name="colorControlNormal">@color/colorPrimary</item>
+        <item name="colorControlActivated">@color/colorPrimary</item>
+        <item name="colorControlHighlight">@color/colorPrimary</item>
+    </style>
+
     <!-- Widgets -->
     <style name="Widget.P2P.Button" parent="@style/Widget.MaterialComponents.Button">
         <item name="cornerRadius">@dimen/medium</item>

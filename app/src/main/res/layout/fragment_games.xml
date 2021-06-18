@@ -27,12 +27,14 @@
         android:paddingBottom="@dimen/medium_extra"
         app:endIconDrawable="@drawable/ic_pencil"
         app:endIconMode="custom"
+        app:hintTextColor="@color/green_eden"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
         app:layout_constraintTop_toTopOf="@id/guideline_top">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/user_name_input"
+            android:theme="@style/P2P.EditTextTheme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
