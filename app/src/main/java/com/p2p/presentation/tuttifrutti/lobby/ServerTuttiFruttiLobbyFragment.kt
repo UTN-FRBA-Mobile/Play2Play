@@ -23,12 +23,9 @@ class ServerTuttiFruttiLobbyFragment: BaseGameFragment<
 
     private lateinit var connectedPlayersTuttiFruttiAdapter: ConnectedPlayersTuttiFruttiAdapter
 
-    init {
-        gameViewModel.startConnection()
-    }
-
     override fun initUI() {
         super.initUI()
+        gameViewModel.startConnection() // TODO Check Fragment without an activity on init {}
         gameBinding.startGameButton.isEnabled = false
         setupPlayersRecycler()
         gameBinding.startGameButton.setOnClickListener {
