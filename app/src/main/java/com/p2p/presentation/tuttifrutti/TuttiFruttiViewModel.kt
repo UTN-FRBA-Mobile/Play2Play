@@ -3,10 +3,10 @@ package com.p2p.presentation.tuttifrutti
 import androidx.annotation.CallSuper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.p2p.R
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.userInfo.UserSession
+import com.p2p.model.Loading
 import com.p2p.model.base.message.Conversation
 import com.p2p.model.tuttifrutti.FinishedRoundInfo
 import com.p2p.model.tuttifrutti.RoundInfo
@@ -31,12 +31,9 @@ abstract class TuttiFruttiViewModel(
 
     protected lateinit var lettersByRound: List<Char>
 
-    protected val _isLoading = MutableLiveData(false)
-    val isLoading: LiveData<Boolean> = _isLoading
-
-
-    protected val _nextSteploadingText = MutableLiveData<String>()
-    val nextSteploadingText: LiveData<String> = _nextSteploadingText
+    //Loading value for loading screen, being first if isLoading and second the text to show
+    protected val _loading = MutableLiveData<Loading>()
+    val loading: LiveData<Loading> = _loading
 
     protected val _totalRounds = MutableLiveData<Int>()
     val totalRounds: LiveData<Int> = _totalRounds
@@ -59,13 +56,13 @@ abstract class TuttiFruttiViewModel(
         _totalRounds.value = totalRounds
     }
 
-    fun startRound(nextSteploadingText: String) {
+    fun startRound(nextStepLoadingText: String) {
         generateNextRoundValues()
-        _nextSteploadingText.value = nextSteploadingText
+        _loading.value = requireNotNull(loading.value).copy(loadingText = nextStepLoadingText)
     }
 
     open fun enoughForMeEnoughForAll() {
-        _isLoading.value = true
+        _loading.value = requireNotNull(loading.value).copy(isLoading = true)
         connection.write(TuttiFruttiEnoughForMeEnoughForAllMessage())
     }
 
@@ -85,7 +82,7 @@ abstract class TuttiFruttiViewModel(
     protected open fun onReceiveEnoughForAll(conversation: Conversation) = stopRound()
 
     protected fun stopRound() {
-        _isLoading.value = true
+        _loading.value = requireNotNull(loading.value).copy(isLoading = true)
         dispatchSingleTimeEvent(ObtainWords)
     }
 

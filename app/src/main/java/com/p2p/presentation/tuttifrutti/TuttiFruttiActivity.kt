@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.activity.viewModels
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import com.p2p.R
 import com.p2p.presentation.basegame.GameActivity
@@ -24,12 +23,10 @@ class TuttiFruttiActivity : GameActivity<TuttiFruttiSpecificGameEvent, TuttiFrut
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.isLoading.observe(this) { isLoading ->
-            if (isLoading) hideKeyboard()
-            findViewById<View>(R.id.activity_progress_overlay).isVisible = isLoading
-        }
-        viewModel.nextSteploadingText.observe(this) { loadingText ->
-            findViewById<TextView>(R.id.progress_text).text = loadingText
+        viewModel.loading.observe(this) { loading ->
+            if (loading.isLoading) hideKeyboard()
+            findViewById<View>(R.id.activity_progress_overlay).isVisible = loading.isLoading
+            findViewById<TextView>(R.id.progress_text).text = loading.loadingText
         }
     }
 
