@@ -1,8 +1,6 @@
 package com.p2p.presentation.tuttifrutti.play
 
-import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.fragment.app.activityViewModels
@@ -48,7 +46,7 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
     }
 
     private fun setUpCategoriesList(list: LinearLayout) = with(gameViewModel) {
-        categoriesToPlay.observe(viewLifecycleOwner) { it ->
+        categoriesToPlay.observe(viewLifecycleOwner) {
             it.map { category ->
                 categoriesInputs[category] =
                     ViewPlayCategoryItemBinding.inflate(layoutInflater, list, true).run {
