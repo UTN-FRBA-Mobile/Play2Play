@@ -1,6 +1,8 @@
 package com.p2p.presentation.tuttifrutti.play
 
+import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.fragment.app.activityViewModels
@@ -8,7 +10,7 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.textfield.TextInputLayout
 import com.p2p.R
 import com.p2p.databinding.FragmentPlayTuttiFruttiBinding
-import com.p2p.databinding.PlayCategoryItemBinding
+import com.p2p.databinding.ViewPlayCategoryItemBinding
 import com.p2p.presentation.basegame.BaseGameFragment
 import com.p2p.presentation.tuttifrutti.GoToReview
 import com.p2p.presentation.tuttifrutti.ObtainWords
@@ -46,11 +48,16 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
     }
 
     private fun setUpCategoriesList(list: LinearLayout) = with(gameViewModel) {
-        categoriesToPlay.observe(viewLifecycleOwner) {
+        categoriesToPlay.observe(viewLifecycleOwner) { it ->
             it.map { category ->
-                categoriesInputs[category] = PlayCategoryItemBinding.inflate(layoutInflater, list, true).run {
-                    input.hint = category
-                    root
+                categoriesInputs[category] =
+                    ViewPlayCategoryItemBinding.inflate(layoutInflater, list, true).run {
+                        input.hint = category
+                        textField.setOnFocusChangeListener { _, _ ->
+                            input.error = null
+                            input.isErrorEnabled = false
+                        }
+                        root
                 }
             }
         }
@@ -61,8 +68,10 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
         with(gameViewModel) {
             singleTimeEvent.observe(viewLifecycleOwner) { onGameEvent(it as TuttiFruttiSpecificGameEvent) }
             actualRound.observe(viewLifecycleOwner) {
-                gameBinding.round.text =
-                    resources.getString(R.string.tf_round, it.number, totalRounds.value)
+                gameBinding.actualRound.text =
+                    resources.getString(R.string.tf_actual_round, it.number)
+                gameBinding.totalRounds.text =
+                    resources.getString(R.string.tf_total_rounds, totalRounds.value)
                 gameBinding.letter.text = resources.getString(R.string.tf_letter, it.letter)
             }
         }

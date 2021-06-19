@@ -6,8 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/medium_extra"
+    android:layout_marginBottom="@dimen/medium"
     android:textColorHint="@color/colorPrimaryVariant"
     app:hintTextColor="@color/colorPrimary"
+    app:errorTextAppearance="@style/Text.ErrorAppearence"
     tools:hint="Categoria">
 
     <!--
@@ -20,7 +22,6 @@
         android:theme="@style/P2P.SecondEditTextTheme"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/medium"
         android:inputType="textVisiblePassword"
         android:maxLines="1" />
 

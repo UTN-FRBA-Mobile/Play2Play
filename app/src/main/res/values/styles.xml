@@ -66,4 +66,8 @@
     <style name="P2P_Description">
         <item name="android:textSize">@dimen/font_medium_extra</item>
     </style>
+
+    <style name="Text.ErrorAppearence" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/persimmon</item>
+    </style>
 </resources>
