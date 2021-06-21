@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/medium_extra"
     android:layout_marginBottom="@dimen/medium"
-    android:textColorHint="@color/colorPrimaryVariant"
+    android:textColorHint="@color/colorPrimary"
     app:hintTextColor="@color/colorPrimary"
     app:errorTextAppearance="@style/Text.ErrorAppearence"
     tools:hint="Categoria">
