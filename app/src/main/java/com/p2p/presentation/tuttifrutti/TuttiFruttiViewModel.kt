@@ -47,6 +47,10 @@ abstract class TuttiFruttiViewModel(
     private val _actualRound = MutableLiveData<RoundInfo>()
     val actualRound: LiveData<RoundInfo> = _actualRound
 
+    init {
+        _loading.value = Loading(isLoading = false, loadingText = "")
+    }
+
     /** Set the categories selected by the user when creating the game . */
     fun setCategoriesToPlay(categories: List<Category>) {
         _categoriesToPlay.value = categories
