@@ -3,6 +3,7 @@ package com.p2p.presentation.tuttifrutti.play
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.core.text.HtmlCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.google.android.material.textfield.TextInputLayout
@@ -61,11 +62,14 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
         with(gameViewModel) {
             singleTimeEvent.observe(viewLifecycleOwner) { onGameEvent(it as TuttiFruttiSpecificGameEvent) }
             actualRound.observe(viewLifecycleOwner) {
-                gameBinding.actualRound.text =
-                    resources.getString(R.string.tf_actual_round, it.number)
-                gameBinding.totalRounds.text =
-                    resources.getString(R.string.tf_total_rounds, totalRounds.value)
-                gameBinding.letter.text = resources.getString(R.string.tf_letter, it.letter)
+                gameBinding.round.text = HtmlCompat.fromHtml(
+                    resources.getString(R.string.tf_round, it.number, totalRounds.value),
+                    HtmlCompat.FROM_HTML_MODE_COMPACT
+                )
+                gameBinding.letter.text = HtmlCompat.fromHtml(
+                    resources.getString(R.string.tf_letter, it.letter),
+                    HtmlCompat.FROM_HTML_MODE_COMPACT
+                )
             }
         }
     }

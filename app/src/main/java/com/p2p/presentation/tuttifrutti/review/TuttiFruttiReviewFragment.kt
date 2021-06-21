@@ -2,6 +2,7 @@ package com.p2p.presentation.tuttifrutti.review
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.text.HtmlCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -50,14 +51,23 @@ class TuttiFruttiReviewFragment : BaseGameFragment<
     override fun setupObservers() {
         with(gameViewModel) {
             actualRound.observe(viewLifecycleOwner) {
-                gameBinding.actualRound.text = resources.getString(R.string.tf_actual_round, it.number)
-                gameBinding.totalRounds.text = resources.getString(R.string.tf_total_rounds, totalRounds.value)
-                gameBinding.letter.text = resources.getString(R.string.tf_letter, it.letter)
+                gameBinding.round.text = HtmlCompat.fromHtml(
+                    resources.getString(R.string.tf_round, it.number, totalRounds.value),
+                    HtmlCompat.FROM_HTML_MODE_COMPACT
+                )
+                gameBinding.letter.text = HtmlCompat.fromHtml(
+                    resources.getString(R.string.tf_letter, it.letter),
+                    HtmlCompat.FROM_HTML_MODE_COMPACT
+                )
             }
             finishedRoundInfos.observe(viewLifecycleOwner) { finishedRoundInfo ->
                 tuttiFruttiReviewRoundAdapter.finishedRoundInfo = finishedRoundInfo
                 gameBinding.enoughPlayer.text =
                     resources.getString(R.string.tf_enough_player, finishedRoundInfo.find { it.saidEnough }!!.player)
+                gameBinding.enoughPlayer.text = HtmlCompat.fromHtml(
+                    resources.getString(R.string.tf_enough_player, finishedRoundInfo.find { it.saidEnough }!!.player),
+                    HtmlCompat.FROM_HTML_MODE_COMPACT
+                )
             }
         }
         with(viewModel) {
