@@ -1,5 +1,7 @@
 package com.p2p.presentation.tuttifrutti.review
 
+import com.p2p.model.tuttifrutti.FinishedRoundPointsInfo
+
 sealed class TuttiFruttiReviewEvents
 
-object FinishRoundReview : TuttiFruttiReviewEvents()
+class FinishRoundReview(val finishedRoundPointsInfo: List<FinishedRoundPointsInfo>) : TuttiFruttiReviewEvents()

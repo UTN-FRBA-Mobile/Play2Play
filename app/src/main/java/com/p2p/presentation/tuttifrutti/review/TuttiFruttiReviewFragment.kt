@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.p2p.R
 import com.p2p.databinding.FragmentReviewTuttiFruttiBinding
 import com.p2p.presentation.basegame.BaseGameFragment
+import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.tuttifrutti.TuttiFruttiViewModel
 
 class TuttiFruttiReviewFragment : BaseGameFragment<
@@ -28,10 +29,13 @@ class TuttiFruttiReviewFragment : BaseGameFragment<
 
 
     override fun initValues() {
-        viewModel.initializeBaseRoundPoints(
-            gameViewModel.actualRound.value!!,
-            gameViewModel.finishedRoundInfos.value!!
-        )
+        // TODO: Change to observables
+        // gameViewModel.actualRound.observe(viewLifecycleOwner, { viewModel.setInitialActualRound(it) })
+        // gameViewModel.finishedRoundInfos.observe(viewLifecycleOwner, { viewModel.setInitialFinishedRoundInfos(it) })
+
+        viewModel.setInitialActualRound(gameViewModel.actualRound.requireValue())
+        viewModel.setInitialFinishedRoundInfos(gameViewModel.finishedRoundInfos.requireValue())
+        viewModel.initializeBaseRoundPoints()
     }
 
     override fun initUI() {
@@ -43,7 +47,7 @@ class TuttiFruttiReviewFragment : BaseGameFragment<
 
     private fun setupReviewCategoriesRecycler() = with(gameBinding.reviewCategoriesRecycler) {
         layoutManager = LinearLayoutManager(context)
-        adapter = TuttiFruttiReviewRoundAdapter(viewModel::onChangeRoundPoints).also {
+        adapter = TuttiFruttiReviewRoundAdapter(viewModel::onAddRoundPoints, viewModel::onSubstractRoundPoints).also {
             this@TuttiFruttiReviewFragment.tuttiFruttiReviewRoundAdapter = it
         }
     }
@@ -62,10 +66,8 @@ class TuttiFruttiReviewFragment : BaseGameFragment<
             }
             finishedRoundInfos.observe(viewLifecycleOwner) { finishedRoundInfo ->
                 tuttiFruttiReviewRoundAdapter.finishedRoundInfo = finishedRoundInfo
-                gameBinding.enoughPlayer.text =
-                    resources.getString(R.string.tf_enough_player, finishedRoundInfo.find { it.saidEnough }!!.player)
                 gameBinding.enoughPlayer.text = HtmlCompat.fromHtml(
-                    resources.getString(R.string.tf_enough_player, finishedRoundInfo.find { it.saidEnough }!!.player),
+                    resources.getString(R.string.tf_enough_player, finishedRoundInfo.first { it.saidEnough }.player),
                     HtmlCompat.FROM_HTML_MODE_COMPACT
                 )
             }
@@ -80,7 +82,7 @@ class TuttiFruttiReviewFragment : BaseGameFragment<
     }
 
     override fun onEvent(event: TuttiFruttiReviewEvents) = when (event) {
-        FinishRoundReview -> gameViewModel.setFinishedRoundPointsInfos(viewModel.finishedRoundPointsInfo.value!!)
+        is FinishRoundReview -> gameViewModel.setFinishedRoundPointsInfos(event.finishedRoundPointsInfo)
     }
 
     companion object {

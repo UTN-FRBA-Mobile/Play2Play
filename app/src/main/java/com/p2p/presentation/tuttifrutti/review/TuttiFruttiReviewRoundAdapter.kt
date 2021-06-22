@@ -14,7 +14,9 @@ import com.p2p.presentation.tuttifrutti.create.categories.Category
 import com.p2p.utils.isEven
 
 /** The adapter used to show the list of round reviews. */
-class TuttiFruttiReviewRoundAdapter(private val onChangeRoundPoints: (String, String, Int) -> Unit) :
+class TuttiFruttiReviewRoundAdapter(
+    private val onAddRoundPoints: (String, Int) -> Unit,
+    private val onSubstractRoundPoints: (String, Int) -> Unit) :
     RecyclerView.Adapter<TuttiFruttiReviewRoundAdapter.RecyclerViewHolder>() {
 
     var finishedRoundInfo = listOf<FinishedRoundInfo>()
@@ -26,7 +28,7 @@ class TuttiFruttiReviewRoundAdapter(private val onChangeRoundPoints: (String, St
 
     override fun getItemViewType(position: Int): Int {
         // If the the modulus number of players plus one is zero, then we get the category title view
-        return position % (finishedRoundInfo.count() + 1)
+        return if (position % (finishedRoundInfo.count() + 1) == 0) TITLE_TYPE else WORD_TYPE
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder {
@@ -49,19 +51,21 @@ class TuttiFruttiReviewRoundAdapter(private val onChangeRoundPoints: (String, St
     }
 
     override fun onBindViewHolder(holder: RecyclerViewHolder, position: Int) {
-        val viewIndex = getItemViewType(position)
-        val viewHolderParams = RecyclerViewHolderParameters()
+        val itemType = getItemViewType(position)
+        val viewHolderParams: RecyclerViewHolderParameters
         val categoryIndex = getCategoryIndex(position)
         val viewCategory = getCategory(categoryIndex)
+        val wordViewIndex = position % (finishedRoundInfo.count() + 1) - 1
 
-        if (viewIndex == 0) {
-            viewHolderParams.category = viewCategory
+        viewHolderParams = if (itemType == TITLE_TYPE) {
+            RecyclerViewHolderParameters(category = viewCategory)
         } else {
-            viewHolderParams.player = finishedRoundInfo[viewIndex - 1].player
-            viewHolderParams.word = finishedRoundInfo[viewIndex - 1].categoriesWords[viewCategory]!!
-            viewHolderParams.points = finishedRoundPointsInfo.find {
-                it.player == viewHolderParams.player
-            }!!.wordsPoints[categoryIndex]
+            val wordViewPlayer = finishedRoundInfo[wordViewIndex].player
+            RecyclerViewHolderParameters(
+                player = wordViewPlayer,
+                word = finishedRoundInfo[wordViewIndex].categoriesWords.getValue(viewCategory),
+                points = finishedRoundPointsInfo.first { it.player == wordViewPlayer }.wordsPoints[categoryIndex]
+            )
         }
 
         return holder.bind(viewHolderParams, position)
@@ -73,7 +77,7 @@ class TuttiFruttiReviewRoundAdapter(private val onChangeRoundPoints: (String, St
     private fun numberOfCategories() = finishedRoundInfo.first().categoriesWords.count()
 
     private fun getCategory(categoryIndex: Int): Category {
-        return finishedRoundInfo.first().categoriesWords.keys.toTypedArray()[categoryIndex]
+        return finishedRoundInfo.first().categoriesWords.toList()[categoryIndex].first
     }
 
     private fun getCategoryIndex(actualPosition: Int) = actualPosition / (finishedRoundInfo.count() + 1)
@@ -102,30 +106,38 @@ class TuttiFruttiReviewRoundAdapter(private val onChangeRoundPoints: (String, St
             )
 
             when (viewHolderParams.points) {
-                10 -> {
-                    buttonAdd.isEnabled = false
-                    buttonSubstract.isEnabled = true
-                }
-                0 -> {
+                MIN_SCORE -> {
                     buttonAdd.isEnabled = true
                     buttonSubstract.isEnabled = false
                 }
-                else -> {
+                MIDDLE_SCORE -> {
                     buttonAdd.isEnabled = true
+                    buttonSubstract.isEnabled = true
+                }
+                MAX_SCORE -> {
+                    buttonAdd.isEnabled = false
                     buttonSubstract.isEnabled = true
                 }
             }
 
             buttonAdd.setOnClickListener {
-                onChangeRoundPoints.invoke("add", viewHolderParams.player, getCategoryIndex(position))
+                onAddRoundPoints.invoke(viewHolderParams.player, getCategoryIndex(position))
             }
             buttonSubstract.setOnClickListener {
-                onChangeRoundPoints.invoke("substract", viewHolderParams.player, getCategoryIndex(position))
+                onSubstractRoundPoints.invoke(viewHolderParams.player, getCategoryIndex(position))
             }
         }
     }
 
     abstract class RecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHolder(binding.root) {
         abstract fun bind(viewHolderParams : RecyclerViewHolderParameters, position: Int)
+    }
+
+    companion object {
+        const val TITLE_TYPE = 0
+        const val WORD_TYPE = 1
+        const val MIN_SCORE = 0
+        const val MIDDLE_SCORE = 5
+        const val MAX_SCORE = 10
     }
 }

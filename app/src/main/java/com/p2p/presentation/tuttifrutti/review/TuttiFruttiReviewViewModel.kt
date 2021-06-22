@@ -6,39 +6,64 @@ import com.p2p.model.tuttifrutti.FinishedRoundPointsInfo
 import com.p2p.model.tuttifrutti.FinishedRoundInfo
 import com.p2p.model.tuttifrutti.RoundInfo
 import com.p2p.presentation.base.BaseViewModel
-import com.p2p.presentation.basegame.GameViewModel
+import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.tuttifrutti.create.categories.Category
 import java.text.Normalizer
 
 class TuttiFruttiReviewViewModel :
     BaseViewModel<TuttiFruttiReviewEvents>() {
 
+    private lateinit var actualRound: RoundInfo
+    private lateinit var finishedRoundInfos : List<FinishedRoundInfo>
+
     /** List with the finished round review points */
     private val _finishedRoundPointsInfo = MutableLiveData(listOf<FinishedRoundPointsInfo>())
     val finishedRoundPointsInfo: LiveData<List<FinishedRoundPointsInfo>> = _finishedRoundPointsInfo
 
-    fun onChangeRoundPoints(action: String, player: String, categoryIndex: Int) {
-        val updatedFinishedRoundPoints = finishedRoundPointsInfo.value!!.toMutableList()
+    fun setInitialActualRound(setActualRound: RoundInfo) {
+        actualRound = setActualRound
+    }
 
-        if(action == "add") {
-            updatedFinishedRoundPoints.find { it.player == player }!!.wordsPoints[categoryIndex] += 5
+    fun setInitialFinishedRoundInfos(setFinishedRoundInfo: List<FinishedRoundInfo>) {
+        finishedRoundInfos = setFinishedRoundInfo
+    }
 
-        } else {
-            updatedFinishedRoundPoints.find { it.player == player }!!.wordsPoints[categoryIndex] -= 5
-        }
+    fun onAddRoundPoints(player: String, categoryIndex: Int) {
+        val updatedFinishedRoundPoints = finishedRoundPointsInfo.requireValue().toMutableList()
+        val elementToUpdate = updatedFinishedRoundPoints.find { it.player == player }!!
+        val wordsPoints = elementToUpdate.wordsPoints.toMutableList()
+
+        wordsPoints[categoryIndex] += 5
+
+        updatedFinishedRoundPoints[updatedFinishedRoundPoints.indexOf(elementToUpdate)] =
+            elementToUpdate.copy(wordsPoints = wordsPoints)
+
         _finishedRoundPointsInfo.value = updatedFinishedRoundPoints
     }
 
+    fun onSubstractRoundPoints(player: String, categoryIndex: Int) {
+        val updatedFinishedRoundPoints = finishedRoundPointsInfo.requireValue().toMutableList()
+        val elementToUpdate = updatedFinishedRoundPoints.find { it.player == player }!!
+        val wordsPoints = elementToUpdate.wordsPoints.toMutableList()
+
+        wordsPoints[categoryIndex] -= 5
+
+        updatedFinishedRoundPoints[updatedFinishedRoundPoints.indexOf(elementToUpdate)] =
+            elementToUpdate.copy(wordsPoints = wordsPoints)
+
+        _finishedRoundPointsInfo.value = updatedFinishedRoundPoints
+    }
+
+
     /** Process the finishedRoundInfo list to take the base points for all the players */
-    fun initializeBaseRoundPoints(actualRound: RoundInfo, finishedRoundInfos: List<FinishedRoundInfo>) {
+    fun initializeBaseRoundPoints() {
         val roundInitialPoints = mutableListOf<FinishedRoundPointsInfo>()
 
         finishedRoundInfos.forEach {
-            val pointsList = mutableListOf<Int>()
-            it.categoriesWords.forEach { playerResponse ->
-                val categoryWords = getCategoryWords(playerResponse.key, finishedRoundInfos)
-                pointsList.add(getPointsForWord(playerResponse.value, actualRound.letter, categoryWords))
-            }
+            val pointsList = it.categoriesWords.map { playerResponse ->
+                val categoryWords = getCategoryWords(playerResponse.key)
+                getPointsForWord(playerResponse.value, actualRound.letter, categoryWords)
+            }.toMutableList()
 
             val playerPoints = FinishedRoundPointsInfo(it.player, pointsList, pointsList.sum())
             roundInitialPoints.add(playerPoints)
@@ -47,7 +72,7 @@ class TuttiFruttiReviewViewModel :
         _finishedRoundPointsInfo.value = roundInitialPoints
     }
 
-    private fun getCategoryWords(category: Category, finishedRoundInfos: List<FinishedRoundInfo>) : List<String> =
+    private fun getCategoryWords(category: Category) : List<String> =
         finishedRoundInfos.map{ Normalizer.normalize(it.categoriesWords[category].toString(), Normalizer.Form.NFD) }
 
     private fun getPointsForWord(word: String, roundLetter: Char, categoryWords: List<String>) : Int {
@@ -62,12 +87,12 @@ class TuttiFruttiReviewViewModel :
     }
 
     private fun calculateTotalRoundPoints() {
-        finishedRoundPointsInfo.value!!.forEach { it.totalPoints = it.wordsPoints.sum() }
+        finishedRoundPointsInfo.requireValue().forEach { it.totalPoints = it.wordsPoints.sum() }
     }
 
     /** Next view to show when Continue button is pressed. */
     fun sendRoundPoints() {
         calculateTotalRoundPoints()
-        dispatchSingleTimeEvent(FinishRoundReview)
+        dispatchSingleTimeEvent(FinishRoundReview(finishedRoundPointsInfo.requireValue()))
     }
 }
