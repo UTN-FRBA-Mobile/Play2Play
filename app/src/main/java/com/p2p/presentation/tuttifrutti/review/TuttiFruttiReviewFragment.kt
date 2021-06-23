@@ -8,6 +8,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.p2p.R
 import com.p2p.databinding.FragmentReviewTuttiFruttiBinding
+import com.p2p.model.tuttifrutti.FinishedRoundInfo
 import com.p2p.presentation.basegame.BaseGameFragment
 import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.tuttifrutti.TuttiFruttiViewModel
@@ -29,13 +30,8 @@ class TuttiFruttiReviewFragment : BaseGameFragment<
 
 
     override fun initValues() {
-        // TODO: Change to observables
-        // gameViewModel.actualRound.observe(viewLifecycleOwner, { viewModel.setInitialActualRound(it) })
-        // gameViewModel.finishedRoundInfos.observe(viewLifecycleOwner, { viewModel.setInitialFinishedRoundInfos(it) })
-
-        viewModel.setInitialActualRound(gameViewModel.actualRound.requireValue())
-        viewModel.setInitialFinishedRoundInfos(gameViewModel.finishedRoundInfos.requireValue())
-        viewModel.initializeBaseRoundPoints()
+        gameViewModel.actualRound.observe(viewLifecycleOwner, { viewModel.setInitialActualRound(it) })
+        gameViewModel.finishedRoundInfos.observe(viewLifecycleOwner, { viewModel.setInitialFinishedRoundInfos(it) })
     }
 
     override fun initUI() {

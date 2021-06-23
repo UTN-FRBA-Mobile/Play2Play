@@ -13,8 +13,8 @@ import java.text.Normalizer
 class TuttiFruttiReviewViewModel :
     BaseViewModel<TuttiFruttiReviewEvents>() {
 
-    private lateinit var actualRound: RoundInfo
-    private lateinit var finishedRoundInfos : List<FinishedRoundInfo>
+    private var actualRound: RoundInfo? = null
+    private var finishedRoundInfos : List<FinishedRoundInfo>? = null
 
     /** List with the finished round review points */
     private val _finishedRoundPointsInfo = MutableLiveData(listOf<FinishedRoundPointsInfo>())
@@ -22,10 +22,29 @@ class TuttiFruttiReviewViewModel :
 
     fun setInitialActualRound(setActualRound: RoundInfo) {
         actualRound = setActualRound
+        finishedRoundInfos?.let { initializeBaseRoundPoints(setActualRound, it) }
     }
 
     fun setInitialFinishedRoundInfos(setFinishedRoundInfo: List<FinishedRoundInfo>) {
         finishedRoundInfos = setFinishedRoundInfo
+        actualRound?.let { initializeBaseRoundPoints(it, setFinishedRoundInfo) }
+    }
+
+    /** Process the finishedRoundInfo list to take the base points for all the players */
+    fun initializeBaseRoundPoints(actualRound: RoundInfo, finishedRoundInfos: List<FinishedRoundInfo>) {
+        val roundInitialPoints = mutableListOf<FinishedRoundPointsInfo>()
+
+        finishedRoundInfos.forEach {
+            val pointsList = it.categoriesWords.map { playerResponse ->
+                val categoryWords = getCategoryWords(playerResponse.key)
+                getPointsForWord(playerResponse.value, actualRound.letter, categoryWords)
+            }.toMutableList()
+
+            val playerPoints = FinishedRoundPointsInfo(it.player, pointsList, pointsList.sum())
+            roundInitialPoints.add(playerPoints)
+        }
+
+        _finishedRoundPointsInfo.value = roundInitialPoints
     }
 
     fun onAddRoundPoints(player: String, categoryIndex: Int) {
@@ -54,26 +73,8 @@ class TuttiFruttiReviewViewModel :
         _finishedRoundPointsInfo.value = updatedFinishedRoundPoints
     }
 
-
-    /** Process the finishedRoundInfo list to take the base points for all the players */
-    fun initializeBaseRoundPoints() {
-        val roundInitialPoints = mutableListOf<FinishedRoundPointsInfo>()
-
-        finishedRoundInfos.forEach {
-            val pointsList = it.categoriesWords.map { playerResponse ->
-                val categoryWords = getCategoryWords(playerResponse.key)
-                getPointsForWord(playerResponse.value, actualRound.letter, categoryWords)
-            }.toMutableList()
-
-            val playerPoints = FinishedRoundPointsInfo(it.player, pointsList, pointsList.sum())
-            roundInitialPoints.add(playerPoints)
-        }
-
-        _finishedRoundPointsInfo.value = roundInitialPoints
-    }
-
     private fun getCategoryWords(category: Category) : List<String> =
-        finishedRoundInfos.map{ Normalizer.normalize(it.categoriesWords[category].toString(), Normalizer.Form.NFD) }
+        finishedRoundInfos!!.map{ Normalizer.normalize(it.categoriesWords[category].toString(), Normalizer.Form.NFD) }
 
     private fun getPointsForWord(word: String, roundLetter: Char, categoryWords: List<String>) : Int {
         val categoryWord = Normalizer.normalize(word, Normalizer.Form.NFD)
