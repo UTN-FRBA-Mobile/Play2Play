@@ -14,6 +14,7 @@ class ServerTuttiFruttiLobbyFragment: BaseGameFragment<
         LobbyEvent,
         ServerTuttiFruttiLobbyViewModel,
         TuttiFruttiViewModel>() {
+        
     override val gameViewModel: TuttiFruttiViewModel by activityViewModels()
 
     override val viewModel: ServerTuttiFruttiLobbyViewModel by viewModels()
