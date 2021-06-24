@@ -13,9 +13,10 @@
         style="@style/P2P_Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/tf_letter"
+        android:paddingStart="@dimen/medium"
+        app:layout_constraintTop_toTopOf="@id/guideline_top"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
-        app:layout_constraintTop_toTopOf="@id/guideline_top" />
+        android:text="@string/tf_letter" />
 
     <TextView
         android:id="@+id/round"
@@ -23,9 +24,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/medium"
-        android:text="@string/tf_round"
+        app:layout_constraintTop_toTopOf="@id/guideline_top"
         app:layout_constraintEnd_toStartOf="@id/guideline_end"
-        app:layout_constraintTop_toTopOf="@id/guideline_top" />
+        android:text="@string/tf_round" />
 
     <ScrollView
         android:layout_width="match_parent"
