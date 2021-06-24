@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.p2p.databinding.FragmentCreateTuttiFruttiBinding
 import com.p2p.presentation.basegame.BaseGameFragment
 import com.p2p.presentation.tuttifrutti.TuttiFruttiViewModel
-import com.p2p.presentation.tuttifrutti.create.rounds.RoundsNumberFragment
+import com.p2p.presentation.tuttifrutti.create.rounds.TuttiFruttiRoundsNumberFragment
 
 class CreateTuttiFruttiFragment : BaseGameFragment<
         FragmentCreateTuttiFruttiBinding,
@@ -48,8 +48,8 @@ class CreateTuttiFruttiFragment : BaseGameFragment<
 
     override fun onEvent(event: TuttiFruttiCategoriesEvents) = when (event) {
         is GoToSelectRounds -> {
-            gameViewModel.setSelectedCategories(event.categories)
-            RoundsNumberFragment.newInstance().show(childFragmentManager, "RoundsNumberDialog")
+            gameViewModel.setCategoriesToPlay(event.categories)
+            TuttiFruttiRoundsNumberFragment.newInstance().show(childFragmentManager, "RoundsNumberDialog")
         }
     }
 

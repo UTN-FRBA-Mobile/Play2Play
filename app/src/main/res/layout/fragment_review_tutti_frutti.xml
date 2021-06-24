@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground">
@@ -27,32 +28,40 @@
         app:layout_constraintEnd_toStartOf="@id/guideline_end"
         android:text="@string/tf_round" />
 
-    <ScrollView
+    <TextView
+        android:id="@+id/enough_player"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/medium"
+        app:layout_constraintTop_toBottomOf="@id/letter"
+        app:layout_constraintStart_toStartOf="@id/guideline_begin"
+        android:text="@string/tf_enough_player"
+        android:textColor="@color/green_eden"
+        style="@style/P2P_Description" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/review_categories_recycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="@dimen/big"
+        android:layout_marginBottom="@dimen/large"
+        android:orientation="vertical"
         android:requiresFadingEdge="vertical"
-        app:layout_constraintBottom_toTopOf="@id/finish_round_button"
+        app:layout_constraintBottom_toTopOf="@id/finish_review_button"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
-        app:layout_constraintTop_toBottomOf="@id/letter">
-
-        <LinearLayout
-            android:id="@+id/categories_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingHorizontal="@dimen/screen_padding"
-            android:paddingBottom="@dimen/medium_extra" />
-    </ScrollView>
+        app:layout_constraintTop_toBottomOf="@id/enough_player"
+        tools:listitem="@layout/view_review_category_item" />
 
     <Button
-        android:id="@+id/finish_round_button"
-        style="@style/Widget.P2P.Button"
+        android:id="@+id/finish_review_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/tf_finish_round"
+        android:text="@string/continue_"
         app:layout_constraintBottom_toBottomOf="@id/guideline_bottom"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
-        app:layout_constraintStart_toStartOf="@id/guideline_begin" />
+        app:layout_constraintStart_toStartOf="@id/guideline_begin"
+        style="@style/Widget.P2P.Button" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <com.google.android.material.textfield.TextInputLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/input"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/medium_extra"
-    app:layout_goneMarginBottom="@dimen/medium"
+    android:layout_marginTop="@dimen/medium_extra"
     tools:hint="Categoria">
 
+    <!--
+    The input type is used to avoid the keyboards to show suggestions.
+    There's an input type that is literally "no suggestions", but some devices
+    don't respect that so we force it by saying it's a password input.
+    -->
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/textField"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:inputType="textVisiblePassword"
+        android:maxLines="1" />
 
 </com.google.android.material.textfield.TextInputLayout>

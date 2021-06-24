@@ -1,15 +1,18 @@
 package com.p2p.presentation.tuttifrutti
 
+import androidx.annotation.CallSuper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.userInfo.UserSession
+import com.p2p.model.base.message.Conversation
 import com.p2p.model.tuttifrutti.FinishedRoundInfo
+import com.p2p.model.tuttifrutti.FinishedRoundPointsInfo
 import com.p2p.model.tuttifrutti.RoundInfo
+import com.p2p.model.tuttifrutti.message.TuttiFruttiEnoughForMeEnoughForAllMessage
 import com.p2p.presentation.basegame.ConnectionType
 import com.p2p.presentation.basegame.GameViewModel
-import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.home.games.Game
 import com.p2p.presentation.tuttifrutti.create.categories.Category
 
@@ -26,60 +29,88 @@ abstract class TuttiFruttiViewModel(
     Game.TUTTI_FRUTTI
 ) {
 
-    /**Data for all game*/
-    private val roundsInfo = mutableListOf<FinishedRoundInfo>()
-    private val lettersByRound: List<Char> by lazy { getRandomLetters() }
+    protected lateinit var lettersByRound: List<Char>
 
-    private val _totalRounds = MutableLiveData<Int>()
+    protected val _isLoading = MutableLiveData(false)
+    val isLoading: LiveData<Boolean> = _isLoading
+
+    protected val _totalRounds = MutableLiveData<Int>()
     val totalRounds: LiveData<Int> = _totalRounds
 
-    private val _selectedCategories = MutableLiveData<List<Category>>()
-    val selectedCategories: LiveData<List<Category>> = _selectedCategories
+    protected val _finishedRoundInfos = MutableLiveData(listOf<FinishedRoundInfo>())
+    val finishedRoundInfos: LiveData<List<FinishedRoundInfo>> = _finishedRoundInfos
 
-    /** Data for the actual round. */
+    private val _finishedRoundsPointsInfos = MutableLiveData(listOf<FinishedRoundPointsInfo>())
+    val finishedRoundsPointsInfos: LiveData<List<FinishedRoundPointsInfo>> = _finishedRoundsPointsInfos
+
+    private val _categoriesToPlay = MutableLiveData<List<Category>>()
+    val categoriesToPlay: LiveData<List<Category>> = _categoriesToPlay
+
     private val _actualRound = MutableLiveData<RoundInfo>()
     val actualRound: LiveData<RoundInfo> = _actualRound
 
-    /** Set the categories selected by the user when creating the game. */
-    fun setSelectedCategories(categories: List<Category>) {
-        _selectedCategories.value = categories
+    /** Set the categories selected by the user when creating the game . */
+    fun setCategoriesToPlay(categories: List<Category>) {
+        _categoriesToPlay.value = categories
     }
 
     fun setTotalRounds(totalRounds: Int) {
         _totalRounds.value = totalRounds
     }
 
-    private fun getRandomLetters(): List<Char> =
-        availableLetters.toList().shuffled().take(totalRounds.requireValue())
-
-
-    /**On Playing game*/
-    fun finishRound(categoriesWithValues: Map<Category, String>) {
-        roundsInfo.add(actualRound.requireValue().finish(categoriesWithValues))
-        goToReviewOrWait()
+    fun setFinishedRoundPointsInfos(finishedRoundPointsInfo: List<FinishedRoundPointsInfo>) {
+        _finishedRoundsPointsInfos.value =
+            _finishedRoundsPointsInfos.value?.plus(finishedRoundPointsInfo)
     }
 
-    //TODO this should be called after review
-    private fun gameContinues(): Boolean {
-        val totalRounds: Int = totalRounds.requireValue()
-        val actualRound: Int = actualRound.requireValue().number
-        return actualRound <= totalRounds
+    fun startRound() {
+        generateNextRoundValues()
     }
 
-    private fun goToReviewOrWait() {
-
-        //TODO throw when done
-        // dispatchSingleTimeEvent(GoToReview)
+    /**
+     * Enough for me enough for all will say to the room that the round is finished.
+     *
+     * The client and the server will handle different the invocation of this method:
+     * - The client will just sent the message and just when it's sent, it'll stop the round
+     *   (that's because it needs the conversation started with the server to send their words).
+     * - The server will stop the round immediately when this is invoked because since it doesn't need
+     *   to do any more, just wait the others words.
+     */
+    open fun enoughForMeEnoughForAll() {
+        _isLoading.value = true
+        connection.write(TuttiFruttiEnoughForMeEnoughForAllMessage())
     }
 
-    fun generateNextRoundValues() {
-        //TODO this should be recieved by the server on the client, and in the server is ok
-        //See how to do this logic
+    open fun stopLoading() {
+        _isLoading.value = false
+    }
+
+
+    // TODO: this should be called from the server lobby when startGame button is clicked.
+    abstract fun startGame()
+
+    abstract fun sendWords(categoriesWords: LinkedHashMap<Category, String>)
+
+    @CallSuper
+    override fun receiveMessage(conversation: Conversation) {
+        super.receiveMessage(conversation)
+        when (conversation.lastMessage) {
+            is TuttiFruttiEnoughForMeEnoughForAllMessage -> onReceiveEnoughForAll(conversation)
+        }
+    }
+
+    protected open fun onReceiveEnoughForAll(conversation: Conversation) = stopRound()
+
+    protected fun stopRound() {
+        _isLoading.value = true
+        dispatchSingleTimeEvent(ObtainWords)
+    }
+
+    private fun generateNextRoundValues() {
         val actualRoundNumber: Int = actualRound.value?.number?.plus(1) ?: 1
         _actualRound.value =
             RoundInfo(lettersByRound[actualRoundNumber.minus(1)], actualRoundNumber)
     }
-
 
     companion object {
         const val availableLetters = "ABCDEFGHIJKLMNOPRSTUVY"
