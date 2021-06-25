@@ -7,6 +7,6 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class FinishedRoundInfo(
     val player: String,
-    val categoriesWords: Map<Category, String>,
+    val categoriesWords: LinkedHashMap<Category, String>,
     val saidEnough: Boolean = false
 ) : Parcelable

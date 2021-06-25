@@ -23,7 +23,7 @@ class TuttiFruttiActivity : GameActivity<TuttiFruttiSpecificGameEvent, TuttiFrut
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.loading.observe(this) { loading ->
+        viewModel.loadingScreen.observe(this) { loading ->
             if (loading.isLoading) hideKeyboard()
             findViewById<View>(R.id.activity_progress_overlay).isVisible = loading.isLoading
             findViewById<TextView>(R.id.progress_text).text = loading.loadingText
