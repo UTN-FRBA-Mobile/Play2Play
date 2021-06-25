@@ -30,23 +30,6 @@ class TuttiFruttiReviewViewModel :
         actualRound?.let { initializeBaseRoundPoints(it, setFinishedRoundInfo) }
     }
 
-    /** Process the finishedRoundInfo list to take the base points for all the players */
-    fun initializeBaseRoundPoints(actualRound: RoundInfo, finishedRoundInfos: List<FinishedRoundInfo>) {
-        val roundInitialPoints = mutableListOf<FinishedRoundPointsInfo>()
-
-        finishedRoundInfos.forEach {
-            val pointsList = it.categoriesWords.map { playerResponse ->
-                val categoryWords = getCategoryWords(playerResponse.key, finishedRoundInfos)
-                getPointsForWord(playerResponse.value, actualRound.letter, categoryWords)
-            }.toMutableList()
-
-            val playerPoints = FinishedRoundPointsInfo(it.player, pointsList, pointsList.sum())
-            roundInitialPoints.add(playerPoints)
-        }
-
-        _finishedRoundPointsInfo.value = roundInitialPoints
-    }
-
     fun onAddRoundPoints(player: String, categoryIndex: Int) {
         val updatedFinishedRoundPoints = finishedRoundPointsInfo.requireValue().toMutableList()
         val elementToUpdate = updatedFinishedRoundPoints.first { it.player == player }
@@ -71,6 +54,20 @@ class TuttiFruttiReviewViewModel :
             elementToUpdate.copy(wordsPoints = wordsPoints)
 
         _finishedRoundPointsInfo.value = updatedFinishedRoundPoints
+    }
+
+    /** Process the finishedRoundInfo list to take the base points for all the players */
+    private fun initializeBaseRoundPoints(actualRound: RoundInfo, finishedRoundInfos: List<FinishedRoundInfo>) {
+        val roundInitialPoints = finishedRoundInfos.map {
+            val pointsList = it.categoriesWords.map { playerResponse ->
+                val categoryWords = getCategoryWords(playerResponse.key, finishedRoundInfos)
+                getPointsForWord(playerResponse.value, actualRound.letter, categoryWords)
+            }.toMutableList()
+
+            FinishedRoundPointsInfo(it.player, pointsList, pointsList.sum())
+        }
+
+        _finishedRoundPointsInfo.value = roundInitialPoints
     }
 
     private fun getCategoryWords(category: Category, finishedRoundInfos: List< FinishedRoundInfo>) : List<String> =
