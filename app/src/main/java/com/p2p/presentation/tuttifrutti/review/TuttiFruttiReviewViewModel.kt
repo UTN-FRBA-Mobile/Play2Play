@@ -36,7 +36,7 @@ class TuttiFruttiReviewViewModel :
 
         finishedRoundInfos.forEach {
             val pointsList = it.categoriesWords.map { playerResponse ->
-                val categoryWords = getCategoryWords(playerResponse.key)
+                val categoryWords = getCategoryWords(playerResponse.key, finishedRoundInfos)
                 getPointsForWord(playerResponse.value, actualRound.letter, categoryWords)
             }.toMutableList()
 
