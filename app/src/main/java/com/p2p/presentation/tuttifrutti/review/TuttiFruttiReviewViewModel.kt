@@ -73,8 +73,8 @@ class TuttiFruttiReviewViewModel :
         _finishedRoundPointsInfo.value = updatedFinishedRoundPoints
     }
 
-    private fun getCategoryWords(category: Category) : List<String> =
-        finishedRoundInfos!!.map{ Normalizer.normalize(it.categoriesWords[category].toString(), Normalizer.Form.NFD) }
+    private fun getCategoryWords(category: Category, finishedRoundInfos: List< FinishedRoundInfo>) : List<String> =
+        finishedRoundInfos.map{ Normalizer.normalize(it.categoriesWords[category].toString(), Normalizer.Form.NFD) }
 
     private fun getPointsForWord(word: String, roundLetter: Char, categoryWords: List<String>) : Int {
         val categoryWord = Normalizer.normalize(word, Normalizer.Form.NFD)
