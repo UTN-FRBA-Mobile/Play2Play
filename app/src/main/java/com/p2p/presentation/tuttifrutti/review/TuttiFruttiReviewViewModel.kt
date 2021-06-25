@@ -49,7 +49,7 @@ class TuttiFruttiReviewViewModel :
 
     fun onAddRoundPoints(player: String, categoryIndex: Int) {
         val updatedFinishedRoundPoints = finishedRoundPointsInfo.requireValue().toMutableList()
-        val elementToUpdate = updatedFinishedRoundPoints.find { it.player == player }!!
+        val elementToUpdate = updatedFinishedRoundPoints.first { it.player == player }
         val wordsPoints = elementToUpdate.wordsPoints.toMutableList()
 
         wordsPoints[categoryIndex] += 5
