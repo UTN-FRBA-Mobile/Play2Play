@@ -1,42 +1,89 @@
 package com.p2p.presentation.tuttifrutti.review
 
-import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
+import androidx.core.text.HtmlCompat
 import androidx.fragment.app.activityViewModels
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.p2p.R
-import com.p2p.databinding.BaseGameBinding
+import com.p2p.databinding.FragmentReviewTuttiFruttiBinding
+import com.p2p.model.tuttifrutti.FinishedRoundInfo
+import com.p2p.presentation.basegame.BaseGameFragment
+import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.tuttifrutti.TuttiFruttiViewModel
 
-// TODO: clean this
-class TuttiFruttiReviewFragment : Fragment() {
+class TuttiFruttiReviewFragment : BaseGameFragment<
+        FragmentReviewTuttiFruttiBinding,
+        TuttiFruttiReviewEvents,
+        TuttiFruttiReviewViewModel,
+        TuttiFruttiViewModel>() {
 
-    val viewmodel: TuttiFruttiViewModel by activityViewModels()
+    override val gameViewModel: TuttiFruttiViewModel by activityViewModels()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return BaseGameBinding.inflate(inflater).root
+    override val viewModel: TuttiFruttiReviewViewModel by viewModels()
+
+    override val gameInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentReviewTuttiFruttiBinding =
+        FragmentReviewTuttiFruttiBinding::inflate
+
+    private lateinit var tuttiFruttiReviewRoundAdapter: TuttiFruttiReviewRoundAdapter
+
+
+    override fun initValues() {
+        gameViewModel.actualRound.observe(viewLifecycleOwner, { viewModel.setInitialActualRound(it) })
+        gameViewModel.finishedRoundInfos.observe(viewLifecycleOwner, { viewModel.setInitialFinishedRoundInfos(it) })
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun initUI() {
+        super.initUI()
+        gameViewModel.stopLoading()
+        setupReviewCategoriesRecycler()
+        gameBinding.finishReviewButton.setOnClickListener { viewModel.sendRoundPoints() }
+    }
 
-        // Delete this! It's awful and we should neve do this.
-        activity?.findViewById<View>(R.id.activity_progress_overlay)?.isVisible = false
-        viewmodel.finishedRoundInfos.observe(viewLifecycleOwner) { finishedRoundInfo ->
-            MaterialAlertDialogBuilder(requireContext())
-                .setMessage(finishedRoundInfo.joinToString("\n\n") {
-                    "${it.player} ${if (it.saidEnough) "(dijo basta)" else ""} --> ${it.categoriesWords}"
-                })
-                .show()
+    private fun setupReviewCategoriesRecycler() = with(gameBinding.reviewCategoriesRecycler) {
+        layoutManager = LinearLayoutManager(context)
+        adapter = TuttiFruttiReviewRoundAdapter(viewModel::onAddRoundPoints, viewModel::onSubstractRoundPoints).also {
+            this@TuttiFruttiReviewFragment.tuttiFruttiReviewRoundAdapter = it
         }
+    }
+
+    override fun setupObservers() {
+        with(gameViewModel) {
+            actualRound.observe(viewLifecycleOwner) {
+                gameBinding.round.text = HtmlCompat.fromHtml(
+                    resources.getString(R.string.tf_round, it.number, totalRounds.value),
+                    HtmlCompat.FROM_HTML_MODE_COMPACT
+                )
+                gameBinding.letter.text = HtmlCompat.fromHtml(
+                    resources.getString(R.string.tf_letter, it.letter),
+                    HtmlCompat.FROM_HTML_MODE_COMPACT
+                )
+            }
+            finishedRoundInfos.observe(viewLifecycleOwner) { finishedRoundInfo ->
+                tuttiFruttiReviewRoundAdapter.finishedRoundInfo = finishedRoundInfo
+                gameBinding.enoughPlayer.text = HtmlCompat.fromHtml(
+                    resources.getString(R.string.tf_enough_player, finishedRoundInfo.first { it.saidEnough }.player),
+                    HtmlCompat.FROM_HTML_MODE_COMPACT
+                )
+            }
+        }
+        with(viewModel) {
+            finishedRoundPointsInfo.observe(viewLifecycleOwner) {
+                tuttiFruttiReviewRoundAdapter.finishedRoundPointsInfo = it
+            }
+        }
+
+        super.setupObservers()
+    }
+
+    override fun onEvent(event: TuttiFruttiReviewEvents) = when (event) {
+        is FinishRoundReview -> gameViewModel.setFinishedRoundPointsInfos(event.finishedRoundPointsInfo)
     }
 
     companion object {
 
+        /** Create a new instance of the [TuttiFruttiReviewFragment]. */
         fun newInstance() = TuttiFruttiReviewFragment()
     }
 }

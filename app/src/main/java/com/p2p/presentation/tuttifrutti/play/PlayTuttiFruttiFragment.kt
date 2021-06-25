@@ -89,7 +89,7 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
 
     private fun onGameEvent(event: GameEvent) {
         when (event) {
-            ObtainWords -> gameViewModel.sendWords(getCategoriesValues())
+            ObtainWords -> gameViewModel.sendWords(getCategoriesValues() as LinkedHashMap<Category, String>)
             is GoToReview -> addFragment(
                 TuttiFruttiReviewFragment.newInstance(),
                 shouldAddToBackStack = false

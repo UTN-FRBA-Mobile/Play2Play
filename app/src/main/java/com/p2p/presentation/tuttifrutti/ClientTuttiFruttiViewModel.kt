@@ -48,7 +48,7 @@ class ClientTuttiFruttiViewModel(
         super.onReceiveEnoughForAll(conversation)
     }
 
-    override fun sendWords(categoriesWords: Map<Category, String>) {
+    override fun sendWords(categoriesWords: LinkedHashMap<Category, String>) {
         enoughForAllConversation?.let { connection.talk(it, TuttiFruttiSendWordsMessage(categoriesWords)) }
         enoughForAllConversation = null
     }
