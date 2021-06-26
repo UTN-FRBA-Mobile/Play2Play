@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import com.p2p.R
+import com.p2p.model.VisibleLoadingScreen
 import com.p2p.presentation.basegame.GameActivity
 import com.p2p.presentation.tuttifrutti.countdown.TuttiFruttiCountdownFragment
 import com.p2p.presentation.tuttifrutti.create.categories.CreateTuttiFruttiFragment
@@ -26,7 +27,12 @@ class TuttiFruttiActivity : GameActivity<TuttiFruttiSpecificGameEvent, TuttiFrut
         viewModel.loadingScreen.observe(this) { loading ->
             if (loading.isLoading) hideKeyboard()
             findViewById<View>(R.id.activity_progress_overlay).isVisible = loading.isLoading
-            findViewById<TextView>(R.id.progress_text).text = loading.loadingText
+            when (loading) {
+                is VisibleLoadingScreen ->
+                    findViewById<TextView>(R.id.progress_text).text = loading.waitingText
+                else -> {
+                }
+            }
         }
     }
 

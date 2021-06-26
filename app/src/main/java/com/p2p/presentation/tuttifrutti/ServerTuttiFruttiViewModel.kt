@@ -3,6 +3,7 @@ package com.p2p.presentation.tuttifrutti
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.userInfo.UserSession
+import com.p2p.model.HiddenLoadingScreen
 import com.p2p.model.base.message.Conversation
 import com.p2p.model.tuttifrutti.FinishedRoundInfo
 import com.p2p.model.tuttifrutti.TuttiFruttiStartGame
@@ -50,9 +51,9 @@ class ServerTuttiFruttiViewModel(
 
     override fun sendWords(categoriesWords: LinkedHashMap<Category, String>) = acceptWords(MYSELF_PEER_ID, categoriesWords)
 
-    override fun enoughForMeEnoughForAll() {
+    override fun enoughForMeEnoughForAll(waitingText: String) {
         saidEnough(MYSELF_PEER_ID)
-        super.enoughForMeEnoughForAll()
+        super.enoughForMeEnoughForAll(waitingText)
         stopRound()
     }
 
@@ -80,6 +81,7 @@ class ServerTuttiFruttiViewModel(
 
     private fun goToReviewIfCorresponds() {
         if (finishedRoundInfos.requireValue().size == connectedPlayers.size) {
+            _loadingScreen.value = HiddenLoadingScreen
             // When all the players send their words, go to the review and clean the players round words.
             dispatchSingleTimeEvent(GoToReview)
         }

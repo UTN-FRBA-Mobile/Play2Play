@@ -36,7 +36,6 @@ class TuttiFruttiReviewFragment : BaseGameFragment<
 
     override fun initUI() {
         super.initUI()
-        gameViewModel.stopLoading()
         setupReviewCategoriesRecycler()
         gameBinding.finishReviewButton.setOnClickListener { viewModel.sendRoundPoints() }
     }

@@ -43,8 +43,15 @@ class ClientTuttiFruttiViewModel(
         super.onSentSuccessfully(conversation)
     }
 
+    override fun enoughForMeEnoughForAll(waitingText: String) {
+        startLoading(waitingText)
+        super.enoughForMeEnoughForAll(waitingText)
+    }
     override fun onReceiveEnoughForAll(conversation: Conversation) {
         enoughForAllConversation = conversation
+        when (val message = conversation.lastMessage) {
+            is TuttiFruttiEnoughForMeEnoughForAllMessage -> startLoading(message.waitingMessage)
+        }
         super.onReceiveEnoughForAll(conversation)
     }
 
