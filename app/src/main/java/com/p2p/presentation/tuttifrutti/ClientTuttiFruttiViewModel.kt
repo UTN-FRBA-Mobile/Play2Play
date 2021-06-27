@@ -47,17 +47,23 @@ class ClientTuttiFruttiViewModel(
     }
 
     override fun enoughForMeEnoughForAll() {
-        startLoading(TuttiFruttiEnoughForMeEnoughForAllMessage.TYPE)
+        startLoading(loadingTextRepository.getText(TuttiFruttiEnoughForMeEnoughForAllMessage.TYPE))
         super.enoughForMeEnoughForAll()
     }
+
     override fun onReceiveEnoughForAll(conversation: Conversation) {
         enoughForAllConversation = conversation
-        startLoading(loadingTextRepository.getText(conversation.lastMessage.type))
+        startLoading(loadingTextRepository.getText(TuttiFruttiEnoughForMeEnoughForAllMessage.TYPE))
         super.onReceiveEnoughForAll(conversation)
     }
 
     override fun sendWords(categoriesWords: LinkedHashMap<Category, String>) {
-        enoughForAllConversation?.let { connection.talk(it, TuttiFruttiSendWordsMessage(categoriesWords)) }
+        enoughForAllConversation?.let {
+            connection.talk(
+                it,
+                TuttiFruttiSendWordsMessage(categoriesWords)
+            )
+        }
         enoughForAllConversation = null
     }
 

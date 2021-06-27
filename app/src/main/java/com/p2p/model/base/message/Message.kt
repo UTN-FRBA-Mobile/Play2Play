@@ -19,4 +19,4 @@ import java.io.Serializable
     JsonSubTypes.Type(value = TuttiFruttiEnoughForMeEnoughForAllMessage::class),
     JsonSubTypes.Type(value = TuttiFruttiSendWordsMessage::class),
 )
-abstract class Message(val type: String) : Serializable
+abstract class Message(private val type: String) : Serializable
