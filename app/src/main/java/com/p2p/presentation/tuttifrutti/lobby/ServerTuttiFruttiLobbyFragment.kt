@@ -26,8 +26,7 @@ class ServerTuttiFruttiLobbyFragment: BaseGameFragment<
 
     override fun initUI() {
         super.initUI()
-        gameViewModel.startConnection() // TODO Check Fragment without an activity on init {}
-        gameBinding.startGameButton.isEnabled = false
+        gameViewModel.startConnection()
         setupPlayersRecycler()
         gameBinding.startGameButton.setOnClickListener {
             gameViewModel.startGame()

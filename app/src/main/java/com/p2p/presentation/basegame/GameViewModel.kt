@@ -51,7 +51,7 @@ abstract class GameViewModel(
         _game.value = theGame
         connectedPlayers = listOf(MYSELF_PEER_ID to userName)
         createOrJoin()
-        startConnection() // TODO: This should be called when the creation is finished, from the Lobby
+        startConnection()
     }
 
     /**

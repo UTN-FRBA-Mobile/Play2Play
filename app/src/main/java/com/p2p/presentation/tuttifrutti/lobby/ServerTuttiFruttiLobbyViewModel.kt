@@ -8,10 +8,9 @@ class ServerTuttiFruttiLobbyViewModel: BaseViewModel<LobbyEvent>() {
     private val _isContinueButtonEnabled = MutableLiveData(false)
     val isContinueButtonEnabled: LiveData<Boolean> = _isContinueButtonEnabled
 
-    fun updateContinueButtonStatus(players: List<String>) {
+    fun updatePlayers(players: List<String>) {
         _isContinueButtonEnabled.value = players.size >= LOBBY_MIN_SIZE
     }
-
 
     companion object {
         const val LOBBY_MIN_SIZE = 1

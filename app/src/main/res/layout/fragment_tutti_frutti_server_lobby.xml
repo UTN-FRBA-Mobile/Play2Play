@@ -38,6 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/medium_extra"
         android:text="@string/lobby_start_game"
+        android:enabled="false"
         app:layout_constraintBottom_toBottomOf="@id/guideline_bottom"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintStart_toStartOf="@id/guideline_begin" />

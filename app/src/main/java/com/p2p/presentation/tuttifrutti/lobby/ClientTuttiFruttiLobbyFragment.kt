@@ -26,7 +26,7 @@ class ClientTuttiFruttiLobbyFragment: BaseGameFragment<
 
     override fun initUI() {
         super.initUI()
-        gameViewModel.startConnection()  // TODO Check Fragment without an activity on init {}
+        gameViewModel.startConnection()
         setupPlayersRecycler()
     }
 
