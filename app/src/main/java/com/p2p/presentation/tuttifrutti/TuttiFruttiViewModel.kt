@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
+import com.p2p.data.loadingMessages.LoadingTextRepository
 import com.p2p.data.userInfo.UserSession
 import com.p2p.model.HiddenLoadingScreen
 import com.p2p.model.LoadingScreen
@@ -24,12 +25,14 @@ abstract class TuttiFruttiViewModel(
     connectionType: ConnectionType,
     userSession: UserSession,
     bluetoothConnectionCreator: BluetoothConnectionCreator,
-    instructionsRepository: InstructionsRepository
+    instructionsRepository: InstructionsRepository,
+    loadingTextRepository: LoadingTextRepository
 ) : GameViewModel(
     connectionType,
     userSession,
     bluetoothConnectionCreator,
     instructionsRepository,
+    loadingTextRepository,
     Game.TUTTI_FRUTTI
 ) {
 
@@ -87,8 +90,8 @@ abstract class TuttiFruttiViewModel(
      *   to do any more, just wait the others words.
      */
     @CallSuper
-    open fun enoughForMeEnoughForAll(waitingText: String) {
-        connection.write(TuttiFruttiEnoughForMeEnoughForAllMessage(waitingText))
+    open fun enoughForMeEnoughForAll() {
+        connection.write(TuttiFruttiEnoughForMeEnoughForAllMessage())
     }
 
 

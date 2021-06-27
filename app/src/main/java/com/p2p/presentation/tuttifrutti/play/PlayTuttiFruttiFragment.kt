@@ -37,8 +37,6 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
     override val gameInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentPlayTuttiFruttiBinding =
         FragmentPlayTuttiFruttiBinding::inflate
 
-    private val waitingText by lazy { resources.getString(R.string.tf_wait_for_results) }
-
     override fun initValues() {
         gameViewModel.startRound()
     }
@@ -85,7 +83,7 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
     }
 
     override fun onEvent(event: TuttiFruttiPlayingEvents) = when (event) {
-        FinishRound -> gameViewModel.enoughForMeEnoughForAll(waitingText)
+        FinishRound -> gameViewModel.enoughForMeEnoughForAll()
         ShowInvalidInputs -> markErrors()
     }
 

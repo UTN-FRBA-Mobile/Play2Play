@@ -2,6 +2,7 @@ package com.p2p.presentation.tuttifrutti
 
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
+import com.p2p.data.loadingMessages.LoadingTextRepository
 import com.p2p.data.userInfo.UserSession
 import com.p2p.model.HiddenLoadingScreen
 import com.p2p.model.base.message.Conversation
@@ -16,12 +17,14 @@ class ServerTuttiFruttiViewModel(
     connectionType: ConnectionType,
     userSession: UserSession,
     bluetoothConnectionCreator: BluetoothConnectionCreator,
-    instructionsRepository: InstructionsRepository
+    instructionsRepository: InstructionsRepository,
+    loadingTextRepository: LoadingTextRepository
 ) : TuttiFruttiViewModel(
     connectionType,
     userSession,
     bluetoothConnectionCreator,
-    instructionsRepository
+    instructionsRepository,
+    loadingTextRepository
 ) {
     private var gameAlreadyStarted = false
     private var saidEnoughPeer: Long? = null
@@ -51,9 +54,9 @@ class ServerTuttiFruttiViewModel(
 
     override fun sendWords(categoriesWords: LinkedHashMap<Category, String>) = acceptWords(MYSELF_PEER_ID, categoriesWords)
 
-    override fun enoughForMeEnoughForAll(waitingText: String) {
+    override fun enoughForMeEnoughForAll() {
         saidEnough(MYSELF_PEER_ID)
-        super.enoughForMeEnoughForAll(waitingText)
+        super.enoughForMeEnoughForAll()
         stopRound()
     }
 
