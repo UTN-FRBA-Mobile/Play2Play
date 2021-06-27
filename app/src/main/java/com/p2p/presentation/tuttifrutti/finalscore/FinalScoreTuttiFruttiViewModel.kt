@@ -10,7 +10,7 @@ class FinalScoreTuttiFruttiViewModel:
     private val _finalScores = MutableLiveData(listOf<TuttiFruttiFinalScore>()
         .plus(TuttiFruttiFinalScore("pepe", 54))
         .plus(TuttiFruttiFinalScore("moni", 53))
-        .plus(TuttiFruttiFinalScore("dardo", 50)))
+        .plus(TuttiFruttiFinalScore("dardo", 50))) //TODO REMOVE MOCKS
     val finalScores: LiveData<List<TuttiFruttiFinalScore>> = _finalScores
 
     fun exit() {

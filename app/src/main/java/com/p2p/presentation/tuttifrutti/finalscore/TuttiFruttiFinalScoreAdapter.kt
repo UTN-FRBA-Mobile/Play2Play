@@ -45,7 +45,7 @@ class TuttiFruttiFinalScoreAdapter :
     inner class ViewHolder(private val binding: ViewTuttiFruttiFinalScoreItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        /** Show the given [category] into the view. */
+        /** Show the given [final score] into the view. */
         fun bind(userFinalScore: TuttiFruttiFinalScore, position: Int) = with(binding) {
             finalPosition.text = (position + 1).toString()
             playerName.text = userFinalScore.player
