@@ -1,15 +1,19 @@
 package com.p2p.presentation.tuttifrutti.play
 
+import android.os.Build
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.core.text.HtmlCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.google.android.material.textfield.TextInputLayout
 import com.p2p.R
 import com.p2p.databinding.FragmentPlayTuttiFruttiBinding
-import com.p2p.databinding.PlayCategoryItemBinding
+import com.p2p.databinding.ViewPlayCategoryItemBinding
 import com.p2p.presentation.basegame.BaseGameFragment
+import com.p2p.presentation.basegame.GameEvent
 import com.p2p.presentation.tuttifrutti.GoToReview
 import com.p2p.presentation.tuttifrutti.ObtainWords
 import com.p2p.presentation.tuttifrutti.TuttiFruttiSpecificGameEvent
@@ -48,9 +52,14 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
     private fun setUpCategoriesList(list: LinearLayout) = with(gameViewModel) {
         categoriesToPlay.observe(viewLifecycleOwner) {
             it.map { category ->
-                categoriesInputs[category] = PlayCategoryItemBinding.inflate(layoutInflater, list, true).run {
-                    input.hint = category
-                    root
+                categoriesInputs[category] =
+                    ViewPlayCategoryItemBinding.inflate(layoutInflater, list, true).run {
+                        input.hint = category
+                        textField.setOnFocusChangeListener { _, _ ->
+                            input.error = null
+                            input.isErrorEnabled = false
+                        }
+                        root
                 }
             }
         }
@@ -59,11 +68,16 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
     override fun setupObservers() {
         super.setupObservers()
         with(gameViewModel) {
-            singleTimeEvent.observe(viewLifecycleOwner) { onGameEvent(it as TuttiFruttiSpecificGameEvent) }
+            singleTimeEvent.observe(viewLifecycleOwner) { onGameEvent(it) }
             actualRound.observe(viewLifecycleOwner) {
-                gameBinding.round.text =
-                    resources.getString(R.string.tf_round, it.number, totalRounds.value)
-                gameBinding.letter.text = resources.getString(R.string.tf_letter, it.letter)
+                gameBinding.round.text = HtmlCompat.fromHtml(
+                    resources.getString(R.string.tf_round, it.number, totalRounds.value),
+                    HtmlCompat.FROM_HTML_MODE_COMPACT
+                )
+                gameBinding.letter.text = HtmlCompat.fromHtml(
+                    resources.getString(R.string.tf_letter, it.letter),
+                    HtmlCompat.FROM_HTML_MODE_COMPACT
+                )
             }
         }
     }
@@ -73,13 +87,14 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
         ShowInvalidInputs -> markErrors()
     }
 
-    private fun onGameEvent(event: TuttiFruttiSpecificGameEvent) {
+    private fun onGameEvent(event: GameEvent) {
         when (event) {
-            ObtainWords -> gameViewModel.sendWords(getCategoriesValues())
+            ObtainWords -> gameViewModel.sendWords(getCategoriesValues() as LinkedHashMap<Category, String>)
             is GoToReview -> addFragment(
                 TuttiFruttiReviewFragment.newInstance(),
                 shouldAddToBackStack = false
             )
+            else -> Unit
         }
     }
 

@@ -8,6 +8,7 @@ import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.userInfo.UserSession
 import com.p2p.model.base.message.Conversation
 import com.p2p.model.tuttifrutti.FinishedRoundInfo
+import com.p2p.model.tuttifrutti.FinishedRoundPointsInfo
 import com.p2p.model.tuttifrutti.RoundInfo
 import com.p2p.model.tuttifrutti.message.TuttiFruttiEnoughForMeEnoughForAllMessage
 import com.p2p.presentation.basegame.ConnectionType
@@ -39,6 +40,9 @@ abstract class TuttiFruttiViewModel(
     protected val _finishedRoundInfos = MutableLiveData(listOf<FinishedRoundInfo>())
     val finishedRoundInfos: LiveData<List<FinishedRoundInfo>> = _finishedRoundInfos
 
+    private val _finishedRoundsPointsInfos = MutableLiveData(listOf<FinishedRoundPointsInfo>())
+    val finishedRoundsPointsInfos: LiveData<List<FinishedRoundPointsInfo>> = _finishedRoundsPointsInfos
+
     private val _categoriesToPlay = MutableLiveData<List<Category>>()
     val categoriesToPlay: LiveData<List<Category>> = _categoriesToPlay
 
@@ -52,6 +56,11 @@ abstract class TuttiFruttiViewModel(
 
     fun setTotalRounds(totalRounds: Int) {
         _totalRounds.value = totalRounds
+    }
+
+    fun setFinishedRoundPointsInfos(finishedRoundPointsInfo: List<FinishedRoundPointsInfo>) {
+        _finishedRoundsPointsInfos.value =
+            _finishedRoundsPointsInfos.value?.plus(finishedRoundPointsInfo)
     }
 
     fun startRound() {
@@ -72,9 +81,15 @@ abstract class TuttiFruttiViewModel(
         connection.write(TuttiFruttiEnoughForMeEnoughForAllMessage())
     }
 
+    open fun stopLoading() {
+        _isLoading.value = false
+    }
+
+
+    // TODO: this should be called from the server lobby when startGame button is clicked.
     abstract fun startGame()
 
-    abstract fun sendWords(categoriesWords: Map<Category, String>)
+    abstract fun sendWords(categoriesWords: LinkedHashMap<Category, String>)
 
     @CallSuper
     override fun receiveMessage(conversation: Conversation) {

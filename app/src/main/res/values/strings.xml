@@ -9,6 +9,7 @@
     <string name="connect">Conectarse</string>
     <string name="understood">Entendido</string>
     <string name="unknown">Desconocido</string>
+    <string name="points">Puntos</string>
 
     <!-- Request location permission -->
     <string name="request_location_title">Lo necesitás para jugar</string>
@@ -46,8 +47,8 @@
     <string name="how_to_connect_bluetooth_title">¿Cómo conectarse con otro dispositivo Bluetooth?</string>
 
     <!-- Tutti Frutti - Game -->
-    <string name="tf_letter">Letra: %s</string>
-    <string name="tf_round">Ronda: %d/%d</string>
+    <string name="tf_letter"><![CDATA[Letra: <font color=#FF8550>%s</font>]]></string>
+    <string name="tf_round"><![CDATA[Ronda: <font color=#FF8550>%d</font>/%d]]></string>
     <string name="tf_validation_error">¡Falta completar!</string>
     <string name="tf_finish_round">¡Basta para mi, basta para todos!</string>
 
@@ -56,4 +57,5 @@
     <string name="lobby_waiting_players">Esperando jugadores</string>
     <string name="lobby_start_game">Comenzar juego</string>
 
+    <string name="tf_enough_player"><![CDATA[¡<b>%s</b> dijo basta!]]></string>
 </resources>
