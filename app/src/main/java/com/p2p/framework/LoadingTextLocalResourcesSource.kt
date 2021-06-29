@@ -16,6 +16,6 @@ class LoadingTextLocalResourcesSource(private val context: Context) : LoadingSou
     )
 
     override fun getLoadingText(messageType: String): String =
-        textByMessage[messageType] ?: context.resources.getString(R.string.default_loading_text)
+        textByMessage[messageType] ?: ""
 
 }

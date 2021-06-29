@@ -55,12 +55,14 @@ class ServerTuttiFruttiViewModel(
     override fun sendWords(categoriesWords: LinkedHashMap<Category, String>) = acceptWords(MYSELF_PEER_ID, categoriesWords)
 
     override fun enoughForMeEnoughForAll() {
+        startLoading(loadingMessage = "")
         saidEnough(MYSELF_PEER_ID)
         super.enoughForMeEnoughForAll()
         stopRound()
     }
 
     override fun onReceiveEnoughForAll(conversation: Conversation) {
+        startLoading(loadingMessage = "")
         saidEnough(conversation.peer)
         super.onReceiveEnoughForAll(conversation)
     }
@@ -84,7 +86,6 @@ class ServerTuttiFruttiViewModel(
 
     private fun goToReviewIfCorresponds() {
         if (finishedRoundInfos.requireValue().size == connectedPlayers.size) {
-            _loadingScreen.value = HiddenLoadingScreen
             // When all the players send their words, go to the review and clean the players round words.
             dispatchSingleTimeEvent(GoToReview)
         }

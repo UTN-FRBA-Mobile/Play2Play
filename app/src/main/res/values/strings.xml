@@ -10,7 +10,6 @@
     <string name="understood">Entendido</string>
     <string name="unknown">Desconocido</string>
     <string name="points">Puntos</string>
-    <string name="default_loading_text">Momento de tomar un respiro, y esperar un poco :)</string>
 
 
     <!-- Request location permission -->

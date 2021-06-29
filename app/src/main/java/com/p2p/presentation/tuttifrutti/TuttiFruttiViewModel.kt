@@ -120,6 +120,10 @@ abstract class TuttiFruttiViewModel(
         _loadingScreen.value = VisibleLoadingScreen(loadingMessage)
     }
 
+    protected fun stopLoading(){
+        _loadingScreen.value = HiddenLoadingScreen
+    }
+
     private fun generateNextRoundValues() {
         val actualRoundNumber: Int = actualRound.value?.number?.plus(1) ?: 1
         _actualRound.value =
