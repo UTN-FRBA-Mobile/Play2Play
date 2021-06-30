@@ -32,7 +32,7 @@ class TuttiFruttiReviewRoundAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder {
-        if (viewType == 0) {
+        if (viewType == TITLE_TYPE) {
             return ReviewCategoryViewHolder(
                 ViewReviewCategoryItemBinding.inflate(
                     LayoutInflater.from(parent.context),

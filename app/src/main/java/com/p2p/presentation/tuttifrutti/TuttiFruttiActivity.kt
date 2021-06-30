@@ -8,6 +8,8 @@ import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import com.p2p.R
 import com.p2p.presentation.basegame.GameActivity
+import com.p2p.presentation.tuttifrutti.lobby.ClientTuttiFruttiLobbyFragment
+import com.p2p.presentation.tuttifrutti.lobby.ServerTuttiFruttiLobbyFragment
 import com.p2p.presentation.tuttifrutti.countdown.TuttiFruttiCountdownFragment
 import com.p2p.presentation.tuttifrutti.create.categories.CreateTuttiFruttiFragment
 import com.p2p.presentation.tuttifrutti.finalscore.FinalScoreTuttiFruttiFragment
@@ -35,10 +37,10 @@ class TuttiFruttiActivity : GameActivity<TuttiFruttiSpecificGameEvent, TuttiFrut
     override fun goToPlay() = addFragment(TuttiFruttiCountdownFragment.newInstance(), shouldAddToBackStack = false)
 
     override fun goToClientLobby() =
-        Unit // TODO: addFragment(ClientLobbyTuttiFruttiFragment.newInstance(), shouldAddToBackStack = false)
+        addFragment(ClientTuttiFruttiLobbyFragment.newInstance(), shouldAddToBackStack = false)
 
     override fun goToServerLobby() =
-        Unit // TODO: addFragment(ServerLobbyTuttiFruttiFragment.newInstance(), shouldAddToBackStack = false)
+        addFragment(ServerTuttiFruttiLobbyFragment.newInstance(), shouldAddToBackStack = false)
 
     companion object {
 

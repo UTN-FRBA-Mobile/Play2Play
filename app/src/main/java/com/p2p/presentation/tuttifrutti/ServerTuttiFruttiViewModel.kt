@@ -39,6 +39,8 @@ class ServerTuttiFruttiViewModel(
     override fun startGame() {
         lettersByRound = getRandomLetters()
         connection.write(TuttiFruttiStartGame(lettersByRound, categoriesToPlay.requireValue()))
+        closeDiscovery()
+        goToPlay()
     }
 
     override fun receiveMessage(conversation: Conversation) {
