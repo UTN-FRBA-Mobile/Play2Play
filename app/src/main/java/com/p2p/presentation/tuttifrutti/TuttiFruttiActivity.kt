@@ -22,6 +22,7 @@ class TuttiFruttiActivity : GameActivity<TuttiFruttiSpecificGameEvent, TuttiFrut
         TuttiFruttiViewModelFactory(this, gameViewModelFactoryData)
     }
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.isLoading.observe(this) { isLoading ->

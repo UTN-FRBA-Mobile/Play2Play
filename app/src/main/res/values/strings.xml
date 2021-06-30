@@ -58,4 +58,10 @@
     <string name="lobby_start_game">Comenzar juego</string>
 
     <string name="tf_enough_player"><![CDATA[¡<b>%s</b> dijo basta!]]></string>
+  
+    <!-- Tutti Frutti - Final Score -->
+    <string name="tf_winner">Ganó %s</string>
+    <string name="tf_points">%d puntos</string>
+    <string name="tf_exit">Salir</string>
+  
 </resources>
