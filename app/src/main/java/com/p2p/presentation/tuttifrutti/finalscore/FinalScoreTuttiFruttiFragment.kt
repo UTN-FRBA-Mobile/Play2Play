@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.p2p.R
 import com.p2p.databinding.FragmentTuttiFruttiFinalScoreBinding
 import com.p2p.presentation.basegame.BaseGameFragment
-import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.tuttifrutti.TuttiFruttiViewModel
 
 class FinalScoreTuttiFruttiFragment : BaseGameFragment<
@@ -32,12 +31,12 @@ class FinalScoreTuttiFruttiFragment : BaseGameFragment<
         gameBinding.exitButton.setOnClickListener { viewModel.exit() }
     }
 
-    override fun setupObservers() = with(viewModel) {
+    override fun setupObservers() = with(gameViewModel) {
         super.setupObservers()
-        finalScores.observe(viewLifecycleOwner) {
-            tuttiFruttiFinalScoreAdapter.results = it
-            val players = finalScores.requireValue()
-            gameBinding.winner.text = resources.getString(R.string.tf_winner, players[0].player)
+        finishedRoundsPointsInfos.observe(viewLifecycleOwner) {
+            val finalScores = it.sortedByDescending { info -> info.totalPoints }
+            tuttiFruttiFinalScoreAdapter.results = finalScores
+            gameBinding.winner.text = resources.getString(R.string.tf_winner, finalScores[0].player)
         }
     }
 

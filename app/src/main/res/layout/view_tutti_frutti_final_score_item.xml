@@ -6,19 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <View
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="@+id/final_position"
-        app:layout_constraintEnd_toEndOf="@+id/points"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
     <TextView
         android:id="@+id/final_position"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/P2P_Description"
         android:textColor="@color/persimmon"
         android:textSize="@dimen/font_huge"
         android:textStyle="bold"
@@ -54,13 +46,14 @@
         android:layout_marginStart="@dimen/medium_more"
         app:layout_constraintStart_toEndOf="@+id/playerName"
         app:layout_constraintTop_toTopOf="@+id/playerName"
-        tools:tint="@color/persimmon"
-        tools:src="@drawable/ic_crown"/>
+        app:tint="@color/persimmon"
+        android:src="@drawable/ic_crown"/>
 
     <TextView
         android:id="@+id/points"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/P2P_Description"
         android:textColor="@color/green_black"
         android:textSize="@dimen/font_huge"
         android:paddingBottom="@dimen/medium_more"
