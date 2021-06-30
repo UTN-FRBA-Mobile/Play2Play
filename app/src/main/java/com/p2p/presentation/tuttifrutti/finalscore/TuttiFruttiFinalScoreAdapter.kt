@@ -1,20 +1,18 @@
 package com.p2p.presentation.tuttifrutti.finalscore
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.p2p.R
 import com.p2p.databinding.ViewTuttiFruttiFinalScoreItemBinding
-import com.p2p.model.tuttifrutti.FinishedRoundPointsInfo
 import com.p2p.utils.isEven
 
 class TuttiFruttiFinalScoreAdapter :
     RecyclerView.Adapter<TuttiFruttiFinalScoreAdapter.ViewHolder>() {
 
-    var results = listOf<FinishedRoundPointsInfo>()
+    var results = listOf<TuttiFruttiFinalScore>()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -46,10 +44,10 @@ class TuttiFruttiFinalScoreAdapter :
         RecyclerView.ViewHolder(binding.root) {
 
         /** Show the given [final score] into the view. */
-        fun bind(userFinalScore: FinishedRoundPointsInfo, position: Int) = with(binding) {
+        fun bind(userFinalScore: TuttiFruttiFinalScore, position: Int) = with(binding) {
             finalPosition.text = (position + 1).toString()
             playerName.text = userFinalScore.player
-            points.text = userFinalScore.totalPoints.toString()
+            points.text = userFinalScore.finalScore.toString()
             bigCrown.isVisible = position == 0
             finalScoreItem.setBackgroundColor(
                 ContextCompat.getColor(
