@@ -23,7 +23,7 @@
         android:id="@+id/big_crown"
         android:layout_width="@dimen/final_score_image_size"
         android:layout_height="@dimen/final_score_image_size"
-        android:layout_marginTop="@dimen/medium_extra"
+        android:layout_marginTop="@dimen/medium"
         android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
