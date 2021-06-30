@@ -6,8 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
+import com.p2p.data.loadingMessages.LoadingTextRepository
 import com.p2p.data.userInfo.UserSession
 import com.p2p.framework.InstructionsLocalResourcesSource
+import com.p2p.framework.LoadingTextLocalResourcesSource
 import com.p2p.framework.SharedPreferencesUserInfoStorage
 import com.p2p.framework.bluetooth.BluetoothConnectionCreatorImp
 
@@ -28,18 +30,23 @@ open class GameViewModelFactory(
     protected val instructionsRepository: InstructionsRepository
         get() = InstructionsRepository(InstructionsLocalResourcesSource(activity.baseContext))
 
+    private val loadingTextRepository: LoadingTextRepository
+        get() = LoadingTextRepository(LoadingTextLocalResourcesSource(activity.baseContext))
+
     override fun <T : ViewModel?> create(modelClass: Class<T>): T = modelClass
         .getConstructor(
             ConnectionType::class.java,
             UserSession::class.java,
             BluetoothConnectionCreator::class.java,
             InstructionsRepository::class.java,
+            LoadingTextRepository::class.java,
         )
         .newInstance(
             connectionType,
             userSession,
             bluetoothConnectionCreator,
-            instructionsRepository
+            instructionsRepository,
+            loadingTextRepository
         )
 
     data class Data(

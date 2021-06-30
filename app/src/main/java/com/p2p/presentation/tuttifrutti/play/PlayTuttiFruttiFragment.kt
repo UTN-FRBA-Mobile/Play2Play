@@ -60,7 +60,7 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
                             input.isErrorEnabled = false
                         }
                         root
-                }
+                    }
             }
         }
     }

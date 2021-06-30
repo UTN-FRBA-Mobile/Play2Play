@@ -11,6 +11,7 @@
     <string name="unknown">Desconocido</string>
     <string name="points">Puntos</string>
 
+
     <!-- Request location permission -->
     <string name="request_location_title">Lo necesitás para jugar</string>
     <string name="request_location_description">La tecnología Bluetooth requiere que tengamos los permisos de tu ubicación, en caso de no otorgárnoslo tendremos que cerrar la aplicación :(</string>
@@ -58,10 +59,10 @@
     <string name="lobby_start_game">Comenzar juego</string>
 
     <string name="tf_enough_player"><![CDATA[¡<b>%s</b> dijo basta!]]></string>
-  
+    <!-- Tutti Frutti - Loading screen -->
+    <string name="tf_wait_for_results">¡Discutan con el creador del juego los puntajes!</string>
     <!-- Tutti Frutti - Final Score -->
     <string name="tf_winner">Ganó %s</string>
     <string name="tf_points">%d puntos</string>
     <string name="tf_exit">Salir</string>
-  
 </resources>

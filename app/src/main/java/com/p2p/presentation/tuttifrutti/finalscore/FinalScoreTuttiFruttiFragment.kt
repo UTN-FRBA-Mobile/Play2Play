@@ -34,7 +34,12 @@ class FinalScoreTuttiFruttiFragment : BaseGameFragment<
     override fun setupObservers() = with(gameViewModel) {
         super.setupObservers()
         finishedRoundsPointsInfos.observe(viewLifecycleOwner) {
-            val finalScores = it.sortedByDescending { info -> info.totalPoints }
+            val finalScores = it.groupBy { roundInfo -> roundInfo.player }
+                                .entries
+                                .map {entry ->
+                                    TuttiFruttiFinalScore(entry.key, entry.value.map{ roundPoints -> roundPoints.totalPoints}.sum())
+                                }
+                                .sortedByDescending { results -> results.finalScore }
             tuttiFruttiFinalScoreAdapter.results = finalScores
             gameBinding.winner.text = resources.getString(R.string.tf_winner, finalScores[0].player)
         }
