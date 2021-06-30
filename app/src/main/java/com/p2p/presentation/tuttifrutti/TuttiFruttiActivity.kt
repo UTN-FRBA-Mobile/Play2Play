@@ -30,7 +30,7 @@ class TuttiFruttiActivity : GameActivity<TuttiFruttiSpecificGameEvent, TuttiFrut
         }
     }
 
-    override fun goToCreate() = addFragment(FinalScoreTuttiFruttiFragment.newInstance(), shouldAddToBackStack = false)
+    override fun goToCreate() = addFragment(CreateTuttiFruttiFragment.newInstance(), shouldAddToBackStack = false)
 
     override fun goToPlay() = addFragment(TuttiFruttiCountdownFragment.newInstance(), shouldAddToBackStack = false)
 
