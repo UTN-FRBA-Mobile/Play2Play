@@ -51,7 +51,6 @@ abstract class GameViewModel(
         _game.value = theGame
         connectedPlayers = listOf(MYSELF_PEER_ID to userName)
         createOrJoin()
-        startConnection()
     }
 
     /**

@@ -13,6 +13,6 @@ class ServerTuttiFruttiLobbyViewModel: BaseViewModel<LobbyEvent>() {
     }
 
     companion object {
-        const val LOBBY_MIN_SIZE = 1
+        const val LOBBY_MIN_SIZE = 2
     }
 }
