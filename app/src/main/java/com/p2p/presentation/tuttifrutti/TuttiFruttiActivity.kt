@@ -10,6 +10,8 @@ import androidx.core.view.isVisible
 import com.p2p.R
 import com.p2p.model.VisibleLoadingScreen
 import com.p2p.presentation.basegame.GameActivity
+import com.p2p.presentation.tuttifrutti.lobby.ClientTuttiFruttiLobbyFragment
+import com.p2p.presentation.tuttifrutti.lobby.ServerTuttiFruttiLobbyFragment
 import com.p2p.presentation.tuttifrutti.countdown.TuttiFruttiCountdownFragment
 import com.p2p.presentation.tuttifrutti.create.categories.CreateTuttiFruttiFragment
 import com.p2p.utils.hideKeyboard
@@ -21,6 +23,7 @@ class TuttiFruttiActivity : GameActivity<TuttiFruttiSpecificGameEvent, TuttiFrut
     override val viewModel: TuttiFruttiViewModel by viewModels {
         TuttiFruttiViewModelFactory(this, gameViewModelFactoryData)
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,10 +46,10 @@ class TuttiFruttiActivity : GameActivity<TuttiFruttiSpecificGameEvent, TuttiFrut
         addFragment(TuttiFruttiCountdownFragment.newInstance(), shouldAddToBackStack = false)
 
     override fun goToClientLobby() =
-        Unit // TODO: addFragment(ClientLobbyTuttiFruttiFragment.newInstance(), shouldAddToBackStack = false)
+        addFragment(ClientTuttiFruttiLobbyFragment.newInstance(), shouldAddToBackStack = false)
 
     override fun goToServerLobby() =
-        Unit // TODO: addFragment(ServerLobbyTuttiFruttiFragment.newInstance(), shouldAddToBackStack = false)
+        addFragment(ServerTuttiFruttiLobbyFragment.newInstance(), shouldAddToBackStack = false)
 
     companion object {
 

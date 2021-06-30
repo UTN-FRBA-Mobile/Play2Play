@@ -52,8 +52,17 @@
     <string name="tf_round"><![CDATA[Ronda: <font color=#FF8550>%d</font>/%d]]></string>
     <string name="tf_validation_error">¡Falta completar!</string>
     <string name="tf_finish_round">¡Basta para mi, basta para todos!</string>
-    <string name="tf_enough_player"><![CDATA[¡<b>%s</b> dijo basta!]]></string>
 
+    <!-- Lobby -->
+    <string name="lobby_connected_players">Jugadores listos</string>
+    <string name="lobby_waiting_players">Esperando jugadores</string>
+    <string name="lobby_start_game">Comenzar juego</string>
+
+    <string name="tf_enough_player"><![CDATA[¡<b>%s</b> dijo basta!]]></string>
     <!-- Tutti Frutti - Loading screen -->
     <string name="tf_wait_for_results">¡Discutan con el creador del juego los puntajes!</string>
+    <!-- Tutti Frutti - Final Score -->
+    <string name="tf_winner">Ganó %s</string>
+    <string name="tf_points">%d puntos</string>
+    <string name="tf_exit">Salir</string>
 </resources>

@@ -17,6 +17,7 @@
     <dimen name="huge_extra">46dp</dimen>
     <dimen name="largest">54dp</dimen>
     <dimen name="largest_extra">64dp</dimen>
+    <dimen name="final_score_image_size">96dp</dimen>
 
     <!-- Text sizes -->
     <dimen name="font_tiny">6sp</dimen>

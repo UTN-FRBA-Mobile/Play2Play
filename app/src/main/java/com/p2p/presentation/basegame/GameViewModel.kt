@@ -8,6 +8,7 @@ import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.loadingMessages.LoadingTextRepository
 import com.p2p.data.userInfo.UserSession
+import com.p2p.framework.bluetooth.BluetoothServer
 import com.p2p.model.base.message.ClientHandshakeMessage
 import com.p2p.model.base.message.Conversation
 import com.p2p.model.base.message.Message
@@ -52,7 +53,6 @@ abstract class GameViewModel(
         _game.value = theGame
         connectedPlayers = listOf(MYSELF_PEER_ID to userName)
         createOrJoin()
-        startConnection() // TODO: This should be called when the creation is finished, from the Lobby
     }
 
     /**
@@ -108,7 +108,16 @@ abstract class GameViewModel(
 
     fun showInstructions() = dispatchSingleTimeEvent(OpenInstructions(instructions))
 
+    fun goToLobby() = dispatchSingleTimeEvent(if(isServer()) GoToServerLobby else GoToClientLobby)
+
     fun goToPlay() = dispatchSingleTimeEvent(GoToPlay)
+
+    fun closeDiscovery() {
+        when(connection) {
+            is BluetoothServer -> (connection as BluetoothServer).stopAccepting() //TODO prettify
+            else -> Unit
+        }
+    }
 
     override fun onCleared() {
         connection.close()

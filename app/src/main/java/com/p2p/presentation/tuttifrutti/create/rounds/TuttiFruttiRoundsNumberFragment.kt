@@ -23,8 +23,7 @@ class TuttiFruttiRoundsNumberFragment :
         binding.arrowLeft.setOnClickListener { viewModel.decrease() }
         binding.createButton.setOnClickListener {
             gameViewModel.setTotalRounds(binding.number.text.toString().toInt())
-            // TODO GO TO SERVER LOBBY
-            gameViewModel.startGame() // TODO: delete this and call it from serverLobby
+            gameViewModel.goToLobby()
         }
     }
 
