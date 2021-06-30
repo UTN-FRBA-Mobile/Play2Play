@@ -120,7 +120,7 @@ abstract class TuttiFruttiViewModel(
         _loadingScreen.value = VisibleLoadingScreen(loadingMessage)
     }
 
-    protected fun stopLoading(){
+    fun stopLoading(){
         _loadingScreen.value = HiddenLoadingScreen
     }
 
