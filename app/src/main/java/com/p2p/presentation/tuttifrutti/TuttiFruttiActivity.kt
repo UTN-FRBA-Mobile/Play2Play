@@ -10,7 +10,6 @@ import com.p2p.R
 import com.p2p.presentation.basegame.GameActivity
 import com.p2p.presentation.tuttifrutti.countdown.TuttiFruttiCountdownFragment
 import com.p2p.presentation.tuttifrutti.create.categories.CreateTuttiFruttiFragment
-import com.p2p.presentation.tuttifrutti.finalscore.FinalScoreTuttiFruttiFragment
 import com.p2p.utils.hideKeyboard
 
 class TuttiFruttiActivity : GameActivity<TuttiFruttiSpecificGameEvent, TuttiFruttiViewModel>(
