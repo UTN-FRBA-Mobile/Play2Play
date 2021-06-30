@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.p2p.data.bluetooth.BluetoothConnection
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
+import com.p2p.data.loadingMessages.LoadingTextRepository
 import com.p2p.data.userInfo.UserSession
 import com.p2p.framework.bluetooth.BluetoothServer
 import com.p2p.model.base.message.ClientHandshakeMessage
@@ -21,6 +22,7 @@ abstract class GameViewModel(
     private val userSession: UserSession,
     private val bluetoothConnectionCreator: BluetoothConnectionCreator,
     private val instructionsRepository: InstructionsRepository,
+    protected val loadingTextRepository: LoadingTextRepository,
     theGame: Game
 ) : BaseViewModel<GameEvent>() {
 
@@ -63,12 +65,16 @@ abstract class GameViewModel(
         when (val message = conversation.lastMessage) {
             is ClientHandshakeMessage -> {
                 if (isServer()) {
-                    connection.talk(conversation, ServerHandshakeMessage(connectedPlayers.map { it.second }))
+                    connection.talk(
+                        conversation,
+                        ServerHandshakeMessage(connectedPlayers.map { it.second })
+                    )
                 }
                 connectedPlayers = connectedPlayers + (conversation.peer to message.name)
             }
             is ServerHandshakeMessage -> {
-                connectedPlayers = connectedPlayers + message.players.map { conversation.peer to it }
+                connectedPlayers =
+                    connectedPlayers + message.players.map { conversation.peer to it }
             }
         }
     }
@@ -119,7 +125,8 @@ abstract class GameViewModel(
 
     protected fun isServer() = connectionType.type == GameConnectionType.SERVER
 
-    protected fun getPlayerById(playerId: Long) = connectedPlayers.first { it.first == playerId }.second
+    protected fun getPlayerById(playerId: Long) =
+        connectedPlayers.first { it.first == playerId }.second
 
     private fun createOrJoin() {
         if (isServer()) {

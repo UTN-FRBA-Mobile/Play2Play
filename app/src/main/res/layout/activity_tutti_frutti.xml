@@ -8,21 +8,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <FrameLayout
+    <include
+        layout="@layout/activity_progress"
         android:id="@+id/activity_progress_overlay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorBackground"
-        android:clickable="true"
-        android:focusable="true"
-        android:visibility="gone">
+        />
 
-        <ProgressBar
-            android:layout_width="@dimen/progress_bar_size"
-            android:layout_height="@dimen/progress_bar_size"
-            android:layout_gravity="center"
-            android:indeterminate="true"
-            android:indeterminateBehavior="@color/colorPrimaryVariant"
-            android:indeterminateTint="@color/colorPrimary" />
-    </FrameLayout>
 </FrameLayout>

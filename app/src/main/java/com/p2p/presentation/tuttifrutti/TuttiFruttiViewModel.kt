@@ -5,12 +5,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
+import com.p2p.data.loadingMessages.LoadingTextRepository
 import com.p2p.data.userInfo.UserSession
+import com.p2p.model.HiddenLoadingScreen
+import com.p2p.model.LoadingScreen
+import com.p2p.model.VisibleLoadingScreen
 import com.p2p.model.base.message.Conversation
 import com.p2p.model.tuttifrutti.FinishedRoundInfo
 import com.p2p.model.tuttifrutti.FinishedRoundPointsInfo
 import com.p2p.model.tuttifrutti.RoundInfo
 import com.p2p.model.tuttifrutti.message.TuttiFruttiEnoughForMeEnoughForAllMessage
+import com.p2p.model.tuttifrutti.message.TuttiFruttiSendWordsMessage
 import com.p2p.presentation.basegame.ConnectionType
 import com.p2p.presentation.basegame.GameViewModel
 import com.p2p.presentation.home.games.Game
@@ -20,19 +25,22 @@ abstract class TuttiFruttiViewModel(
     connectionType: ConnectionType,
     userSession: UserSession,
     bluetoothConnectionCreator: BluetoothConnectionCreator,
-    instructionsRepository: InstructionsRepository
+    instructionsRepository: InstructionsRepository,
+    loadingTextRepository: LoadingTextRepository
 ) : GameViewModel(
     connectionType,
     userSession,
     bluetoothConnectionCreator,
     instructionsRepository,
+    loadingTextRepository,
     Game.TUTTI_FRUTTI
 ) {
 
     protected lateinit var lettersByRound: List<Char>
 
-    protected val _isLoading = MutableLiveData(false)
-    val isLoading: LiveData<Boolean> = _isLoading
+    //Loading value for loading screen, being first if isLoading and second the text to show
+    protected val _loadingScreen = MutableLiveData<LoadingScreen>()
+    val loadingScreen: LiveData<LoadingScreen> = _loadingScreen
 
     protected val _totalRounds = MutableLiveData<Int>()
     val totalRounds: LiveData<Int> = _totalRounds
@@ -41,13 +49,18 @@ abstract class TuttiFruttiViewModel(
     val finishedRoundInfos: LiveData<List<FinishedRoundInfo>> = _finishedRoundInfos
 
     private val _finishedRoundsPointsInfos = MutableLiveData(listOf<FinishedRoundPointsInfo>())
-    val finishedRoundsPointsInfos: LiveData<List<FinishedRoundPointsInfo>> = _finishedRoundsPointsInfos
+    val finishedRoundsPointsInfos: LiveData<List<FinishedRoundPointsInfo>> =
+        _finishedRoundsPointsInfos
 
     private val _categoriesToPlay = MutableLiveData<List<Category>>()
     val categoriesToPlay: LiveData<List<Category>> = _categoriesToPlay
 
     private val _actualRound = MutableLiveData<RoundInfo>()
     val actualRound: LiveData<RoundInfo> = _actualRound
+
+    init {
+        _loadingScreen.value = HiddenLoadingScreen
+    }
 
     /** Set the categories selected by the user when creating the game . */
     fun setCategoriesToPlay(categories: List<Category>) {
@@ -76,13 +89,9 @@ abstract class TuttiFruttiViewModel(
      * - The server will stop the round immediately when this is invoked because since it doesn't need
      *   to do any more, just wait the others words.
      */
+    @CallSuper
     open fun enoughForMeEnoughForAll() {
-        _isLoading.value = true
         connection.write(TuttiFruttiEnoughForMeEnoughForAllMessage())
-    }
-
-    open fun stopLoading() {
-        _isLoading.value = false
     }
 
 
@@ -98,11 +107,20 @@ abstract class TuttiFruttiViewModel(
         }
     }
 
-    protected open fun onReceiveEnoughForAll(conversation: Conversation) = stopRound()
+    protected open fun onReceiveEnoughForAll(conversation: Conversation) {
+        stopRound()
+    }
 
     protected fun stopRound() {
-        _isLoading.value = true
         dispatchSingleTimeEvent(ObtainWords)
+    }
+
+    protected fun startLoading(loadingMessage: String) {
+        _loadingScreen.value = VisibleLoadingScreen(loadingMessage)
+    }
+
+    fun stopLoading(){
+        _loadingScreen.value = HiddenLoadingScreen
     }
 
     private fun generateNextRoundValues() {
