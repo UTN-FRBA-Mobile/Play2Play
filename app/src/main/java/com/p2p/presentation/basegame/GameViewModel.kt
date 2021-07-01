@@ -18,6 +18,7 @@ import com.p2p.model.base.message.ClientHandshakeMessage
 import com.p2p.model.base.message.Conversation
 import com.p2p.model.base.message.GoodbyePlayerMessage
 import com.p2p.model.base.message.Message
+import com.p2p.model.base.message.NameInUseMessage
 import com.p2p.model.base.message.ServerHandshakeMessage
 import com.p2p.presentation.base.BaseViewModel
 import com.p2p.presentation.extensions.requireValue
@@ -81,20 +82,30 @@ abstract class GameViewModel(
     open fun receiveMessage(conversation: Conversation) {
         when (val message = conversation.lastMessage) {
             is ClientHandshakeMessage -> {
+                val isNameInUse = connectedPlayers.any { it.second == message.name }
                 if (isServer()) {
-                    connection.talk(
-                        conversation,
-                        ServerHandshakeMessage(connectedPlayers.map { it.second })
-                    )
+                    if (isNameInUse) {
+                        connection.talk(conversation, NameInUseMessage())
+                    } else {
+                        connection.talk(
+                            conversation,
+                            ServerHandshakeMessage(connectedPlayers.map { it.second })
+                        )
+                    }
                 }
-                connectedPlayers = connectedPlayers + (conversation.peer to message.name)
+                if (!isNameInUse) {
+                    connectedPlayers = connectedPlayers + (conversation.peer to message.name)
+                }
             }
+            is NameInUseMessage -> dispatchErrorScreen(NameInUseError {
+                dispatchSingleTimeEvent(KillGame)
+            })
             is ServerHandshakeMessage -> {
                 connectedPlayers =
                     connectedPlayers + message.players.map { conversation.peer to it }
             }
             is GoodbyePlayerMessage -> {
-                removePlayer(connectedPlayers.first { it.second == message.name })
+                connectedPlayers.firstOrNull { it.second == message.name }?.let { removePlayer(it) }
             }
         }
     }
@@ -144,7 +155,7 @@ abstract class GameViewModel(
     /** Invoked when the connection with the given [peerId] was lost. */
     @CallSuper
     open fun onClientConnectionLost(peerId: Long) {
-        val playerLost = connectedPlayers.first { it.first == peerId }
+        val playerLost = connectedPlayers.firstOrNull { it.first == peerId } ?: return
         connection.write(GoodbyePlayerMessage(playerLost.second))
         removePlayer(playerLost)
     }

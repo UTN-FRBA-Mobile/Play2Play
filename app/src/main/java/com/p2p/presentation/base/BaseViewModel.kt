@@ -26,7 +26,7 @@ abstract class BaseViewModel<E : Any> : ViewModel() {
         text: String? = null,
         type: MessageData.Type,
         duration: MessageData.Duration = MessageData.Duration.SHORT,
-        vararg formatArgs: String = emptyArray()
+        vararg formatArgs: Any = emptyArray()
     ) {
         _message.value = MessageData(textRes, text, type, duration, *formatArgs)
     }
@@ -36,7 +36,7 @@ abstract class BaseViewModel<E : Any> : ViewModel() {
         val text: String? = null,
         val type: Type,
         val duration: Duration = Duration.SHORT,
-        vararg val formatArgs: String = emptyArray(),
+        vararg val formatArgs: Any = emptyArray(),
     ) {
 
         enum class Type {

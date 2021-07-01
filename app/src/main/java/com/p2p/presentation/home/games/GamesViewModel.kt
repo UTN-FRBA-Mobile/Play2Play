@@ -56,14 +56,23 @@ class GamesViewModel(
         }
     }
 
-    private fun validateAndSaveName(name: String?): Boolean {
-        return if (name.isNullOrBlank()) {
+    private fun validateAndSaveName(name: String?) = when {
+        name.isNullOrBlank() -> {
             dispatchMessage(
                 textRes = R.string.games_name_error,
                 type = MessageData.Type.ERROR
             )
             false
-        } else {
+        }
+        name.length > NAME_MAX_LENGTH -> {
+            dispatchMessage(
+                textRes = R.string.games_name_max_length_error,
+                type = MessageData.Type.ERROR
+            )
+
+            false
+        }
+        else -> {
             saveName(name)
             true
         }
@@ -72,5 +81,10 @@ class GamesViewModel(
     private fun saveName(name: String) {
         _userName.value = name
         userSession.saveUserName(name)
+    }
+
+    companion object {
+
+        private const val NAME_MAX_LENGTH = 7
     }
 }

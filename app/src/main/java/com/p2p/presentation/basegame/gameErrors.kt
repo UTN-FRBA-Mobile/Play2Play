@@ -18,6 +18,13 @@ class CannotEstablishClientConnectionError(onRetry: () -> Unit) : GameError(
     onRetry
 )
 
+class NameInUseError(onOkClicked: () -> Unit) : GameError(
+    R.drawable.ic_info,
+    R.string.error_name_in_use,
+    android.R.string.ok,
+    onOkClicked
+)
+
 class CannotWriteOnConnectionError(onOkClicked: () -> Unit) : GameError(
     R.drawable.ic_no_cell,
     R.string.error_connection_write_failure,
