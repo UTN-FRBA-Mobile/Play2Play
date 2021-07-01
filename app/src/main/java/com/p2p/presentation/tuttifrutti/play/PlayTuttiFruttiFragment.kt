@@ -1,7 +1,5 @@
 package com.p2p.presentation.tuttifrutti.play
 
-import android.os.Build
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -16,7 +14,6 @@ import com.p2p.presentation.basegame.BaseGameFragment
 import com.p2p.presentation.basegame.GameEvent
 import com.p2p.presentation.tuttifrutti.GoToReview
 import com.p2p.presentation.tuttifrutti.ObtainWords
-import com.p2p.presentation.tuttifrutti.TuttiFruttiSpecificGameEvent
 import com.p2p.presentation.tuttifrutti.TuttiFruttiViewModel
 import com.p2p.presentation.tuttifrutti.create.categories.Category
 import com.p2p.presentation.tuttifrutti.review.TuttiFruttiReviewFragment
@@ -38,7 +35,7 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
         FragmentPlayTuttiFruttiBinding::inflate
 
     override fun initValues() {
-        gameViewModel.startRound()
+        gameViewModel.generateNextRoundValues()
     }
 
     override fun initUI() {

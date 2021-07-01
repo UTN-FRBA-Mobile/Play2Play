@@ -8,10 +8,11 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.p2p.R
 import com.p2p.databinding.FragmentReviewTuttiFruttiBinding
-import com.p2p.model.tuttifrutti.FinishedRoundInfo
 import com.p2p.presentation.basegame.BaseGameFragment
-import com.p2p.presentation.extensions.requireValue
+import com.p2p.presentation.basegame.GameEvent
+import com.p2p.presentation.tuttifrutti.GoToFinalScore
 import com.p2p.presentation.tuttifrutti.TuttiFruttiViewModel
+import com.p2p.presentation.tuttifrutti.finalscore.FinalScoreTuttiFruttiFragment
 
 class TuttiFruttiReviewFragment : BaseGameFragment<
         FragmentReviewTuttiFruttiBinding,
@@ -67,6 +68,7 @@ class TuttiFruttiReviewFragment : BaseGameFragment<
                     HtmlCompat.FROM_HTML_MODE_COMPACT
                 )
             }
+            singleTimeEvent.observe(viewLifecycleOwner) { onGameEvent(it) }
         }
         with(viewModel) {
             finishedRoundPointsInfo.observe(viewLifecycleOwner) {
@@ -78,7 +80,20 @@ class TuttiFruttiReviewFragment : BaseGameFragment<
     }
 
     override fun onEvent(event: TuttiFruttiReviewEvents) = when (event) {
-        is FinishRoundReview -> gameViewModel.setFinishedRoundPointsInfos(event.finishedRoundPointsInfo)
+        is FinishRoundReview ->  {
+            gameViewModel.setFinishedRoundPointsInfos(event.finishedRoundPointsInfo)
+            gameViewModel.startRoundOrFinishGame()
+        }
+    }
+
+    private fun onGameEvent(event: GameEvent) {
+        when (event) {
+            GoToFinalScore -> addFragment(
+                FinalScoreTuttiFruttiFragment.newInstance(),
+                shouldAddToBackStack = false
+            )
+            else -> Unit
+        }
     }
 
     companion object {

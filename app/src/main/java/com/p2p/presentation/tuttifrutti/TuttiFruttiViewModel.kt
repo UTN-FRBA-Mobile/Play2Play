@@ -15,9 +15,9 @@ import com.p2p.model.tuttifrutti.FinishedRoundInfo
 import com.p2p.model.tuttifrutti.FinishedRoundPointsInfo
 import com.p2p.model.tuttifrutti.RoundInfo
 import com.p2p.model.tuttifrutti.message.TuttiFruttiEnoughForMeEnoughForAllMessage
-import com.p2p.model.tuttifrutti.message.TuttiFruttiSendWordsMessage
 import com.p2p.presentation.basegame.ConnectionType
 import com.p2p.presentation.basegame.GameViewModel
+import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.home.games.Game
 import com.p2p.presentation.tuttifrutti.create.categories.Category
 
@@ -76,26 +76,39 @@ abstract class TuttiFruttiViewModel(
             _finishedRoundsPointsInfos.value?.plus(finishedRoundPointsInfo)
     }
 
-    fun startRound() {
-        generateNextRoundValues()
+    /**
+     * Goes to the final scores view or starts a new round when corresponds.
+     * */
+    fun startRoundOrFinishGame() {
+        if (actualRound.requireValue().number == totalRounds.requireValue()) { // last round
+            dispatchSingleTimeEvent(GoToFinalScore)
+        } else {
+            startRound()
+        }
     }
+
+    fun generateNextRoundValues() {
+        val round = (actualRound.value?.number ?: 0) + 1
+        _actualRound.value = RoundInfo(lettersByRound[round - 1], round)
+    }
+
+    abstract fun startGame()
+
+    abstract fun startRound()
 
     /**
      * Enough for me enough for all will say to the room that the round is finished.
      *
      * The client and the server will handle different the invocation of this method:
-     * - The client will just sent the message and just when it's sent, it'll stop the round
+     * - The client will just send the message and when it's sent, it'll stop the round
      *   (that's because it needs the conversation started with the server to send their words).
-     * - The server will stop the round immediately when this is invoked because since it doesn't need
-     *   to do any more, just wait the others words.
+     * - The server will stop the round immediately when this is invoked because it doesn't need
+     *   to do anything more, just wait for the others words.
      */
     @CallSuper
     open fun enoughForMeEnoughForAll() {
         connection.write(TuttiFruttiEnoughForMeEnoughForAllMessage())
     }
-
-
-    abstract fun startGame()
 
     abstract fun sendWords(categoriesWords: LinkedHashMap<Category, String>)
 
@@ -119,14 +132,8 @@ abstract class TuttiFruttiViewModel(
         _loadingScreen.value = VisibleLoadingScreen(loadingMessage)
     }
 
-    fun stopLoading(){
+    fun stopLoading() {
         _loadingScreen.value = HiddenLoadingScreen
-    }
-
-    private fun generateNextRoundValues() {
-        val actualRoundNumber: Int = actualRound.value?.number?.plus(1) ?: 1
-        _actualRound.value =
-            RoundInfo(lettersByRound[actualRoundNumber.minus(1)], actualRoundNumber)
     }
 
     companion object {

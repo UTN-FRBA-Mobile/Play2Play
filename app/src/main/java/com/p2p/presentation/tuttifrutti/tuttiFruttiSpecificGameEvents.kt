@@ -7,3 +7,5 @@ sealed class TuttiFruttiSpecificGameEvent : SpecificGameEvent()
 object ObtainWords : TuttiFruttiSpecificGameEvent()
 
 object GoToReview : TuttiFruttiSpecificGameEvent()
+
+object GoToFinalScore : TuttiFruttiSpecificGameEvent()

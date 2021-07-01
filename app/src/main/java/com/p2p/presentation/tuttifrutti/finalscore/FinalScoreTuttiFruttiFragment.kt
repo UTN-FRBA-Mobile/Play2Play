@@ -35,17 +35,21 @@ class FinalScoreTuttiFruttiFragment : BaseGameFragment<
         super.setupObservers()
         finishedRoundsPointsInfos.observe(viewLifecycleOwner) {
             val finalScores = it.groupBy { roundInfo -> roundInfo.player }
-                                .entries
-                                .map {entry ->
-                                    TuttiFruttiFinalScore(entry.key, entry.value.map{ roundPoints -> roundPoints.totalPoints}.sum())
-                                }
-                                .sortedByDescending { results -> results.finalScore }
+                .entries
+                .map { entry ->
+                    TuttiFruttiFinalScore(
+                        entry.key,
+                        entry.value.map { roundPoints -> roundPoints.totalPoints }.sum()
+                    )
+                }
+                .sortedByDescending { results -> results.finalScore }
             tuttiFruttiFinalScoreAdapter.results = finalScores
             gameBinding.winner.text = resources.getString(R.string.tf_winner, finalScores[0].player)
         }
     }
 
-    private fun setupScoreRecycler() { with(gameBinding.playersScores) {
+    private fun setupScoreRecycler() {
+        with(gameBinding.playersScores) {
             layoutManager = LinearLayoutManager(context)
             adapter = TuttiFruttiFinalScoreAdapter().also {
                 this@FinalScoreTuttiFruttiFragment.tuttiFruttiFinalScoreAdapter = it
@@ -53,7 +57,7 @@ class FinalScoreTuttiFruttiFragment : BaseGameFragment<
         }
     }
 
-    override fun onEvent(event: TuttiFruttiFinalScoreEvent) = when(event){
+    override fun onEvent(event: TuttiFruttiFinalScoreEvent) = when (event) {
         is EndTuttiFruttiGame -> requireActivity().finish()
     }
 

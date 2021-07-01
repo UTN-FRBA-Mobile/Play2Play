@@ -4,11 +4,11 @@ import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.loadingMessages.LoadingTextRepository
 import com.p2p.data.userInfo.UserSession
-import com.p2p.model.HiddenLoadingScreen
 import com.p2p.model.base.message.Conversation
 import com.p2p.model.tuttifrutti.FinishedRoundInfo
-import com.p2p.model.tuttifrutti.TuttiFruttiStartGame
 import com.p2p.model.tuttifrutti.message.TuttiFruttiSendWordsMessage
+import com.p2p.model.tuttifrutti.message.TuttiFruttiStartGameMessage
+import com.p2p.model.tuttifrutti.message.TuttiFruttiStartRoundMessage
 import com.p2p.presentation.basegame.ConnectionType
 import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.tuttifrutti.create.categories.Category
@@ -27,24 +27,38 @@ class ServerTuttiFruttiViewModel(
     loadingTextRepository
 ) {
     private var gameAlreadyStarted = false
+    private var roundAlreadyStarted = false
     private var saidEnoughPeer: Long? = null
 
     /** Be careful: this will be called for every client on a broadcast. */
     override fun onSentSuccessfully(conversation: Conversation) {
         super.onSentSuccessfully(conversation)
         when (conversation.lastMessage) {
-            is TuttiFruttiStartGame -> if (!gameAlreadyStarted) {
+            is TuttiFruttiStartGameMessage -> if (!gameAlreadyStarted) {
                 goToPlay() // starts the game when the first StartGame message was sent successfully.
                 gameAlreadyStarted = true
+            }
+            is TuttiFruttiStartRoundMessage -> if (!roundAlreadyStarted) {
+                goToPlay()
+                roundAlreadyStarted = true
             }
         }
     }
 
     override fun startGame() {
         lettersByRound = getRandomLetters()
-        connection.write(TuttiFruttiStartGame(lettersByRound, categoriesToPlay.requireValue()))
+        connection.write(
+            TuttiFruttiStartGameMessage(
+                lettersByRound,
+                categoriesToPlay.requireValue()
+            )
+        )
         closeDiscovery()
-        goToPlay()
+    }
+
+    override fun startRound() {
+        connection.write(TuttiFruttiStartRoundMessage())
+        roundAlreadyStarted = false
     }
 
     override fun receiveMessage(conversation: Conversation) {
@@ -54,7 +68,8 @@ class ServerTuttiFruttiViewModel(
         }
     }
 
-    override fun sendWords(categoriesWords: LinkedHashMap<Category, String>) = acceptWords(MYSELF_PEER_ID, categoriesWords)
+    override fun sendWords(categoriesWords: LinkedHashMap<Category, String>) =
+        acceptWords(MYSELF_PEER_ID, categoriesWords)
 
     override fun enoughForMeEnoughForAll() {
         startLoading(loadingMessage = "")
