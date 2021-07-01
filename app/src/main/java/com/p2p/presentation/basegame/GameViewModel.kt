@@ -3,6 +3,7 @@ package com.p2p.presentation.basegame
 import androidx.annotation.CallSuper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.p2p.R
 import com.p2p.data.bluetooth.BluetoothConnection
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
@@ -21,6 +22,9 @@ import com.p2p.model.base.message.ServerHandshakeMessage
 import com.p2p.presentation.base.BaseViewModel
 import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.home.games.Game
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 abstract class GameViewModel(
     private val connectionType: ConnectionType,
@@ -33,6 +37,7 @@ abstract class GameViewModel(
 
     private val userName by lazy { userSession.getUserNameOrEmpty() }
     private val instructions by lazy { instructionsRepository.getInstructions(game.requireValue()) }
+    private val failingMessagesRetries = mutableMapOf<Message, Int>()
 
     protected lateinit var connection: BluetoothConnection
 
@@ -99,14 +104,31 @@ abstract class GameViewModel(
      *
      * Override if needed.
      */
-    open fun onSentSuccessfully(conversation: Conversation) {}
+    @CallSuper
+    open fun onSentSuccessfully(conversation: Conversation) {
+        failingMessagesRetries.remove(conversation.lastMessage)
+    }
 
     /**
      * Invoked when there was an error sending a message.
      *
-     * Default implementation retries the writing. Override if needed.
+     * Default implementation retries the writing [RETRY_MESSAGE_ERROR_COUNT] times. Override if needed.
      */
-    open fun onSentError(message: Message) = connection.write(message)
+    open fun onSentError(message: Message) {
+        val failingMessageRetries = failingMessagesRetries.getOrElse(message) { 0 }
+        if (failingMessageRetries < RETRY_MESSAGE_ERROR_COUNT) {
+            failingMessagesRetries[message] = failingMessageRetries + 1
+            viewModelScope.launch(Dispatchers.Default) {
+                delay(RETRY_MESSAGE_ERROR_DELAY * (failingMessageRetries + 1))
+                connection.write(message)
+            }
+        } else {
+            failingMessagesRetries.remove(message)
+            dispatchErrorScreen(CannotWriteOnConnectionError {
+                dispatchSingleTimeEvent(KillGame)
+            })
+        }
+    }
 
     /** Invoked when the client connection to the server was established successfully. */
     @CallSuper
@@ -196,5 +218,7 @@ abstract class GameViewModel(
     companion object {
 
         const val MYSELF_PEER_ID = -1L
+        private const val RETRY_MESSAGE_ERROR_COUNT = 3
+        private const val RETRY_MESSAGE_ERROR_DELAY = 1_000L
     }
 }

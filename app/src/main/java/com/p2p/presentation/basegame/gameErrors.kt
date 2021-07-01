@@ -17,3 +17,10 @@ class CannotEstablishClientConnectionError(onRetry: () -> Unit) : GameError(
     R.string.error_screen_retry_button,
     onRetry
 )
+
+class CannotWriteOnConnectionError(onOkClicked: () -> Unit) : GameError(
+    R.drawable.ic_no_cell,
+    R.string.error_connection_write_failure,
+    android.R.string.ok,
+    onOkClicked
+)

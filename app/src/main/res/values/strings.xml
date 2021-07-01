@@ -70,6 +70,7 @@
     <string name="error_screen_retry_button">Quiero volver a intentarlo</string>
     <string name="error_client_connection_failure">Hubo un error al intentar conectarse al dispositivo del otro jugador</string>
     <string name="error_client_connection_lost">Se perdió la conexión con %s</string>
+    <string name="error_connection_write_failure">Se perdió la conexión con la sala de juego, lo sentimos mucho</string>
     <string name="tf_error_single_player">El resto de los jugadores abandonaron el juego… ¡felicitaciones ganador!</string>
 
 </resources>

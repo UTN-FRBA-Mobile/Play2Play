@@ -108,7 +108,9 @@ abstract class TuttiFruttiViewModel(
     override fun onClientConnectionLost(peerId: Long) {
         super.onClientConnectionLost(peerId)
         if (isGameStarted() && connectedPlayers.size == 1) {
-            dispatchErrorScreen(SinglePlayerOnGame { dispatchSingleTimeEvent(KillGame) })
+            dispatchErrorScreen(SinglePlayerOnGame {
+                dispatchSingleTimeEvent(KillGame)
+            })
         }
     }
 
