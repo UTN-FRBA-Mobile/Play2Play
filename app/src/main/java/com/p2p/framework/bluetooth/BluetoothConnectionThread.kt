@@ -19,7 +19,7 @@ class BluetoothConnectionThread(
     private val socket: BluetoothSocket
 ) : Thread() {
 
-    var onConnectionLost: (() -> Boolean)? = null
+    var onConnectionLost: (() -> Unit)? = null
     var onMessageReceived: ((isConversation: Boolean, length: Int, buffer: ByteArray) -> Unit)? = null
 
     private val inputStream: InputStream = socket.inputStream
@@ -42,7 +42,6 @@ class BluetoothConnectionThread(
                 inputStream.read(buffer)
             } catch (e: IOException) {
                 Logger.d(TAG, "Input stream was disconnected", e)
-                handler.obtainMessage(ON_CLIENT_CONNECTION_LOST, id).sendToTarget()
                 onConnectionLost?.invoke()
                 break
             }

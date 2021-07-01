@@ -40,16 +40,22 @@ class BluetoothServer(
             } ?: continue
 
             Logger.d(TAG, "Accepted socket: ${socket.remoteDevice.name}")
-            val bluetoothConnectionThread = createConnectionThread(socket)
-            bluetoothConnectionThread.onMessageReceived = { isConversation, length, buffer ->
-                if (!isConversation) {
-                    Logger.d(TAG, "Received message and broadcasting")
-                    connectionsToClients
-                        .filterNot { it == bluetoothConnectionThread }
-                        .forEach { it.write(buffer, length, false) }
+            val bluetoothConnectionThread = createConnectionThread(socket).apply {
+                onMessageReceived = { isConversation, length, buffer ->
+                    if (!isConversation) {
+                        Logger.d(TAG, "Received message and broadcasting")
+                        connectionsToClients
+                            .filterNot { it == this }
+                            .forEach { it.write(buffer, length, false) }
+                    }
+                }
+                onConnectionLost = {
+                    connectionsToClients.remove(this)
+                    handler
+                        .obtainMessage(BluetoothHandlerMessages.ON_CLIENT_CONNECTION_LOST, id)
+                        .sendToTarget()
                 }
             }
-            bluetoothConnectionThread.onConnectionLost = { connectionsToClients.remove(bluetoothConnectionThread) }
             connectionsToClients.add(bluetoothConnectionThread)
             if (connectionsToClients.size >= maxAccepted) {
                 stopAccepting()

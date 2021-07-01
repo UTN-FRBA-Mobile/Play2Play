@@ -43,7 +43,13 @@ class BluetoothClient(
                     // The connection attempt succeeded. Perform work associated with
                     // the connection in a separate thread.
                     Logger.d(TAG, "Connection succeed")
-                    connectionToServer = createConnectionThread(socket)
+                    connectionToServer = createConnectionThread(socket).apply {
+                        onConnectionLost = {
+                            handler
+                                .obtainMessage(BluetoothHandlerMessages.ON_SERVER_CONNECTION_LOST)
+                                .sendToTarget()
+                        }
+                    }
                     handler.obtainMessage(ON_CLIENT_CONNECTION_SUCCESS).sendToTarget()
                 } catch (exception: IOException) {
                     if (pendingRetries > 0) tryConnection(pendingRetries - 1)

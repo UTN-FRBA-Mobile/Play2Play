@@ -20,6 +20,7 @@ import com.p2p.framework.bluetooth.BluetoothHandlerMessages.MESSAGE_WRITE_SUCCES
 import com.p2p.framework.bluetooth.BluetoothHandlerMessages.ON_CLIENT_CONNECTION_FAILURE
 import com.p2p.framework.bluetooth.BluetoothHandlerMessages.ON_CLIENT_CONNECTION_LOST
 import com.p2p.framework.bluetooth.BluetoothHandlerMessages.ON_CLIENT_CONNECTION_SUCCESS
+import com.p2p.framework.bluetooth.BluetoothHandlerMessages.ON_SERVER_CONNECTION_LOST
 import com.p2p.model.VisibleLoadingScreen
 import com.p2p.model.base.message.Conversation
 import com.p2p.model.base.message.Message
@@ -72,6 +73,10 @@ abstract class GameActivity<E : SpecificGameEvent, VM : GameViewModel> :
             }
             ON_CLIENT_CONNECTION_LOST -> {
                 viewModel.onClientConnectionLost(it.obj as Long)
+                true
+            }
+            ON_SERVER_CONNECTION_LOST -> {
+                viewModel.onServerConnectionLost()
                 true
             }
             else -> false

@@ -160,6 +160,11 @@ abstract class GameViewModel(
         removePlayer(playerLost)
     }
 
+    @CallSuper
+    open fun onServerConnectionLost() = dispatchErrorScreen(ServerConnectionLostError {
+        dispatchSingleTimeEvent(KillGame)
+    })
+
     fun startConnection() {
         connection = if (isServer()) {
             bluetoothConnectionCreator.createServer()
