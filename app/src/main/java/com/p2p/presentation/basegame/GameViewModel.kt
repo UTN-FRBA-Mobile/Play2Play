@@ -3,6 +3,7 @@ package com.p2p.presentation.basegame
 import androidx.annotation.CallSuper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.p2p.R
 import com.p2p.data.bluetooth.BluetoothConnection
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
@@ -14,6 +15,7 @@ import com.p2p.model.LoadingScreen
 import com.p2p.model.VisibleLoadingScreen
 import com.p2p.model.base.message.ClientHandshakeMessage
 import com.p2p.model.base.message.Conversation
+import com.p2p.model.base.message.GoodbyePlayerMessage
 import com.p2p.model.base.message.Message
 import com.p2p.model.base.message.ServerHandshakeMessage
 import com.p2p.presentation.base.BaseViewModel
@@ -86,6 +88,9 @@ abstract class GameViewModel(
                 connectedPlayers =
                     connectedPlayers + message.players.map { conversation.peer to it }
             }
+            is GoodbyePlayerMessage -> {
+                removePlayer(connectedPlayers.first { it.second == message.name })
+            }
         }
     }
 
@@ -107,9 +112,17 @@ abstract class GameViewModel(
     open fun onClientConnectionSuccess() = connection.write(ClientHandshakeMessage(userName))
 
     /** Invoked when there was an error while trying to connect the client with the server. */
-    open fun onClientConnectionFailure() = setErrorScreen(CannotEstablishClientConnectionError {
+    open fun onClientConnectionFailure() = dispatchErrorScreen(CannotEstablishClientConnectionError {
+        clearError()
         startConnection()
     })
+
+    /** Invoked when the connection with the given [peerId] was lost. */
+    open fun onClientConnectionLost(peerId: Long) {
+        val playerLost = connectedPlayers.first { it.first == peerId }
+        connection.write(GoodbyePlayerMessage(playerLost.second))
+        removePlayer(playerLost)
+    }
 
     fun startConnection() {
         connection = if (isServer()) {
@@ -143,7 +156,7 @@ abstract class GameViewModel(
     protected fun getPlayerById(playerId: Long) =
         connectedPlayers.first { it.first == playerId }.second
 
-    protected fun setErrorScreen(error: GameError) {
+    protected fun dispatchErrorScreen(error: GameError) {
         _error.value = error
     }
 
@@ -165,6 +178,15 @@ abstract class GameViewModel(
         } else {
             dispatchSingleTimeEvent(GoToClientLobby)
         }
+    }
+
+    private fun removePlayer(playerLost: Pair<Long, String>) {
+        connectedPlayers = connectedPlayers - playerLost
+        dispatchMessage(
+            textRes = R.string.error_client_connection_lost,
+            type = MessageData.Type.ERROR,
+            formatArgs = arrayOf(playerLost.second),
+        )
     }
 
     companion object {

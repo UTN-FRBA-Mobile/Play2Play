@@ -3,7 +3,6 @@ package com.p2p.framework.bluetooth
 import android.bluetooth.BluetoothServerSocket
 import android.bluetooth.BluetoothSocket
 import android.os.Handler
-import com.p2p.data.bluetooth.BluetoothConnection
 import com.p2p.model.base.message.Conversation
 import com.p2p.model.base.message.Message
 import com.p2p.utils.Logger
@@ -15,8 +14,12 @@ class BluetoothServer(
 ) : BluetoothConnectionImp(handler) {
 
     private var shouldLoop = true
-    private val connectedThreads = mutableListOf<BluetoothConnectionThread>()
-    private val serverSocket: BluetoothServerSocket? by lazy(LazyThreadSafetyMode.NONE) {
+
+    /** This list of [BluetoothConnectionThread]s contains the communication with each client. */
+    private val connectionsToClients = mutableListOf<BluetoothConnectionThread>()
+
+    /** The server socket is used to accept connections, then it should be closed. */
+    private val acceptingConnectionsSocket: BluetoothServerSocket? by lazy(LazyThreadSafetyMode.NONE) {
         bluetoothAdapter?.listenUsingInsecureRfcommWithServiceRecord(TAG, java.util.UUID.fromString(UUID))
     }
 
@@ -29,7 +32,7 @@ class BluetoothServer(
         while (shouldLoop) {
             val socket: BluetoothSocket = try {
                 Logger.d(TAG, "Accepting new connection, blocking this thread")
-                serverSocket?.accept()
+                acceptingConnectionsSocket?.accept()
             } catch (e: IOException) {
                 Logger.d(TAG, "Socket's accept() method failed", e)
                 shouldLoop = false
@@ -41,13 +44,14 @@ class BluetoothServer(
             bluetoothConnectionThread.onMessageReceived = { isConversation, length, buffer ->
                 if (!isConversation) {
                     Logger.d(TAG, "Received message and broadcasting")
-                    connectedThreads
+                    connectionsToClients
                         .filterNot { it == bluetoothConnectionThread }
                         .forEach { it.write(buffer, length, false) }
                 }
             }
-            connectedThreads.add(bluetoothConnectionThread)
-            if (connectedThreads.size >= maxAccepted) {
+            bluetoothConnectionThread.onConnectionLost = { connectionsToClients.remove(bluetoothConnectionThread) }
+            connectionsToClients.add(bluetoothConnectionThread)
+            if (connectionsToClients.size >= maxAccepted) {
                 stopAccepting()
             }
         }
@@ -56,26 +60,26 @@ class BluetoothServer(
     override fun close() {
         Logger.d(TAG, "Close the server")
         try {
-            serverSocket?.close()
-            connectedThreads.forEach { it.close() }
+            acceptingConnectionsSocket?.close()
+            connectionsToClients.forEach { it.close() }
         } catch (e: IOException) {
             Logger.e(TAG, "Could not close the connect socket", e)
         }
     }
 
-    override fun write(message: Message) = connectedThreads.forEach {
+    override fun write(message: Message) = connectionsToClients.forEach {
         writeOnConnection(it, message, isConversation = false)
     }
 
     override fun talk(conversation: Conversation, sendMessage: Message) {
-        connectedThreads
+        connectionsToClients
             .firstOrNull { it.id == conversation.peer }
             ?.let { writeOnConnection(it, sendMessage, isConversation = true) }
     }
 
     fun stopAccepting() {
         Logger.d(TAG, "Stop accepting new connections")
-        serverSocket?.close() // TODO: I'm not sure that we should close this socket.
+        acceptingConnectionsSocket?.close()
         shouldLoop = false
     }
 

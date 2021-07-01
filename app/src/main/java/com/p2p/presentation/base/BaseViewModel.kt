@@ -21,15 +21,22 @@ abstract class BaseViewModel<E : Any> : ViewModel() {
     }
 
     /** Dispatch a new event that will show a message. */
-    protected fun dispatchMessage(message: MessageData) {
-        _message.value = message
+    protected fun dispatchMessage(
+        @StringRes textRes: Int? = null,
+        text: String? = null,
+        type: MessageData.Type,
+        duration: MessageData.Duration = MessageData.Duration.SHORT,
+        vararg formatArgs: String = emptyArray()
+    ) {
+        _message.value = MessageData(textRes, text, type, duration, *formatArgs)
     }
 
-    data class MessageData(
+    class MessageData(
         @StringRes val textRes: Int? = null,
         val text: String? = null,
         val type: Type,
-        val duration: Duration = Duration.SHORT
+        val duration: Duration = Duration.SHORT,
+        vararg val formatArgs: String = emptyArray(),
     ) {
 
         enum class Type {

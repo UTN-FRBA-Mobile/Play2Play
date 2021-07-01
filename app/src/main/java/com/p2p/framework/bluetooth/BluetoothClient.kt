@@ -15,7 +15,8 @@ class BluetoothClient(
     private val bluetoothServerDevice: BluetoothDevice,
 ) : BluetoothConnectionImp(handler) {
 
-    private var connectedSocket: BluetoothConnectionThread? = null
+    /** This [BluetoothConnectionThread] contains the communication with the server. */
+    private var connectionToServer: BluetoothConnectionThread? = null
 
     init {
         start()
@@ -42,7 +43,7 @@ class BluetoothClient(
                     // The connection attempt succeeded. Perform work associated with
                     // the connection in a separate thread.
                     Logger.d(TAG, "Connection succeed")
-                    connectedSocket = createConnectionThread(socket)
+                    connectionToServer = createConnectionThread(socket)
                     handler.obtainMessage(ON_CLIENT_CONNECTION_SUCCESS).sendToTarget()
                 } catch (exception: IOException) {
                     if (pendingRetries > 0) tryConnection(pendingRetries - 1)
@@ -54,7 +55,7 @@ class BluetoothClient(
     override fun close() {
         Logger.d(TAG, "Close the client")
         try {
-            connectedSocket?.close()
+            connectionToServer?.close()
         } catch (e: IOException) {
             Logger.e(TAG, "Could not close the client socket", e)
         }
@@ -63,7 +64,7 @@ class BluetoothClient(
     override fun write(message: Message) = write(message, isConversation = false)
 
     override fun talk(conversation: Conversation, sendMessage: Message) {
-        if (connectedSocket?.id == conversation.peer) {
+        if (connectionToServer?.id == conversation.peer) {
             write(sendMessage, isConversation = true)
         } else {
             Logger.e(TAG, "Cannot answer to the given sender id")
@@ -71,7 +72,7 @@ class BluetoothClient(
     }
 
     private fun write(message: Message, isConversation: Boolean) {
-        connectedSocket?.let { writeOnConnection(it, message, isConversation) }
+        connectionToServer?.let { writeOnConnection(it, message, isConversation) }
     }
 
     companion object {

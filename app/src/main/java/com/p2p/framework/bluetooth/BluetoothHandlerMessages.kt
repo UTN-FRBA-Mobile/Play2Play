@@ -7,4 +7,5 @@ object BluetoothHandlerMessages {
     const val MESSAGE_WRITE_ERROR = 2
     const val ON_CLIENT_CONNECTION_SUCCESS = 3
     const val ON_CLIENT_CONNECTION_FAILURE = 4
+    const val ON_CLIENT_CONNECTION_LOST = 5
 }

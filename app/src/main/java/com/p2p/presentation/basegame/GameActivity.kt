@@ -18,6 +18,7 @@ import com.p2p.framework.bluetooth.BluetoothHandlerMessages.MESSAGE_READ
 import com.p2p.framework.bluetooth.BluetoothHandlerMessages.MESSAGE_WRITE_ERROR
 import com.p2p.framework.bluetooth.BluetoothHandlerMessages.MESSAGE_WRITE_SUCCESS
 import com.p2p.framework.bluetooth.BluetoothHandlerMessages.ON_CLIENT_CONNECTION_FAILURE
+import com.p2p.framework.bluetooth.BluetoothHandlerMessages.ON_CLIENT_CONNECTION_LOST
 import com.p2p.framework.bluetooth.BluetoothHandlerMessages.ON_CLIENT_CONNECTION_SUCCESS
 import com.p2p.model.VisibleLoadingScreen
 import com.p2p.model.base.message.Conversation
@@ -25,6 +26,7 @@ import com.p2p.model.base.message.Message
 import com.p2p.presentation.base.BaseMVVMActivity
 import com.p2p.utils.Logger
 import com.p2p.utils.hideKeyboard
+import com.p2p.utils.showSnackBar
 import kotlin.reflect.KClass
 
 abstract class GameActivity<E : SpecificGameEvent, VM : GameViewModel> :
@@ -68,6 +70,10 @@ abstract class GameActivity<E : SpecificGameEvent, VM : GameViewModel> :
                 viewModel.onClientConnectionFailure()
                 true
             }
+            ON_CLIENT_CONNECTION_LOST -> {
+                viewModel.onClientConnectionLost(it.obj as Long)
+                true
+            }
             else -> false
         }
     }
@@ -97,12 +103,13 @@ abstract class GameActivity<E : SpecificGameEvent, VM : GameViewModel> :
             error?.run {
                 findViewById<ImageView>(R.id.error_image).setImageResource(image)
                 findViewById<TextView>(R.id.error_text).setText(text)
-                findViewById<TextView>(R.id.error_button).setOnClickListener {
-                    errorView.isVisible = false
-                    onRetry()
+                findViewById<TextView>(R.id.error_button).run {
+                    setText(actionText)
+                    setOnClickListener { onActionClicked() }
                 }
             }
         }
+        viewModel.message.observe(this) { showSnackBar(findViewById(android.R.id.content), it) }
     }
 
     final override fun onEvent(event: GameEvent) = when (event) {

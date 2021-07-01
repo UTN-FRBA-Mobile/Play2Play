@@ -51,10 +51,8 @@ class CreateTuttiFruttiViewModel(repository: TuttiFruttiRepository) :
     private fun validateCategoriesCount(): Boolean {
         return if (!categoriesCountIsValid()) {
             dispatchMessage(
-                MessageData(
-                    textRes = R.string.games_tutti_frutti,
-                    type = MessageData.Type.ERROR
-                )
+                textRes = R.string.games_tutti_frutti,
+                type = MessageData.Type.ERROR
             )
             false
         } else {

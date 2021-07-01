@@ -6,6 +6,7 @@ import androidx.core.os.bundleOf
 import com.p2p.framework.bluetooth.BluetoothHandlerMessages.MESSAGE_READ
 import com.p2p.framework.bluetooth.BluetoothHandlerMessages.MESSAGE_WRITE_ERROR
 import com.p2p.framework.bluetooth.BluetoothHandlerMessages.MESSAGE_WRITE_SUCCESS
+import com.p2p.framework.bluetooth.BluetoothHandlerMessages.ON_CLIENT_CONNECTION_LOST
 import com.p2p.utils.Logger
 import com.p2p.utils.toBoolean
 import com.p2p.utils.toByteArray
@@ -18,6 +19,7 @@ class BluetoothConnectionThread(
     private val socket: BluetoothSocket
 ) : Thread() {
 
+    var onConnectionLost: (() -> Boolean)? = null
     var onMessageReceived: ((isConversation: Boolean, length: Int, buffer: ByteArray) -> Unit)? = null
 
     private val inputStream: InputStream = socket.inputStream
@@ -40,6 +42,8 @@ class BluetoothConnectionThread(
                 inputStream.read(buffer)
             } catch (e: IOException) {
                 Logger.d(TAG, "Input stream was disconnected", e)
+                handler.obtainMessage(ON_CLIENT_CONNECTION_LOST, id).sendToTarget()
+                onConnectionLost?.invoke()
                 break
             }
 

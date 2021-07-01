@@ -68,6 +68,7 @@
 
     <!-- Error screen -->
     <string name="error_screen_retry_button">Quiero volver a intentarlo</string>
-    <string name="error_on_client_connection">Hubo un error al intentar conectarse al dispositivo del otro jugador</string>
+    <string name="error_client_connection_failure">Hubo un error al intentar conectarse al dispositivo del otro jugador</string>
+    <string name="error_client_connection_lost">Se perdió la conexión con %s</string>
 
 </resources>
