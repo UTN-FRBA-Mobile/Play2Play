@@ -33,7 +33,7 @@ abstract class TuttiFruttiViewModel(
     Game.TUTTI_FRUTTI
 ) {
 
-    private var isPlaying = false
+    protected var gameAlreadyStarted = false
     protected lateinit var lettersByRound: List<Char>
 
     protected val _totalRounds = MutableLiveData<Int>()
@@ -84,12 +84,14 @@ abstract class TuttiFruttiViewModel(
         connection.write(TuttiFruttiEnoughForMeEnoughForAllMessage())
     }
 
-    @CallSuper
-    open fun startGame() {
-        isPlaying = true
-    }
+    abstract fun startGame()
 
     abstract fun sendWords(categoriesWords: LinkedHashMap<Category, String>)
+
+    override fun goToPlay() {
+        gameAlreadyStarted = true
+        super.goToPlay()
+    }
 
     @CallSuper
     override fun receiveMessage(conversation: Conversation) {

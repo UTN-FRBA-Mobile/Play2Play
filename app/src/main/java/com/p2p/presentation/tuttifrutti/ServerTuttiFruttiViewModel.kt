@@ -25,7 +25,6 @@ class ServerTuttiFruttiViewModel(
     instructionsRepository,
     loadingTextRepository
 ) {
-    private var gameAlreadyStarted = false
     private var saidEnoughPeer: Long? = null
 
     /** Be careful: this will be called for every client on a broadcast. */
@@ -34,7 +33,6 @@ class ServerTuttiFruttiViewModel(
         when (conversation.lastMessage) {
             is TuttiFruttiStartGame -> if (!gameAlreadyStarted) {
                 goToPlay() // starts the game when the first StartGame message was sent successfully.
-                gameAlreadyStarted = true
             }
         }
     }
@@ -44,7 +42,6 @@ class ServerTuttiFruttiViewModel(
         connection.write(TuttiFruttiStartGame(lettersByRound, categoriesToPlay.requireValue()))
         closeDiscovery()
         goToPlay()
-        super.startGame()
     }
 
     override fun receiveMessage(conversation: Conversation) {
