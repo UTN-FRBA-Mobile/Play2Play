@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorSecondary"
+    android:background="@color/colorPrimaryVariant"
     android:clickable="true"
     android:focusable="true">
 
@@ -16,8 +16,8 @@
         android:layout_height="@dimen/progress_bar_size"
         android:layout_gravity="center"
         android:indeterminate="true"
-        android:indeterminateBehavior="@color/colorPrimaryVariant"
-        android:indeterminateTint="@color/colorPrimary"
+        android:indeterminateBehavior="@color/colorSecondaryVariant"
+        android:indeterminateTint="@color/colorSecondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintLeft_toLeftOf="parent"
