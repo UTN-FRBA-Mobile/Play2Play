@@ -65,4 +65,9 @@
     <string name="tf_winner">Ganó %s</string>
     <string name="tf_points">%d puntos</string>
     <string name="tf_exit">Salir</string>
+
+    <!-- Error screen -->
+    <string name="error_screen_retry_button">Quiero volver a intentarlo</string>
+    <string name="error_on_client_connection">Hubo un error al intentar conectarse al dispositivo del otro jugador</string>
+
 </resources>

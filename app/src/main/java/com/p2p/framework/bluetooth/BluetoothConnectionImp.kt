@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.p2p.data.bluetooth.BluetoothConnection
 import com.p2p.model.base.message.Message
 
-abstract class BluetoothConnectionImp(private val handler: Handler) : Thread(), BluetoothConnection {
+abstract class BluetoothConnectionImp(protected val handler: Handler) : Thread(), BluetoothConnection {
 
     private val objectMapper by lazy { ObjectMapper() }
 

@@ -9,6 +9,9 @@ import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.loadingMessages.LoadingTextRepository
 import com.p2p.data.userInfo.UserSession
 import com.p2p.framework.bluetooth.BluetoothServer
+import com.p2p.model.HiddenLoadingScreen
+import com.p2p.model.LoadingScreen
+import com.p2p.model.VisibleLoadingScreen
 import com.p2p.model.base.message.ClientHandshakeMessage
 import com.p2p.model.base.message.Conversation
 import com.p2p.model.base.message.Message
@@ -48,6 +51,13 @@ abstract class GameViewModel(
 
     private val _players = MutableLiveData(emptyList<String>())
     val players: LiveData<List<String>> = _players
+
+    //Loading value for loading screen, being first if isLoading and second the text to show
+    private val _loadingScreen = MutableLiveData<LoadingScreen>()
+    val loadingScreen: LiveData<LoadingScreen> = _loadingScreen
+
+    private val _error = MutableLiveData<GameError?>()
+    val error: LiveData<GameError?> = _error
 
     init {
         _game.value = theGame
@@ -93,27 +103,32 @@ abstract class GameViewModel(
      */
     open fun onSentError(message: Message) = connection.write(message)
 
+    /** Invoked when the client connection to the server was established successfully. */
+    open fun onClientConnectionSuccess() = connection.write(ClientHandshakeMessage(userName))
+
+    /** Invoked when there was an error while trying to connect the client with the server. */
+    open fun onClientConnectionFailure() = setErrorScreen(CannotEstablishClientConnectionError {
+        startConnection()
+    })
+
     fun startConnection() {
         connection = if (isServer()) {
             bluetoothConnectionCreator.createServer()
         } else {
-            val device = requireNotNull(connectionType.device) {
+            bluetoothConnectionCreator.createClient(requireNotNull(connectionType.device) {
                 "A bluetooth device should be passed on the activity creation"
-            }
-            bluetoothConnectionCreator.createClient(device).also { client ->
-                client.onConnected { it.write(ClientHandshakeMessage(userName)) }
-            }
+            })
         }
     }
 
     fun showInstructions() = dispatchSingleTimeEvent(OpenInstructions(instructions))
 
-    fun goToLobby() = dispatchSingleTimeEvent(if(isServer()) GoToServerLobby else GoToClientLobby)
+    fun goToLobby() = dispatchSingleTimeEvent(if (isServer()) GoToServerLobby else GoToClientLobby)
 
     fun goToPlay() = dispatchSingleTimeEvent(GoToPlay)
 
     fun closeDiscovery() {
-        when(connection) {
+        when (connection) {
             is BluetoothServer -> (connection as BluetoothServer).stopAccepting() //TODO prettify
             else -> Unit
         }
@@ -127,6 +142,22 @@ abstract class GameViewModel(
 
     protected fun getPlayerById(playerId: Long) =
         connectedPlayers.first { it.first == playerId }.second
+
+    protected fun setErrorScreen(error: GameError) {
+        _error.value = error
+    }
+
+    protected fun clearError() {
+        _error.value = null
+    }
+
+    protected fun startLoading(loadingMessage: String) {
+        _loadingScreen.value = VisibleLoadingScreen(loadingMessage)
+    }
+
+    fun stopLoading() {
+        _loadingScreen.value = HiddenLoadingScreen
+    }
 
     private fun createOrJoin() {
         if (isServer()) {

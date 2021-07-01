@@ -3,25 +3,32 @@ package com.p2p.presentation.basegame
 import android.bluetooth.BluetoothDevice
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import androidx.annotation.LayoutRes
+import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.core.view.isVisible
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.p2p.R
-import com.p2p.framework.bluetooth.BluetoothConnectionThread.Companion.MESSAGE_READ
-import com.p2p.framework.bluetooth.BluetoothConnectionThread.Companion.MESSAGE_WRITE_ERROR
-import com.p2p.framework.bluetooth.BluetoothConnectionThread.Companion.MESSAGE_WRITE_SUCCESS
 import com.p2p.framework.bluetooth.BluetoothConnectionThread.Companion.PEER_ID
+import com.p2p.framework.bluetooth.BluetoothHandlerMessages.MESSAGE_READ
+import com.p2p.framework.bluetooth.BluetoothHandlerMessages.MESSAGE_WRITE_ERROR
+import com.p2p.framework.bluetooth.BluetoothHandlerMessages.MESSAGE_WRITE_SUCCESS
+import com.p2p.framework.bluetooth.BluetoothHandlerMessages.ON_CLIENT_CONNECTION_FAILURE
+import com.p2p.framework.bluetooth.BluetoothHandlerMessages.ON_CLIENT_CONNECTION_SUCCESS
+import com.p2p.model.VisibleLoadingScreen
 import com.p2p.model.base.message.Conversation
 import com.p2p.model.base.message.Message
 import com.p2p.presentation.base.BaseMVVMActivity
 import com.p2p.utils.Logger
+import com.p2p.utils.hideKeyboard
 import kotlin.reflect.KClass
 
-abstract class GameActivity<E : SpecificGameEvent, VM : GameViewModel>(
-    @LayoutRes layout: Int = R.layout.activity_base
-) : BaseMVVMActivity<GameEvent, VM>(layout) {
+abstract class GameActivity<E : SpecificGameEvent, VM : GameViewModel> :
+    BaseMVVMActivity<GameEvent, VM>(R.layout.activity_base) {
 
     protected val gameViewModelFactory: GameViewModelFactory
         get() = GameViewModelFactory(this, gameViewModelFactoryData)
@@ -53,6 +60,14 @@ abstract class GameActivity<E : SpecificGameEvent, VM : GameViewModel>(
                 viewModel.onSentError(message)
                 true
             }
+            ON_CLIENT_CONNECTION_SUCCESS -> {
+                viewModel.onClientConnectionSuccess()
+                true
+            }
+            ON_CLIENT_CONNECTION_FAILURE -> {
+                viewModel.onClientConnectionFailure()
+                true
+            }
             else -> false
         }
     }
@@ -63,6 +78,32 @@ abstract class GameActivity<E : SpecificGameEvent, VM : GameViewModel>(
     }
     private val device: BluetoothDevice? by lazy { intent.getParcelableExtra(SERVER_DEVICE_EXTRA) }
     private val objectMapper by lazy { jacksonObjectMapper() }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.loadingScreen.observe(this) { loading ->
+            if (loading.isLoading) hideKeyboard()
+            findViewById<View>(R.id.activity_progress_overlay).isVisible = loading.isLoading
+            when (loading) {
+                is VisibleLoadingScreen ->
+                    findViewById<TextView>(R.id.progress_text).text = loading.waitingText
+                else -> {
+                }
+            }
+        }
+        viewModel.error.observe(this) { error ->
+            val errorView = findViewById<View>(R.id.error_view)
+            errorView.isVisible = error != null
+            error?.run {
+                findViewById<ImageView>(R.id.error_image).setImageResource(image)
+                findViewById<TextView>(R.id.error_text).setText(text)
+                findViewById<TextView>(R.id.error_button).setOnClickListener {
+                    errorView.isVisible = false
+                    onRetry()
+                }
+            }
+        }
+    }
 
     final override fun onEvent(event: GameEvent) = when (event) {
         GoToCreate -> goToCreate()

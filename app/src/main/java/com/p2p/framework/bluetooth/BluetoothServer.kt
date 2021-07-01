@@ -73,10 +73,6 @@ class BluetoothServer(
             ?.let { writeOnConnection(it, sendMessage, isConversation = true) }
     }
 
-    override fun onConnected(action: (BluetoothConnection) -> Unit) {
-        action(this)
-    }
-
     fun stopAccepting() {
         Logger.d(TAG, "Stop accepting new connections")
         serverSocket?.close() // TODO: I'm not sure that we should close this socket.
