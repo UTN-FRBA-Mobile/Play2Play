@@ -14,6 +14,7 @@ import com.p2p.model.tuttifrutti.RoundInfo
 import com.p2p.model.tuttifrutti.message.TuttiFruttiEnoughForMeEnoughForAllMessage
 import com.p2p.presentation.basegame.ConnectionType
 import com.p2p.presentation.basegame.GameViewModel
+import com.p2p.presentation.basegame.KillGame
 import com.p2p.presentation.home.games.Game
 import com.p2p.presentation.tuttifrutti.create.categories.Category
 
@@ -32,6 +33,7 @@ abstract class TuttiFruttiViewModel(
     Game.TUTTI_FRUTTI
 ) {
 
+    private var isPlaying = false
     protected lateinit var lettersByRound: List<Char>
 
     protected val _totalRounds = MutableLiveData<Int>()
@@ -82,8 +84,10 @@ abstract class TuttiFruttiViewModel(
         connection.write(TuttiFruttiEnoughForMeEnoughForAllMessage())
     }
 
-
-    abstract fun startGame()
+    @CallSuper
+    open fun startGame() {
+        isPlaying = true
+    }
 
     abstract fun sendWords(categoriesWords: LinkedHashMap<Category, String>)
 
@@ -99,6 +103,13 @@ abstract class TuttiFruttiViewModel(
         stopRound()
     }
 
+    override fun onClientConnectionLost(peerId: Long) {
+        super.onClientConnectionLost(peerId)
+        if (isGameStarted() && connectedPlayers.size == 1) {
+            dispatchErrorScreen(SinglePlayerOnGame { dispatchSingleTimeEvent(KillGame) })
+        }
+    }
+
     protected fun stopRound() {
         dispatchSingleTimeEvent(ObtainWords)
     }
@@ -108,6 +119,8 @@ abstract class TuttiFruttiViewModel(
         _actualRound.value =
             RoundInfo(lettersByRound[actualRoundNumber.minus(1)], actualRoundNumber)
     }
+
+    private fun isGameStarted() = this::lettersByRound.isInitialized
 
     companion object {
         const val availableLetters = "ABCDEFGHIJKLMNOPRSTUVY"

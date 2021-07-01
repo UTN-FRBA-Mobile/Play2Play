@@ -67,5 +67,8 @@ class ClientTuttiFruttiViewModel(
         enoughForAllConversation = null
     }
 
-    override fun startGame() = goToPlay()
+    override fun startGame() {
+        goToPlay()
+        super.startGame()
+    }
 }

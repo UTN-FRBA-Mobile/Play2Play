@@ -109,15 +109,18 @@ abstract class GameViewModel(
     open fun onSentError(message: Message) = connection.write(message)
 
     /** Invoked when the client connection to the server was established successfully. */
+    @CallSuper
     open fun onClientConnectionSuccess() = connection.write(ClientHandshakeMessage(userName))
 
     /** Invoked when there was an error while trying to connect the client with the server. */
+    @CallSuper
     open fun onClientConnectionFailure() = dispatchErrorScreen(CannotEstablishClientConnectionError {
         clearError()
         startConnection()
     })
 
     /** Invoked when the connection with the given [peerId] was lost. */
+    @CallSuper
     open fun onClientConnectionLost(peerId: Long) {
         val playerLost = connectedPlayers.first { it.first == peerId }
         connection.write(GoodbyePlayerMessage(playerLost.second))

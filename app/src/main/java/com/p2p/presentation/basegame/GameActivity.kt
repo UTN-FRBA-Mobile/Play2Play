@@ -117,6 +117,7 @@ abstract class GameActivity<E : SpecificGameEvent, VM : GameViewModel> :
         GoToClientLobby -> goToClientLobby()
         GoToServerLobby -> goToServerLobby()
         GoToPlay -> goToPlay()
+        KillGame -> finish()
         is OpenInstructions -> showInstructions(event.instructions)
         is SpecificGameEvent -> {
             try {
