@@ -67,6 +67,8 @@ class BluetoothClient(
         }
     }
 
+    override fun killPeer(peer: Long) = close()
+
     override fun write(message: Message) = write(message, isConversation = false)
 
     override fun talk(conversation: Conversation, sendMessage: Message) {

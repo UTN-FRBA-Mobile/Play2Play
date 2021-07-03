@@ -13,4 +13,7 @@ interface BluetoothConnection {
 
     /** Close the bluetooth connection when there won't be more communication. */
     fun close()
+
+    /** Kills the connection with the given [peer] id. */
+    fun killPeer(peer: Long)
 }

@@ -37,7 +37,7 @@ abstract class GameViewModel(
 ) : BaseViewModel<GameEvent>() {
 
     protected var gameAlreadyStarted = false
-    protected var gameAlreadyFinished = false
+    protected var gameAlreadyFinished = false // TODO: if game finished then set gameAlreadyFinished = false
 
     private val userName by lazy { userSession.getUserNameOrEmpty() }
     private val instructions by lazy { instructionsRepository.getInstructions(game.requireValue()) }

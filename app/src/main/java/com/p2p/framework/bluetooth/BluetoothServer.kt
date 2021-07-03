@@ -74,6 +74,10 @@ class BluetoothServer(
         }
     }
 
+    override fun killPeer(peer: Long) {
+        connectionsToClients.firstOrNull { it.id == peer }?.close()
+    }
+
     override fun write(message: Message) = connectionsToClients.forEach {
         writeOnConnection(it, message, isConversation = false)
     }
