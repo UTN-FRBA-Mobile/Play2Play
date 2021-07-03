@@ -1,11 +1,8 @@
 package com.p2p.presentation.tuttifrutti.play
 
-import android.os.Build
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import androidx.core.text.HtmlCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.google.android.material.textfield.TextInputLayout
@@ -16,10 +13,10 @@ import com.p2p.presentation.basegame.BaseGameFragment
 import com.p2p.presentation.basegame.GameEvent
 import com.p2p.presentation.tuttifrutti.GoToReview
 import com.p2p.presentation.tuttifrutti.ObtainWords
-import com.p2p.presentation.tuttifrutti.TuttiFruttiSpecificGameEvent
 import com.p2p.presentation.tuttifrutti.TuttiFruttiViewModel
 import com.p2p.presentation.tuttifrutti.create.categories.Category
 import com.p2p.presentation.tuttifrutti.review.TuttiFruttiReviewFragment
+import com.p2p.utils.fromHtml
 import com.p2p.utils.text
 
 class PlayTuttiFruttiFragment : BaseGameFragment<
@@ -70,14 +67,12 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
         with(gameViewModel) {
             singleTimeEvent.observe(viewLifecycleOwner) { onGameEvent(it) }
             actualRound.observe(viewLifecycleOwner) {
-                gameBinding.round.text = HtmlCompat.fromHtml(
-                    resources.getString(R.string.tf_round, it.number, totalRounds.value),
-                    HtmlCompat.FROM_HTML_MODE_COMPACT
-                )
-                gameBinding.letter.text = HtmlCompat.fromHtml(
-                    resources.getString(R.string.tf_letter, it.letter),
-                    HtmlCompat.FROM_HTML_MODE_COMPACT
-                )
+                gameBinding.round.text = resources
+                    .getString(R.string.tf_round, it.number, totalRounds.value)
+                    .fromHtml()
+                gameBinding.letter.text = resources
+                    .getString(R.string.tf_letter, it.letter)
+                    .fromHtml()
             }
         }
     }

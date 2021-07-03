@@ -59,6 +59,9 @@ abstract class GameViewModel(
             _players.value = value.map { it.second }
         }
 
+    private val _myDeviceName = MutableLiveData<String>()
+    val myDeviceName: LiveData<String> = _myDeviceName
+
     private val _game = MutableLiveData<Game>()
     val game: LiveData<Game> = _game
 
@@ -74,6 +77,7 @@ abstract class GameViewModel(
 
     init {
         _game.value = theGame
+        _myDeviceName.value = bluetoothConnectionCreator.getMyDeviceName()
         connectedPlayers = listOf(MYSELF_PEER_ID to userName)
         createOrJoin()
     }

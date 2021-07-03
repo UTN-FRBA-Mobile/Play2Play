@@ -5,16 +5,18 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.p2p.R
 import com.p2p.databinding.FragmentTuttiFruttiServerLobbyBinding
 import com.p2p.presentation.basegame.BaseGameFragment
 import com.p2p.presentation.tuttifrutti.TuttiFruttiViewModel
+import com.p2p.utils.fromHtml
 
-class ServerTuttiFruttiLobbyFragment: BaseGameFragment<
+class ServerTuttiFruttiLobbyFragment : BaseGameFragment<
         FragmentTuttiFruttiServerLobbyBinding,
         LobbyEvent,
         ServerTuttiFruttiLobbyViewModel,
         TuttiFruttiViewModel>() {
-        
+
     override val gameViewModel: TuttiFruttiViewModel by activityViewModels()
 
     override val viewModel: ServerTuttiFruttiLobbyViewModel by viewModels()
@@ -36,12 +38,17 @@ class ServerTuttiFruttiLobbyFragment: BaseGameFragment<
     override fun setupObservers() {
         super.setupObservers()
         with(gameViewModel) {
+            myDeviceName.observe(viewLifecycleOwner) {
+                gameBinding.helpPlayersDescription.text = resources
+                    .getString(R.string.lobby_give_help_players_decription, it)
+                    .fromHtml()
+            }
             players.observe(viewLifecycleOwner) {
                 connectedPlayersTuttiFruttiAdapter.players = it
                 viewModel.updatePlayers(it)
             }
         }
-        viewModel.isContinueButtonEnabled.observe(viewLifecycleOwner) { gameBinding.startGameButton.isEnabled = it}
+        viewModel.isContinueButtonEnabled.observe(viewLifecycleOwner) { gameBinding.startGameButton.isEnabled = it }
     }
 
     private fun setupPlayersRecycler() = with(gameBinding.playersRecycler) {
@@ -52,7 +59,7 @@ class ServerTuttiFruttiLobbyFragment: BaseGameFragment<
     }
 
     override fun onEvent(event: LobbyEvent) {
-        when(event) {
+        when (event) {
             is GoToPlay -> Unit
         }
     }

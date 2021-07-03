@@ -55,6 +55,8 @@
     <string name="tf_finish_round">¡Basta para mi, basta para todos!</string>
 
     <!-- Lobby -->
+    <string name="lobby_give_help_players_title">Pedile al resto que se sumen</string>
+    <string name="lobby_give_help_players_decription"><![CDATA[Para sumarse a la partida se tienen que unir al celular con el nombre <b>%s</b>]]></string>
     <string name="lobby_connected_players">Jugadores listos</string>
     <string name="lobby_waiting_players">Esperando jugadores</string>
     <string name="lobby_start_game">Comenzar juego</string>
