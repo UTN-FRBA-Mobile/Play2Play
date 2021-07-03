@@ -3,6 +3,7 @@ package com.p2p.framework.bluetooth
 import android.bluetooth.BluetoothServerSocket
 import android.bluetooth.BluetoothSocket
 import android.os.Handler
+import com.p2p.data.bluetooth.BluetoothServerConnection
 import com.p2p.model.base.message.Conversation
 import com.p2p.model.base.message.Message
 import com.p2p.utils.Logger
@@ -11,7 +12,7 @@ import java.io.IOException
 class BluetoothServer(
     handler: Handler,
     private val maxAccepted: Int = MAX_ACCEPTED,
-) : BluetoothConnectionImp(handler) {
+) : BluetoothConnectionImp(handler), BluetoothServerConnection {
 
     private var shouldLoop = true
 
@@ -83,7 +84,7 @@ class BluetoothServer(
             ?.let { writeOnConnection(it, sendMessage, isConversation = true) }
     }
 
-    fun stopAccepting() {
+    override fun stopAccepting() {
         Logger.d(TAG, "Stop accepting new connections")
         acceptingConnectionsSocket?.close()
         shouldLoop = false

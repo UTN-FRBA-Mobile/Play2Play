@@ -88,6 +88,6 @@ class ServerTuttiFruttiViewModel(
             // When all the players send their words, go to the review and clean the players round words.
             dispatchSingleTimeEvent(GoToReview)
         }
-        // TODO: if game finished then set isPlaying = false
+        // TODO: if game finished then set gameAlreadyFinished = false
     }
 }

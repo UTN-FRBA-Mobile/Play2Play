@@ -25,13 +25,6 @@ class NameInUseError(onOkClicked: () -> Unit) : GameError(
     onOkClicked
 )
 
-class CannotWriteOnConnectionError(onOkClicked: () -> Unit) : GameError(
-    R.drawable.ic_no_cell,
-    R.string.error_connection_write_failure,
-    android.R.string.ok,
-    onOkClicked
-)
-
 class ServerConnectionLostError(onOkClicked: () -> Unit) : GameError(
     R.drawable.ic_no_cell,
     R.string.error_server_connection_failure,

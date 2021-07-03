@@ -33,7 +33,6 @@ abstract class TuttiFruttiViewModel(
     Game.TUTTI_FRUTTI
 ) {
 
-    protected var gameAlreadyStarted = false
     protected lateinit var lettersByRound: List<Char>
 
     protected val _totalRounds = MutableLiveData<Int>()
@@ -107,7 +106,7 @@ abstract class TuttiFruttiViewModel(
 
     override fun onClientConnectionLost(peerId: Long) {
         super.onClientConnectionLost(peerId)
-        if (isGameStarted() && connectedPlayers.size == 1) {
+        if (gameAlreadyStarted && connectedPlayers.size == 1) {
             dispatchErrorScreen(SinglePlayerOnGame {
                 dispatchSingleTimeEvent(KillGame)
             })
@@ -123,8 +122,6 @@ abstract class TuttiFruttiViewModel(
         _actualRound.value =
             RoundInfo(lettersByRound[actualRoundNumber.minus(1)], actualRoundNumber)
     }
-
-    private fun isGameStarted() = this::lettersByRound.isInitialized
 
     companion object {
         const val availableLetters = "ABCDEFGHIJKLMNOPRSTUVY"

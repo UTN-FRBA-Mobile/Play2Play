@@ -7,10 +7,10 @@ import androidx.lifecycle.viewModelScope
 import com.p2p.R
 import com.p2p.data.bluetooth.BluetoothConnection
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
+import com.p2p.data.bluetooth.BluetoothServerConnection
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.loadingMessages.LoadingTextRepository
 import com.p2p.data.userInfo.UserSession
-import com.p2p.framework.bluetooth.BluetoothServer
 import com.p2p.model.HiddenLoadingScreen
 import com.p2p.model.LoadingScreen
 import com.p2p.model.VisibleLoadingScreen
@@ -36,11 +36,16 @@ abstract class GameViewModel(
     theGame: Game
 ) : BaseViewModel<GameEvent>() {
 
+    protected var gameAlreadyStarted = false
+    protected var gameAlreadyFinished = false
+
     private val userName by lazy { userSession.getUserNameOrEmpty() }
     private val instructions by lazy { instructionsRepository.getInstructions(game.requireValue()) }
     private val failingMessagesRetries = mutableMapOf<Message, Int>()
 
-    protected lateinit var connection: BluetoothConnection
+    private var _connection: BluetoothConnection? = null
+    protected val connection: BluetoothConnection
+        get() = requireNotNull(_connection) { "The connection was not initialized yet." }
 
     /**
      * Contains all the connected players recognizing them by a [Long] id.
@@ -134,8 +139,7 @@ abstract class GameViewModel(
                 connection.write(message)
             }
         } else {
-            failingMessagesRetries.remove(message)
-            dispatchErrorScreen(CannotWriteOnConnectionError {
+            dispatchErrorScreen(ServerConnectionLostError {
                 dispatchSingleTimeEvent(KillGame)
             })
         }
@@ -155,18 +159,22 @@ abstract class GameViewModel(
     /** Invoked when the connection with the given [peerId] was lost. */
     @CallSuper
     open fun onClientConnectionLost(peerId: Long) {
+        if (gameAlreadyFinished) return
         val playerLost = connectedPlayers.firstOrNull { it.first == peerId } ?: return
         connection.write(GoodbyePlayerMessage(playerLost.second))
         removePlayer(playerLost)
     }
 
     @CallSuper
-    open fun onServerConnectionLost() = dispatchErrorScreen(ServerConnectionLostError {
-        dispatchSingleTimeEvent(KillGame)
-    })
+    open fun onServerConnectionLost() {
+        if (gameAlreadyFinished) return
+        dispatchErrorScreen(ServerConnectionLostError {
+            dispatchSingleTimeEvent(KillGame)
+        })
+    }
 
     fun startConnection() {
-        connection = if (isServer()) {
+        _connection = if (isServer()) {
             bluetoothConnectionCreator.createServer()
         } else {
             bluetoothConnectionCreator.createClient(requireNotNull(connectionType.device) {
@@ -183,14 +191,11 @@ abstract class GameViewModel(
     open fun goToPlay() = dispatchSingleTimeEvent(GoToPlay)
 
     fun closeDiscovery() {
-        when (connection) {
-            is BluetoothServer -> (connection as BluetoothServer).stopAccepting() //TODO prettify
-            else -> Unit
-        }
+        _connection?.let { if (it is BluetoothServerConnection) it.stopAccepting() }
     }
 
     override fun onCleared() {
-        connection.close()
+        _connection?.close()
     }
 
     protected fun isServer() = connectionType.type == GameConnectionType.SERVER
