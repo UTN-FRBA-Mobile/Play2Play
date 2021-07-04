@@ -8,13 +8,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.p2p.R
 import com.p2p.databinding.FragmentTuttiFruttiFinalScoreBinding
 import com.p2p.presentation.basegame.BaseGameFragment
+import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.tuttifrutti.TuttiFruttiViewModel
+import com.p2p.utils.Logger
 
 class FinalScoreTuttiFruttiFragment : BaseGameFragment<
         FragmentTuttiFruttiFinalScoreBinding,
         TuttiFruttiFinalScoreEvent,
         FinalScoreTuttiFruttiViewModel,
         TuttiFruttiViewModel>() {
+
     override val gameViewModel: TuttiFruttiViewModel by activityViewModels()
 
     override val gameInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentTuttiFruttiFinalScoreBinding =
@@ -28,23 +31,18 @@ class FinalScoreTuttiFruttiFragment : BaseGameFragment<
         super.initUI()
         setupObservers()
         setupScoreRecycler()
+        gameViewModel.calculateFinalScores()
+        gameViewModel.stopLoading()
         gameBinding.exitButton.setOnClickListener { viewModel.exit() }
     }
 
-    override fun setupObservers() = with(gameViewModel) {
+    override fun setupObservers() {
         super.setupObservers()
-        finishedRoundsPointsInfos.observe(viewLifecycleOwner) {
-            val finalScores = it.groupBy { roundInfo -> roundInfo.player }
-                .entries
-                .map { entry ->
-                    TuttiFruttiFinalScore(
-                        entry.key,
-                        entry.value.map { roundPoints -> roundPoints.totalPoints }.sum()
-                    )
-                }
-                .sortedByDescending { results -> results.finalScore }
-            tuttiFruttiFinalScoreAdapter.results = finalScores
-            gameBinding.winner.text = resources.getString(R.string.tf_winner, finalScores[0].player)
+        with(gameViewModel) {
+            finalScores.observe(viewLifecycleOwner) {
+                tuttiFruttiFinalScoreAdapter.results = it
+                gameBinding.winner.text = resources.getString(R.string.tf_winner, it.first().player)
+            }
         }
     }
 

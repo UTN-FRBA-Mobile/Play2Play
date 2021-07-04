@@ -5,10 +5,7 @@ import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.loadingMessages.LoadingTextRepository
 import com.p2p.data.userInfo.UserSession
 import com.p2p.model.base.message.Conversation
-import com.p2p.model.tuttifrutti.message.TuttiFruttiEnoughForMeEnoughForAllMessage
-import com.p2p.model.tuttifrutti.message.TuttiFruttiSendWordsMessage
-import com.p2p.model.tuttifrutti.message.TuttiFruttiStartGameMessage
-import com.p2p.model.tuttifrutti.message.TuttiFruttiStartRoundMessage
+import com.p2p.model.tuttifrutti.message.*
 import com.p2p.presentation.basegame.ConnectionType
 import com.p2p.presentation.tuttifrutti.create.categories.Category
 
@@ -38,6 +35,10 @@ class ClientTuttiFruttiViewModel(
                 startGame()
             }
             is TuttiFruttiStartRoundMessage -> startRound()
+            is FinalScoreMessage -> {
+                setFinalScores(message.playersScores)
+                goToFinalScore()
+            }
         }
     }
 

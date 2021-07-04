@@ -91,12 +91,12 @@ abstract class BaseBottomSheetDialogFragment<VB : ViewBinding, E : Any, VM : Bas
     }
 
     /** Add the [fragment] to the activity and if [shouldAddToBackStack] it'll added to the fragments stack */
-    protected fun addFragment(fragment: BaseFragment<*, *, *>, shouldAddToBackStack: Boolean) {
+   /* protected fun addFragment(fragment: BaseFragment<*, *, *>, shouldAddToBackStack: Boolean) {
         parentFragmentManager.commit {
             replace(R.id.fragment_container_view, fragment)
             if (shouldAddToBackStack) addToBackStack(null)
         }
-    }
+    } */
 
     /** Invoked when the view is initialized and should be used to setup the observers for the view model. */
     protected open fun setupObservers() {}

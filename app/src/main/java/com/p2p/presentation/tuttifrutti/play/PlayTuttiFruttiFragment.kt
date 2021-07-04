@@ -12,11 +12,9 @@ import com.p2p.databinding.FragmentPlayTuttiFruttiBinding
 import com.p2p.databinding.ViewPlayCategoryItemBinding
 import com.p2p.presentation.basegame.BaseGameFragment
 import com.p2p.presentation.basegame.GameEvent
-import com.p2p.presentation.tuttifrutti.GoToReview
 import com.p2p.presentation.tuttifrutti.ObtainWords
 import com.p2p.presentation.tuttifrutti.TuttiFruttiViewModel
 import com.p2p.presentation.tuttifrutti.create.categories.Category
-import com.p2p.presentation.tuttifrutti.review.TuttiFruttiReviewFragment
 import com.p2p.utils.text
 
 class PlayTuttiFruttiFragment : BaseGameFragment<
@@ -87,10 +85,6 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
     private fun onGameEvent(event: GameEvent) {
         when (event) {
             ObtainWords -> gameViewModel.sendWords(getCategoriesValues() as LinkedHashMap<Category, String>)
-            is GoToReview -> addFragment(
-                TuttiFruttiReviewFragment.newInstance(),
-                shouldAddToBackStack = false
-            )
             else -> Unit
         }
     }

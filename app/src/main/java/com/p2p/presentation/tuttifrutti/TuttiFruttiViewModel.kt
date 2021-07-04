@@ -20,6 +20,7 @@ import com.p2p.presentation.basegame.GameViewModel
 import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.home.games.Game
 import com.p2p.presentation.tuttifrutti.create.categories.Category
+import com.p2p.presentation.tuttifrutti.finalscore.TuttiFruttiFinalScore
 
 abstract class TuttiFruttiViewModel(
     connectionType: ConnectionType,
@@ -58,6 +59,9 @@ abstract class TuttiFruttiViewModel(
     private val _actualRound = MutableLiveData<RoundInfo>()
     val actualRound: LiveData<RoundInfo> = _actualRound
 
+    private val _finalScores = MutableLiveData<List<TuttiFruttiFinalScore>>()
+    val finalScores: LiveData<List<TuttiFruttiFinalScore>> = _finalScores
+
     init {
         _loadingScreen.value = HiddenLoadingScreen
     }
@@ -81,7 +85,7 @@ abstract class TuttiFruttiViewModel(
      * */
     fun startRoundOrFinishGame() {
         if (actualRound.requireValue().number == totalRounds.requireValue()) { // last round
-            dispatchSingleTimeEvent(GoToFinalScore)
+            goToFinalScore()
         } else {
             startRound()
         }
@@ -112,6 +116,31 @@ abstract class TuttiFruttiViewModel(
 
     abstract fun sendWords(categoriesWords: LinkedHashMap<Category, String>)
 
+    /**
+     * The server calculates the final scores and send them to the clients.
+     * */
+    open fun calculateFinalScores() {
+        if (finalScores.value?.isEmpty() != false) {
+            _finalScores.value = finishedRoundsPointsInfos.requireValue().groupBy { roundInfo -> roundInfo.player }
+                .entries
+                .map { entry ->
+                    TuttiFruttiFinalScore(
+                        entry.key,
+                        entry.value.map { roundPoints -> roundPoints.totalPoints }.sum()
+                    )
+                }
+                .sortedByDescending { results -> results.finalScore }
+        }
+    }
+
+    fun setFinalScores(scores: List<TuttiFruttiFinalScore>) {
+        _finalScores.value = scores
+    }
+
+    fun stopLoading() {
+        _loadingScreen.value = HiddenLoadingScreen
+    }
+
     @CallSuper
     override fun receiveMessage(conversation: Conversation) {
         super.receiveMessage(conversation)
@@ -124,17 +153,13 @@ abstract class TuttiFruttiViewModel(
         stopRound()
     }
 
-    protected fun stopRound() {
-        dispatchSingleTimeEvent(ObtainWords)
-    }
+    protected fun stopRound() = dispatchSingleTimeEvent(ObtainWords)
 
     protected fun startLoading(loadingMessage: String) {
         _loadingScreen.value = VisibleLoadingScreen(loadingMessage)
     }
 
-    fun stopLoading() {
-        _loadingScreen.value = HiddenLoadingScreen
-    }
+    protected fun goToFinalScore() = dispatchSingleTimeEvent(GoToFinalScore)
 
     companion object {
         const val availableLetters = "ABCDEFGHIJKLMNOPRSTUVY"

@@ -6,6 +6,7 @@ import com.p2p.data.loadingMessages.LoadingTextRepository
 import com.p2p.data.userInfo.UserSession
 import com.p2p.model.base.message.Conversation
 import com.p2p.model.tuttifrutti.FinishedRoundInfo
+import com.p2p.model.tuttifrutti.message.FinalScoreMessage
 import com.p2p.model.tuttifrutti.message.TuttiFruttiSendWordsMessage
 import com.p2p.model.tuttifrutti.message.TuttiFruttiStartGameMessage
 import com.p2p.model.tuttifrutti.message.TuttiFruttiStartRoundMessage
@@ -82,6 +83,11 @@ class ServerTuttiFruttiViewModel(
         startLoading(loadingMessage = "")
         saidEnough(conversation.peer)
         super.onReceiveEnoughForAll(conversation)
+    }
+
+    override fun calculateFinalScores() {
+        super.calculateFinalScores()
+        connection.write(FinalScoreMessage(finalScores.requireValue()))
     }
 
     private fun saidEnough(peer: Long) {
