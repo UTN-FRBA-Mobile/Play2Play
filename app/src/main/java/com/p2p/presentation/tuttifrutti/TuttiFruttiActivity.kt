@@ -1,7 +1,7 @@
 package com.p2p.presentation.tuttifrutti
 
+import android.app.Activity
 import android.bluetooth.BluetoothDevice
-import android.content.Context
 import androidx.activity.viewModels
 import com.p2p.presentation.basegame.GameActivity
 import com.p2p.presentation.tuttifrutti.countdown.TuttiFruttiCountdownFragment
@@ -29,10 +29,12 @@ class TuttiFruttiActivity : GameActivity<TuttiFruttiSpecificGameEvent, TuttiFrut
 
     companion object {
 
-        fun startCreate(context: Context) = startCreate(TuttiFruttiActivity::class, context)
+        fun startCreate(activity: Activity, requestCode: Int) {
+            startCreate(TuttiFruttiActivity::class, activity, requestCode)
+        }
 
-        fun startJoin(context: Context, serverDevice: BluetoothDevice) {
-            startJoin(TuttiFruttiActivity::class, context, serverDevice)
+        fun startJoin(activity: Activity, requestCode: Int, serverDevice: BluetoothDevice) {
+            startJoin(TuttiFruttiActivity::class, activity, requestCode, serverDevice)
         }
     }
 }

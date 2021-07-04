@@ -2,6 +2,7 @@ package com.p2p.presentation.home
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.os.Bundle
 import android.view.WindowManager
@@ -10,7 +11,10 @@ import androidx.core.content.ContextCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.p2p.R
 import com.p2p.presentation.base.BaseActivity
+import com.p2p.presentation.base.BaseViewModel
+import com.p2p.presentation.basegame.GameActivity
 import com.p2p.presentation.home.games.GamesFragment
+import com.p2p.utils.showSnackBar
 
 class HomeActivity : BaseActivity() {
 
@@ -41,6 +45,18 @@ class HomeActivity : BaseActivity() {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == GAME_REQUEST_CODE && resultCode == GameActivity.RESULT_ERROR_BLUETOOTH_OFF) {
+            showSnackBar(
+                BaseViewModel.MessageData(
+                    textRes = R.string.error_bluetooth_off,
+                    type = BaseViewModel.MessageData.Type.ERROR
+                )
+            )
+        }
+    }
+
     private fun hasLocationPermissions(): Boolean {
         return ContextCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION) == PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) == PERMISSION_GRANTED
@@ -60,6 +76,7 @@ class HomeActivity : BaseActivity() {
 
     companion object {
 
+        const val GAME_REQUEST_CODE = 9001
         private const val REQUEST_LOCATION_PERMISSION_CODE = 1001
     }
 }

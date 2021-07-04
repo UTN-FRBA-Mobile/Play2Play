@@ -70,6 +70,7 @@
     <string name="tf_exit">Salir</string>
 
     <!-- Error screen -->
+    <string name="error_bluetooth_off">Se apagó el bluetooth. Para poder jugar tenés que mantenerlo encendido.</string>
     <string name="error_screen_retry_button">Quiero volver a intentarlo</string>
     <string name="error_client_connection_failure">Hubo un error al intentar conectarse al dispositivo del otro jugador.</string>
     <string name="error_server_connection_failure">Se perdió la conexión con la sala.</string>

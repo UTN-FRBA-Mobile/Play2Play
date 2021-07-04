@@ -1,8 +1,12 @@
 package com.p2p.presentation.basegame
 
+import android.app.Activity
+import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -87,6 +91,18 @@ abstract class GameActivity<E : SpecificGameEvent, VM : GameViewModel> :
             "The connection type wasn't sent. Use the start method of [GameActivity]."
         }
     }
+    private val bluetoothConnectionIntentFilter = IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED)
+    private val bluetoothConnectionReceiver = object : BroadcastReceiver() {
+
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action == BluetoothAdapter.ACTION_STATE_CHANGED) {
+                val state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, -1)
+                if (state in listOf(BluetoothAdapter.STATE_TURNING_OFF, BluetoothAdapter.STATE_OFF)) {
+                    onBluetoothOff()
+                }
+            }
+        }
+    }
     private val device: BluetoothDevice? by lazy { intent.getParcelableExtra(SERVER_DEVICE_EXTRA) }
     private val objectMapper by lazy { jacksonObjectMapper() }
 
@@ -114,7 +130,20 @@ abstract class GameActivity<E : SpecificGameEvent, VM : GameViewModel> :
                 }
             }
         }
-        viewModel.message.observe(this) { showSnackBar(findViewById(android.R.id.content), it) }
+        viewModel.message.observe(this) { showSnackBar(it) }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (!BluetoothAdapter.getDefaultAdapter().isEnabled) {
+            onBluetoothOff()
+        }
+        registerReceiver(bluetoothConnectionReceiver, bluetoothConnectionIntentFilter)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        unregisterReceiver(bluetoothConnectionReceiver)
     }
 
     final override fun onEvent(event: GameEvent) = when (event) {
@@ -147,6 +176,11 @@ abstract class GameActivity<E : SpecificGameEvent, VM : GameViewModel> :
 
     protected open fun onGameEvent(event: E) {}
 
+    private fun onBluetoothOff() {
+        setResult(RESULT_ERROR_BLUETOOTH_OFF)
+        finish()
+    }
+
     private fun showInstructions(instructions: String) {
         MaterialAlertDialogBuilder(this)
             .setMessage(instructions)
@@ -167,27 +201,37 @@ abstract class GameActivity<E : SpecificGameEvent, VM : GameViewModel> :
 
     companion object {
 
+        const val RESULT_ERROR_BLUETOOTH_OFF = 1000
+
         private const val TAG = "P2P_GAME_ACTIVITY"
         private const val SERVER_DEVICE_EXTRA = "SERVER_DEVICE_EXTRA"
 
-        fun startCreate(clazz: KClass<*>, context: Context, customizeIntent: Intent.() -> Unit = {}) {
-            context.startActivity(Intent(context, clazz.java).apply {
+        fun startCreate(
+            clazz: KClass<*>,
+            activity: Activity,
+            requestCode: Int,
+            customizeIntent: Intent.() -> Unit = {}
+        ) {
+            val intent = Intent(activity, clazz.java).apply {
                 putExtra(GameConnectionType.EXTRA, GameConnectionType.SERVER)
                 customizeIntent()
-            })
+            }
+            activity.startActivityForResult(intent, requestCode)
         }
 
         fun startJoin(
             clazz: KClass<*>,
-            context: Context,
+            activity: Activity,
+            requestCode: Int,
             serverDevice: BluetoothDevice,
             customizeIntent: Intent.() -> Unit = {}
         ) {
-            context.startActivity(Intent(context, clazz.java).apply {
+            val intent = Intent(activity, clazz.java).apply {
                 putExtra(GameConnectionType.EXTRA, GameConnectionType.CLIENT)
                 putExtra(SERVER_DEVICE_EXTRA, serverDevice)
                 customizeIntent()
-            })
+            }
+            activity.startActivityForResult(intent, requestCode)
         }
     }
 }
