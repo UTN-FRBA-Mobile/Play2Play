@@ -7,9 +7,6 @@ import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.loadingMessages.LoadingTextRepository
 import com.p2p.data.userInfo.UserSession
-import com.p2p.model.HiddenLoadingScreen
-import com.p2p.model.LoadingScreen
-import com.p2p.model.VisibleLoadingScreen
 import com.p2p.model.base.message.Conversation
 import com.p2p.model.tuttifrutti.FinishedRoundInfo
 import com.p2p.model.tuttifrutti.FinishedRoundPointsInfo
@@ -17,6 +14,7 @@ import com.p2p.model.tuttifrutti.RoundInfo
 import com.p2p.model.tuttifrutti.message.TuttiFruttiEnoughForMeEnoughForAllMessage
 import com.p2p.presentation.basegame.ConnectionType
 import com.p2p.presentation.basegame.GameViewModel
+import com.p2p.presentation.basegame.KillGame
 import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.home.games.Game
 import com.p2p.presentation.tuttifrutti.create.categories.Category
@@ -39,10 +37,6 @@ abstract class TuttiFruttiViewModel(
 
     protected lateinit var lettersByRound: List<Char>
 
-    //Loading value for loading screen, being first if isLoading and second the text to show
-    protected val _loadingScreen = MutableLiveData<LoadingScreen>()
-    val loadingScreen: LiveData<LoadingScreen> = _loadingScreen
-
     protected val _totalRounds = MutableLiveData<Int>()
     val totalRounds: LiveData<Int> = _totalRounds
 
@@ -61,10 +55,6 @@ abstract class TuttiFruttiViewModel(
 
     private val _finalScores = MutableLiveData<List<TuttiFruttiFinalScore>>()
     val finalScores: LiveData<List<TuttiFruttiFinalScore>> = _finalScores
-
-    init {
-        _loadingScreen.value = HiddenLoadingScreen
-    }
 
     /** Set the categories selected by the user when creating the game . */
     fun setCategoriesToPlay(categories: List<Category>) {
@@ -137,8 +127,9 @@ abstract class TuttiFruttiViewModel(
         _finalScores.value = scores
     }
 
-    fun stopLoading() {
-        _loadingScreen.value = HiddenLoadingScreen
+    override fun goToPlay() {
+        gameAlreadyStarted = true
+        super.goToPlay()
     }
 
     @CallSuper
@@ -153,13 +144,21 @@ abstract class TuttiFruttiViewModel(
         stopRound()
     }
 
-    protected fun stopRound() = dispatchSingleTimeEvent(ObtainWords)
-
-    protected fun startLoading(loadingMessage: String) {
-        _loadingScreen.value = VisibleLoadingScreen(loadingMessage)
+    override fun onClientConnectionLost(peerId: Long) {
+        super.onClientConnectionLost(peerId)
+        if (gameAlreadyStarted && connectedPlayers.size == 1) {
+            dispatchErrorScreen(SinglePlayerOnGame {
+                dispatchSingleTimeEvent(KillGame)
+            })
+        }
     }
 
-    protected fun goToFinalScore() = dispatchSingleTimeEvent(GoToFinalScore)
+    protected fun stopRound() = dispatchSingleTimeEvent(ObtainWords)
+
+    protected fun goToFinalScore() {
+        gameAlreadyFinished = true
+        dispatchSingleTimeEvent(GoToFinalScore)
+    }
 
     companion object {
         const val availableLetters = "ABCDEFGHIJKLMNOPRSTUVY"

@@ -1,11 +1,11 @@
 package com.p2p.framework.bluetooth
 
 import android.bluetooth.BluetoothDevice
-import android.bluetooth.BluetoothSocket
 import android.os.Handler
-import com.p2p.data.bluetooth.BluetoothConnection
-import com.p2p.model.base.message.Message
+import com.p2p.framework.bluetooth.BluetoothHandlerMessages.ON_CLIENT_CONNECTION_FAILURE
+import com.p2p.framework.bluetooth.BluetoothHandlerMessages.ON_CLIENT_CONNECTION_SUCCESS
 import com.p2p.model.base.message.Conversation
+import com.p2p.model.base.message.Message
 import com.p2p.utils.Logger
 import java.io.IOException
 import java.util.UUID
@@ -15,11 +15,8 @@ class BluetoothClient(
     private val bluetoothServerDevice: BluetoothDevice,
 ) : BluetoothConnectionImp(handler) {
 
-    private val onConnectedActions = mutableListOf<(BluetoothConnection) -> Unit>()
-    private val connectionSocket: BluetoothSocket? by lazy(LazyThreadSafetyMode.NONE) {
-        bluetoothServerDevice.createRfcommSocketToServiceRecord(UUID.fromString(BluetoothServer.UUID))
-    }
-    private var connectedSocket: BluetoothConnectionThread? = null
+    /** This [BluetoothConnectionThread] contains the communication with the server. */
+    private var connectionToServer: BluetoothConnectionThread? = null
 
     init {
         start()
@@ -33,47 +30,49 @@ class BluetoothClient(
     }
 
     private fun tryConnection(pendingRetries: Int = RETRY_COUNT) {
-        Logger.d(TAG, "Try connect to the socket: $connectionSocket (attempts left: $pendingRetries)")
-        connectionSocket?.let { socket ->
-            // Connect to the remote device through the socket. This call blocks
-            // until it succeeds or throws an exception.
-            try {
-                socket.connect()
+        bluetoothServerDevice
+            .createRfcommSocketToServiceRecord(UUID.fromString(BluetoothServer.UUID))
+            ?.let { socket ->
+                Logger.d(TAG, "Try connect to the socket: $socket (attempts left: $pendingRetries)")
 
-                // The connection attempt succeeded. Perform work associated with
-                // the connection in a separate thread.
-                Logger.d(TAG, "Connection succeed")
-                connectedSocket = createConnectionThread(socket)
-                onConnectedActions.forEach { it(this) }
-                onConnectedActions.clear()
-            } catch (exception: IOException) {
-                if (pendingRetries > 0) tryConnection(pendingRetries - 1)
-            }
-        }
+                // Connect to the remote device through the socket. This call blocks
+                // until it succeeds or throws an exception.
+                try {
+                    socket.connect()
+
+                    // The connection attempt succeeded. Perform work associated with
+                    // the connection in a separate thread.
+                    Logger.d(TAG, "Connection succeed")
+                    connectionToServer = createConnectionThread(socket).apply {
+                        onConnectionLost = {
+                            handler
+                                .obtainMessage(BluetoothHandlerMessages.ON_SERVER_CONNECTION_LOST)
+                                .sendToTarget()
+                        }
+                    }
+                    handler.obtainMessage(ON_CLIENT_CONNECTION_SUCCESS).sendToTarget()
+                } catch (exception: IOException) {
+                    if (pendingRetries > 0) tryConnection(pendingRetries - 1)
+                    null
+                }
+            } ?: handler.obtainMessage(ON_CLIENT_CONNECTION_FAILURE).sendToTarget()
     }
 
     override fun close() {
         Logger.d(TAG, "Close the client")
         try {
-            connectionSocket?.close()
-            connectedSocket?.close() // TODO: Check if these aren't the same and if we should close both
+            connectionToServer?.close()
         } catch (e: IOException) {
             Logger.e(TAG, "Could not close the client socket", e)
         }
     }
 
-    override fun onConnected(action: (BluetoothConnection) -> Unit) {
-        if (connectedSocket != null) {
-            action(this)
-        } else {
-            onConnectedActions.add(action)
-        }
-    }
+    override fun killPeer(peer: Long) = close()
 
     override fun write(message: Message) = write(message, isConversation = false)
 
     override fun talk(conversation: Conversation, sendMessage: Message) {
-        if (connectedSocket?.id == conversation.peer) {
+        if (connectionToServer?.id == conversation.peer) {
             write(sendMessage, isConversation = true)
         } else {
             Logger.e(TAG, "Cannot answer to the given sender id")
@@ -81,7 +80,7 @@ class BluetoothClient(
     }
 
     private fun write(message: Message, isConversation: Boolean) {
-        connectedSocket?.let { writeOnConnection(it, message, isConversation) }
+        connectionToServer?.let { writeOnConnection(it, message, isConversation) }
     }
 
     companion object {

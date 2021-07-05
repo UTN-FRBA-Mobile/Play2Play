@@ -27,6 +27,7 @@
         android:paddingBottom="@dimen/medium_extra"
         app:endIconDrawable="@drawable/ic_pencil"
         app:endIconMode="custom"
+        app:helperText="@string/games_name_max_length_error"
         app:hintTextColor="@color/green_eden"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
@@ -34,13 +35,13 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/user_name_input"
-            android:theme="@style/P2P.EditTextTheme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
             android:maxLines="1"
             android:paddingStart="@dimen/small"
-            android:paddingEnd="@dimen/small" />
+            android:paddingEnd="@dimen/small"
+            android:theme="@style/P2P.EditTextTheme" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.recyclerview.widget.RecyclerView

@@ -2,7 +2,6 @@ package com.p2p.presentation.tuttifrutti.review
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.text.HtmlCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -10,6 +9,7 @@ import com.p2p.R
 import com.p2p.databinding.FragmentReviewTuttiFruttiBinding
 import com.p2p.presentation.basegame.BaseGameFragment
 import com.p2p.presentation.tuttifrutti.TuttiFruttiViewModel
+import com.p2p.utils.fromHtml
 
 class TuttiFruttiReviewFragment : BaseGameFragment<
         FragmentReviewTuttiFruttiBinding,
@@ -49,21 +49,18 @@ class TuttiFruttiReviewFragment : BaseGameFragment<
     override fun setupObservers() {
         with(gameViewModel) {
             observe(actualRound) {
-                gameBinding.round.text = HtmlCompat.fromHtml(
-                    resources.getString(R.string.tf_round, it.number, totalRounds.value),
-                    HtmlCompat.FROM_HTML_MODE_COMPACT
-                )
-                gameBinding.letter.text = HtmlCompat.fromHtml(
-                    resources.getString(R.string.tf_letter, it.letter),
-                    HtmlCompat.FROM_HTML_MODE_COMPACT
-                )
+                gameBinding.round.text = resources
+                    .getString(R.string.tf_round, it.number, totalRounds.value)
+                    .fromHtml()
+                gameBinding.letter.text = resources
+                    .getString(R.string.tf_letter, it.letter)
+                    .fromHtml()
             }
             observe(finishedRoundInfos) { finishedRoundInfo ->
                 tuttiFruttiReviewRoundAdapter.finishedRoundInfo = finishedRoundInfo
-                gameBinding.enoughPlayer.text = HtmlCompat.fromHtml(
-                    resources.getString(R.string.tf_enough_player, finishedRoundInfo.first { it.saidEnough }.player),
-                    HtmlCompat.FROM_HTML_MODE_COMPACT
-                )
+                gameBinding.enoughPlayer.text = resources
+                    .getString(R.string.tf_enough_player, finishedRoundInfo.first { it.saidEnough }.player)
+                    .fromHtml()
             }
         }
         with(viewModel) {
@@ -76,7 +73,7 @@ class TuttiFruttiReviewFragment : BaseGameFragment<
     }
 
     override fun onEvent(event: TuttiFruttiReviewEvents) = when (event) {
-        is FinishRoundReview ->  {
+        is FinishRoundReview -> {
             gameViewModel.setFinishedRoundPointsInfos(event.finishedRoundPointsInfo)
             gameViewModel.startRoundOrFinishGame()
         }

@@ -4,7 +4,7 @@ import com.google.android.material.textfield.TextInputLayout
 
 fun TextInputLayout.text(): String = this.editText?.text.toString()
 
-fun TextInputLayout.clear(){
+fun TextInputLayout.clear() {
     this.editText?.run {
         setText("")
         isErrorEnabled = false

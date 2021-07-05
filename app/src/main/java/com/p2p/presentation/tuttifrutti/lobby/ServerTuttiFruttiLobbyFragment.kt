@@ -5,9 +5,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.p2p.R
 import com.p2p.databinding.FragmentTuttiFruttiServerLobbyBinding
 import com.p2p.presentation.basegame.BaseGameFragment
 import com.p2p.presentation.tuttifrutti.TuttiFruttiViewModel
+import com.p2p.utils.fromHtml
 
 class ServerTuttiFruttiLobbyFragment : BaseGameFragment<
         FragmentTuttiFruttiServerLobbyBinding,
@@ -36,6 +38,11 @@ class ServerTuttiFruttiLobbyFragment : BaseGameFragment<
     override fun setupObservers() {
         super.setupObservers()
         with(gameViewModel) {
+            observe(myDeviceName) {
+                gameBinding.helpPlayersDescription.text = resources
+                    .getString(R.string.lobby_give_help_players_decription, it)
+                    .fromHtml()
+            }
             observe(players) {
                 connectedPlayersTuttiFruttiAdapter.players = it
                 viewModel.updatePlayers(it)

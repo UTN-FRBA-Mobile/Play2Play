@@ -8,6 +8,7 @@ import com.p2p.databinding.FragmentJoinGamesBinding
 import com.p2p.framework.bluetooth.BluetoothDeviceFinderReceiver
 import com.p2p.presentation.base.BaseBottomSheetDialogFragment
 import com.p2p.presentation.bluetooth.HowToConnectBluetoothActivity
+import com.p2p.presentation.home.HomeActivity.Companion.GAME_REQUEST_CODE
 import com.p2p.presentation.tuttifrutti.TuttiFruttiActivity
 
 class JoinGamesBottomSheetFragment :
@@ -37,7 +38,7 @@ class JoinGamesBottomSheetFragment :
             dismiss()
             HowToConnectBluetoothActivity.start(requireContext())
         }
-        is JoinGame -> TuttiFruttiActivity.startJoin(requireContext(), event.device)
+        is JoinGame -> TuttiFruttiActivity.startJoin(requireActivity(), GAME_REQUEST_CODE, event.device)
     }
 
     private fun setupRecycler() = with(binding.devicesRecycler) {

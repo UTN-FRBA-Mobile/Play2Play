@@ -29,7 +29,7 @@ class JoinGamesViewModel(bluetoothDeviceFinder: BluetoothDeviceFinder) : BaseVie
         selectedDevice?.let {
             dispatchSingleTimeEvent(JoinGame(it))
         } ?: run {
-            dispatchMessage(MessageData(R.string.join_game_select_device, type = MessageData.Type.ERROR))
+            dispatchMessage(textRes = R.string.join_game_select_device, type = MessageData.Type.ERROR)
         }
     }
 

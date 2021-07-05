@@ -11,9 +11,9 @@ interface BluetoothConnection {
     /** Talking implies sending a message **only** to the conversation with the [Conversation.peer]. */
     fun talk(conversation: Conversation, sendMessage: Message)
 
-    /** Runs an action when the connection to the room is established. */
-    fun onConnected(action: (BluetoothConnection) -> Unit)
-
     /** Close the bluetooth connection when there won't be more communication. */
     fun close()
+
+    /** Kills the connection with the given [peer] id. */
+    fun killPeer(peer: Long)
 }

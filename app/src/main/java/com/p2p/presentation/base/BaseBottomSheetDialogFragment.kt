@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.annotation.CallSuper
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.LiveData
@@ -16,8 +15,8 @@ import androidx.viewbinding.ViewBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.snackbar.Snackbar
 import com.p2p.R
+import com.p2p.utils.showSnackBar
 
 /**
  * Base implementation of a [Fragment] used to simplify boilerplate.
@@ -119,17 +118,6 @@ abstract class BaseBottomSheetDialogFragment<VB : ViewBinding, E : Any, VM : Bas
     /** Show a snackbar customized with the given [data]. */
     protected fun showSnackBar(data: BaseViewModel.MessageData) {
         val view = view ?: return
-        val text = data.textRes?.let { context?.getText(it) } ?: data.text ?: return
-        val duration = when (data.duration) {
-            BaseViewModel.MessageData.Duration.SHORT -> Snackbar.LENGTH_SHORT
-            BaseViewModel.MessageData.Duration.LONG -> Snackbar.LENGTH_LONG
-        }
-        val backgroundColor = when (data.type) {
-            BaseViewModel.MessageData.Type.ERROR -> R.color.design_default_color_error
-        }
-        Snackbar
-            .make(view, text, duration)
-            .setBackgroundTint(ContextCompat.getColor(requireContext(), backgroundColor))
-            .show()
+        requireContext().showSnackBar(view, data)
     }
 }
