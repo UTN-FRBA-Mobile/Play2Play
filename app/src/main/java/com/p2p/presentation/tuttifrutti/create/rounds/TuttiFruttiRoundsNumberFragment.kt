@@ -28,7 +28,7 @@ class TuttiFruttiRoundsNumberFragment :
     }
 
     override fun setupObservers() =
-        viewModel.roundsNumber.observe(viewLifecycleOwner) {
+        observe(viewModel.roundsNumber) {
             binding.number.text = it.toString()
         }
 

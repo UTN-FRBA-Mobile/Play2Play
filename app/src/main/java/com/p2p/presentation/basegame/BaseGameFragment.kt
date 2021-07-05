@@ -48,7 +48,7 @@ abstract class BaseGameFragment<GVB : ViewBinding, E : Any, VM : BaseViewModel<E
     @CallSuper
     override fun setupObservers() {
         super.setupObservers()
-        gameViewModel.game.observe(viewLifecycleOwner) { binding.header.title = context?.getText(it.nameRes) }
+        observe(gameViewModel.game) { binding.header.title = context?.getText(it.nameRes) }
     }
 
     private fun setHeaderEvents(header: MaterialToolbar) {

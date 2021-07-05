@@ -33,7 +33,7 @@ class ClientTuttiFruttiLobbyFragment: BaseGameFragment<
     override fun setupObservers() {
         super.setupObservers()
         with(gameViewModel) {
-            players.observe(viewLifecycleOwner) { connectedPlayersTuttiFruttiAdapter.players = it }
+            observe(players) { connectedPlayersTuttiFruttiAdapter.players = it }
         }
     }
 

@@ -28,8 +28,8 @@ class JoinGamesBottomSheetFragment :
     }
 
     override fun setupObservers() = with(viewModel) {
-        devices.observe(viewLifecycleOwner) { adapter.devices = it.toList() }
-        connectButtonEnabled.observe(viewLifecycleOwner) { binding.connectButton.isEnabled = it }
+        observe(devices) { adapter.devices = it.toList() }
+        observe(connectButtonEnabled) { binding.connectButton.isEnabled = it }
     }
 
     override fun onEvent(event: JoinGamesEvent) = when (event) {

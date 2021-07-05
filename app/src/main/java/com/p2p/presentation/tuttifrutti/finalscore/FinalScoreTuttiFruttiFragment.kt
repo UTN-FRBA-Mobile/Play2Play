@@ -39,7 +39,7 @@ class FinalScoreTuttiFruttiFragment : BaseGameFragment<
     override fun setupObservers() {
         super.setupObservers()
         with(gameViewModel) {
-            finalScores.observe(viewLifecycleOwner) {
+            observe(finalScores) {
                 tuttiFruttiFinalScoreAdapter.results = it
                 gameBinding.winner.text = resources.getString(R.string.tf_winner, it.first().player)
             }

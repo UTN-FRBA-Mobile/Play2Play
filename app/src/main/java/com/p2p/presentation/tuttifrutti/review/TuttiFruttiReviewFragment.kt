@@ -28,8 +28,8 @@ class TuttiFruttiReviewFragment : BaseGameFragment<
 
 
     override fun initValues() {
-        gameViewModel.actualRound.observe(viewLifecycleOwner, { viewModel.setInitialActualRound(it) })
-        gameViewModel.finishedRoundInfos.observe(viewLifecycleOwner, { viewModel.setInitialFinishedRoundInfos(it) })
+        observe(gameViewModel.actualRound) { viewModel.setInitialActualRound(it) }
+        observe(gameViewModel.finishedRoundInfos) { viewModel.setInitialFinishedRoundInfos(it) }
     }
 
     override fun initUI() {
@@ -48,7 +48,7 @@ class TuttiFruttiReviewFragment : BaseGameFragment<
 
     override fun setupObservers() {
         with(gameViewModel) {
-            actualRound.observe(viewLifecycleOwner) {
+            observe(actualRound) {
                 gameBinding.round.text = HtmlCompat.fromHtml(
                     resources.getString(R.string.tf_round, it.number, totalRounds.value),
                     HtmlCompat.FROM_HTML_MODE_COMPACT
@@ -58,7 +58,7 @@ class TuttiFruttiReviewFragment : BaseGameFragment<
                     HtmlCompat.FROM_HTML_MODE_COMPACT
                 )
             }
-            finishedRoundInfos.observe(viewLifecycleOwner) { finishedRoundInfo ->
+            observe(finishedRoundInfos) { finishedRoundInfo ->
                 tuttiFruttiReviewRoundAdapter.finishedRoundInfo = finishedRoundInfo
                 gameBinding.enoughPlayer.text = HtmlCompat.fromHtml(
                     resources.getString(R.string.tf_enough_player, finishedRoundInfo.first { it.saidEnough }.player),
@@ -67,7 +67,7 @@ class TuttiFruttiReviewFragment : BaseGameFragment<
             }
         }
         with(viewModel) {
-            finishedRoundPointsInfo.observe(viewLifecycleOwner) {
+            observe(finishedRoundPointsInfo) {
                 tuttiFruttiReviewRoundAdapter.finishedRoundPointsInfo = it
             }
         }

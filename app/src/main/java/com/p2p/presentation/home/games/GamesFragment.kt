@@ -27,9 +27,9 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesEvents, GamesViewM
     }
 
     override fun setupObservers() = with(viewModel) {
-        games.observe(viewLifecycleOwner) { adapter.games = it }
-        userName.observe(viewLifecycleOwner) { binding.userNameInput.clearAndAppend(it) }
-        createButtonEnabled.observe(viewLifecycleOwner) { binding.createButton.isEnabled = it }
+        observe(games) { adapter.games = it }
+        observe(userName) { binding.userNameInput.clearAndAppend(it) }
+        observe(createButtonEnabled) { binding.createButton.isEnabled = it }
     }
 
     override fun onEvent(event: GamesEvents) = when (event) {

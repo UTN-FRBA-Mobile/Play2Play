@@ -45,7 +45,7 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
     }
 
     private fun setUpCategoriesList(list: LinearLayout) = with(gameViewModel) {
-        categoriesToPlay.observe(viewLifecycleOwner) {
+        observe(categoriesToPlay) {
             it.map { category ->
                 categoriesInputs[category] =
                     ViewPlayCategoryItemBinding.inflate(layoutInflater, list, true).run {
@@ -63,8 +63,8 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
     override fun setupObservers() {
         super.setupObservers()
         with(gameViewModel) {
-            singleTimeEvent.observe(viewLifecycleOwner) { onGameEvent(it) }
-            actualRound.observe(viewLifecycleOwner) {
+            observe(singleTimeEvent) { onGameEvent(it) }
+            observe(actualRound) {
                 gameBinding.round.text = HtmlCompat.fromHtml(
                     resources.getString(R.string.tf_round, it.number, totalRounds.value),
                     HtmlCompat.FROM_HTML_MODE_COMPACT

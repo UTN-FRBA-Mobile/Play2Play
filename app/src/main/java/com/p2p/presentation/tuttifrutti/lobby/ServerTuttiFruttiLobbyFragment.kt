@@ -9,12 +9,12 @@ import com.p2p.databinding.FragmentTuttiFruttiServerLobbyBinding
 import com.p2p.presentation.basegame.BaseGameFragment
 import com.p2p.presentation.tuttifrutti.TuttiFruttiViewModel
 
-class ServerTuttiFruttiLobbyFragment: BaseGameFragment<
+class ServerTuttiFruttiLobbyFragment : BaseGameFragment<
         FragmentTuttiFruttiServerLobbyBinding,
         LobbyEvent,
         ServerTuttiFruttiLobbyViewModel,
         TuttiFruttiViewModel>() {
-        
+
     override val gameViewModel: TuttiFruttiViewModel by activityViewModels()
 
     override val viewModel: ServerTuttiFruttiLobbyViewModel by viewModels()
@@ -36,12 +36,12 @@ class ServerTuttiFruttiLobbyFragment: BaseGameFragment<
     override fun setupObservers() {
         super.setupObservers()
         with(gameViewModel) {
-            players.observe(viewLifecycleOwner) {
+            observe(players) {
                 connectedPlayersTuttiFruttiAdapter.players = it
                 viewModel.updatePlayers(it)
             }
         }
-        viewModel.isContinueButtonEnabled.observe(viewLifecycleOwner) { gameBinding.startGameButton.isEnabled = it}
+        observe(viewModel.isContinueButtonEnabled) { gameBinding.startGameButton.isEnabled = it }
     }
 
     private fun setupPlayersRecycler() = with(gameBinding.playersRecycler) {
@@ -52,7 +52,7 @@ class ServerTuttiFruttiLobbyFragment: BaseGameFragment<
     }
 
     override fun onEvent(event: LobbyEvent) {
-        when(event) {
+        when (event) {
             is GoToPlay -> Unit
         }
     }
