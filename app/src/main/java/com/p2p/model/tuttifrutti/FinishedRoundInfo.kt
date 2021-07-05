@@ -6,6 +6,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class FinishedRoundInfo(
+    val peer: Long,
     val player: String,
     val categoriesWords: LinkedHashMap<Category, String>,
     val saidEnough: Boolean = false

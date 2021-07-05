@@ -13,6 +13,11 @@ class BluetoothConnectionCreatorImp(
     private val handler: Handler
 ) : BluetoothConnectionCreator {
 
+    override fun getMyDeviceName() = BluetoothAdapter.getDefaultAdapter().name ?: run {
+        BluetoothAdapter.getDefaultAdapter().name = DEFAULT_NAME
+        DEFAULT_NAME
+    }
+
     override fun createServer(): BluetoothConnection {
         activity.startActivity(Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE).apply {
             putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, MAX_DISCOVERABLE_DURATION_SEC)
@@ -24,6 +29,7 @@ class BluetoothConnectionCreatorImp(
 
     companion object {
 
+        private const val DEFAULT_NAME = "Play2Play"
         private const val MAX_DISCOVERABLE_DURATION_SEC = 300
     }
 }

@@ -1,10 +1,10 @@
 package com.p2p.presentation.tuttifrutti
 
+import androidx.lifecycle.viewModelScope
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.loadingMessages.LoadingTextRepository
 import com.p2p.data.userInfo.UserSession
-import com.p2p.model.HiddenLoadingScreen
 import com.p2p.model.base.message.Conversation
 import com.p2p.model.tuttifrutti.FinishedRoundInfo
 import com.p2p.model.tuttifrutti.TuttiFruttiStartGame
@@ -12,6 +12,11 @@ import com.p2p.model.tuttifrutti.message.TuttiFruttiSendWordsMessage
 import com.p2p.presentation.basegame.ConnectionType
 import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.tuttifrutti.create.categories.Category
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ServerTuttiFruttiViewModel(
     connectionType: ConnectionType,
@@ -26,8 +31,8 @@ class ServerTuttiFruttiViewModel(
     instructionsRepository,
     loadingTextRepository
 ) {
-    private var gameAlreadyStarted = false
     private var saidEnoughPeer: Long? = null
+    private var waitingWordsJob: Job? = null
 
     /** Be careful: this will be called for every client on a broadcast. */
     override fun onSentSuccessfully(conversation: Conversation) {
@@ -35,7 +40,6 @@ class ServerTuttiFruttiViewModel(
         when (conversation.lastMessage) {
             is TuttiFruttiStartGame -> if (!gameAlreadyStarted) {
                 goToPlay() // starts the game when the first StartGame message was sent successfully.
-                gameAlreadyStarted = true
             }
         }
     }
@@ -54,7 +58,8 @@ class ServerTuttiFruttiViewModel(
         }
     }
 
-    override fun sendWords(categoriesWords: LinkedHashMap<Category, String>) = acceptWords(MYSELF_PEER_ID, categoriesWords)
+    override fun sendWords(categoriesWords: LinkedHashMap<Category, String>) =
+        acceptWords(MYSELF_PEER_ID, categoriesWords)
 
     override fun enoughForMeEnoughForAll() {
         startLoading(loadingMessage = "")
@@ -72,14 +77,28 @@ class ServerTuttiFruttiViewModel(
     private fun saidEnough(peer: Long) {
         saidEnoughPeer = peer
         _finishedRoundInfos.value = emptyList()
+        waitingWordsJob = viewModelScope.launch(Dispatchers.Default) {
+            delay(WAITING_WORDS_TIMEOUT_MS)
+            withContext(Dispatchers.Main) { stopAcceptingWords() }
+        }
     }
 
     private fun acceptWords(peer: Long, categoriesWords: LinkedHashMap<Category, String>) {
         _finishedRoundInfos.value = _finishedRoundInfos.requireValue() + FinishedRoundInfo(
+            peer = peer,
             player = getPlayerById(peer),
             categoriesWords = categoriesWords,
             saidEnough = peer == saidEnoughPeer
         )
+        goToReviewIfCorresponds()
+    }
+
+    private fun stopAcceptingWords() {
+        val removedConnectedPlayers = connectedPlayers.filterNot { (peer, _) ->
+            finishedRoundInfos.requireValue().any { it.peer == peer }
+        }
+        connectedPlayers = connectedPlayers - removedConnectedPlayers
+        removedConnectedPlayers.forEach { (peer, _) -> connection.killPeer(peer) }
         goToReviewIfCorresponds()
     }
 
@@ -88,8 +107,15 @@ class ServerTuttiFruttiViewModel(
 
     private fun goToReviewIfCorresponds() {
         if (finishedRoundInfos.requireValue().size == connectedPlayers.size) {
+            waitingWordsJob?.cancel()
+            waitingWordsJob = null
             // When all the players send their words, go to the review and clean the players round words.
             dispatchSingleTimeEvent(GoToReview)
         }
+    }
+
+    companion object {
+
+        private const val WAITING_WORDS_TIMEOUT_MS = 45_000L
     }
 }

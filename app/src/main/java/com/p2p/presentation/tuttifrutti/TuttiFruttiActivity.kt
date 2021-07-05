@@ -1,42 +1,18 @@
 package com.p2p.presentation.tuttifrutti
 
+import android.app.Activity
 import android.bluetooth.BluetoothDevice
-import android.content.Context
-import android.os.Bundle
-import android.view.View
-import android.widget.TextView
 import androidx.activity.viewModels
-import androidx.core.view.isVisible
-import com.p2p.R
-import com.p2p.model.VisibleLoadingScreen
 import com.p2p.presentation.basegame.GameActivity
-import com.p2p.presentation.tuttifrutti.lobby.ClientTuttiFruttiLobbyFragment
-import com.p2p.presentation.tuttifrutti.lobby.ServerTuttiFruttiLobbyFragment
 import com.p2p.presentation.tuttifrutti.countdown.TuttiFruttiCountdownFragment
 import com.p2p.presentation.tuttifrutti.create.categories.CreateTuttiFruttiFragment
-import com.p2p.utils.hideKeyboard
+import com.p2p.presentation.tuttifrutti.lobby.ClientTuttiFruttiLobbyFragment
+import com.p2p.presentation.tuttifrutti.lobby.ServerTuttiFruttiLobbyFragment
 
-class TuttiFruttiActivity : GameActivity<TuttiFruttiSpecificGameEvent, TuttiFruttiViewModel>(
-    R.layout.activity_tutti_frutti
-) {
+class TuttiFruttiActivity : GameActivity<TuttiFruttiSpecificGameEvent, TuttiFruttiViewModel>() {
 
     override val viewModel: TuttiFruttiViewModel by viewModels {
         TuttiFruttiViewModelFactory(this, gameViewModelFactoryData)
-    }
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.loadingScreen.observe(this) { loading ->
-            if (loading.isLoading) hideKeyboard()
-            findViewById<View>(R.id.activity_progress_overlay).isVisible = loading.isLoading
-            when (loading) {
-                is VisibleLoadingScreen ->
-                    findViewById<TextView>(R.id.progress_text).text = loading.waitingText
-                else -> {
-                }
-            }
-        }
     }
 
     override fun goToCreate() =
@@ -53,10 +29,12 @@ class TuttiFruttiActivity : GameActivity<TuttiFruttiSpecificGameEvent, TuttiFrut
 
     companion object {
 
-        fun startCreate(context: Context) = startCreate(TuttiFruttiActivity::class, context)
+        fun startCreate(activity: Activity, requestCode: Int) {
+            startCreate(TuttiFruttiActivity::class, activity, requestCode)
+        }
 
-        fun startJoin(context: Context, serverDevice: BluetoothDevice) {
-            startJoin(TuttiFruttiActivity::class, context, serverDevice)
+        fun startJoin(activity: Activity, requestCode: Int, serverDevice: BluetoothDevice) {
+            startJoin(TuttiFruttiActivity::class, activity, requestCode, serverDevice)
         }
     }
 }

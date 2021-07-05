@@ -10,6 +10,8 @@ object GoToClientLobby : GameEvent()
 
 object GoToPlay : GameEvent()
 
+object KillGame : GameEvent()
+
 data class OpenInstructions(val instructions: String) : GameEvent()
 
 open class SpecificGameEvent : GameEvent()

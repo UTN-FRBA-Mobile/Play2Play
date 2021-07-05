@@ -12,13 +12,9 @@
         style="@style/P2P_Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/medium_extra"
-        android:layout_marginStart="@dimen/medium"
-        android:paddingTop="@dimen/tiniest"
         android:text="@string/lobby_connected_players"
-        android:textColor="@color/colorLink"
-        app:layout_constraintTop_toTopOf="@id/guideline_top"
-        app:layout_constraintStart_toStartOf="@id/guideline_begin" />
+        app:layout_constraintStart_toStartOf="@id/guideline_begin"
+        app:layout_constraintTop_toTopOf="@id/guideline_top" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/players_recycler"
@@ -27,23 +23,23 @@
         android:layout_marginTop="@dimen/medium"
         android:layout_marginBottom="@dimen/medium"
         app:layout_constrainedHeight="true"
-        app:layout_constraintVertical_bias="0"
-        app:layout_constraintTop_toBottomOf="@id/connected_players"
         app:layout_constraintBottom_toTopOf="@id/progressBar_cyclic"
+        app:layout_constraintTop_toBottomOf="@id/connected_players"
+        app:layout_constraintVertical_bias="0"
         tools:listitem="@layout/view_connected_user" />
 
     <ProgressBar
-        android:layout_weight="1"
         android:id="@+id/progressBar_cyclic"
-        android:visibility="visible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:minHeight="@dimen/largest_extra"
-        android:minWidth="@dimen/largest_extra"
         android:layout_marginTop="@dimen/medium"
+        android:layout_weight="1"
+        android:minWidth="@dimen/largest_extra"
+        android:minHeight="@dimen/largest_extra"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@id/waiting_players"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
-        app:layout_constraintBottom_toTopOf="@id/waiting_players"
         />
 
     <TextView
@@ -59,6 +55,6 @@
         android:textColor="@color/colorLink"
         app:layout_constraintBottom_toBottomOf="@id/guideline_bottom"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
-        app:layout_constraintStart_toStartOf="@id/guideline_begin"/>
+        app:layout_constraintStart_toStartOf="@id/guideline_begin" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
