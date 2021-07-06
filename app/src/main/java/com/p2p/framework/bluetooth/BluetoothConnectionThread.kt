@@ -33,10 +33,7 @@ class BluetoothConnectionThread(
     override fun run() {
         // Keep listening to the InputStream until an exception occurs.
         infinityLoop@ while (true) {
-            // Read from the InputStream.
             var numBytes = readFromStream() ?: break
-
-            // Send the obtained bytes to the UI activity.
             val isConversation = buffer[IS_CONVERSATION_INDEX].toInt().toBoolean()
             val packages = buffer[PACKAGES_COUNT_INDEX].toInt()
             var byteArray = buffer.copyOfRange(EXTRA_INFO_SIZE, numBytes)
