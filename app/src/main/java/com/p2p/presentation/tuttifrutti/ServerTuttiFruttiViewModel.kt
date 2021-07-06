@@ -101,7 +101,7 @@ class ServerTuttiFruttiViewModel(
         _finishedRoundInfos.value = emptyList()
         waitingWordsJob = viewModelScope.launch(Dispatchers.Default) {
             delay(WAITING_WORDS_TIMEOUT_MS)
-            //withContext(Dispatchers.Main) { stopAcceptingWords() }
+            withContext(Dispatchers.Main) { stopAcceptingWords() }
         }
     }
 
