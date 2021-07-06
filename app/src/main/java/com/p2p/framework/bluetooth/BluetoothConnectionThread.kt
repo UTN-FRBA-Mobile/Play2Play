@@ -6,13 +6,13 @@ import androidx.core.os.bundleOf
 import com.p2p.framework.bluetooth.BluetoothHandlerMessages.MESSAGE_READ
 import com.p2p.framework.bluetooth.BluetoothHandlerMessages.MESSAGE_WRITE_ERROR
 import com.p2p.framework.bluetooth.BluetoothHandlerMessages.MESSAGE_WRITE_SUCCESS
-import com.p2p.framework.bluetooth.BluetoothHandlerMessages.ON_CLIENT_CONNECTION_LOST
 import com.p2p.utils.Logger
 import com.p2p.utils.toBoolean
 import com.p2p.utils.toByteArray
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
+import kotlin.math.ceil
 
 class BluetoothConnectionThread(
     private val handler: Handler,
@@ -24,33 +24,30 @@ class BluetoothConnectionThread(
 
     private val inputStream: InputStream = socket.inputStream
     private val outputStream: OutputStream = socket.outputStream
-    private val buffer: ByteArray = ByteArray(1024) // mmBuffer store for the stream
+    private val buffer: ByteArray = ByteArray(BUFFER_SIZE)
 
     init {
         start()
     }
 
     override fun run() {
-        var numBytes: Int // bytes returned from read()
-
         // Keep listening to the InputStream until an exception occurs.
-        while (true) {
+        infinityLoop@ while (true) {
             // Read from the InputStream.
-            numBytes = try {
-                // This method blocks until input data is available, end of file is detected, or an exception is thrown.
-                Logger.d(TAG, "Reading")
-                inputStream.read(buffer)
-            } catch (e: IOException) {
-                Logger.d(TAG, "Input stream was disconnected", e)
-                onConnectionLost?.invoke()
-                break
-            }
+            var numBytes = readFromStream() ?: break
 
             // Send the obtained bytes to the UI activity.
-            Logger.d(TAG, "Message arrived")
-            val isConversation = buffer[0].toInt().toBoolean()
-            val byteArray = buffer.copyOfRange(1, numBytes)
-            onMessageReceived?.invoke(isConversation, numBytes - 1, byteArray)
+            val isConversation = buffer[IS_CONVERSATION_INDEX].toInt().toBoolean()
+            val packages = buffer[PACKAGES_COUNT_INDEX].toInt()
+            var byteArray = buffer.copyOfRange(EXTRA_INFO_SIZE, numBytes)
+            for (i in 1 until packages) {
+                val newNumBytes = readFromStream() ?: break@infinityLoop
+                numBytes += newNumBytes
+                byteArray += buffer.copyOfRange(0, newNumBytes)
+                Logger.d(TAG, "Read ${i + 1}/$packages message...")
+            }
+            val finalNumBytes = numBytes - EXTRA_INFO_SIZE
+            onMessageReceived?.invoke(isConversation, finalNumBytes, byteArray)
             handler
                 .obtainMessage(MESSAGE_READ, -1, -1, byteArray)
                 .apply { data = bundleOf(PEER_ID to this@BluetoothConnectionThread.id) }
@@ -58,11 +55,29 @@ class BluetoothConnectionThread(
         }
     }
 
+    private fun readFromStream() = try {
+        // This method blocks until input data is available, end of file is detected, or an exception is thrown.
+        Logger.d(TAG, "Reading")
+        inputStream.read(buffer)
+    } catch (e: IOException) {
+        Logger.d(TAG, "Input stream was disconnected", e)
+        onConnectionLost?.invoke()
+        null
+    }
+
     // Call this from the main activity to send data to the remote device.
     fun write(bytes: ByteArray, length: Int, isConversation: Boolean) {
         try {
-            Logger.d(TAG, "Writing...")
-            outputStream.write(isConversation.toByteArray() + bytes, 0, length + 1)
+            val packages = ceil((length + EXTRA_INFO_SIZE).toFloat() / MESSAGE_BUFFER_SIZE).toInt()
+            val packagesByteArray = packages.toByteArray() ?: throw IOException("We cannot send $packages packages")
+            val finalBytes = isConversation.toByteArray() + packagesByteArray + bytes
+            val finalBytesLength = length + EXTRA_INFO_SIZE
+            for (i in 0 until packages) {
+                val offset = i * MAX_BUFFER_SIZE
+                val messageLength = (finalBytesLength - offset).coerceAtMost(MAX_BUFFER_SIZE)
+                Logger.d(TAG, "Writing ${i + 1}/$packages message...")
+                outputStream.write(finalBytes, offset, messageLength)
+            }
         } catch (e: IOException) {
             Logger.e(TAG, "Error occurred when sending data", e)
 
@@ -92,7 +107,19 @@ class BluetoothConnectionThread(
     }
 
     companion object {
+
         const val PEER_ID = "PEER"
         const val TAG = "P2P_BLUETOOTH_SERVICE"
+
+        /**
+         * [MAX_BUFFER_SIZE] should be less than the [BUFFER_SIZE] because at read or at write
+         * some extra bytes are added (~40B).
+         */
+        private const val MAX_BUFFER_SIZE = 950
+        private const val IS_CONVERSATION_INDEX = 0
+        private const val PACKAGES_COUNT_INDEX = 1
+        private const val BUFFER_SIZE = 1024
+        private const val EXTRA_INFO_SIZE = 2
+        private const val MESSAGE_BUFFER_SIZE = MAX_BUFFER_SIZE - EXTRA_INFO_SIZE
     }
 }

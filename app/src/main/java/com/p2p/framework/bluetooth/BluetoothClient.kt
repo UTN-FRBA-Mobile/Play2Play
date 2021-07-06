@@ -18,6 +18,8 @@ class BluetoothClient(
     /** This [BluetoothConnectionThread] contains the communication with the server. */
     private var connectionToServer: BluetoothConnectionThread? = null
 
+    private var isClosed = false
+
     init {
         start()
     }
@@ -52,7 +54,7 @@ class BluetoothClient(
                     }
                     handler.obtainMessage(ON_CLIENT_CONNECTION_SUCCESS).sendToTarget()
                 } catch (exception: IOException) {
-                    if (pendingRetries > 0) tryConnection(pendingRetries - 1)
+                    if (!isClosed && pendingRetries > 0) tryConnection(pendingRetries - 1)
                     null
                 }
             } ?: handler.obtainMessage(ON_CLIENT_CONNECTION_FAILURE).sendToTarget()
@@ -60,6 +62,7 @@ class BluetoothClient(
 
     override fun close() {
         Logger.d(TAG, "Close the client")
+        isClosed = true
         try {
             connectionToServer?.close()
         } catch (e: IOException) {
