@@ -40,6 +40,7 @@ class BluetoothConnectionThread(
             val isConversation = buffer[IS_CONVERSATION_INDEX].toInt().toBoolean()
             val packages = buffer[PACKAGES_COUNT_INDEX].toInt()
             var byteArray = buffer.copyOfRange(EXTRA_INFO_SIZE, numBytes)
+            Logger.d(TAG, "Read 1/$packages message...")
             for (i in 1 until packages) {
                 val newNumBytes = readFromStream() ?: break@infinityLoop
                 numBytes += newNumBytes
