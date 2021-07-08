@@ -37,7 +37,7 @@ abstract class GameViewModel(
 ) : BaseViewModel<GameEvent>() {
 
     protected var gameAlreadyStarted = false
-    protected var gameAlreadyFinished = false // TODO: if game finished then set gameAlreadyFinished = false
+    protected var gameAlreadyFinished = false
 
     private val userName by lazy { userSession.getUserNameOrEmpty() }
     private val instructions by lazy { instructionsRepository.getInstructions(game.requireValue()) }
@@ -247,3 +247,4 @@ abstract class GameViewModel(
         private const val RETRY_MESSAGE_ERROR_DELAY = 1_000L
     }
 }
+

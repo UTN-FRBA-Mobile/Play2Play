@@ -7,9 +7,12 @@ import com.p2p.data.loadingMessages.LoadingTextRepository
 import com.p2p.data.userInfo.UserSession
 import com.p2p.model.base.message.Conversation
 import com.p2p.model.tuttifrutti.FinishedRoundInfo
-import com.p2p.model.tuttifrutti.TuttiFruttiStartGame
+import com.p2p.model.tuttifrutti.message.FinalScoreMessage
 import com.p2p.model.tuttifrutti.message.TuttiFruttiSendWordsMessage
+import com.p2p.model.tuttifrutti.message.TuttiFruttiStartGameMessage
+import com.p2p.model.tuttifrutti.message.TuttiFruttiStartRoundMessage
 import com.p2p.presentation.basegame.ConnectionType
+import com.p2p.presentation.basegame.KillGame
 import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.tuttifrutti.create.categories.Category
 import kotlinx.coroutines.Dispatchers
@@ -31,6 +34,7 @@ class ServerTuttiFruttiViewModel(
     instructionsRepository,
     loadingTextRepository
 ) {
+    private var roundAlreadyStarted = false
     private var saidEnoughPeer: Long? = null
     private var waitingWordsJob: Job? = null
 
@@ -38,17 +42,30 @@ class ServerTuttiFruttiViewModel(
     override fun onSentSuccessfully(conversation: Conversation) {
         super.onSentSuccessfully(conversation)
         when (conversation.lastMessage) {
-            is TuttiFruttiStartGame -> if (!gameAlreadyStarted) {
+            is TuttiFruttiStartGameMessage -> if (!gameAlreadyStarted) {
                 goToPlay() // starts the game when the first StartGame message was sent successfully.
+            }
+            is TuttiFruttiStartRoundMessage -> if (!roundAlreadyStarted) {
+                goToPlay()
+                roundAlreadyStarted = true
             }
         }
     }
 
     override fun startGame() {
         lettersByRound = getRandomLetters()
-        connection.write(TuttiFruttiStartGame(lettersByRound, categoriesToPlay.requireValue()))
+        connection.write(
+            TuttiFruttiStartGameMessage(
+                lettersByRound,
+                categoriesToPlay.requireValue()
+            )
+        )
         closeDiscovery()
-        goToPlay()
+    }
+
+    override fun startRound() {
+        connection.write(TuttiFruttiStartRoundMessage())
+        roundAlreadyStarted = false
     }
 
     override fun receiveMessage(conversation: Conversation) {
@@ -72,6 +89,11 @@ class ServerTuttiFruttiViewModel(
         startLoading(loadingMessage = "")
         saidEnough(conversation.peer)
         super.onReceiveEnoughForAll(conversation)
+    }
+
+    override fun calculateFinalScores() {
+        super.calculateFinalScores()
+        connection.write(FinalScoreMessage(finalScores.requireValue()))
     }
 
     private fun saidEnough(peer: Long) {
@@ -99,7 +121,11 @@ class ServerTuttiFruttiViewModel(
         }
         connectedPlayers = connectedPlayers - removedConnectedPlayers
         removedConnectedPlayers.forEach { (peer, _) -> connection.killPeer(peer) }
-        goToReviewIfCorresponds()
+        if (connectedPlayers.size == 1) {
+            dispatchErrorScreen(SinglePlayerOnGame { dispatchSingleTimeEvent(KillGame) })
+        } else {
+            goToReviewIfCorresponds()
+        }
     }
 
     private fun getRandomLetters(): List<Char> =

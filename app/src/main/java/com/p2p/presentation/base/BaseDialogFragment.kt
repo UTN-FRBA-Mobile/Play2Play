@@ -8,6 +8,8 @@ import androidx.annotation.CallSuper
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import androidx.viewbinding.ViewBinding
 import com.p2p.R
 import com.p2p.utils.showSnackBar
@@ -26,6 +28,8 @@ abstract class BaseDialogFragment<VB : ViewBinding, E : Any, VM : BaseViewModel<
     /** It's necessary since ViewBinding doesn't give a simpler way, it should be = T::inflate. */
     abstract val inflater: (LayoutInflater, ViewGroup?, Boolean) -> VB
 
+    private val observers = mutableListOf<Pair<LiveData<*>, Observer<*>>>()
+
     @CallSuper
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,8 +42,8 @@ abstract class BaseDialogFragment<VB : ViewBinding, E : Any, VM : BaseViewModel<
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.singleTimeEvent.observe(viewLifecycleOwner) { onEvent(it) }
-        viewModel.message.observe(viewLifecycleOwner) { showSnackBar(it) }
+        observe(viewModel.singleTimeEvent) { onEvent(it) }
+        observe(viewModel.message) { showSnackBar(it) }
         initUI()
         setupObservers()
     }
@@ -47,19 +51,25 @@ abstract class BaseDialogFragment<VB : ViewBinding, E : Any, VM : BaseViewModel<
     @CallSuper
     override fun onDestroyView() {
         super.onDestroyView()
+        removeObservers()
         _binding = null
     }
 
-    /** Add the [fragment] to the activity and if [shouldAddToBackStack] it'll added to the fragments stack */
-    protected fun addFragment(fragment: Fragment, shouldAddToBackStack: Boolean) {
-        parentFragmentManager.commit {
-            replace(R.id.fragment_container_view, fragment)
-            if (shouldAddToBackStack) addToBackStack(null)
-        }
+    protected fun <T> observe(liveData: LiveData<T>, observer: Observer<T>) {
+        observers.add(liveData to observer)
+        liveData.observe(viewLifecycleOwner, observer)
     }
 
     /** Invoked when the view is initialized and should be used to setup the observers for the view model. */
     protected open fun setupObservers() {}
+
+    /** Invoked when the view is destroyed and should be used to removed the observers for the view model. */
+    @CallSuper
+    protected open fun removeObservers() {
+        @Suppress("UNCHECKED_CAST")
+        observers.forEach { (livedata, observer) -> livedata.removeObserver(observer as Observer<in Any>) }
+    }
+
 
     /** Invoked when the view is initialized and should initialize the view that requires it. */
     protected open fun initUI() {}

@@ -38,17 +38,17 @@ class ServerTuttiFruttiLobbyFragment : BaseGameFragment<
     override fun setupObservers() {
         super.setupObservers()
         with(gameViewModel) {
-            myDeviceName.observe(viewLifecycleOwner) {
+            observe(myDeviceName) {
                 gameBinding.helpPlayersDescription.text = resources
                     .getString(R.string.lobby_give_help_players_decription, it)
                     .fromHtml()
             }
-            players.observe(viewLifecycleOwner) {
+            observe(players) {
                 connectedPlayersTuttiFruttiAdapter.players = it
                 viewModel.updatePlayers(it)
             }
         }
-        viewModel.isContinueButtonEnabled.observe(viewLifecycleOwner) { gameBinding.startGameButton.isEnabled = it }
+        observe(viewModel.isContinueButtonEnabled) { gameBinding.startGameButton.isEnabled = it }
     }
 
     private fun setupPlayersRecycler() = with(gameBinding.playersRecycler) {

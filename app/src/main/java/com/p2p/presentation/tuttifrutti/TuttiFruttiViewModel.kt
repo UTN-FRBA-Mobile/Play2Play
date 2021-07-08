@@ -15,8 +15,10 @@ import com.p2p.model.tuttifrutti.message.TuttiFruttiEnoughForMeEnoughForAllMessa
 import com.p2p.presentation.basegame.ConnectionType
 import com.p2p.presentation.basegame.GameViewModel
 import com.p2p.presentation.basegame.KillGame
+import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.home.games.Game
 import com.p2p.presentation.tuttifrutti.create.categories.Category
+import com.p2p.presentation.tuttifrutti.finalscore.TuttiFruttiFinalScore
 
 abstract class TuttiFruttiViewModel(
     connectionType: ConnectionType,
@@ -51,6 +53,9 @@ abstract class TuttiFruttiViewModel(
     private val _actualRound = MutableLiveData<RoundInfo>()
     val actualRound: LiveData<RoundInfo> = _actualRound
 
+    private val _finalScores = MutableLiveData<List<TuttiFruttiFinalScore>>()
+    val finalScores: LiveData<List<TuttiFruttiFinalScore>> = _finalScores
+
     /** Set the categories selected by the user when creating the game . */
     fun setCategoriesToPlay(categories: List<Category>) {
         _categoriesToPlay.value = categories
@@ -65,27 +70,62 @@ abstract class TuttiFruttiViewModel(
             _finishedRoundsPointsInfos.value?.plus(finishedRoundPointsInfo)
     }
 
-    fun startRound() {
-        generateNextRoundValues()
+    /**
+     * Goes to the final scores view or starts a new round when corresponds.
+     * */
+    fun startRoundOrFinishGame() {
+        if (actualRound.requireValue().number == totalRounds.requireValue()) { // last round
+            goToFinalScore()
+        } else {
+            startRound()
+        }
     }
+
+    fun generateNextRoundValues() {
+        val round = (actualRound.value?.number ?: 0) + 1
+        _actualRound.value = RoundInfo(lettersByRound[round - 1], round)
+    }
+
+    abstract fun startGame()
+
+    abstract fun startRound()
 
     /**
      * Enough for me enough for all will say to the room that the round is finished.
      *
      * The client and the server will handle different the invocation of this method:
-     * - The client will just sent the message and just when it's sent, it'll stop the round
+     * - The client will just send the message and when it's sent, it'll stop the round
      *   (that's because it needs the conversation started with the server to send their words).
-     * - The server will stop the round immediately when this is invoked because since it doesn't need
-     *   to do any more, just wait the others words.
+     * - The server will stop the round immediately when this is invoked because it doesn't need
+     *   to do anything more, just wait for the others words.
      */
     @CallSuper
     open fun enoughForMeEnoughForAll() {
         connection.write(TuttiFruttiEnoughForMeEnoughForAllMessage())
     }
 
-    abstract fun startGame()
-
     abstract fun sendWords(categoriesWords: LinkedHashMap<Category, String>)
+
+    /**
+     * The server calculates the final scores and send them to the clients.
+     * */
+    open fun calculateFinalScores() {
+        if (finalScores.value?.isEmpty() != false) {
+            _finalScores.value = finishedRoundsPointsInfos.requireValue().groupBy { roundInfo -> roundInfo.player }
+                .entries
+                .map { entry ->
+                    TuttiFruttiFinalScore(
+                        entry.key,
+                        entry.value.map { roundPoints -> roundPoints.totalPoints }.sum()
+                    )
+                }
+                .sortedByDescending { results -> results.finalScore }
+        }
+    }
+
+    fun setFinalScores(scores: List<TuttiFruttiFinalScore>) {
+        _finalScores.value = scores
+    }
 
     override fun goToPlay() {
         gameAlreadyStarted = true
@@ -113,14 +153,11 @@ abstract class TuttiFruttiViewModel(
         }
     }
 
-    protected fun stopRound() {
-        dispatchSingleTimeEvent(ObtainWords)
-    }
+    protected fun stopRound() = dispatchSingleTimeEvent(ObtainWords)
 
-    private fun generateNextRoundValues() {
-        val actualRoundNumber: Int = actualRound.value?.number?.plus(1) ?: 1
-        _actualRound.value =
-            RoundInfo(lettersByRound[actualRoundNumber.minus(1)], actualRoundNumber)
+    protected fun goToFinalScore() {
+        gameAlreadyFinished = true
+        dispatchSingleTimeEvent(GoToFinalScore)
     }
 
     companion object {

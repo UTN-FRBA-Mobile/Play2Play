@@ -28,8 +28,8 @@ class TuttiFruttiReviewFragment : BaseGameFragment<
 
 
     override fun initValues() {
-        gameViewModel.actualRound.observe(viewLifecycleOwner, { viewModel.setInitialActualRound(it) })
-        gameViewModel.finishedRoundInfos.observe(viewLifecycleOwner, { viewModel.setInitialFinishedRoundInfos(it) })
+        observe(gameViewModel.actualRound) { viewModel.setInitialActualRound(it) }
+        observe(gameViewModel.finishedRoundInfos) { viewModel.setInitialFinishedRoundInfos(it) }
     }
 
     override fun initUI() {
@@ -48,7 +48,7 @@ class TuttiFruttiReviewFragment : BaseGameFragment<
 
     override fun setupObservers() {
         with(gameViewModel) {
-            actualRound.observe(viewLifecycleOwner) {
+            observe(actualRound) {
                 gameBinding.round.text = resources
                     .getString(R.string.tf_round, it.number, totalRounds.value)
                     .fromHtml()
@@ -56,7 +56,7 @@ class TuttiFruttiReviewFragment : BaseGameFragment<
                     .getString(R.string.tf_letter, it.letter)
                     .fromHtml()
             }
-            finishedRoundInfos.observe(viewLifecycleOwner) { finishedRoundInfo ->
+            observe(finishedRoundInfos) { finishedRoundInfo ->
                 tuttiFruttiReviewRoundAdapter.finishedRoundInfo = finishedRoundInfo
                 gameBinding.enoughPlayer.text = resources
                     .getString(R.string.tf_enough_player, finishedRoundInfo.first { it.saidEnough }.player)
@@ -64,7 +64,7 @@ class TuttiFruttiReviewFragment : BaseGameFragment<
             }
         }
         with(viewModel) {
-            finishedRoundPointsInfo.observe(viewLifecycleOwner) {
+            observe(finishedRoundPointsInfo) {
                 tuttiFruttiReviewRoundAdapter.finishedRoundPointsInfo = it
             }
         }
@@ -73,7 +73,10 @@ class TuttiFruttiReviewFragment : BaseGameFragment<
     }
 
     override fun onEvent(event: TuttiFruttiReviewEvents) = when (event) {
-        is FinishRoundReview -> gameViewModel.setFinishedRoundPointsInfos(event.finishedRoundPointsInfo)
+        is FinishRoundReview -> {
+            gameViewModel.setFinishedRoundPointsInfos(event.finishedRoundPointsInfo)
+            gameViewModel.startRoundOrFinishGame()
+        }
     }
 
     companion object {

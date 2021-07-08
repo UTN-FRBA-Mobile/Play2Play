@@ -11,11 +11,9 @@ import com.p2p.databinding.FragmentPlayTuttiFruttiBinding
 import com.p2p.databinding.ViewPlayCategoryItemBinding
 import com.p2p.presentation.basegame.BaseGameFragment
 import com.p2p.presentation.basegame.GameEvent
-import com.p2p.presentation.tuttifrutti.GoToReview
 import com.p2p.presentation.tuttifrutti.ObtainWords
 import com.p2p.presentation.tuttifrutti.TuttiFruttiViewModel
 import com.p2p.presentation.tuttifrutti.create.categories.Category
-import com.p2p.presentation.tuttifrutti.review.TuttiFruttiReviewFragment
 import com.p2p.utils.fromHtml
 import com.p2p.utils.text
 
@@ -35,7 +33,7 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
         FragmentPlayTuttiFruttiBinding::inflate
 
     override fun initValues() {
-        gameViewModel.startRound()
+        gameViewModel.generateNextRoundValues()
     }
 
     override fun initUI() {
@@ -47,7 +45,7 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
     }
 
     private fun setUpCategoriesList(list: LinearLayout) = with(gameViewModel) {
-        categoriesToPlay.observe(viewLifecycleOwner) {
+        observe(categoriesToPlay) {
             it.map { category ->
                 categoriesInputs[category] =
                     ViewPlayCategoryItemBinding.inflate(layoutInflater, list, true).run {
@@ -65,8 +63,8 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
     override fun setupObservers() {
         super.setupObservers()
         with(gameViewModel) {
-            singleTimeEvent.observe(viewLifecycleOwner) { onGameEvent(it) }
-            actualRound.observe(viewLifecycleOwner) {
+            observe(singleTimeEvent) { onGameEvent(it) }
+            observe(actualRound) {
                 gameBinding.round.text = resources
                     .getString(R.string.tf_round, it.number, totalRounds.value)
                     .fromHtml()
@@ -85,10 +83,6 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
     private fun onGameEvent(event: GameEvent) {
         when (event) {
             ObtainWords -> gameViewModel.sendWords(getCategoriesValues() as LinkedHashMap<Category, String>)
-            is GoToReview -> addFragment(
-                TuttiFruttiReviewFragment.newInstance(),
-                shouldAddToBackStack = false
-            )
             else -> Unit
         }
     }

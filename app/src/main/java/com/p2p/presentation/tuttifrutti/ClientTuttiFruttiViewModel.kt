@@ -5,9 +5,7 @@ import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.loadingMessages.LoadingTextRepository
 import com.p2p.data.userInfo.UserSession
 import com.p2p.model.base.message.Conversation
-import com.p2p.model.tuttifrutti.TuttiFruttiStartGame
-import com.p2p.model.tuttifrutti.message.TuttiFruttiEnoughForMeEnoughForAllMessage
-import com.p2p.model.tuttifrutti.message.TuttiFruttiSendWordsMessage
+import com.p2p.model.tuttifrutti.message.*
 import com.p2p.presentation.basegame.ConnectionType
 import com.p2p.presentation.tuttifrutti.create.categories.Category
 
@@ -30,11 +28,16 @@ class ClientTuttiFruttiViewModel(
     override fun receiveMessage(conversation: Conversation) {
         super.receiveMessage(conversation)
         when (val message = conversation.lastMessage) {
-            is TuttiFruttiStartGame -> {
+            is TuttiFruttiStartGameMessage -> {
                 lettersByRound = message.letters
                 setTotalRounds(message.letters.count())
                 setCategoriesToPlay(message.categories)
                 startGame()
+            }
+            is TuttiFruttiStartRoundMessage -> startRound()
+            is FinalScoreMessage -> {
+                setFinalScores(message.playersScores)
+                goToFinalScore()
             }
         }
     }
@@ -68,4 +71,7 @@ class ClientTuttiFruttiViewModel(
     }
 
     override fun startGame() = goToPlay()
+
+    override fun startRound() = goToPlay()
+
 }

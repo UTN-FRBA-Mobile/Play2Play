@@ -6,8 +6,10 @@ import androidx.activity.viewModels
 import com.p2p.presentation.basegame.GameActivity
 import com.p2p.presentation.tuttifrutti.countdown.TuttiFruttiCountdownFragment
 import com.p2p.presentation.tuttifrutti.create.categories.CreateTuttiFruttiFragment
+import com.p2p.presentation.tuttifrutti.finalscore.FinalScoreTuttiFruttiFragment
 import com.p2p.presentation.tuttifrutti.lobby.ClientTuttiFruttiLobbyFragment
 import com.p2p.presentation.tuttifrutti.lobby.ServerTuttiFruttiLobbyFragment
+import com.p2p.presentation.tuttifrutti.review.TuttiFruttiReviewFragment
 
 class TuttiFruttiActivity : GameActivity<TuttiFruttiSpecificGameEvent, TuttiFruttiViewModel>() {
 
@@ -18,14 +20,30 @@ class TuttiFruttiActivity : GameActivity<TuttiFruttiSpecificGameEvent, TuttiFrut
     override fun goToCreate() =
         addFragment(CreateTuttiFruttiFragment.newInstance(), shouldAddToBackStack = false)
 
-    override fun goToPlay() =
+    override fun goToPlay() {
+        viewModel.stopLoading()
         addFragment(TuttiFruttiCountdownFragment.newInstance(), shouldAddToBackStack = false)
+    }
 
     override fun goToClientLobby() =
         addFragment(ClientTuttiFruttiLobbyFragment.newInstance(), shouldAddToBackStack = false)
 
     override fun goToServerLobby() =
         addFragment(ServerTuttiFruttiLobbyFragment.newInstance(), shouldAddToBackStack = false)
+
+    override fun onGameEvent(event: TuttiFruttiSpecificGameEvent) {
+        super.onGameEvent(event)
+        when (event) {
+            GoToFinalScore -> addFragment(
+                FinalScoreTuttiFruttiFragment.newInstance(),
+                shouldAddToBackStack = false
+            )
+            GoToReview -> addFragment(
+                TuttiFruttiReviewFragment.newInstance(),
+                shouldAddToBackStack = false
+            )
+        }
+    }
 
     companion object {
 
