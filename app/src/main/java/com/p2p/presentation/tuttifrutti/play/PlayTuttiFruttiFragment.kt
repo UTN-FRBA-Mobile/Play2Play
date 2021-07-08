@@ -94,11 +94,10 @@ class PlayTuttiFruttiFragment : BaseGameFragment<
     }
 
     private fun markErrors() {
-        val invalidCategories = categoriesInputs.entries.filter { it.value.text().isBlank() }
-        invalidCategories.forEach {
-            it.value.error = resources.getString(R.string.tf_validation_error)
+        categoriesInputs.values.filter { it.text().isBlank() }.forEachIndexed { index, text ->
+            text.error = resources.getString(R.string.tf_validation_error)
+            if(index == 0) text.requestFocus()
         }
-        invalidCategories.first().value.requestFocus()
     }
 
     private fun getCategoriesValues() = categoriesInputs.mapValues { it.value.text() }
