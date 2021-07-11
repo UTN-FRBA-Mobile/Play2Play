@@ -6,6 +6,7 @@
 
     <!-- Common -->
     <string name="continue_">Continuar</string> <!-- The `_` should be because continue is a reserved symbol :( -->
+    <string name="start">Iniciar</string>
     <string name="connect">Conectarse</string>
     <string name="understood">Entendido</string>
     <string name="unknown">Desconocido</string>
@@ -28,6 +29,7 @@
 
     <!-- Games names -->
     <string name="games_tutti_frutti">Tutti Frutti</string>
+    <string name="games_impostor">Impostor</string>
     <string name="games_name_error">¡Para jugar primero tenés que decirnos tu nombre!</string>
     <string name="games_name_max_length_error">Tu nombre puede tener hasta 7 letras</string>
 
@@ -68,6 +70,12 @@
     <string name="tf_winner">Ganó %s</string>
     <string name="tf_points">%d puntos</string>
     <string name="tf_exit">Salir</string>
+
+    <!-- Impostor - Game -->
+
+    <!-- Impostor create game -->
+    <string name="im_write_key_word">Ingrese palabra clave</string>
+
 
     <!-- Error screen -->
     <string name="error_bluetooth_off">Se apagó el bluetooth. Para poder jugar tenés que mantenerlo encendido.</string>

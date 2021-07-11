@@ -16,4 +16,9 @@ enum class Game(
         R.drawable.ic_tutti_frutti,
         R.raw.tutti_frutti_instructions
     ),
+    IMPOSTOR(
+        R.string.games_impostor,
+        R.drawable.ic_impostor,
+        R.raw.impostor_instructions
+    ),
 }

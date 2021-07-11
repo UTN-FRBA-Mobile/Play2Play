@@ -2,8 +2,11 @@ package com.p2p.presentation.home.games
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.p2p.R
 import com.p2p.databinding.ViewGamesItemBinding
+import com.p2p.utils.isEven
 
 /** The adapter used to show the list of games. */
 class GamesAdapter(private val onSelectedChanged: (Game?) -> Unit) :
@@ -35,17 +38,40 @@ class GamesAdapter(private val onSelectedChanged: (Game?) -> Unit) :
         )
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(games[position])
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) =
+        holder.bind(games[position], position)
 
     override fun getItemCount() = games.size
+
+    private fun setBackgroundColors(binding: ViewGamesItemBinding, index: Int) {
+        val (viewColor, textViewColor) =
+            if (index.isEven()) Pair(R.color.colorSecondaryVariant, R.color.colorSecondary)
+            else Pair(R.color.colorPrimaryVariant, R.color.colorPrimary)
+
+        with(binding) {
+            gameCard.setBackgroundColor(
+                ContextCompat.getColor(
+                    gameCard.context,
+                    viewColor
+                )
+            )
+            name.setBackgroundColor(
+                ContextCompat.getColor(
+                    name.context,
+                    textViewColor
+                )
+            )
+        }
+    }
 
     inner class ViewHolder(private val binding: ViewGamesItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         /** Show the given [game] into the view. */
-        fun bind(game: Game) = with(binding) {
+        fun bind(game: Game, position: Int) = with(binding) {
             gameCardIcon.setBackgroundResource(game.iconRes)
             name.text = name.context.getText(game.nameRes)
+            setBackgroundColors(binding, position)
             container.setOnClickListener { selected = game }
             container
                 .animate()
