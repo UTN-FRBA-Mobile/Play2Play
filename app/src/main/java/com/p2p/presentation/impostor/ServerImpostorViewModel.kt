@@ -36,7 +36,7 @@ class ServerImpostorViewModel(
 ) {
 
     override fun startGame(keyWord: String) {
-        //TODO bren definir palabras
+        //TODO bren do logic
         connection.write(
             //TODO replace
             TuttiFruttiStartGameMessage(
