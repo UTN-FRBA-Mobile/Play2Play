@@ -60,6 +60,7 @@
     <string name="lobby_give_help_players_title">Pedile al resto que se sumen</string>
     <string name="lobby_give_help_players_decription"><![CDATA[Para sumarse a la partida se tienen que unir al celular con el nombre <b>%s</b>]]></string>
     <string name="lobby_connected_players">Jugadores listos</string>
+    <string name="lobby_no_players_yet">Aun no hay jugadores...</string>
     <string name="lobby_waiting_players">Esperando jugadores</string>
     <string name="lobby_start_game">Comenzar juego</string>
 
@@ -75,6 +76,8 @@
 
     <!-- Impostor create game -->
     <string name="im_write_key_word">Ingrese palabra clave</string>
+    <string name="im_validation_error_input">¡Debes ingresar la palabra para poder arrancar!</string>
+    <string name="im_validation_error_players">¡Se debe unir al menos un jugador!</string>
 
 
     <!-- Error screen -->

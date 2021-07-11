@@ -155,10 +155,11 @@ abstract class GameViewModel(
 
     /** Invoked when there was an error while trying to connect the client with the server. */
     @CallSuper
-    open fun onClientConnectionFailure() = dispatchErrorScreen(CannotEstablishClientConnectionError {
-        clearError()
-        startConnection()
-    })
+    open fun onClientConnectionFailure() =
+        dispatchErrorScreen(CannotEstablishClientConnectionError {
+            clearError()
+            startConnection()
+        })
 
     /** Invoked when the connection with the given [peerId] was lost. */
     @CallSuper
@@ -230,6 +231,9 @@ abstract class GameViewModel(
             dispatchSingleTimeEvent(GoToClientLobby)
         }
     }
+
+    fun otherPlayers(): List<String>? =
+        players.value?.let { it - userName }
 
     private fun removePlayer(playerLost: Pair<Long, String>) {
         connectedPlayers = connectedPlayers - playerLost

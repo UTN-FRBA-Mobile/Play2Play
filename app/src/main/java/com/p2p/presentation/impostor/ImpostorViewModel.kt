@@ -36,9 +36,9 @@ abstract class ImpostorViewModel(
     Game.IMPOSTOR
 ) {
 
-
     protected val _keyWord = MutableLiveData<String>()
     val keyWord: LiveData<String> = _keyWord
+
     abstract fun startGame(keyWord: String)
 
     override fun goToPlay() {
