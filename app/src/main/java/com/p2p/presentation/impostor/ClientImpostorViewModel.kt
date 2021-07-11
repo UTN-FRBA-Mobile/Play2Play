@@ -23,8 +23,6 @@ class ClientImpostorViewModel(
     loadingTextRepository
 ) {
 
-    private var enoughForAllConversation: Conversation? = null
-
     override fun startGame(keyWord: String) = goToPlay()
 
 }

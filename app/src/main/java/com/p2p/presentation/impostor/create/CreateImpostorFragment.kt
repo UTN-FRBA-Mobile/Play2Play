@@ -44,8 +44,11 @@ class CreateImpostorFragment : BaseGameFragment<
     }
 
     private fun updateConnectedPlayers(players: List<String>?) {
-        gameBinding.players.text =
-            players?.joinToString(", ") ?: resources.getString(R.string.lobby_no_players_yet)
+        val text = if (players?.isNotEmpty() == true)
+            players.joinToString(", ")
+        else resources.getString(R.string.lobby_no_players_yet)
+
+        gameBinding.players.text = text
     }
 
     override fun onEvent(event: ImpostorCreateEvents) =

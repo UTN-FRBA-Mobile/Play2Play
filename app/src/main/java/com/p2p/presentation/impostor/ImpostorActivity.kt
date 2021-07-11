@@ -21,31 +21,15 @@ class ImpostorActivity : GameActivity<ImpostorSpecificGameEvent, ImpostorViewMod
     override fun goToCreate() =
         addFragment(CreateImpostorFragment.newInstance(), shouldAddToBackStack = false)
 
-    //TODO bren change
     override fun goToPlay() {
         viewModel.stopLoading()
+        //TODO bren put real fragment
         addFragment(TuttiFruttiCountdownFragment.newInstance(), shouldAddToBackStack = false)
     }
 
-    //TODO bren change
+    //TODO bren put impostor lobby
     override fun goToClientLobby() =
         addFragment(ClientTuttiFruttiLobbyFragment.newInstance(), shouldAddToBackStack = false)
-
-    //TODO bren change
-    override fun goToServerLobby() =
-        addFragment(ServerTuttiFruttiLobbyFragment.newInstance(), shouldAddToBackStack = false)
-
-    //TODO bren change
-    override fun onGameEvent(event: ImpostorSpecificGameEvent) {
-        super.onGameEvent(event)
-        when (event) {
-            //TODO bren change
-            StartGame -> addFragment(
-                FinalScoreTuttiFruttiFragment.newInstance(),
-                shouldAddToBackStack = false
-            )
-        }
-    }
 
     companion object {
 
@@ -56,5 +40,11 @@ class ImpostorActivity : GameActivity<ImpostorSpecificGameEvent, ImpostorViewMod
         fun startJoin(activity: Activity, requestCode: Int, serverDevice: BluetoothDevice) {
             startJoin(ImpostorActivity::class, activity, requestCode, serverDevice)
         }
+    }
+
+    override fun goToServerLobby() {
+        throw IllegalStateException(
+            "There is no server lobby in Impostor game"
+        )
     }
 }
