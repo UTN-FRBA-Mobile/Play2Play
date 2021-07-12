@@ -21,6 +21,8 @@ Y todo esto... ¡sin conexión a internet! Solo con necesidad de conectarte por 
   - En marte 👩‍🚀
   
  Respetá el distanciamiento social... ¡Podrás jugar mantentiendo la distancia en una ronda! 👑
+ 
+ Podrás compartirle la app a todes tus amigues sin necesidad de tener internet para descargarla 🤗
 
 ### Puntajes
 
@@ -36,7 +38,7 @@ Discutan entre todes los puntajes para las palabras de cada categoría. ¡Luchá
 
 <img src="https://user-images.githubusercontent.com/31253446/125311860-21223480-e30a-11eb-9d90-4ec0dd10effa.jpg" width="200" height="400" /> <img src="https://user-images.githubusercontent.com/31253446/125311887-27181580-e30a-11eb-8739-970a7a42ac99.jpg" width="200" height="400" /> <img src="https://user-images.githubusercontent.com/31253446/125311902-2b443300-e30a-11eb-9997-da988b837924.jpg" width="200" height="400" /> <img src="https://user-images.githubusercontent.com/31253446/125311913-2d0df680-e30a-11eb-94ce-733df2cc8975.jpg" width="200" height="400" />
 
-
+#### Compartí la app de manera offline
 
 https://user-images.githubusercontent.com/14262610/125314232-66476600-e30c-11eb-9323-c2cd0a84092c.mp4
 
