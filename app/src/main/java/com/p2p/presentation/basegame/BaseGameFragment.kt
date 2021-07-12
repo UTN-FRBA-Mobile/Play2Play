@@ -1,7 +1,10 @@
 package com.p2p.presentation.basegame
 
+import android.app.AlertDialog
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.annotation.CallSuper
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.appbar.MaterialToolbar
@@ -17,7 +20,7 @@ import com.p2p.presentation.base.BaseViewModel
  * [E]: Event
  * [VM]: BaseViewModel with the same event defined
  */
-abstract class BaseGameFragment<GVB : ViewBinding, E : Any, VM : BaseViewModel<E>, GVM : GameViewModel> :
+abstract class BaseGameFragment<GVB : ViewBinding, E : Any, VM : BaseViewModel<E>, GVM : GameViewModel>(protected val isAddedToBackStack: Boolean = false) :
     BaseFragment<BaseGameBinding, E, VM>() {
 
     protected abstract val gameViewModel: GVM
@@ -28,6 +31,9 @@ abstract class BaseGameFragment<GVB : ViewBinding, E : Any, VM : BaseViewModel<E
             _gameBinding = gameInflater(inflater, container, boolean)
             val gameView = gameBinding.root
             baseView.content.addView(gameView)
+            if( !isAddedToBackStack ) {
+                baseView.header.navigationIcon = null
+            }
             baseView
         }
 
@@ -43,6 +49,29 @@ abstract class BaseGameFragment<GVB : ViewBinding, E : Any, VM : BaseViewModel<E
     @CallSuper
     override fun initUI() {
         setHeaderEvents(binding.header)
+    }
+
+    @CallSuper
+    override fun onCreate(
+        savedInstanceState: Bundle?
+    ){
+        super.onCreate(savedInstanceState)
+        if(!isAddedToBackStack) {
+            activity?.onBackPressedDispatcher?.addCallback(
+                this,
+                object : OnBackPressedCallback(true) {
+                    override fun handleOnBackPressed() {
+                        AlertDialog.Builder(requireContext())
+                            .setMessage(R.string.exit_game)
+                            .setCancelable(false)
+                            .setPositiveButton(R.string.exit_game_yes) { _, _ ->
+                                activity?.finish()
+                            }
+                            .setNegativeButton(R.string.exit_game_no, null)
+                            .show()
+                    }
+                })
+        }
     }
 
     @CallSuper
