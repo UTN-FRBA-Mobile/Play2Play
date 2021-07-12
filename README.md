@@ -1,5 +1,7 @@
 # Play2Play: Tutti Frutti
 
+![ic_launcher_round](https://user-images.githubusercontent.com/9021200/125312461-a9083e80-e30a-11eb-819a-b5f505b9438b.png)
+
 ### Sobre este juego
 
 ¡Jugá con tus amigues y familia! Desafiales testeando tu velocidad en este divertido juego de palabras!⚡
@@ -32,9 +34,6 @@ Discutan entre todes los puntajes para las palabras de cada categoría. ¡Luchá
 
 ### Capturas
 
-![screenshot-categories](https://user-images.githubusercontent.com/31253446/125311860-21223480-e30a-11eb-9d90-4ec0dd10effa.jpg)
-![screenshot-play-game](https://user-images.githubusercontent.com/31253446/125311887-27181580-e30a-11eb-8739-970a7a42ac99.jpg)
-![screenshot-review](https://user-images.githubusercontent.com/31253446/125311902-2b443300-e30a-11eb-9997-da988b837924.jpg)
-![screenshot-final-score](https://user-images.githubusercontent.com/31253446/125311913-2d0df680-e30a-11eb-94ce-733df2cc8975.jpg)
+<img src="https://user-images.githubusercontent.com/31253446/125311860-21223480-e30a-11eb-9d90-4ec0dd10effa.jpg" width="200" height="400" /> <img src="https://user-images.githubusercontent.com/31253446/125311887-27181580-e30a-11eb-8739-970a7a42ac99.jpg" width="200" height="400" /> <img src="https://user-images.githubusercontent.com/31253446/125311902-2b443300-e30a-11eb-9997-da988b837924.jpg" width="200" height="400" /> <img src="https://user-images.githubusercontent.com/31253446/125311913-2d0df680-e30a-11eb-94ce-733df2cc8975.jpg" width="200" height="400" />
 
 
