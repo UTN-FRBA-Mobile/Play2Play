@@ -58,7 +58,7 @@ dependencies {
     implementation libraries.jackson.databind
     implementation libraries.material
 
-    implementation libraries.leakCanary
+    debugImplementation libraries.leakCanary
 
     testImplementation testingLibraries.androidx.core
     testImplementation testingLibraries.androidx.arch
