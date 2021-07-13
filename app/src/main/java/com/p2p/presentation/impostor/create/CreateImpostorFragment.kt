@@ -9,7 +9,6 @@ import com.p2p.R
 import com.p2p.databinding.FragmentCreateImpostorBinding
 import com.p2p.presentation.basegame.BaseGameFragment
 import com.p2p.presentation.impostor.ImpostorViewModel
-import com.p2p.utils.fromHtml
 import com.p2p.utils.value
 
 class CreateImpostorFragment : BaseGameFragment<

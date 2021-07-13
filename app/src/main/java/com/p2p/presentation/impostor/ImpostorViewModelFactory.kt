@@ -1,10 +1,6 @@
 package com.p2p.presentation.impostor
 
 import androidx.lifecycle.ViewModel
-import com.p2p.data.instructions.InstructionsRepository
-import com.p2p.data.loadingMessages.LoadingTextRepository
-import com.p2p.framework.InstructionsLocalResourcesSource
-import com.p2p.framework.LoadingTextLocalResourcesSource
 import com.p2p.presentation.basegame.GameActivity
 import com.p2p.presentation.basegame.GameConnectionType
 import com.p2p.presentation.basegame.GameViewModelFactory

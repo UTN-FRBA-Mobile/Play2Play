@@ -6,11 +6,7 @@ import androidx.activity.viewModels
 import com.p2p.presentation.basegame.GameActivity
 import com.p2p.presentation.impostor.create.CreateImpostorFragment
 import com.p2p.presentation.tuttifrutti.countdown.TuttiFruttiCountdownFragment
-import com.p2p.presentation.tuttifrutti.create.categories.CreateTuttiFruttiFragment
-import com.p2p.presentation.tuttifrutti.finalscore.FinalScoreTuttiFruttiFragment
 import com.p2p.presentation.tuttifrutti.lobby.ClientTuttiFruttiLobbyFragment
-import com.p2p.presentation.tuttifrutti.lobby.ServerTuttiFruttiLobbyFragment
-import com.p2p.presentation.tuttifrutti.review.TuttiFruttiReviewFragment
 
 class ImpostorActivity : GameActivity<ImpostorSpecificGameEvent, ImpostorViewModel>() {
 
