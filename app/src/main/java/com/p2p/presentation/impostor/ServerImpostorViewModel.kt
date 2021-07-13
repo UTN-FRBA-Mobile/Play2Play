@@ -21,10 +21,10 @@ class ServerImpostorViewModel(
     loadingTextRepository
 ) {
 
-    fun createGame(word: String) {
+    override fun createGame(word: String) {
+        super.createGame(word)
         val impostor = selectImpostor()
         _impostor.value = impostor
-        _keyWord.value = word
         connection.write(
             ImpostorAssignWord(
                 word,
@@ -35,8 +35,9 @@ class ServerImpostorViewModel(
         goToPlay()
     }
 
-    private fun selectImpostor(): String{
-        val players = requireNotNull(otherPlayers()) { "At this instance at least one player must be connected" }
+    private fun selectImpostor(): String {
+        val players =
+            requireNotNull(otherPlayers()) { "At this instance at least one player must be connected" }
         return players.shuffled().first()
     }
 

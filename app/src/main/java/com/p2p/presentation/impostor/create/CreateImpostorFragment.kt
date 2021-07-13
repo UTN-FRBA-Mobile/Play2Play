@@ -9,7 +9,6 @@ import com.p2p.R
 import com.p2p.databinding.FragmentCreateImpostorBinding
 import com.p2p.presentation.basegame.BaseGameFragment
 import com.p2p.presentation.impostor.ImpostorViewModel
-import com.p2p.presentation.impostor.ServerImpostorViewModel
 import com.p2p.utils.value
 
 class CreateImpostorFragment : BaseGameFragment<
@@ -18,7 +17,7 @@ class CreateImpostorFragment : BaseGameFragment<
         CreateImpostorViewModel,
         ImpostorViewModel>() {
 
-    override val gameViewModel: ServerImpostorViewModel by activityViewModels()
+    override val gameViewModel: ImpostorViewModel by activityViewModels()
     override val viewModel: CreateImpostorViewModel by viewModels()
 
     override val gameInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentCreateImpostorBinding =
