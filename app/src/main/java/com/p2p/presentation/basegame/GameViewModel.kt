@@ -205,7 +205,7 @@ abstract class GameViewModel(
         _connection?.close()
     }
 
-    protected fun isServer() = connectionType.type == GameConnectionType.SERVER
+    fun isServer() = connectionType.type == GameConnectionType.SERVER
 
     protected fun getPlayerById(playerId: Long) =
         connectedPlayers.first { it.first == playerId }.second

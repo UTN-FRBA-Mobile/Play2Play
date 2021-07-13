@@ -38,7 +38,9 @@ class JoinGamesBottomSheetFragment :
             dismiss()
             HowToConnectBluetoothActivity.start(requireContext())
         }
-        is JoinGame -> TuttiFruttiActivity.startJoin(requireActivity(), GAME_REQUEST_CODE, event.device)
+        is JoinGame -> {
+            TuttiFruttiActivity.startJoin(requireActivity(), GAME_REQUEST_CODE, event.device)
+        }
     }
 
     private fun setupRecycler() = with(binding.devicesRecycler) {
