@@ -31,6 +31,9 @@ abstract class ImpostorViewModel(
     protected val _keyWord = MutableLiveData<String>()
     val keyWord: LiveData<String> = _keyWord
 
+    protected val _impostor = MutableLiveData<String>()
+    val impostor: LiveData<String> = _impostor
+
     @CallSuper
     open fun createGame(word: String){
         _keyWord.value = word
@@ -43,6 +46,7 @@ abstract class ImpostorViewModel(
         super.goToPlay()
     }
 
+    fun isImpostor() = impostor.value == userName
 
     //TODO bren ver que se hace
     override fun onClientConnectionLost(peerId: Long) {

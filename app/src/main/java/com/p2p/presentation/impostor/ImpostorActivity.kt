@@ -18,7 +18,6 @@ class ImpostorActivity : GameActivity<ImpostorSpecificGameEvent, ImpostorViewMod
         addFragment(CreateImpostorFragment.newInstance(), shouldAddToBackStack = false)
 
     override fun goToPlay() {
-        viewModel.stopLoading()
         //TODO bren put real fragment
         addFragment(TuttiFruttiCountdownFragment.newInstance(), shouldAddToBackStack = false)
     }
