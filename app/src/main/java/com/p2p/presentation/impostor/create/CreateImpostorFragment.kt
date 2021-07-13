@@ -25,6 +25,7 @@ class CreateImpostorFragment : BaseGameFragment<
 
     override fun initUI() {
         super.initUI()
+        gameViewModel.startConnection()
         gameBinding.startButton.setOnClickListener {
             val keyWord = gameBinding.textField.value()
             viewModel.tryStartGame(keyWord)
