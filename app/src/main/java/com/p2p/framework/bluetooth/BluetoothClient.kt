@@ -18,6 +18,8 @@ class BluetoothClient(
     /** This [BluetoothConnectionThread] contains the communication with the server. */
     private var connectionToServer: BluetoothConnectionThread? = null
 
+    private var isClosed = false
+
     init {
         start()
     }
@@ -26,18 +28,21 @@ class BluetoothClient(
         // Cancel discovery because it otherwise slows down the connection.
         bluetoothAdapter?.cancelDiscovery()
 
-        tryConnection()
+        val isSuccess = tryConnection()
+        handler
+            .obtainMessage(if (isSuccess) ON_CLIENT_CONNECTION_SUCCESS else ON_CLIENT_CONNECTION_FAILURE)
+            .sendToTarget()
     }
 
-    private fun tryConnection(pendingRetries: Int = RETRY_COUNT) {
-        bluetoothServerDevice
-            .createRfcommSocketToServiceRecord(UUID.fromString(BluetoothServer.UUID))
-            ?.let { socket ->
-                Logger.d(TAG, "Try connect to the socket: $socket (attempts left: $pendingRetries)")
+    private fun tryConnection(pendingRetries: Int = RETRY_COUNT): Boolean {
+        return try {
+            bluetoothServerDevice
+                .createRfcommSocketToServiceRecord(UUID.fromString(BluetoothServer.UUID))
+                ?.let { socket ->
+                    Logger.d(TAG, "Try connect to the socket: $socket (attempts left: $pendingRetries)")
 
-                // Connect to the remote device through the socket. This call blocks
-                // until it succeeds or throws an exception.
-                try {
+                    // Connect to the remote device through the socket. This call blocks
+                    // until it succeeds or throws an exception.
                     socket.connect()
 
                     // The connection attempt succeeded. Perform work associated with
@@ -50,16 +55,21 @@ class BluetoothClient(
                                 .sendToTarget()
                         }
                     }
-                    handler.obtainMessage(ON_CLIENT_CONNECTION_SUCCESS).sendToTarget()
-                } catch (exception: IOException) {
-                    if (pendingRetries > 0) tryConnection(pendingRetries - 1)
-                    null
-                }
-            } ?: handler.obtainMessage(ON_CLIENT_CONNECTION_FAILURE).sendToTarget()
+                    true
+                } ?: false
+        } catch (exception: IOException) {
+            if (!isClosed && pendingRetries > 0) {
+                sleep(CONNECTION_TIMEOUT)
+                tryConnection(pendingRetries - 1)
+            } else {
+                false
+            }
+        }
     }
 
     override fun close() {
         Logger.d(TAG, "Close the client")
+        isClosed = true
         try {
             connectionToServer?.close()
         } catch (e: IOException) {
@@ -87,5 +97,6 @@ class BluetoothClient(
 
         private const val TAG = "P2P_CLIENT_BLUETOOTH"
         private const val RETRY_COUNT = 5
+        private const val CONNECTION_TIMEOUT: Long = 1_000
     }
 }
