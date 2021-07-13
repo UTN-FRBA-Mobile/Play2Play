@@ -20,29 +20,4 @@ class ServerImpostorViewModel(
     bluetoothConnectionCreator,
     instructionsRepository,
     loadingTextRepository
-) {
-
-    override fun createGame(word: String) {
-        super.createGame(word)
-        val impostor = selectImpostor()
-        _impostor.value = impostor
-        connection.write(
-            ImpostorAssignWord(
-                word,
-                impostor
-            )
-        )
-        closeDiscovery()
-        goToPlay()
-    }
-
-    override fun endGame(){
-        connection.write(ImpostorEndGame())
-    }
-
-    private fun selectImpostor(): String{
-        val players = requireNotNull(otherPlayers()) { "At this instance at least one player must be connected" }
-        return players.shuffled().first()
-    }
-
-}
+)

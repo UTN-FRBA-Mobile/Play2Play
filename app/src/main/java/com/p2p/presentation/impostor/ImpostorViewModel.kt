@@ -7,6 +7,7 @@ import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.loadingMessages.LoadingTextRepository
 import com.p2p.data.userInfo.UserSession
+import com.p2p.model.impostor.message.ImpostorAssignWord
 import com.p2p.model.impostor.message.ImpostorEndGame
 import com.p2p.presentation.basegame.ConnectionType
 import com.p2p.presentation.basegame.GameViewModel
@@ -35,13 +36,29 @@ abstract class ImpostorViewModel(
     protected val _impostor = MutableLiveData<String>()
     val impostor: LiveData<String> = _impostor
 
-    @CallSuper
-    open fun createGame(word: String) {
+    fun createGame(word: String) {
+        val impostor = selectImpostor()
+        _impostor.value = impostor
         _keyWord.value = word
+        connection.write(
+            ImpostorAssignWord(
+                word,
+                impostor
+            )
+        )
+        closeDiscovery()
+        goToPlay()
     }
 
-    //Do nothing, for client
-    open fun endGame(){}
+    private fun selectImpostor(): String {
+        val players =
+            requireNotNull(otherPlayers()) { "At this instance at least one player must be connected" }
+        return players.shuffled().first()
+    }
+
+    fun endGame() {
+        connection.write(ImpostorEndGame())
+    }
 
     override fun startGame() = goToPlay()
 
@@ -52,7 +69,7 @@ abstract class ImpostorViewModel(
 
     fun isImpostor() = impostor.value == userName
 
-    //TODO bren ver que se hace
+    //TODO que se hace aca??
     override fun onClientConnectionLost(peerId: Long) {
         super.onClientConnectionLost(peerId)
         if (gameAlreadyStarted && connectedPlayers.size == 1) {
