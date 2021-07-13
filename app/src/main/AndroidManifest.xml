@@ -30,6 +30,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.P2P">
 
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.p2p.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+
         <activity
             android:name=".presentation.home.HomeActivity"
             android:theme="@style/SplashTheme">
