@@ -22,10 +22,10 @@ class ServerImpostorViewModel(
     loadingTextRepository
 ) {
 
-    override fun createGame(word: String) {
-        super.createGame(word)
+    fun createGame(word: String) {
         val impostor = selectImpostor()
         _impostor.value = impostor
+        _keyWord.value = word
         connection.write(
             ImpostorAssignWord(
                 word,
