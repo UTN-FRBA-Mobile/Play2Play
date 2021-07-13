@@ -1,10 +1,10 @@
-package com.p2p.presentation.tuttifrutti.lobby
+package com.p2p.presentation.clientlobby
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.p2p.presentation.base.BaseViewModel
 
-class ServerTuttiFruttiLobbyViewModel: BaseViewModel<LobbyEvent>() {
+class ServerLobbyViewModel: BaseViewModel<LobbyEvent>() {
     private val _isContinueButtonEnabled = MutableLiveData(false)
     val isContinueButtonEnabled: LiveData<Boolean> = _isContinueButtonEnabled
 

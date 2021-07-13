@@ -21,7 +21,8 @@ class ServerImpostorViewModel(
     loadingTextRepository
 ) {
 
-    override fun startGame(keyWord: String) {
+    override fun createGame(keyWord: String) {
+        super.createGame(keyWord)
         //TODO bren do logic
         connection.write(
             //TODO replace

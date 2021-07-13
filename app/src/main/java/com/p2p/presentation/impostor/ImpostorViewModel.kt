@@ -1,5 +1,6 @@
 package com.p2p.presentation.impostor
 
+import androidx.annotation.CallSuper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
@@ -30,7 +31,12 @@ abstract class ImpostorViewModel(
     protected val _keyWord = MutableLiveData<String>()
     val keyWord: LiveData<String> = _keyWord
 
-    abstract fun startGame(keyWord: String)
+    @CallSuper
+    open fun createGame(word: String){
+        _keyWord.value = word
+    }
+
+    override fun startGame() = goToPlay()
 
     override fun goToPlay() {
         gameAlreadyStarted = true

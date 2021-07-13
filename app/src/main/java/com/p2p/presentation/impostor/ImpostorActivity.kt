@@ -6,7 +6,7 @@ import androidx.activity.viewModels
 import com.p2p.presentation.basegame.GameActivity
 import com.p2p.presentation.impostor.create.CreateImpostorFragment
 import com.p2p.presentation.tuttifrutti.countdown.TuttiFruttiCountdownFragment
-import com.p2p.presentation.tuttifrutti.lobby.ClientTuttiFruttiLobbyFragment
+import com.p2p.presentation.clientlobby.ClientLobbyFragment
 
 class ImpostorActivity : GameActivity<ImpostorSpecificGameEvent, ImpostorViewModel>() {
 
@@ -25,7 +25,7 @@ class ImpostorActivity : GameActivity<ImpostorSpecificGameEvent, ImpostorViewMod
 
     //TODO bren put impostor lobby
     override fun goToClientLobby() =
-        addFragment(ClientTuttiFruttiLobbyFragment.newInstance(), shouldAddToBackStack = false)
+        addFragment(ClientLobbyFragment.newInstance(viewModel), shouldAddToBackStack = false)
 
     companion object {
 

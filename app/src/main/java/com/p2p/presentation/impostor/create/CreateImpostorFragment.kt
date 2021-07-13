@@ -52,7 +52,7 @@ class CreateImpostorFragment : BaseGameFragment<
 
     override fun onEvent(event: ImpostorCreateEvents) =
         when (event) {
-            is StartGame -> gameViewModel.startGame(event.keyWord)
+            is StartGame -> gameViewModel.createGame(event.keyWord)
             InvalidInput -> markErrorInput()
             NoConnectedPlayers -> markErrorConnectedPlayers()
         }

@@ -192,6 +192,8 @@ abstract class GameViewModel(
 
     fun goToLobby() = dispatchSingleTimeEvent(if (isServer()) GoToServerLobby else GoToClientLobby)
 
+    abstract fun startGame()
+
     @CallSuper
     open fun goToPlay() = dispatchSingleTimeEvent(GoToPlay)
 

@@ -1,4 +1,4 @@
-package com.p2p.presentation.tuttifrutti.lobby
+package com.p2p.presentation.clientlobby
 
 sealed class LobbyEvent
 

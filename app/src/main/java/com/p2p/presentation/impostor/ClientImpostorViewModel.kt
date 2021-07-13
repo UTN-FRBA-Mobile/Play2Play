@@ -20,6 +20,6 @@ class ClientImpostorViewModel(
     loadingTextRepository
 ) {
 
-    override fun startGame(keyWord: String) = goToPlay()
+    override fun startGame() = goToPlay()
 
 }
