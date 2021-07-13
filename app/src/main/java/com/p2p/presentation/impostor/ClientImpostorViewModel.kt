@@ -6,7 +6,9 @@ import com.p2p.data.loadingMessages.LoadingTextRepository
 import com.p2p.data.userInfo.UserSession
 import com.p2p.model.base.message.Conversation
 import com.p2p.model.impostor.message.ImpostorAssignWord
+import com.p2p.model.impostor.message.ImpostorEndGame
 import com.p2p.presentation.basegame.ConnectionType
+import com.p2p.presentation.basegame.KillGame
 
 class ClientImpostorViewModel(
     connectionType: ConnectionType,
@@ -34,6 +36,7 @@ class ClientImpostorViewModel(
         super.receiveMessage(conversation)
         when (val message = conversation.lastMessage) {
             is ImpostorAssignWord -> assignWordAndStart(message)
+            is ImpostorEndGame -> dispatchSingleTimeEvent(KillGame)
         }
     }
 

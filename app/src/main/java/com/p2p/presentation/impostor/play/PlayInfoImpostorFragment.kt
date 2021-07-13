@@ -9,6 +9,7 @@ import com.p2p.databinding.FragmentPlayImpostorBinding
 import com.p2p.databinding.FragmentPlayInfoImpostorBinding
 import com.p2p.presentation.basegame.BaseGameFragment
 import com.p2p.presentation.impostor.ImpostorViewModel
+import com.p2p.presentation.impostor.ServerImpostorViewModel
 
 class PlayInfoImpostorFragment : BaseGameFragment<
         FragmentPlayInfoImpostorBinding,
@@ -16,12 +17,20 @@ class PlayInfoImpostorFragment : BaseGameFragment<
         PlayImpostorViewModel,
         ImpostorViewModel>() {
 
-    override val gameViewModel: ImpostorViewModel by activityViewModels()
+    override val gameViewModel: ServerImpostorViewModel by activityViewModels()
 
     override val viewModel: PlayImpostorViewModel by viewModels()
 
     override val gameInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentPlayInfoImpostorBinding =
         FragmentPlayInfoImpostorBinding::inflate
+
+    override fun initUI() {
+        super.initUI()
+        gameBinding.finishButton.setOnClickListener {
+            gameViewModel.endGame()
+            requireActivity().finish()
+        }
+    }
 
     override fun setupObservers() {
         super.setupObservers()
