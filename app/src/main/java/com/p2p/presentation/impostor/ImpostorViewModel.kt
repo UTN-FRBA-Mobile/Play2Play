@@ -34,11 +34,6 @@ abstract class ImpostorViewModel(
     protected val _impostor = MutableLiveData<String>()
     val impostor: LiveData<String> = _impostor
 
-    @CallSuper
-    open fun createGame(word: String){
-        _keyWord.value = word
-    }
-
     override fun startGame() = goToPlay()
 
     override fun goToPlay() {
