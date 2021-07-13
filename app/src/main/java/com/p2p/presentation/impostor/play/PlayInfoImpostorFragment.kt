@@ -17,7 +17,7 @@ class PlayInfoImpostorFragment : BaseGameFragment<
         PlayImpostorViewModel,
         ImpostorViewModel>() {
 
-    override val gameViewModel: ServerImpostorViewModel by activityViewModels()
+    override val gameViewModel: ImpostorViewModel by activityViewModels()
 
     override val viewModel: PlayImpostorViewModel by viewModels()
 

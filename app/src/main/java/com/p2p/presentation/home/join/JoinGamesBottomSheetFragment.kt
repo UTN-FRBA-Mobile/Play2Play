@@ -9,6 +9,7 @@ import com.p2p.framework.bluetooth.BluetoothDeviceFinderReceiver
 import com.p2p.presentation.base.BaseBottomSheetDialogFragment
 import com.p2p.presentation.bluetooth.HowToConnectBluetoothActivity
 import com.p2p.presentation.home.HomeActivity.Companion.GAME_REQUEST_CODE
+import com.p2p.presentation.impostor.ImpostorActivity
 import com.p2p.presentation.tuttifrutti.TuttiFruttiActivity
 
 class JoinGamesBottomSheetFragment :
@@ -39,7 +40,7 @@ class JoinGamesBottomSheetFragment :
             HowToConnectBluetoothActivity.start(requireContext())
         }
         is JoinGame -> {
-            TuttiFruttiActivity.startJoin(requireActivity(), GAME_REQUEST_CODE, event.device)
+            ImpostorActivity.startJoin(requireActivity(), GAME_REQUEST_CODE, event.device)
         }
     }
 

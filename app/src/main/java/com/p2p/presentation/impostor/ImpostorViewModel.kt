@@ -7,6 +7,7 @@ import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.loadingMessages.LoadingTextRepository
 import com.p2p.data.userInfo.UserSession
+import com.p2p.model.impostor.message.ImpostorEndGame
 import com.p2p.presentation.basegame.ConnectionType
 import com.p2p.presentation.basegame.GameViewModel
 import com.p2p.presentation.basegame.KillGame
@@ -33,6 +34,14 @@ abstract class ImpostorViewModel(
 
     protected val _impostor = MutableLiveData<String>()
     val impostor: LiveData<String> = _impostor
+
+    @CallSuper
+    open fun createGame(word: String) {
+        _keyWord.value = word
+    }
+
+    //Do nothing, for client
+    open fun endGame(){}
 
     override fun startGame() = goToPlay()
 
