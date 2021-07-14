@@ -39,6 +39,7 @@
         android:layout_height="wrap_content"
         android:text="@string/im_impostor_is"
         android:paddingTop="@dimen/large"
+        app:layout_constraintVertical_bias="1"
         app:layout_constraintBottom_toTopOf="@id/impostor"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
