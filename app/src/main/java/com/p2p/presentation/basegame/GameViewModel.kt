@@ -27,6 +27,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+
 abstract class GameViewModel(
     private val connectionType: ConnectionType,
     private val userSession: UserSession,
