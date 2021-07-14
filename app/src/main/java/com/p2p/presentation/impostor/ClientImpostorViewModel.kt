@@ -24,8 +24,6 @@ class ClientImpostorViewModel(
     loadingTextRepository
 ) {
 
-    override fun startGame() = goToPlay()
-
     fun assignWordAndStart(message: ImpostorAssignWord) = with(message){
         _impostor.value = impostor
         _keyWord.value = word
