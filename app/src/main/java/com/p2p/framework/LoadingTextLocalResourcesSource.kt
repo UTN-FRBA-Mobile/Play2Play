@@ -14,8 +14,7 @@ class LoadingTextLocalResourcesSource(context: Context) : LoadingSource {
         LoadingMessageType.TF_WAITING_FOR_WORDS to getString(context, R.string.tf_wait_for_words)
     )
 
-    private fun getString(context: Context, @StringRes stringRes: Int) = context.resources.getString(stringRes)
-
     override fun getLoadingText(messageType: LoadingMessageType) = textByMessage[messageType].orEmpty()
 
+    private fun getString(context: Context, @StringRes stringRes: Int) = context.resources.getString(stringRes)
 }
