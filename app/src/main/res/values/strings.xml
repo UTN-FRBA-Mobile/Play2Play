@@ -43,8 +43,8 @@
 
     <!-- Tutti Frutti - Rounds -->
     <string name="tutti_frutti_rounds">¿Cuántas rondas van a jugar?</string>
-    <string name="decrease_number">Decrease number</string>
-    <string name="increase_number">Increase number</string>
+    <string name="decrease_number">Disminuir número</string>
+    <string name="increase_number">Incrementar número</string>
 
     <!-- How to connect Bluetooth screen -->
     <string name="how_to_connect_bluetooth_title">¿Cómo conectarse con otro dispositivo Bluetooth?</string>
@@ -53,7 +53,7 @@
     <string name="tf_letter"><![CDATA[Letra: <font color=#FF8550>%s</font>]]></string>
     <string name="tf_round"><![CDATA[Ronda: <font color=#FF8550>%d</font>/%d]]></string>
     <string name="tf_validation_error">¡Falta completar!</string>
-    <string name="tf_finish_round">¡Basta para mi, basta para todos!</string>
+    <string name="tf_finish_round">¡Basta para mi, basta para todes!</string>
 
     <!-- Lobby -->
     <string name="lobby_give_help_players_title">Pedile al resto que se sumen</string>
@@ -64,7 +64,8 @@
 
     <string name="tf_enough_player"><![CDATA[¡<b>%s</b> dijo basta!]]></string>
     <!-- Tutti Frutti - Loading screen -->
-    <string name="tf_wait_for_results">¡Discutan con el creador del juego los puntajes!</string>
+    <string name="tf_wait_for_review">¡Discutan con quien creó el juego los puntajes!</string>
+    <string name="tf_wait_for_words">Esperando las palabras del resto de les jugadores</string>
     <!-- Tutti Frutti - Final Score -->
     <string name="tf_winner">Ganó %s</string>
     <string name="tf_points">%d puntos</string>
