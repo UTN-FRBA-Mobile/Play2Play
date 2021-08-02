@@ -33,6 +33,7 @@
     <string name="games_name_max_length_error">Tu nombre puede tener hasta 7 letras</string>
 
     <!-- Tutti Frutti - Categories -->
+    <string name="tf_categories_custom">Ingresá una categoría personalizada</string>
     <string name="tf_categories_selected_categories">Categorías seleccionadas</string>
     <string name="tf_categories_count_error">¡Debes seleccionar al menos 5!</string>
 
