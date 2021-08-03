@@ -45,8 +45,8 @@ class CreateTuttiFruttiFragment : BaseGameFragment<
     override fun setupObservers() = with(viewModel) {
         observe(allCategories) { tuttiFruttiCategoriesAdapter.categories = it }
         observe(selectedCategories) {
-            tuttiFruttiCategoriesAdapter.selectedCategories = it
-            tuttiFruttiSelectedCategoriesAdapter.selectedCategories = it
+            tuttiFruttiCategoriesAdapter.selectedCategories = it.toList()
+            tuttiFruttiSelectedCategoriesAdapter.selectedCategories = it.toList()
         }
         observe(continueButtonEnabled) {
             gameBinding.continueButton.isEnabled = it
