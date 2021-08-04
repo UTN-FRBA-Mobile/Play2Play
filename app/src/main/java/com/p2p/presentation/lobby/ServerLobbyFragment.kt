@@ -1,4 +1,4 @@
-package com.p2p.presentation.clientlobby
+package com.p2p.presentation.lobby
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,11 +10,11 @@ import com.p2p.presentation.basegame.BaseGameFragment
 import com.p2p.presentation.basegame.GameViewModel
 import com.p2p.utils.fromHtml
 
-class ServerLobbyFragment(override val gameViewModel: GameViewModel) : BaseGameFragment<
+abstract class ServerLobbyFragment<GVM : GameViewModel> : BaseGameFragment<
         FragmentServerLobbyBinding,
         LobbyEvent,
         ServerLobbyViewModel,
-        GameViewModel>() {
+        GVM>() {
 
 
     override val viewModel: ServerLobbyViewModel by viewModels()
@@ -60,9 +60,5 @@ class ServerLobbyFragment(override val gameViewModel: GameViewModel) : BaseGameF
         when (event) {
             is GoToPlay -> Unit
         }
-    }
-
-    companion object {
-        fun newInstance(gameViewModel: GameViewModel) = ServerLobbyFragment(gameViewModel)
     }
 }

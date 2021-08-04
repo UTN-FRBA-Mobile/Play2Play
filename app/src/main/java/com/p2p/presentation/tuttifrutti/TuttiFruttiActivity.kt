@@ -7,8 +7,10 @@ import com.p2p.presentation.basegame.GameActivity
 import com.p2p.presentation.tuttifrutti.countdown.TuttiFruttiCountdownFragment
 import com.p2p.presentation.tuttifrutti.create.categories.CreateTuttiFruttiFragment
 import com.p2p.presentation.tuttifrutti.finalscore.FinalScoreTuttiFruttiFragment
-import com.p2p.presentation.clientlobby.ClientLobbyFragment
-import com.p2p.presentation.clientlobby.ServerLobbyFragment
+import com.p2p.presentation.lobby.ClientLobbyFragment
+import com.p2p.presentation.lobby.ServerLobbyFragment
+import com.p2p.presentation.tuttifrutti.lobby.TuttiFruttiClientLobbyFragment
+import com.p2p.presentation.tuttifrutti.lobby.TuttiFruttiServerLobbyFragment
 import com.p2p.presentation.tuttifrutti.review.TuttiFruttiReviewFragment
 
 class TuttiFruttiActivity : GameActivity<TuttiFruttiSpecificGameEvent, TuttiFruttiViewModel>() {
@@ -26,10 +28,10 @@ class TuttiFruttiActivity : GameActivity<TuttiFruttiSpecificGameEvent, TuttiFrut
     }
 
     override fun goToClientLobby() =
-        addFragment(ClientLobbyFragment.newInstance(viewModel), shouldAddToBackStack = false)
+        addFragment(TuttiFruttiClientLobbyFragment.newInstance(), shouldAddToBackStack = false)
 
     override fun goToServerLobby() =
-        addFragment(ServerLobbyFragment.newInstance(viewModel), shouldAddToBackStack = false)
+        addFragment(TuttiFruttiServerLobbyFragment.newInstance(), shouldAddToBackStack = false)
 
     override fun onGameEvent(event: TuttiFruttiSpecificGameEvent) {
         super.onGameEvent(event)

@@ -36,7 +36,7 @@ class CreateImpostorFragment : BaseGameFragment<
         super.setupObservers()
         with(gameViewModel) {
             observe(players) {
-                val otherPlayers = otherPlayers()
+                val otherPlayers = getOtherPlayers()
                 updateConnectedPlayers(otherPlayers)
                 viewModel.updatePlayers(otherPlayers)
             }
@@ -44,9 +44,10 @@ class CreateImpostorFragment : BaseGameFragment<
     }
 
     private fun updateConnectedPlayers(players: List<String>?) {
-        val text = if (players?.isNotEmpty() == true)
-            players.joinToString(", ")
-        else resources.getString(R.string.lobby_no_players_yet)
+        val text = players
+            ?.takeUnless { it.isEmpty() }
+            ?.joinToString()
+            ?: resources.getString(R.string.lobby_no_players_yet)
 
         gameBinding.players.text = text
     }

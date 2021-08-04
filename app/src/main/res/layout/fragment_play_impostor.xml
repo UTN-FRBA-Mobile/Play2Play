@@ -23,7 +23,7 @@
         style="@style/P2P_Title_Extra"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/medium"
+        android:layout_marginTop="@dimen/large"
         tools:text="SIMULA" />
 
 

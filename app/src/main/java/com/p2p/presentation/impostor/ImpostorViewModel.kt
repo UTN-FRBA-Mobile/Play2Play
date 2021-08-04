@@ -41,8 +41,9 @@ abstract class ImpostorViewModel(
     fun createGame(word: String) {
         val impostor = selectImpostor()
         _impostor.value = impostor
-        _isImpostor.value = impostor == userName
         _keyWord.value = word
+        //Creator is never impostor
+        _isImpostor.value = false
         connection.write(
             ImpostorAssignWord(
                 word,
@@ -55,7 +56,7 @@ abstract class ImpostorViewModel(
 
     private fun selectImpostor(): String {
         val players =
-            requireNotNull(otherPlayers()) { "At this instance at least one player must be connected" }
+            requireNotNull(getOtherPlayers()) { "At this instance at least one player must be connected" }
         return players.shuffled().first()
     }
 
@@ -68,15 +69,5 @@ abstract class ImpostorViewModel(
     override fun goToPlay() {
         gameAlreadyStarted = true
         super.goToPlay()
-    }
-
-    //TODO que se hace aca??
-    override fun onClientConnectionLost(peerId: Long) {
-        super.onClientConnectionLost(peerId)
-        if (gameAlreadyStarted && connectedPlayers.size == 1) {
-            dispatchErrorScreen(SinglePlayerOnGame {
-                dispatchSingleTimeEvent(KillGame)
-            })
-        }
     }
 }
