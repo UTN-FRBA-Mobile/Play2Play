@@ -45,7 +45,7 @@ class CreateImpostorFragment : BaseGameFragment<
 
     private fun updateConnectedPlayers(players: List<String>?) {
         val text = if (players?.isNotEmpty() == true)
-            players.joinToString(", ")
+            players.joinToString()
         else resources.getString(R.string.lobby_no_players_yet)
 
         gameBinding.players.text = text
