@@ -234,7 +234,7 @@ abstract class GameViewModel(
         }
     }
 
-    fun otherPlayers(): List<String>? =
+    fun getOtherPlayers(): List<String>? =
         players.value?.let { it - userName }
 
     private fun removePlayer(playerLost: Pair<Long, String>) {

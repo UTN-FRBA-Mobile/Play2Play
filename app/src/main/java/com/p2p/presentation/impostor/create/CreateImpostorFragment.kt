@@ -36,7 +36,7 @@ class CreateImpostorFragment : BaseGameFragment<
         super.setupObservers()
         with(gameViewModel) {
             observe(players) {
-                val otherPlayers = otherPlayers()
+                val otherPlayers = getOtherPlayers()
                 updateConnectedPlayers(otherPlayers)
                 viewModel.updatePlayers(otherPlayers)
             }

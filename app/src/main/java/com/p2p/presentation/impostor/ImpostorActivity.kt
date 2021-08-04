@@ -36,10 +36,4 @@ class ImpostorActivity : GameActivity<ImpostorSpecificGameEvent, ImpostorViewMod
             startJoin(ImpostorActivity::class, activity, requestCode, serverDevice)
         }
     }
-
-    override fun goToServerLobby() {
-        throw IllegalStateException(
-            "There is no server lobby in Impostor game"
-        )
-    }
 }

@@ -47,14 +47,4 @@ abstract class ImpostorViewModel(
     }
 
     fun isImpostor() = impostor.value == userName
-
-    //TODO bren ver que se hace
-    override fun onClientConnectionLost(peerId: Long) {
-        super.onClientConnectionLost(peerId)
-        if (gameAlreadyStarted && connectedPlayers.size == 1) {
-            dispatchErrorScreen(SinglePlayerOnGame {
-                dispatchSingleTimeEvent(KillGame)
-            })
-        }
-    }
 }

@@ -37,7 +37,7 @@ class ServerImpostorViewModel(
 
     private fun selectImpostor(): String {
         val players =
-            requireNotNull(otherPlayers()) { "At this instance at least one player must be connected" }
+            requireNotNull(getOtherPlayers()) { "At this instance at least one player must be connected" }
         return players.shuffled().first()
     }
 

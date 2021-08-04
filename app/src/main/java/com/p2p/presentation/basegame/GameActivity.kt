@@ -172,7 +172,11 @@ abstract class GameActivity<E : SpecificGameEvent, VM : GameViewModel> :
 
     protected abstract fun goToClientLobby()
 
-    protected abstract fun goToServerLobby()
+    protected fun goToServerLobby(){
+        throw IllegalStateException(
+            "There is no server lobby for game"
+        )
+    }
 
     protected open fun onGameEvent(event: E) {}
 
