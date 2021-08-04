@@ -36,7 +36,6 @@
     <dimen name="divider_height">1dp</dimen>
     <dimen name="checkbox_icon_size">26dp</dimen>
     <dimen name="progress_bar_size">100dp</dimen>
-    <dimen name="text_field_size">200dp</dimen>
     <dimen name="error_image_size">120dp</dimen>
 
     <!-- Splash screen -->
