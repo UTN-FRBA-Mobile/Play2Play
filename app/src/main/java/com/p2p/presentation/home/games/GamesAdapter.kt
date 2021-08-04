@@ -45,8 +45,8 @@ class GamesAdapter(private val onSelectedChanged: (Game?) -> Unit) :
 
     private fun setBackgroundColors(binding: ViewGamesItemBinding, index: Int) {
         val (viewColor, textViewColor) =
-            if (index.isEven()) Pair(R.color.colorSecondaryVariant, R.color.colorSecondary)
-            else Pair(R.color.colorPrimaryVariant, R.color.colorPrimary)
+            if (index.isEven()) R.color.colorSecondaryVariant to R.color.colorSecondary
+            else R.color.colorPrimaryVariant to R.color.colorPrimary
 
         with(binding) {
             gameCard.setBackgroundColor(
