@@ -1,4 +1,4 @@
-package com.p2p.presentation.clientlobby
+package com.p2p.presentation.lobby
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,11 +8,11 @@ import com.p2p.databinding.FragmentClientLobbyBinding
 import com.p2p.presentation.basegame.BaseGameFragment
 import com.p2p.presentation.basegame.GameViewModel
 
-class ClientLobbyFragment(override val gameViewModel: GameViewModel) : BaseGameFragment<
+abstract class ClientLobbyFragment<GVM : GameViewModel> : BaseGameFragment<
         FragmentClientLobbyBinding,
         LobbyEvent,
         ClientLobbyViewModel,
-        GameViewModel>() {
+        GVM>() {
 
     override val viewModel: ClientLobbyViewModel by viewModels()
 
@@ -41,8 +41,4 @@ class ClientLobbyFragment(override val gameViewModel: GameViewModel) : BaseGameF
         }
     }
 
-
-    companion object {
-        fun newInstance(gameViewModel: GameViewModel) = ClientLobbyFragment(gameViewModel)
-    }
 }

@@ -1,4 +1,4 @@
-package com.p2p.presentation.clientlobby
+package com.p2p.presentation.lobby
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

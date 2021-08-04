@@ -1,4 +1,4 @@
-package com.p2p.presentation.clientlobby
+package com.p2p.presentation.lobby
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
