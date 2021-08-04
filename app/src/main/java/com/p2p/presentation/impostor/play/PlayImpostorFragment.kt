@@ -32,27 +32,28 @@ class PlayImpostorFragment : BaseGameFragment<
     override val gameInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentPlayImpostorBinding =
         FragmentPlayImpostorBinding::inflate
 
-    override fun initUI() {
-        super.initUI()
-        setScreenDescription()
-    }
-
-    private fun setScreenDescription() = with(gameBinding) {
-        val resource =
-            if (gameViewModel.isImpostor()) R.string.im_you_are_impostor else R.string.im_you_are_not_impostor
-        screenDescription.text = resources.getString(resource)
-    }
+    var word: String = ""
 
     override fun setupObservers() {
         super.setupObservers()
         with(gameViewModel) {
-            observe(keyWord) { word ->
-                val wordToShow =
-                    if (gameViewModel.isImpostor())
-                        resources.getString(R.string.im_simulate) else word
-                gameBinding.word.text = wordToShow
+            observe(keyWord) { key -> word = key }
+            observe(isImpostor) { impostor ->
+                setWordToShow(impostor)
+                setScreenDescription(impostor)
             }
         }
+    }
+
+    private fun setScreenDescription(isImpostor: Boolean) = with(gameBinding) {
+        val resource =
+            if (isImpostor) R.string.im_you_are_impostor else R.string.im_you_are_not_impostor
+        screenDescription.text = resources.getString(resource)
+    }
+
+    private fun setWordToShow(isImpostor: Boolean) {
+        val wordToShow = if (isImpostor) resources.getString(R.string.im_simulate) else word
+        gameBinding.word.text = wordToShow
     }
 
     companion object {

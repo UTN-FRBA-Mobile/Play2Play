@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_gravity="center"
-    android:background="@color/colorBackground">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/error_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorBackground"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/screen_padding">
 
     <include layout="@layout/view_guidelines" />
 
@@ -14,21 +17,14 @@
         style="@style/P2P_Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/im_key_word_is"
-        app:layout_constraintBottom_toTopOf="@id/key_word"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="@string/im_key_word_is" />
 
     <TextView
         android:id="@+id/key_word"
         style="@style/P2P_Title_Extra"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/small"
-        app:layout_constraintBottom_toTopOf="@id/impostor_title"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="@dimen/medium"
         tools:text="BALLENA" />
 
 
@@ -37,32 +33,22 @@
         style="@style/P2P_Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/im_impostor_is"
-        android:paddingTop="@dimen/large"
-        app:layout_constraintVertical_bias="1"
-        app:layout_constraintBottom_toTopOf="@id/impostor"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginTop="@dimen/large_extra"
+        android:text="@string/im_impostor_is" />
 
     <TextView
         android:id="@+id/impostor"
         style="@style/P2P_Title_Extra"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/largest_extra"
-        app:layout_constraintBottom_toTopOf="@id/finish_button"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="@dimen/medium"
         tools:text="DARDO" />
 
     <Button
         android:id="@+id/finish_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/finish_game"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        android:layout_marginTop="@dimen/large_extra"
+        android:text="@string/finish_game"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

@@ -35,9 +35,13 @@ abstract class ImpostorViewModel(
     protected val _impostor = MutableLiveData<String>()
     val impostor: LiveData<String> = _impostor
 
+    protected val _isImpostor = MutableLiveData<Boolean>()
+    val isImpostor: LiveData<Boolean> = _isImpostor
+
     fun createGame(word: String) {
         val impostor = selectImpostor()
         _impostor.value = impostor
+        _isImpostor.value = impostor == userName
         _keyWord.value = word
         connection.write(
             ImpostorAssignWord(
@@ -65,8 +69,6 @@ abstract class ImpostorViewModel(
         gameAlreadyStarted = true
         super.goToPlay()
     }
-
-    fun isImpostor() = impostor.value == userName
 
     //TODO que se hace aca??
     override fun onClientConnectionLost(peerId: Long) {
