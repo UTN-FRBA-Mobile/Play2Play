@@ -1,6 +1,7 @@
 package com.p2p.presentation.impostor
 
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
+import com.p2p.data.impostor.ImpostorData
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.loadingMessages.LoadingTextRepository
 import com.p2p.data.userInfo.UserSession
@@ -25,9 +26,7 @@ class ClientImpostorViewModel(
 ) {
 
     fun assignWordAndStart(message: ImpostorAssignWord) = with(message){
-        _impostor.value = impostor
-        _keyWord.value = word
-        _isImpostor.value = impostor == userName
+        _impostorData.value = ImpostorData(impostor, word, isImpostor = impostor == userName)
         startGame()
     }
 

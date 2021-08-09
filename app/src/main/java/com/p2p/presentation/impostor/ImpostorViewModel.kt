@@ -3,6 +3,7 @@ package com.p2p.presentation.impostor
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
+import com.p2p.data.impostor.ImpostorData
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.loadingMessages.LoadingTextRepository
 import com.p2p.data.userInfo.UserSession
@@ -29,21 +30,13 @@ abstract class ImpostorViewModel(
     Game.IMPOSTOR
 ) {
 
-    protected val _keyWord = MutableLiveData<String>()
-    val keyWord: LiveData<String> = _keyWord
-
-    protected val _impostor = MutableLiveData<String>()
-    val impostor: LiveData<String> = _impostor
-
-    protected val _isImpostor = MutableLiveData<Boolean>()
-    val isImpostor: LiveData<Boolean> = _isImpostor
+    protected val _impostorData = MutableLiveData<ImpostorData>()
+    val impostorData: LiveData<ImpostorData> = _impostorData
 
     fun createGame(word: String) {
         val impostor = selectImpostor()
-        _impostor.value = impostor
-        _keyWord.value = word
         //Creator is never impostor
-        _isImpostor.value = false
+        _impostorData.value = ImpostorData(impostor, word, isImpostor = false)
         connection.write(
             ImpostorAssignWord(
                 word,

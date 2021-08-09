@@ -35,8 +35,10 @@ class PlayInfoImpostorFragment : BaseGameFragment<
     override fun setupObservers() {
         super.setupObservers()
         with(gameViewModel) {
-            observe(keyWord) { word -> gameBinding.keyWord.text = word }
-            observe(impostor) { impostor -> gameBinding.impostor.text = impostor }
+            observe(impostorData) { data ->
+                gameBinding.keyWord.text = data.keyWord
+                gameBinding.impostor.text = data.impostor
+            }
         }
     }
 

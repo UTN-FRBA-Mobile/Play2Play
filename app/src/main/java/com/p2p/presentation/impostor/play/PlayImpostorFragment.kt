@@ -32,15 +32,12 @@ class PlayImpostorFragment : BaseGameFragment<
     override val gameInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentPlayImpostorBinding =
         FragmentPlayImpostorBinding::inflate
 
-    var word: String = ""
-
     override fun setupObservers() {
         super.setupObservers()
         with(gameViewModel) {
-            observe(keyWord) { key -> word = key }
-            observe(isImpostor) { impostor ->
-                setWordToShow(impostor)
-                setScreenDescription(impostor)
+            observe(impostorData) { data ->
+                setWordToShow(data.isImpostor, data.keyWord)
+                setScreenDescription(data.isImpostor)
             }
         }
     }
@@ -51,8 +48,8 @@ class PlayImpostorFragment : BaseGameFragment<
         screenDescription.text = resources.getString(resource)
     }
 
-    private fun setWordToShow(isImpostor: Boolean) {
-        val wordToShow = if (isImpostor) resources.getString(R.string.im_simulate) else word
+    private fun setWordToShow(isImpostor: Boolean, keyWord: String) {
+        val wordToShow = if (isImpostor) resources.getString(R.string.im_simulate) else keyWord
         gameBinding.word.text = wordToShow
     }
 
