@@ -1,12 +1,15 @@
 package com.p2p.presentation.impostor
 
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
+import com.p2p.data.impostor.ImpostorData
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.loadingMessages.LoadingTextRepository
 import com.p2p.data.userInfo.UserSession
 import com.p2p.model.base.message.Conversation
 import com.p2p.model.impostor.message.ImpostorAssignWord
+import com.p2p.model.impostor.message.ImpostorEndGame
 import com.p2p.presentation.basegame.ConnectionType
+import com.p2p.presentation.basegame.KillGame
 
 class ClientImpostorViewModel(
     connectionType: ConnectionType,
@@ -23,8 +26,7 @@ class ClientImpostorViewModel(
 ) {
 
     private fun assignWordAndStart(message: ImpostorAssignWord) = with(message){
-        _impostor.value = impostor
-        _keyWord.value = word
+        _impostorData.value = ImpostorData(impostor, word, isImpostor = impostor == userName)
         startGame()
     }
 
@@ -32,6 +34,7 @@ class ClientImpostorViewModel(
         super.receiveMessage(conversation)
         when (val message = conversation.lastMessage) {
             is ImpostorAssignWord -> assignWordAndStart(message)
+            is ImpostorEndGame -> dispatchSingleTimeEvent(KillGame)
         }
     }
 

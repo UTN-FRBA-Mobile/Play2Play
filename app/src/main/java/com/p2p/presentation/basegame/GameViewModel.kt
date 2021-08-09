@@ -27,6 +27,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+
 abstract class GameViewModel(
     private val connectionType: ConnectionType,
     private val userSession: UserSession,
@@ -205,7 +206,7 @@ abstract class GameViewModel(
         _connection?.close()
     }
 
-    protected fun isServer() = connectionType.type == GameConnectionType.SERVER
+    fun isServer() = connectionType.type == GameConnectionType.SERVER
 
     protected fun getPlayerById(playerId: Long) =
         connectedPlayers.first { it.first == playerId }.second

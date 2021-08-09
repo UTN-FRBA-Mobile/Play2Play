@@ -1,12 +1,14 @@
 package com.p2p.presentation.impostor
 
-import androidx.annotation.CallSuper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
+import com.p2p.data.impostor.ImpostorData
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.loadingMessages.LoadingTextRepository
 import com.p2p.data.userInfo.UserSession
+import com.p2p.model.impostor.message.ImpostorAssignWord
+import com.p2p.model.impostor.message.ImpostorEndGame
 import com.p2p.presentation.basegame.ConnectionType
 import com.p2p.presentation.basegame.GameViewModel
 import com.p2p.presentation.basegame.KillGame
@@ -28,15 +30,31 @@ abstract class ImpostorViewModel(
     Game.IMPOSTOR
 ) {
 
-    protected val _keyWord = MutableLiveData<String>()
-    val keyWord: LiveData<String> = _keyWord
+    protected val _impostorData = MutableLiveData<ImpostorData>()
+    val impostorData: LiveData<ImpostorData> = _impostorData
 
-    protected val _impostor = MutableLiveData<String>()
-    val impostor: LiveData<String> = _impostor
+    fun createGame(word: String) {
+        val impostor = selectImpostor()
+        //Creator is never impostor
+        _impostorData.value = ImpostorData(impostor, word, isImpostor = false)
+        connection.write(
+            ImpostorAssignWord(
+                word,
+                impostor
+            )
+        )
+        closeDiscovery()
+        goToPlay()
+    }
 
-    @CallSuper
-    open fun createGame(word: String) {
-        _keyWord.value = word
+    private fun selectImpostor(): String {
+        val players =
+            requireNotNull(getOtherPlayers()) { "At this instance at least one player must be connected" }
+        return players.shuffled().first()
+    }
+
+    fun endGame() {
+        connection.write(ImpostorEndGame())
     }
 
     override fun startGame() = goToPlay()
@@ -45,6 +63,4 @@ abstract class ImpostorViewModel(
         gameAlreadyStarted = true
         super.goToPlay()
     }
-
-    fun isImpostor() = impostor.value == userName
 }

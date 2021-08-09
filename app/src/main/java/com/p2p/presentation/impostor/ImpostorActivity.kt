@@ -5,8 +5,8 @@ import android.bluetooth.BluetoothDevice
 import androidx.activity.viewModels
 import com.p2p.presentation.basegame.GameActivity
 import com.p2p.presentation.impostor.create.CreateImpostorFragment
-import com.p2p.presentation.tuttifrutti.countdown.TuttiFruttiCountdownFragment
-import com.p2p.presentation.lobby.ClientLobbyFragment
+import com.p2p.presentation.impostor.play.PlayImpostorFragment
+import com.p2p.presentation.impostor.play.PlayInfoImpostorFragment
 import com.p2p.presentation.tuttifrutti.lobby.ImpostorClientLobbyFragment
 
 class ImpostorActivity : GameActivity<ImpostorSpecificGameEvent, ImpostorViewModel>() {
@@ -19,11 +19,11 @@ class ImpostorActivity : GameActivity<ImpostorSpecificGameEvent, ImpostorViewMod
         addFragment(CreateImpostorFragment.newInstance(), shouldAddToBackStack = false)
 
     override fun goToPlay() {
-        //TODO bren put real fragment
-        addFragment(TuttiFruttiCountdownFragment.newInstance(), shouldAddToBackStack = false)
+        val fragmentToShow =
+            if (viewModel.isServer()) PlayInfoImpostorFragment.newInstance() else PlayImpostorFragment.newInstance()
+        addFragment(fragmentToShow, shouldAddToBackStack = false)
     }
 
-    //TODO bren put impostor lobby
     override fun goToClientLobby() =
         addFragment(ImpostorClientLobbyFragment.newInstance(), shouldAddToBackStack = false)
 
