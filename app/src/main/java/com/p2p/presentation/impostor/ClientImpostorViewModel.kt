@@ -25,7 +25,7 @@ class ClientImpostorViewModel(
     loadingTextRepository
 ) {
 
-    fun assignWordAndStart(message: ImpostorAssignWord) = with(message){
+    private fun assignWordAndStart(message: ImpostorAssignWord) = with(message){
         _impostorData.value = ImpostorData(impostor, word, isImpostor = impostor == userName)
         startGame()
     }
