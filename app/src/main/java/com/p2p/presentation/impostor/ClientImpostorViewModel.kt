@@ -22,7 +22,7 @@ class ClientImpostorViewModel(
     loadingTextRepository
 ) {
 
-    fun assignWordAndStart(message: ImpostorAssignWord) = with(message){
+    private fun assignWordAndStart(message: ImpostorAssignWord) = with(message){
         _impostor.value = impostor
         _keyWord.value = word
         startGame()
