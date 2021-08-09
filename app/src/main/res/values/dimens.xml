@@ -30,6 +30,7 @@
     <dimen name="font_large_extra">20sp</dimen>
     <dimen name="font_big">22sp</dimen>
     <dimen name="font_huge">24sp</dimen>
+    <dimen name="font_huge_extra">26sp</dimen>
 
     <!-- General dimensions -->
     <dimen name="screen_padding">@dimen/medium_extra</dimen>

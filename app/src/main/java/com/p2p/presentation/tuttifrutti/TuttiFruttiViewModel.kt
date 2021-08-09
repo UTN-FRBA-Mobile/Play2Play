@@ -86,8 +86,6 @@ abstract class TuttiFruttiViewModel(
         _actualRound.value = RoundInfo(lettersByRound[round - 1], round)
     }
 
-    abstract fun startGame()
-
     abstract fun startRound()
 
     /**

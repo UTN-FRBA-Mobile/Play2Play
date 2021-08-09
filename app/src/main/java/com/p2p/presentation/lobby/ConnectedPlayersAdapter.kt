@@ -1,11 +1,11 @@
-package com.p2p.presentation.tuttifrutti.lobby
+package com.p2p.presentation.lobby
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.p2p.databinding.ViewConnectedUserBinding
 
-class ConnectedPlayersTuttiFruttiAdapter: RecyclerView.Adapter<ConnectedPlayersTuttiFruttiAdapter.ViewHolder>() {
+class ConnectedPlayersAdapter: RecyclerView.Adapter<ConnectedPlayersAdapter.ViewHolder>() {
 
     var players = listOf<String>()
         set(value) {

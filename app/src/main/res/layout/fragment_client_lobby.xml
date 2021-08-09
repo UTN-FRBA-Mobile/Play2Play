@@ -8,7 +8,7 @@
     <include layout="@layout/view_guidelines" />
 
     <TextView
-        android:id="@+id/connected_players"
+        android:id="@+id/connected_players_text"
         style="@style/P2P_Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,7 +24,7 @@
         android:layout_marginBottom="@dimen/medium"
         app:layout_constrainedHeight="true"
         app:layout_constraintBottom_toTopOf="@id/progressBar_cyclic"
-        app:layout_constraintTop_toBottomOf="@id/connected_players"
+        app:layout_constraintTop_toBottomOf="@id/connected_players_text"
         app:layout_constraintVertical_bias="0"
         tools:listitem="@layout/view_connected_user" />
 
