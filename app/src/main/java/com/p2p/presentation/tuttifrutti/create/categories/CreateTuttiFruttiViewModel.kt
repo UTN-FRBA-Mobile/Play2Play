@@ -22,22 +22,23 @@ class CreateTuttiFruttiViewModel(repository: TuttiFruttiRepository) :
      * Necessary to be a LiveData so the recyclerView can be notified and change the opacity of the button,
      * if i only add the category to the repository, the view won't get notified
      * */
-    private val _selectedCategories = MutableLiveData(listOf<Category>())
-    val selectedCategories: LiveData<List<Category>> = _selectedCategories
+    private val _selectedCategories = MutableLiveData(emptySet<Category>())
+    val selectedCategories: LiveData<Set<Category>> = _selectedCategories
 
     init {
         _allCategories.value = repository.allCategories()
         _continueButtonEnabled.value = false
     }
 
-
     /** Changes the [Category] selection */
-    fun changeCategorySelection(category: Category) {
-        val wasSelected = selectedCategories.value?.contains(category) ?: false
-        if (wasSelected) {
-            _selectedCategories.value = selectedCategories.value?.filter { it != category }
+    fun changeCategorySelection(
+        category: Category,
+        shouldSelect: Boolean = !selectedCategories.requireValue().contains(category)
+    ) {
+        if (shouldSelect) {
+            _selectedCategories.value = selectedCategories.requireValue() + category
         } else {
-            _selectedCategories.value = selectedCategories.value?.plus(category)
+            _selectedCategories.value = selectedCategories.requireValue() - category
         }
         _continueButtonEnabled.value = categoriesCountIsValid()
     }
@@ -45,7 +46,7 @@ class CreateTuttiFruttiViewModel(repository: TuttiFruttiRepository) :
     /** Next view to show when Continue button is pressed. */
     fun continueToNextScreen() {
         if (!validateCategoriesCount()) return
-        dispatchSingleTimeEvent(GoToSelectRounds(selectedCategories.requireValue()))
+        dispatchSingleTimeEvent(GoToSelectRounds(selectedCategories.requireValue().toList()))
     }
 
     private fun validateCategoriesCount(): Boolean {

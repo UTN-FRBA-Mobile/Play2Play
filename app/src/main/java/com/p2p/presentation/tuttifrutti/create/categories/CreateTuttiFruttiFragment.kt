@@ -2,6 +2,7 @@ package com.p2p.presentation.tuttifrutti.create.categories
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -9,6 +10,7 @@ import com.p2p.databinding.FragmentCreateTuttiFruttiBinding
 import com.p2p.presentation.basegame.BaseGameFragment
 import com.p2p.presentation.tuttifrutti.TuttiFruttiViewModel
 import com.p2p.presentation.tuttifrutti.create.rounds.TuttiFruttiRoundsNumberFragment
+import com.p2p.utils.text
 
 class CreateTuttiFruttiFragment : BaseGameFragment<
         FragmentCreateTuttiFruttiBinding,
@@ -31,13 +33,20 @@ class CreateTuttiFruttiFragment : BaseGameFragment<
         setupCategoriesRecycler()
         setupCategoriesSelectedRecycler()
         gameBinding.continueButton.setOnClickListener { viewModel.continueToNextScreen() }
+        gameBinding.customCategory.setEndIconOnClickListener { addCustomCategory() }
+        gameBinding.customCategory.editText?.setOnEditorActionListener { _, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                addCustomCategory()
+            }
+            true
+        }
     }
 
     override fun setupObservers() = with(viewModel) {
         observe(allCategories) { tuttiFruttiCategoriesAdapter.categories = it }
         observe(selectedCategories) {
-            tuttiFruttiCategoriesAdapter.selectedCategories = it
-            tuttiFruttiSelectedCategoriesAdapter.selectedCategories = it
+            tuttiFruttiCategoriesAdapter.selectedCategories = it.toList()
+            tuttiFruttiSelectedCategoriesAdapter.selectedCategories = it.toList()
         }
         observe(continueButtonEnabled) {
             gameBinding.continueButton.isEnabled = it
@@ -65,6 +74,11 @@ class CreateTuttiFruttiFragment : BaseGameFragment<
         adapter = TuttiFruttiSelectedCategoriesAdapter(viewModel::changeCategorySelection).also {
             this@CreateTuttiFruttiFragment.tuttiFruttiSelectedCategoriesAdapter = it
         }
+    }
+
+    private fun addCustomCategory() {
+        viewModel.changeCategorySelection(gameBinding.customCategory.text(), shouldSelect = true)
+        gameBinding.customCategory.editText?.text = null
     }
 
     companion object {
