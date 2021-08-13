@@ -16,4 +16,9 @@ enum class Game(
         R.drawable.ic_tutti_frutti,
         R.raw.tutti_frutti_instructions
     ),
+    TRUCO(
+        R.string.games_truco,
+        R.drawable.ic_tutti_frutti, // TODO: Replace with truco icon
+        R.raw.truco_instructions
+    ),
 }
