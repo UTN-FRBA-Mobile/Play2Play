@@ -1,6 +1,8 @@
 package com.p2p.presentation.truco
 
 import androidx.annotation.CallSuper
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.loadingMessages.LoadingTextRepository
@@ -24,6 +26,10 @@ abstract class TrucoViewModel(
     loadingTextRepository,
     Game.TRUCO
 ) {
+
+    /** Set the quantity of players selected by the user when creating the game . */
+    protected val _totalPlayers = MutableLiveData<Int>()
+    val totalPlayers: LiveData<Int> = _totalPlayers
 
     abstract fun startGame()
 
