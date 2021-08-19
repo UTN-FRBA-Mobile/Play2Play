@@ -25,7 +25,7 @@ abstract class TrucoViewModel(
     Game.TRUCO
 ) {
 
-    abstract fun startGame()
+    abstract override fun startGame()
 
     override fun goToPlay() {
         gameAlreadyStarted = true

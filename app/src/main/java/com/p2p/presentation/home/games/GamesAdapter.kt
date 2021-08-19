@@ -1,5 +1,4 @@
 package com.p2p.presentation.home.games
-
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -38,8 +37,7 @@ class GamesAdapter(private val onSelectedChanged: (Game?) -> Unit) :
         )
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) =
-        holder.bind(games[position], position)
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(games[position])
 
     override fun getItemCount() = games.size
 
