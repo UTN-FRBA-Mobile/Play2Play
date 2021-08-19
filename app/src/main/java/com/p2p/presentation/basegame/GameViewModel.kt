@@ -39,7 +39,7 @@ abstract class GameViewModel(
     protected var gameAlreadyStarted = false
     protected var gameAlreadyFinished = false
 
-    private val userName by lazy { userSession.getUserNameOrEmpty() }
+    protected val userName by lazy { userSession.getUserNameOrEmpty() }
     private val instructions by lazy { instructionsRepository.getInstructions(game.requireValue()) }
     private val failingMessagesRetries = mutableMapOf<Message, Int>()
 
