@@ -48,6 +48,9 @@
     <!-- Turn on bluetooth -->
     <dimen name="turn_on_bluetooth_icon_size">120dp</dimen>
 
+    <!-- Tutti frutti categories -->
+    <dimen name="tf_categories_custom_elevation">10dp</dimen>
+
     <!-- Countdown -->
     <dimen name="countdown_number_width">100dp</dimen>
     <dimen name="countdown_number_height">200dp</dimen>

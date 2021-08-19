@@ -19,6 +19,11 @@ enum class Game(
         R.drawable.ic_tutti_frutti,
         R.raw.tutti_frutti_instructions
     ),
+    TRUCO(
+        R.string.games_truco,
+        R.drawable.ic_truco,
+        R.raw.truco_instructions
+    ),
     IMPOSTOR(
         R.string.games_impostor,
         R.drawable.ic_impostor,

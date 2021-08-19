@@ -44,6 +44,7 @@ class GamesViewModel(
             else -> when (selectedGame) {
                 Game.TUTTI_FRUTTI -> dispatchSingleTimeEvent(GoToCreateTuttiFrutti)
                 Game.IMPOSTOR -> dispatchSingleTimeEvent(GoToCreateImpostor)
+                // TODO: Add truco game
             }
         }
     }

@@ -43,35 +43,31 @@ class GamesAdapter(private val onSelectedChanged: (Game?) -> Unit) :
 
     override fun getItemCount() = games.size
 
-    private fun setBackgroundColors(binding: ViewGamesItemBinding, index: Int) {
-        val (viewColor, textViewColor) =
-            if (index.isEven()) R.color.colorSecondaryVariant to R.color.colorSecondary
-            else R.color.colorPrimaryVariant to R.color.colorPrimary
+    private fun getGameCardBackgroundColor(index: Int) =
+        if (index.isEven()) R.color.colorSecondaryVariant else R.color.colorPrimaryVariant
 
-        with(binding) {
-            gameCard.setBackgroundColor(
-                ContextCompat.getColor(
-                    gameCard.context,
-                    viewColor
-                )
-            )
-            name.setBackgroundColor(
-                ContextCompat.getColor(
-                    name.context,
-                    textViewColor
-                )
-            )
-        }
-    }
+    private fun getNameBackgroundColor(index: Int) =
+        if (index.isEven()) R.color.colorSecondary else R.color.colorPrimary
 
     inner class ViewHolder(private val binding: ViewGamesItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         /** Show the given [game] into the view. */
-        fun bind(game: Game, position: Int) = with(binding) {
+        fun bind(game: Game) = with(binding) {
+            gameCard.setBackgroundColor(
+                ContextCompat.getColor(
+                    itemView.context,
+                    getGameCardBackgroundColor(position)
+                )
+            )
+            name.setBackgroundColor(
+                ContextCompat.getColor(
+                    itemView.context,
+                    getNameBackgroundColor(position)
+                )
+            )
             gameCardIcon.setBackgroundResource(game.iconRes)
             name.text = name.context.getText(game.nameRes)
-            setBackgroundColors(binding, position)
             container.setOnClickListener { selected = game }
             container
                 .animate()
