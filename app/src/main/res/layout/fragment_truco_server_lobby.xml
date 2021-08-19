@@ -39,17 +39,16 @@
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
         app:layout_constraintTop_toBottomOf="@id/help_players_description" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/players_recycler"
+    <GridView
+        android:id="@+id/players_grid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/medium"
         android:layout_marginBottom="@dimen/medium"
-        app:layout_constrainedHeight="true"
+        android:numColumns="2"
         app:layout_constraintBottom_toTopOf="@id/start_game_button"
         app:layout_constraintTop_toBottomOf="@id/connected_players"
-        app:layout_constraintVertical_bias="0"
-        tools:listitem="@layout/view_connected_user" />
+        tools:listitem="@layout/view_truco_connected_user" />
 
     <Button
         android:id="@+id/start_game_button"

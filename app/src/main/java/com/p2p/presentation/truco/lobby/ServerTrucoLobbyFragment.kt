@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.p2p.R
 import com.p2p.databinding.FragmentTrucoServerLobbyBinding
 import com.p2p.presentation.basegame.BaseGameFragment
@@ -34,7 +35,7 @@ class ServerTrucoLobbyFragment : BaseGameFragment<
         super.initUI()
         gameViewModel.startConnection()
         gameViewModel.totalPlayers // TODO: Setear la view segun la cantidad de jugadores
-        setupPlayersRecycler() // TODO: ver esto, es un recylcer?
+        setupPlayersGrid()
         gameBinding.startGameButton.setOnClickListener {
             gameViewModel.startGame()
         }
@@ -53,9 +54,8 @@ class ServerTrucoLobbyFragment : BaseGameFragment<
     }
 
     // TODO: Ver si realmente es un recycler
-    private fun setupPlayersRecycler() = with(gameBinding.playersRecycler) {
-        layoutManager = LinearLayoutManager(context)
-        adapter = ConnectedPlayersTrucoAdapter()
+    private fun setupPlayersGrid() = with(gameBinding.playersGrid) {
+        adapter = ConnectedPlayersTrucoAdapter() // players, context?
             .also {
             this@ServerTrucoLobbyFragment.connectedPlayersTrucoAdapter = it
         }
