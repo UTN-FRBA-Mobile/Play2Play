@@ -3,13 +3,13 @@ package com.p2p.framework.bluetooth
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothSocket
 import android.os.Handler
-import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.p2p.data.bluetooth.BluetoothConnection
 import com.p2p.model.base.message.Message
 
 abstract class BluetoothConnectionImp(protected val handler: Handler) : Thread(), BluetoothConnection {
 
-    private val objectMapper by lazy { ObjectMapper() }
+    private val objectMapper by lazy { jacksonObjectMapper() }
 
     protected val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
 
@@ -17,8 +17,13 @@ abstract class BluetoothConnectionImp(protected val handler: Handler) : Thread()
         return BluetoothConnectionThread(handler, bluetoothSocket)
     }
 
-    protected fun writeOnConnection(connection: BluetoothConnectionThread, message: Message, isConversation: Boolean) {
+    protected fun sendMessage(
+        messageSenderThread: MessageSenderThread,
+        connection: BluetoothConnectionThread,
+        message: Message,
+        isConversation: Boolean
+    ) {
         val messageBytesArray = objectMapper.writeValueAsBytes(message)
-        connection.write(messageBytesArray, messageBytesArray.size, isConversation)
+        messageSenderThread.putMessage(connection, messageBytesArray, messageBytesArray.size, isConversation)
     }
 }
