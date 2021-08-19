@@ -24,7 +24,9 @@ class ServerTrucoViewModel(
     instructionsRepository,
     loadingTextRepository
 ) {
-    var cardsAlreadySet = false
+    /** Deck of cards being used by all players in a hand  */
+    private var cards = listOf<Card>()
+    private var cardsAlreadySet = false
 
     /** Be careful: this will be called for every client on a broadcast. */
     override fun onSentSuccessfully(conversation: Conversation) {

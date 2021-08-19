@@ -28,9 +28,6 @@ abstract class TrucoViewModel(
     Game.TRUCO
 ) {
 
-    /** Deck of cards being used by all players in a hand  */
-    protected var cards = listOf<Card>()
-
     /** Current cards for this player */
     protected val _currentCards = MutableLiveData<List<Card>>()
     val currentCards: LiveData<List<Card>> = _currentCards
