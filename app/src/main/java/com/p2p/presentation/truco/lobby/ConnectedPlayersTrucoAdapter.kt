@@ -1,29 +1,22 @@
 package com.p2p.presentation.truco.lobby
 
+import com.p2p.R
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import androidx.recyclerview.widget.RecyclerView
-import com.p2p.databinding.ViewConnectedUserBinding
+import android.widget.TextView
 
 class ConnectedPlayersTrucoAdapter(
-    private val context: Context,
-    private val players: Array<String>
+    private val context: Context
 ) :BaseAdapter() {
 
-    // players notifyDataSetChanged()
-
-
-    // delete?
-    inner class ViewHolder(private val binding: ViewConnectedUserBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(connectedPlayer: String) = with(binding) {
-            name.text = connectedPlayer
+    var players = listOf<String>()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
         }
-    }
 
     override fun getItem(position: Int): Any {
         return players[position]
@@ -38,6 +31,13 @@ class ConnectedPlayersTrucoAdapter(
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        TODO("Not yet implemented")
+        val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val root: View = layoutInflater.inflate(R.layout.view_truco_connected_user, parent, false)
+        val player: String = players[position]
+        val playerName = root.findViewById<View>(R.id.name) as TextView
+
+        playerName.text = player
+
+        return root
     }
 }

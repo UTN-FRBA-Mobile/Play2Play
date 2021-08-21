@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.p2p.R
 import com.p2p.databinding.FragmentTrucoServerLobbyBinding
 import com.p2p.presentation.basegame.BaseGameFragment
@@ -49,15 +48,19 @@ class ServerTrucoLobbyFragment : BaseGameFragment<
                     .getString(R.string.lobby_give_help_players_decription, it)
                     .fromHtml()
             }
+            observe(players) {
+                connectedPlayersTrucoAdapter.players = it
+            }
         }
         observe(viewModel.isContinueButtonEnabled) { gameBinding.startGameButton.isEnabled = it }
     }
 
-    // TODO: Ver si realmente es un recycler
     private fun setupPlayersGrid() = with(gameBinding.playersGrid) {
-        adapter = ConnectedPlayersTrucoAdapter() // players, context?
-            .also {
-            this@ServerTrucoLobbyFragment.connectedPlayersTrucoAdapter = it
+        adapter = activity?.let {
+            ConnectedPlayersTrucoAdapter(it)
+                .also {
+                this@ServerTrucoLobbyFragment.connectedPlayersTrucoAdapter = it
+            }
         }
     }
 

@@ -43,7 +43,7 @@ class GamesViewModel(
             !bluetoothStateProvider.isEnabled() -> dispatchSingleTimeEvent(TurnOnBluetooth)
             else -> when (selectedGame) {
                 Game.TUTTI_FRUTTI -> dispatchSingleTimeEvent(GoToCreateTuttiFrutti)
-                // TODO: Add truco game
+                Game.TRUCO -> dispatchSingleTimeEvent(GoToCreateTruco)
             }
         }
     }

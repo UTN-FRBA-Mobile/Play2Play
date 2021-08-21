@@ -4,6 +4,7 @@ import android.app.Activity
 import android.bluetooth.BluetoothDevice
 import androidx.activity.viewModels
 import com.p2p.presentation.basegame.GameActivity
+import com.p2p.presentation.truco.lobby.ServerTrucoLobbyFragment
 import com.p2p.presentation.tuttifrutti.countdown.TuttiFruttiCountdownFragment
 import com.p2p.presentation.tuttifrutti.create.categories.CreateTuttiFruttiFragment
 import com.p2p.presentation.tuttifrutti.finalscore.FinalScoreTuttiFruttiFragment

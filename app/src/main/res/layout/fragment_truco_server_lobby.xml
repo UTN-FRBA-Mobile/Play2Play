@@ -46,6 +46,9 @@
         android:layout_marginTop="@dimen/medium"
         android:layout_marginBottom="@dimen/medium"
         android:numColumns="2"
+        android:horizontalSpacing="@dimen/medium"
+        android:verticalSpacing="@dimen/medium"
+        app:layout_constraintStart_toStartOf="@id/guideline_begin"
         app:layout_constraintBottom_toTopOf="@id/start_game_button"
         app:layout_constraintTop_toBottomOf="@id/connected_players"
         tools:listitem="@layout/view_truco_connected_user" />
