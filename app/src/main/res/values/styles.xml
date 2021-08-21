@@ -63,6 +63,11 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="P2P_Title_Extra">
+        <item name="android:textSize">@dimen/font_huge_extra</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="P2P_Description">
         <item name="android:textSize">@dimen/font_medium_extra</item>
     </style>

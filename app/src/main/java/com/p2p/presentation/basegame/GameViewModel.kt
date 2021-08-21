@@ -27,6 +27,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+
 abstract class GameViewModel(
     private val connectionType: ConnectionType,
     private val userSession: UserSession,
@@ -39,7 +40,7 @@ abstract class GameViewModel(
     protected var gameAlreadyStarted = false
     protected var gameAlreadyFinished = false
 
-    private val userName by lazy { userSession.getUserNameOrEmpty() }
+    protected val userName by lazy { userSession.getUserNameOrEmpty() }
     private val instructions by lazy { instructionsRepository.getInstructions(game.requireValue()) }
     private val failingMessagesRetries = mutableMapOf<Message, Int>()
 
@@ -155,10 +156,11 @@ abstract class GameViewModel(
 
     /** Invoked when there was an error while trying to connect the client with the server. */
     @CallSuper
-    open fun onClientConnectionFailure() = dispatchErrorScreen(CannotEstablishClientConnectionError {
-        clearError()
-        startConnection()
-    })
+    open fun onClientConnectionFailure() =
+        dispatchErrorScreen(CannotEstablishClientConnectionError {
+            clearError()
+            startConnection()
+        })
 
     /** Invoked when the connection with the given [peerId] was lost. */
     @CallSuper
@@ -191,6 +193,8 @@ abstract class GameViewModel(
 
     fun goToLobby() = dispatchSingleTimeEvent(if (isServer()) GoToServerLobby else GoToClientLobby)
 
+    abstract fun startGame()
+
     @CallSuper
     open fun goToPlay() = dispatchSingleTimeEvent(GoToPlay)
 
@@ -202,7 +206,7 @@ abstract class GameViewModel(
         _connection?.close()
     }
 
-    protected fun isServer() = connectionType.type == GameConnectionType.SERVER
+    fun isServer() = connectionType.type == GameConnectionType.SERVER
 
     protected fun getPlayerById(playerId: Long) =
         connectedPlayers.first { it.first == playerId }.second
@@ -230,6 +234,9 @@ abstract class GameViewModel(
             dispatchSingleTimeEvent(GoToClientLobby)
         }
     }
+
+    fun getOtherPlayers(): List<String>? =
+        players.value?.let { it - userName }
 
     private fun removePlayer(playerLost: Pair<Long, String>) {
         connectedPlayers = connectedPlayers - playerLost
