@@ -40,8 +40,8 @@ abstract class TuttiFruttiViewModel(
     protected val _totalRounds = MutableLiveData<Int>()
     val totalRounds: LiveData<Int> = _totalRounds
 
-    protected val _finishedRoundInfos = MutableLiveData(listOf<FinishedRoundInfo>())
-    val finishedRoundInfos: LiveData<List<FinishedRoundInfo>> = _finishedRoundInfos
+    protected val _finishedRoundInfos = MutableLiveData(setOf<FinishedRoundInfo>())
+    val finishedRoundInfos: LiveData<Set<FinishedRoundInfo>> = _finishedRoundInfos
 
     private val _finishedRoundsPointsInfos = MutableLiveData(listOf<FinishedRoundPointsInfo>())
     val finishedRoundsPointsInfos: LiveData<List<FinishedRoundPointsInfo>> =
