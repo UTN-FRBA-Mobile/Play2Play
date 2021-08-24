@@ -14,16 +14,10 @@ import com.p2p.data.userInfo.UserSession
 import com.p2p.model.HiddenLoadingScreen
 import com.p2p.model.LoadingScreen
 import com.p2p.model.VisibleLoadingScreen
-import com.p2p.model.base.message.ClientHandshakeMessage
-import com.p2p.model.base.message.Conversation
-import com.p2p.model.base.message.GoodbyePlayerMessage
-import com.p2p.model.base.message.Message
-import com.p2p.model.base.message.NameInUseMessage
-import com.p2p.model.base.message.ServerHandshakeMessage
+import com.p2p.model.base.message.*
 import com.p2p.presentation.base.BaseViewModel
 import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.home.games.Game
-import com.p2p.utils.Logger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -81,7 +75,6 @@ abstract class GameViewModel(
         _game.value = theGame
         _myDeviceName.value = bluetoothConnectionCreator.getMyDeviceName()
         connectedPlayers = listOf(MYSELF_PEER_ID to userName)
-        Logger.i("P2P_TrucoViewModel", "Starting!")
         createOrJoin()
     }
 
