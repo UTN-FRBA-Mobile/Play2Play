@@ -2,10 +2,14 @@ package com.p2p.presentation.truco.lobby
 
 import com.p2p.R
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.Drawable
+import android.media.Image
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.ImageView
 import android.widget.TextView
 
 class ConnectedPlayersTrucoAdapter(
@@ -27,7 +31,8 @@ class ConnectedPlayersTrucoAdapter(
     }
 
     override fun getCount(): Int {
-        return players.size
+        val playersCount = players.size
+        return if(playersCount > 4) 4 else playersCount
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
@@ -37,6 +42,12 @@ class ConnectedPlayersTrucoAdapter(
         val playerName = root.findViewById<View>(R.id.name) as TextView
 
         playerName.text = player
+
+        if (position == 0) {
+            val imageView = root.findViewById<ImageView>(R.id.avatar)
+            imageView.setImageResource(R.drawable.ic_baseline_account_circle_white)
+            root.setBackgroundResource(R.drawable.grid_view_item_hand_player)
+        };
 
         return root
     }

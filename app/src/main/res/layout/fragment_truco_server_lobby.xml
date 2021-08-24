@@ -39,18 +39,32 @@
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
         app:layout_constraintTop_toBottomOf="@id/help_players_description" />
 
+    <TextView
+        android:id="@+id/help_order_players_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/medium"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="@id/guideline_begin"
+        app:layout_constraintTop_toBottomOf="@id/connected_players"
+        android:text="@string/tr_lobby_help_order_players" />
+
     <GridView
         android:id="@+id/players_grid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/medium"
         android:layout_marginBottom="@dimen/medium"
+        android:layout_marginStart="@dimen/medium"
+        android:layout_marginEnd="@dimen/medium"
         android:numColumns="2"
-        android:horizontalSpacing="@dimen/medium"
-        android:verticalSpacing="@dimen/medium"
+        android:horizontalSpacing="@dimen/medium_more"
+        android:verticalSpacing="@dimen/largest_extra"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/help_order_players_description"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
         app:layout_constraintBottom_toTopOf="@id/start_game_button"
-        app:layout_constraintTop_toBottomOf="@id/connected_players"
         tools:listitem="@layout/view_truco_connected_user" />
 
     <Button

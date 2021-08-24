@@ -53,4 +53,7 @@
     <!-- Countdown -->
     <dimen name="countdown_number_width">100dp</dimen>
     <dimen name="countdown_number_height">200dp</dimen>
+
+    <!-- Truco lobby -->
+    <dimen name="tr_grid_card_size">100dp</dimen>
 </resources>
