@@ -7,6 +7,8 @@ object GoToCreateTuttiFrutti : GamesEvents()
 
 object GoToCreateImpostor : GamesEvents()
 
+object GoToCreateTruco : GamesEvents()
+
 object TurnOnBluetooth : GamesEvents()
 
 class JoinGame(val game: Game) : GamesEvents()
