@@ -54,4 +54,11 @@
     <!-- Countdown -->
     <dimen name="countdown_number_width">100dp</dimen>
     <dimen name="countdown_number_height">200dp</dimen>
+    <dimen name="truco_card_drop_height">105dp</dimen>
+    <dimen name="truco_card_height">150dp</dimen>
+    <dimen name="truco_normal_card_vertical_margin">10dp</dimen>
+    <dimen name="truco_elevated_card_vertical_margin">20dp</dimen>
+    <dimen name="truco_first_card_horizontal_margin">30dp</dimen>
+    <dimen name="truco_second_card_horizontal_margin">90dp</dimen>
+    <dimen name="truco_third_card_horizontal_margin">160dp</dimen>
 </resources>

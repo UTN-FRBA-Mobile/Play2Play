@@ -41,8 +41,7 @@
         </provider>
 
         <activity
-            android:name=".presentation.home.HomeActivity"
-            android:theme="@style/SplashTheme">
+            android:name=".TrucoActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
