@@ -72,3 +72,11 @@ fun View.animateBackgrondTint(toColor: Int, onComplete: () -> Unit) {
         }
         .start()
 }
+
+fun View.animateRotation(
+    rotation: Float,
+    duration: Long = resources.getInteger(R.integer.config_shortAnimTime).toLong()
+) = animate()
+    .rotation(rotation)
+    .setDuration(duration)
+    .start()

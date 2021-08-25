@@ -3,10 +3,12 @@ package com.p2p.presentation.truco
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
+import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.core.view.isVisible
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
@@ -14,11 +16,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.p2p.R
 import com.p2p.databinding.ViewTrucoActionsBinding
 import com.p2p.presentation.base.BaseBottomSheetDialogFragment
+import com.p2p.presentation.extensions.animateRotation
 
 class TrucoActionsBottomSheetFragment : BaseBottomSheetDialogFragment<ViewTrucoActionsBinding>() {
 
     private var isExpanded = false
-    private val shortDuration by lazy { resources.getInteger(android.R.integer.config_shortAnimTime).toLong() }
     private val bottomSheetCallback = object : BottomSheetBehavior.BottomSheetCallback() {
 
         override fun onStateChanged(bottomSheet: View, newState: Int) {
@@ -73,6 +75,7 @@ class TrucoActionsBottomSheetFragment : BaseBottomSheetDialogFragment<ViewTrucoA
 
     override fun initUI() {
         binding.openButton.setOnClickListener { toggleState() }
+        binding.envidoButton.setOnClickListener { toggleEnvidoOptionsState() }
     }
 
     private fun toggleState() {
@@ -82,21 +85,18 @@ class TrucoActionsBottomSheetFragment : BaseBottomSheetDialogFragment<ViewTrucoA
             ?.state = if (isExpanded) STATE_COLLAPSED else STATE_EXPANDED
     }
 
+    private fun toggleEnvidoOptionsState() {
+        TransitionManager.beginDelayedTransition(binding.envidoContainer)
+        binding.envidoContainer.isVisible = !binding.envidoContainer.isVisible
+        binding.envidoButtonArrow.animateRotation(if (binding.envidoContainer.isVisible) 0f else 180f)
+    }
+
     private fun onCollapsed() {
-        rotateOpenButtonIcon(0f)
+        binding.openButtonIcon.animateRotation(0f)
     }
 
     private fun onExpanded() {
-        rotateOpenButtonIcon(180f)
-    }
-
-    private fun rotateOpenButtonIcon(rotation: Float) {
-        binding
-            .openButtonIcon
-            .animate()
-            .rotation(rotation)
-            .setDuration(shortDuration)
-            .start()
+        binding.openButtonIcon.animateRotation(180f)
     }
 
     private fun Dialog.getBottomSheet(): FrameLayout {

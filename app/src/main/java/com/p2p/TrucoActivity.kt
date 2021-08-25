@@ -72,7 +72,9 @@ class TrucoActivity : BaseActivity(R.layout.activity_truco) {
                 }
             }
         )
-        TrucoActionsBottomSheetFragment().show(supportFragmentManager, null)
+        if (savedInstanceState == null) {
+            TrucoActionsBottomSheetFragment().show(supportFragmentManager, null)
+        }
         trucoCardsHand.takeTurn()
     }
 
