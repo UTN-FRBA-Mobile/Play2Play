@@ -1,15 +1,11 @@
-package com.p2p.presentation.truco
+package com.p2p.presentation.truco.cards
 
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.Rect
 import com.p2p.R
 import com.p2p.model.truco.Card
 import com.p2p.model.truco.Suit
-
 
 class CardImageCreator(val context: Context) {
 
@@ -17,6 +13,7 @@ class CardImageCreator(val context: Context) {
     private val cardWidth = cardsDeck.width / HORIZONTAL_CARDS_COUNT
     private val cardHeight = cardsDeck.height / VERTICAL_CARDS_COUNT
 
+    /** Creates an image represented on a [Bitmap] for the given [card]. */
     fun create(card: Card): Bitmap {
         val cardX = (card.number - 1) * cardWidth
         val cardY = getSuitVerticalPosition(card.suit) * cardHeight

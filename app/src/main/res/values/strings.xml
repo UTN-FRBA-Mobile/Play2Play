@@ -103,6 +103,11 @@
     <string name="error_client_connection_lost">Se perdió la conexión con %s.</string>
     <string name="error_connection_write_failure">Se perdió la conexión con la sala de juego, lo sentimos mucho.</string>
     <string name="tf_error_single_player">El resto de los jugadores abandonaron el juego… ¡felicitaciones ganador!</string>
+
+    <!-- Truco -->
     <string name="truco_card_dropping_place">Jugá tu carta</string>
+    <string name="truco_their_score_label">Ell</string>
+    <string name="truco_our_score_label">Nos</string>
+    <string name="truco_actions_open_button">Abrir las acciones de la ronda del truco</string>
 
 </resources>

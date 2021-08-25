@@ -7,7 +7,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.p2p.databinding.FragmentJoinGamesBinding
 import com.p2p.framework.bluetooth.BluetoothDeviceFinderReceiver
-import com.p2p.presentation.base.BaseBottomSheetDialogFragment
+import com.p2p.presentation.base.BaseMVVMBottomSheetDialogFragment
 import com.p2p.presentation.bluetooth.HowToConnectBluetoothActivity
 import com.p2p.presentation.home.HomeActivity.Companion.GAME_REQUEST_CODE
 import com.p2p.presentation.home.games.Game
@@ -15,7 +15,7 @@ import com.p2p.presentation.impostor.ImpostorActivity
 import com.p2p.presentation.tuttifrutti.TuttiFruttiActivity
 
 class JoinGamesBottomSheetFragment :
-    BaseBottomSheetDialogFragment<FragmentJoinGamesBinding, JoinGamesEvent, JoinGamesViewModel>() {
+    BaseMVVMBottomSheetDialogFragment<FragmentJoinGamesBinding, JoinGamesEvent, JoinGamesViewModel>() {
 
     private lateinit var adapter: ListDevicesAdapter
     private val receiver by lazy { BluetoothDeviceFinderReceiver() }

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:animateLayoutChanges="true"
+    tools:background="@android:color/black">
+
+    <include layout="@layout/view_guidelines" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="@id/open_button" />
+
+    <View
+        android:id="@+id/open_button"
+        android:layout_width="@dimen/truco_actions_open_button_width"
+        android:layout_height="@dimen/truco_actions_open_button_height"
+        android:background="@drawable/ic_open_bottom_sheet"
+        android:scaleType="center"
+        android:src="@drawable/ic_arrow_up"
+        app:layout_constraintEnd_toEndOf="@+id/guideline_end"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/colorPrimary" />
+
+    <ImageView
+        android:id="@+id/open_button_icon"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="@string/truco_actions_open_button"
+        android:scaleType="center"
+        android:src="@drawable/ic_arrow_up"
+        app:layout_constraintBottom_toBottomOf="@id/open_button"
+        app:layout_constraintEnd_toEndOf="@+id/open_button"
+        app:layout_constraintStart_toStartOf="@id/open_button"
+        app:layout_constraintTop_toTopOf="@id/open_button"
+        app:tint="@color/colorPrimary" />
+
+    <View
+        android:id="@+id/background"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/white_alpha_100"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/open_button" />
+
+    <TextView
+        style="@style/P2P_Title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="No es tu turno de jugar"
+        android:textAlignment="center"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline_bottom"
+        app:layout_constraintEnd_toEndOf="@+id/guideline_end"
+        app:layout_constraintStart_toStartOf="@+id/guideline_begin"
+        app:layout_constraintTop_toBottomOf="@+id/open_button" />
+
+    <Button
+        android:id="@+id/envido_button"
+        style="@style/Widget.P2P.Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/medium"
+        android:layout_marginEnd="@dimen/medium"
+        android:text="Envido"
+        app:layout_constraintEnd_toStartOf="@id/truco_button"
+        app:layout_constraintStart_toStartOf="@+id/guideline_begin"
+        app:layout_constraintTop_toBottomOf="@id/open_button" />
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="20dp"
+        android:rotation="270"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_baseline_arrow_left"
+        app:layout_constraintBottom_toBottomOf="@id/envido_button"
+        app:layout_constraintEnd_toEndOf="@id/envido_button"
+        app:layout_constraintTop_toTopOf="@id/envido_button"
+        app:tint="@android:color/white" />
+
+    <Button
+        android:id="@+id/truco_button"
+        style="@style/Widget.P2P.Button.SecondOptionButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/medium"
+        android:layout_marginTop="@dimen/medium"
+        android:text="Truco"
+        app:layout_constraintEnd_toEndOf="@+id/guideline_end"
+        app:layout_constraintStart_toEndOf="@id/envido_button"
+        app:layout_constraintTop_toBottomOf="@id/open_button" />
+
+    <LinearLayout
+        android:id="@+id/envido_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="@+id/guideline_end"
+        app:layout_constraintStart_toStartOf="@+id/guideline_begin"
+        app:layout_constraintTop_toBottomOf="@id/truco_button">
+
+        <Button
+            style="@style/Widget.P2P.Button.Outline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/medium"
+            android:layout_marginEnd="@dimen/medium"
+            android:text="Envido"
+            app:layout_constraintEnd_toStartOf="@id/truco_button"
+            app:layout_constraintStart_toStartOf="@+id/guideline_begin"
+            app:layout_constraintTop_toBottomOf="@id/open_button" />
+
+        <Button
+            style="@style/Widget.P2P.Button.Outline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/medium"
+            android:layout_marginEnd="@dimen/medium"
+            android:text="Real envido"
+            app:layout_constraintEnd_toStartOf="@id/truco_button"
+            app:layout_constraintStart_toStartOf="@+id/guideline_begin"
+            app:layout_constraintTop_toBottomOf="@id/open_button" />
+
+        <Button
+            style="@style/Widget.P2P.Button.Outline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/medium"
+            android:layout_marginEnd="@dimen/medium"
+            android:text="Falta envido"
+            app:layout_constraintEnd_toStartOf="@id/truco_button"
+            app:layout_constraintStart_toStartOf="@+id/guideline_begin"
+            app:layout_constraintTop_toBottomOf="@id/open_button" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/go_to_deck_button"
+        style="@style/Widget.P2P.Button.SecondOptionOutline"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/medium"
+        android:text="Me voy al mazo"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline_bottom"
+        app:layout_constraintEnd_toEndOf="@+id/guideline_end"
+        app:layout_constraintStart_toStartOf="@+id/guideline_begin"
+        app:layout_constraintTop_toBottomOf="@id/envido_container" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,16 +1,22 @@
 package com.p2p.presentation.extensions
 
+import android.R
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.animation.ArgbEvaluator
+import android.animation.ValueAnimator
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.View
 import androidx.core.view.isVisible
+
 
 private const val INVISIBLE_ALPHA = 0f
 private const val VISIBLE_ALPHA = 1f
 
 /** Fades out a view. */
 internal fun View.fadeOut(
-    duration: Long = resources.getInteger(android.R.integer.config_shortAnimTime).toLong(),
+    duration: Long = resources.getInteger(R.integer.config_shortAnimTime).toLong(),
     finalVisibility: Int = View.GONE,
     onComplete: () -> Unit = {}
 ) {
@@ -32,7 +38,7 @@ internal fun View.fadeOut(
 
 /** Fades in a view. */
 internal fun View.fadeIn(
-    duration: Long = resources.getInteger(android.R.integer.config_shortAnimTime).toLong(),
+    duration: Long = resources.getInteger(R.integer.config_shortAnimTime).toLong(),
     onComplete: () -> Unit = {}
 ) {
     if (isVisible && alpha == VISIBLE_ALPHA) {
@@ -50,5 +56,19 @@ internal fun View.fadeIn(
                 onComplete()
             }
         })
+        .start()
+}
+
+fun View.animateBackgrondTint(toColor: Int, onComplete: () -> Unit) {
+    val fromColor = backgroundTintList?.defaultColor ?: Color.WHITE
+    ValueAnimator.ofObject(ArgbEvaluator(), fromColor, toColor)
+        .setDuration(resources.getInteger(R.integer.config_mediumAnimTime).toLong())
+        .apply {
+            addUpdateListener { animator -> backgroundTintList = ColorStateList.valueOf(animator.animatedValue as Int) }
+            addListener(object : AnimatorListenerAdapter() {
+
+                override fun onAnimationEnd(animation: Animator?) = onComplete()
+            })
+        }
         .start()
 }

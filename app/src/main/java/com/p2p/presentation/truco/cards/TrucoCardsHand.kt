@@ -1,4 +1,4 @@
-package com.p2p.presentation.truco
+package com.p2p.presentation.truco.cards
 
 import android.content.Context
 import android.view.View
@@ -6,6 +6,7 @@ import androidx.core.view.isVisible
 import com.p2p.R
 import com.p2p.model.truco.Card
 import com.p2p.presentation.extensions.fadeIn
+import com.p2p.presentation.truco.TrucoDragAndDropCard
 import kotlin.math.abs
 
 class TrucoCardsHand(
@@ -116,7 +117,7 @@ class TrucoCardsHand(
 
     interface Listener {
 
-        fun onCardPlayed(card: PlayingCard)
+        fun onCardPlayed(playingCard: PlayingCard)
     }
 
     data class PlayingCard(val card: Card, val view: View)

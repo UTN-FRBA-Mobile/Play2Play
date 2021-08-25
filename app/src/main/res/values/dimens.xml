@@ -61,4 +61,8 @@
     <dimen name="truco_first_card_horizontal_margin">30dp</dimen>
     <dimen name="truco_second_card_horizontal_margin">90dp</dimen>
     <dimen name="truco_third_card_horizontal_margin">160dp</dimen>
+    <dimen name="truco_round_circle_size">16dp</dimen>
+    <dimen name="truco_round_circle_elevation">10dp</dimen>
+    <dimen name="truco_actions_open_button_width">40dp</dimen>
+    <dimen name="truco_actions_open_button_height">20dp</dimen>
 </resources>
