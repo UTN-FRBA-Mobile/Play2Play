@@ -11,12 +11,18 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import com.p2p.model.tuttifrutti.FinishedRoundInfo
 
 class ConnectedPlayersTrucoAdapter(
     private val context: Context
 ) :BaseAdapter() {
 
     var players = listOf<String>()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+    var totalPlayers : Int = 4
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -31,8 +37,11 @@ class ConnectedPlayersTrucoAdapter(
     }
 
     override fun getCount(): Int {
-        val playersCount = players.size
-        return if(playersCount > 4) 4 else playersCount
+        if (players.count() >= totalPlayers) {
+            return totalPlayers
+        } else {
+            return players.count()
+        }
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {

@@ -1,7 +1,10 @@
 package com.p2p.presentation.truco.lobby
 
+import android.content.ClipData
+import android.content.ClipDescription
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.AdapterView.OnItemLongClickListener
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.p2p.R
@@ -9,6 +12,7 @@ import com.p2p.databinding.FragmentTrucoServerLobbyBinding
 import com.p2p.presentation.basegame.BaseGameFragment
 import com.p2p.presentation.truco.TrucoViewModel
 import com.p2p.utils.fromHtml
+
 
 class ServerTrucoLobbyFragment : BaseGameFragment<
         FragmentTrucoServerLobbyBinding,
@@ -25,7 +29,7 @@ class ServerTrucoLobbyFragment : BaseGameFragment<
 
     private lateinit var connectedPlayersTrucoAdapter: ConnectedPlayersTrucoAdapter
 
-    // TODO: Delete mock
+    // TODO: Delete mocks
     private val mockedPlayers: List<String> = listOf("Homero", "Marge", "Bart", "Lisa")
 
     override fun initValues() {
@@ -36,7 +40,6 @@ class ServerTrucoLobbyFragment : BaseGameFragment<
     override fun initUI() {
         super.initUI()
         gameViewModel.startConnection()
-        gameViewModel.totalPlayers // TODO: Setear la view segun la cantidad de jugadores
         setupPlayersGrid()
         gameBinding.startGameButton.setOnClickListener {
             gameViewModel.startGame()
@@ -44,6 +47,7 @@ class ServerTrucoLobbyFragment : BaseGameFragment<
         gameBinding.helpOrderPlayersDescription.text = resources
             .getString(R.string.tr_lobby_help_order_players)
             .fromHtml()
+        // TODO: Add drag and drop functionality. gameBinding.playersGrid.onItemLongClickListener = OnItemLongClickListener {}
     }
 
     override fun setupObservers() {
@@ -56,6 +60,9 @@ class ServerTrucoLobbyFragment : BaseGameFragment<
             }
             observe(players) {
                 connectedPlayersTrucoAdapter.players = mockedPlayers
+            }
+            observe(totalPlayers) {
+                connectedPlayersTrucoAdapter.totalPlayers = it
             }
         }
         observe(viewModel.isContinueButtonEnabled) { gameBinding.startGameButton.isEnabled = it }
