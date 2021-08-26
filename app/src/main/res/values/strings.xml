@@ -109,5 +109,9 @@
     <string name="truco_their_score_label">Ell</string>
     <string name="truco_our_score_label">Nos</string>
     <string name="truco_actions_open_button">Abrir las acciones de la ronda del truco</string>
+    <string name="truco_swords_card">%d de espada</string>
+    <string name="truco_cups_card">%d de copa</string>
+    <string name="truco_clubs_card">%d de basto</string>
+    <string name="truco_golds_card">%d de oro</string>
 
 </resources>

@@ -77,7 +77,8 @@
         android:layout_marginStart="@dimen/truco_first_card_horizontal_margin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="62:95"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/middle_card"
@@ -86,7 +87,8 @@
         android:layout_marginStart="@dimen/truco_first_card_horizontal_margin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="62:95"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/right_card"
@@ -95,6 +97,7 @@
         android:layout_marginStart="@dimen/truco_first_card_horizontal_margin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="62:95"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="ContentDescription" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

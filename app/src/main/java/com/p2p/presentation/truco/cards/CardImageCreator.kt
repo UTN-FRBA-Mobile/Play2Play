@@ -13,11 +13,13 @@ class CardImageCreator(val context: Context) {
     private val cardWidth = cardsDeck.width / HORIZONTAL_CARDS_COUNT
     private val cardHeight = cardsDeck.height / VERTICAL_CARDS_COUNT
 
-    /** Creates an image represented on a [Bitmap] for the given [card]. */
-    fun create(card: Card): Bitmap {
+    /** Creates an image represented on a [Bitmap] and it content description on a [String] for the given [card]. */
+    fun create(card: Card): Pair<Bitmap, String> {
         val cardX = (card.number - 1) * cardWidth
         val cardY = getSuitVerticalPosition(card.suit) * cardHeight
-        return Bitmap.createBitmap(cardsDeck, cardX, cardY, cardWidth, cardHeight, null, false)
+        val image = Bitmap.createBitmap(cardsDeck, cardX, cardY, cardWidth, cardHeight, null, false)
+        val description = context.getString(getStringForSuit(card.suit), card.number)
+        return image to description
     }
 
     private fun getSuitVerticalPosition(suit: Suit) = when (suit) {
@@ -25,6 +27,13 @@ class CardImageCreator(val context: Context) {
         Suit.CLUBS -> CLUBS_VERTICAL_POSITION
         Suit.GOLDS -> GOLDS_VERTICAL_POSITION
         Suit.CUPS -> CUPS_VERTICAL_POSITION
+    }
+
+    private fun getStringForSuit(suit: Suit) = when (suit) {
+        Suit.SWORDS -> R.string.truco_swords_card
+        Suit.CLUBS -> R.string.truco_clubs_card
+        Suit.GOLDS -> R.string.truco_golds_card
+        Suit.CUPS -> R.string.truco_cups_card
     }
 
     companion object {
