@@ -113,5 +113,10 @@
     <string name="truco_cups_card">%d de copa</string>
     <string name="truco_clubs_card">%d de basto</string>
     <string name="truco_golds_card">%d de oro</string>
+    <string name="truco_ask_for_envido">Envido</string>
+    <string name="truco_ask_for_truco">Truco</string>
+    <string name="truco_ask_for_real_envido">Real envido</string>
+    <string name="truco_ask_for_falta_envido">Falta envido</string>
+    <string name="truco_go_to_deck">Me voy al mazo</string>
 
 </resources>

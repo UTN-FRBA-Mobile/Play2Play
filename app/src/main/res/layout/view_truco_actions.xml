@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/transparent"
-    android:elevation="10dp"
-    tools:background="@android:color/black">
+    android:background="@android:color/transparent">
 
     <include layout="@layout/view_guidelines" />
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="@dimen/truco_actions_border_size"
         android:background="@color/colorPrimary"
-        android:elevation="10dp"
+        android:elevation="@dimen/truco_actions_sheet_elevation"
         app:layout_constraintBottom_toBottomOf="@id/open_button" />
 
     <View
@@ -22,7 +19,7 @@
         android:layout_width="@dimen/truco_actions_open_button_width"
         android:layout_height="@dimen/truco_actions_open_button_height"
         android:background="@drawable/ic_open_bottom_sheet"
-        android:elevation="10dp"
+        android:elevation="@dimen/truco_actions_sheet_elevation"
         android:scaleType="center"
         android:src="@drawable/ic_arrow_up"
         app:layout_constraintEnd_toEndOf="@+id/guideline_end"
@@ -34,7 +31,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:contentDescription="@string/truco_actions_open_button"
-        android:elevation="10dp"
+        android:elevation="@dimen/truco_actions_sheet_elevation"
         android:scaleType="center"
         android:src="@drawable/ic_arrow_up"
         app:layout_constraintBottom_toBottomOf="@id/open_button"
@@ -47,22 +44,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/white"
-        android:elevation="10dp"
+        android:elevation="@dimen/truco_actions_sheet_elevation"
         app:layout_constraintTop_toBottomOf="@id/open_button">
 
         <include layout="@layout/view_guidelines" />
-
-        <TextView
-            style="@style/P2P_Title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="No es tu turno de jugar"
-            android:textAlignment="center"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/guideline_bottom"
-            app:layout_constraintEnd_toEndOf="@+id/guideline_end"
-            app:layout_constraintStart_toStartOf="@+id/guideline_begin"
-            app:layout_constraintTop_toTopOf="@+id/guideline_top" />
 
         <FrameLayout
             android:id="@+id/envido_button_container"
@@ -78,7 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/medium"
-                android:text="Envido" />
+                android:text="@string/truco_ask_for_envido" />
 
             <ImageView
                 android:id="@+id/envido_button_arrow"
@@ -86,7 +71,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
                 android:layout_marginEnd="@dimen/medium_more"
-                android:elevation="10dp"
+                android:elevation="@dimen/truco_actions_sheet_elevation"
+                android:importantForAccessibility="no"
                 android:rotation="180"
                 android:scaleType="centerInside"
                 android:src="@drawable/ic_arrow_up"
@@ -99,7 +85,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/medium"
-            android:text="Truco"
+            android:text="@string/truco_ask_for_truco"
             app:layout_constraintEnd_toEndOf="@+id/guideline_end"
             app:layout_constraintStart_toEndOf="@id/envido_button_container"
             app:layout_constraintTop_toTopOf="@+id/guideline_top" />
@@ -120,7 +106,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/medium"
                 android:layout_marginEnd="@dimen/medium"
-                android:text="Envido"
+                android:text="@string/truco_ask_for_envido"
                 app:layout_constraintEnd_toStartOf="@id/truco_button"
                 app:layout_constraintStart_toStartOf="@+id/guideline_begin"
                 app:layout_constraintTop_toBottomOf="@id/open_button" />
@@ -131,7 +117,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/medium"
                 android:layout_marginEnd="@dimen/medium"
-                android:text="Real envido"
+                android:text="@string/truco_ask_for_real_envido"
                 app:layout_constraintEnd_toStartOf="@id/truco_button"
                 app:layout_constraintStart_toStartOf="@+id/guideline_begin"
                 app:layout_constraintTop_toBottomOf="@id/open_button" />
@@ -142,7 +128,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/medium"
                 android:layout_marginEnd="@dimen/medium"
-                android:text="Falta envido"
+                android:text="@string/truco_ask_for_falta_envido"
                 app:layout_constraintEnd_toStartOf="@id/truco_button"
                 app:layout_constraintStart_toStartOf="@+id/guideline_begin"
                 app:layout_constraintTop_toBottomOf="@id/open_button" />
@@ -154,7 +140,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/medium"
-            android:text="Me voy al mazo"
+            android:text="@string/truco_go_to_deck"
             app:layout_constraintBottom_toBottomOf="@+id/guideline_bottom"
             app:layout_constraintEnd_toEndOf="@+id/guideline_end"
             app:layout_constraintStart_toStartOf="@+id/guideline_begin"

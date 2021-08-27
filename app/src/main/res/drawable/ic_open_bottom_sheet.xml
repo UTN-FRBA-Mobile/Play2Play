@@ -9,9 +9,9 @@
         </shape>
     </item>
     <item
-        android:left="1dp"
-        android:right="1dp"
-        android:top="1dp">
+        android:left="@dimen/truco_actions_border_size"
+        android:right="@dimen/truco_actions_border_size"
+        android:top="@dimen/truco_actions_border_size">
         <shape>
             <solid android:color="@android:color/white" />
             <corners

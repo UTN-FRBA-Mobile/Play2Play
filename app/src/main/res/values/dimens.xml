@@ -65,4 +65,6 @@
     <dimen name="truco_round_circle_elevation">10dp</dimen>
     <dimen name="truco_actions_open_button_width">40dp</dimen>
     <dimen name="truco_actions_open_button_height">20dp</dimen>
+    <dimen name="truco_actions_sheet_elevation">10dp</dimen>
+    <dimen name="truco_actions_border_size">1dp</dimen>
 </resources>
