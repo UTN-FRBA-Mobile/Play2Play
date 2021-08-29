@@ -39,6 +39,11 @@ abstract class TrucoViewModel(
         super.goToPlay()
     }
 
+    /** This will only be used by the server */
+    protected open fun handOutCards() {
+
+    }
+
     @CallSuper
     override fun receiveMessage(conversation: Conversation) {
         super.receiveMessage(conversation)

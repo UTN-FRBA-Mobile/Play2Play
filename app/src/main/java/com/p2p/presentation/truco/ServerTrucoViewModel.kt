@@ -26,17 +26,10 @@ class ServerTrucoViewModel(
 ) {
     /** Deck of cards being used by all players in a hand  */
     private var cards = listOf<Card>()
-    private var cardsAlreadySet = false
 
     /** Be careful: this will be called for every client on a broadcast. */
     override fun onSentSuccessfully(conversation: Conversation) {
         super.onSentSuccessfully(conversation)
-        when (conversation.lastMessage) {
-            is TrucoCardsMessage -> if (!cardsAlreadySet) {
-                _currentCards.value = cardsForPlayer() // sets self cards
-                cardsAlreadySet = true
-            }
-        }
     }
 
     override fun startGame() {
@@ -52,14 +45,14 @@ class ServerTrucoViewModel(
         }
     }
 
-    /** Sends all client players the cards for each one. */
-    private fun handOutCards() {
+    /** Sends all client players the cards for each one and picks self cards. */
+    override fun handOutCards() {
         mixDeck()
-        cardsAlreadySet = false
-        val playerWithCards = connectedPlayers
+        val playersWithCards = connectedPlayers
             .filterNot { it.first == MYSELF_PEER_ID }
             .map { player -> PlayerWithCards(player.second, cardsForPlayer()) }
-        connection.write(TrucoCardsMessage(playerWithCards))
+        _currentCards.value = cardsForPlayer()
+        connection.write(TrucoCardsMessage(playersWithCards))
     }
 
     private fun cardsForPlayer(): List<Card> {
