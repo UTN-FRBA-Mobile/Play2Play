@@ -40,9 +40,7 @@ abstract class TrucoViewModel(
     }
 
     /** This will only be used by the server */
-    protected open fun handOutCards() {
-
-    }
+    protected open fun handOutCards() {}
 
     @CallSuper
     override fun receiveMessage(conversation: Conversation) {
