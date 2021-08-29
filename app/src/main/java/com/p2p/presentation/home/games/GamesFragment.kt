@@ -12,6 +12,7 @@ import com.p2p.presentation.extensions.clearAndAppend
 import com.p2p.presentation.home.HomeActivity.Companion.GAME_REQUEST_CODE
 import com.p2p.presentation.home.join.JoinGamesBottomSheetFragment
 import com.p2p.presentation.impostor.ImpostorActivity
+import com.p2p.presentation.truco.TrucoActivity
 import com.p2p.presentation.tuttifrutti.TuttiFruttiActivity
 
 class GamesFragment : BaseFragment<FragmentGamesBinding, GamesEvents, GamesViewModel>() {
@@ -43,7 +44,9 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesEvents, GamesViewM
     override fun onEvent(event: GamesEvents) = when (event) {
         GoToCreateTuttiFrutti -> TuttiFruttiActivity.startCreate(requireActivity(), GAME_REQUEST_CODE)
         GoToCreateImpostor -> ImpostorActivity.startCreate(requireActivity(), GAME_REQUEST_CODE)
-        is JoinGame -> JoinGamesBottomSheetFragment.newInstance(event.game).show(parentFragmentManager, null)
+        GoToCreateTruco -> TrucoActivity.startCreate(requireActivity(), GAME_REQUEST_CODE)
+        is JoinGame -> JoinGamesBottomSheetFragment.newInstance(event.game)
+            .show(parentFragmentManager, null)
         TurnOnBluetooth -> TurnOnBluetoothActivity.start(requireContext())
     }
 

@@ -61,6 +61,11 @@
             android:theme="@style/Theme.P2P"
             android:windowSoftInputMode="adjustResize" />
 
+        <activity
+            android:name=".presentation.truco.TrucoActivity"
+            android:theme="@style/Theme.P2P"
+            android:windowSoftInputMode="adjustResize" />
+
 
         <activity
             android:name=".presentation.bluetooth.TurnOnBluetoothActivity"
