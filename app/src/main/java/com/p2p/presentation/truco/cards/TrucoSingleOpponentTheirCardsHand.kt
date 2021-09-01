@@ -29,5 +29,5 @@ class TrucoSingleOpponentTheirCardsHand(
         }
     }
 
-    override fun getExtraCardElevation() = false
+    override fun shouldSetCardInitialElevation() = false
 }

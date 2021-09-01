@@ -28,5 +28,5 @@ class TrucoSingleOpponentMyCardsHand(
         return (cardView.parent as View).height - cardView.height - margin
     }
 
-    override fun getExtraCardElevation() = true
+    override fun shouldSetCardInitialElevation() = true
 }

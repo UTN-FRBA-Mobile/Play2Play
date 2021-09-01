@@ -47,20 +47,15 @@ abstract class TrucoCardsHand(
             .scaleY(1f)
             .rotation(0f)
             .rotationX(20f)
-            .setUpdateListener {
-                if (it.animatedFraction >= HALF_ANIMATION) {
-                    cardView.elevation = COMPLETE_HAND - dragAndDropCardsInHand.size.toFloat()
-                }
-            }
             .setListener(object : AnimatorListenerAdapter() {
 
                 override fun onAnimationStart(animation: Animator?) {
                     updateUIAfterHandChange(dragAndDropCardEntry.first, false)
+                    cardView.elevation = COMPLETE_HAND - dragAndDropCardsInHand.size.toFloat()
                 }
 
                 override fun onAnimationEnd(animator: Animator?) {
                     movingAnimation.setListener(null)
-                    movingAnimation.setUpdateListener(null)
                     val flipAnimation = cardView.animate()
                     flipAnimation
                         .rotationY(0f)
@@ -114,7 +109,7 @@ abstract class TrucoCardsHand(
         val cardsRotation = getCardsRotation(playingCardsSize)
         dragAndDropCardsInHand.forEachIndexed { index, dragAndDropCard ->
             val cardView = dragAndDropCard.cardView
-            cardView.elevation = if (getExtraCardElevation()) index.toFloat() else 0f
+            cardView.elevation = if (shouldSetCardInitialElevation()) index.toFloat() else 0f
             cardView.animate()
                 .x(getCardX(cardView, index))
                 .y(getCardY(cardView, playingCardsSize, index))
@@ -129,7 +124,7 @@ abstract class TrucoCardsHand(
 
     protected abstract fun getCardY(cardView: View, playingCards: Int, cardIndex: Int): Float
 
-    protected abstract fun getExtraCardElevation(): Boolean
+    protected abstract fun shouldSetCardInitialElevation(): Boolean
 
     private fun updateUIAfterHandChange(dragAndDropCard: TrucoDragAndDropCard, isInTheHand: Boolean) {
         val wasInTheHand = dragAndDropCard in dragAndDropCardsInHand
