@@ -1,4 +1,4 @@
-package com.p2p.presentation.truco
+package com.p2p.presentation.truco.actions
 
 import android.annotation.SuppressLint
 import android.app.Dialog
@@ -14,6 +14,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPS
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.p2p.R
+import com.p2p.TrucoActivity
 import com.p2p.databinding.ViewTrucoActionsBinding
 import com.p2p.presentation.base.BaseBottomSheetDialogFragment
 import com.p2p.presentation.extensions.animateRotation
@@ -75,7 +76,11 @@ class TrucoActionsBottomSheetFragment : BaseBottomSheetDialogFragment<ViewTrucoA
 
     override fun initUI() {
         binding.openButton.setOnClickListener { toggleState() }
-        binding.envidoButton.setOnClickListener { toggleEnvidoOptionsState() }
+        binding.envidoOptionsButton.setOnClickListener { toggleEnvidoOptionsState() }
+        binding.trucoButton.setOnClickListener { (activity as TrucoActivity).showMyAction(TrucoAction.Truco) }
+        binding.envidoButton.setOnClickListener { (activity as TrucoActivity).showMyAction(TrucoAction.Envido(false)) }
+        binding.realEnvidoButton.setOnClickListener { (activity as TrucoActivity).showMyAction(TrucoAction.RealEnvido) }
+        binding.faltaEnvidoButton.setOnClickListener { (activity as TrucoActivity).showMyAction(TrucoAction.FaltaEnvido) }
     }
 
     private fun toggleState() {
@@ -101,5 +106,10 @@ class TrucoActionsBottomSheetFragment : BaseBottomSheetDialogFragment<ViewTrucoA
 
     private fun Dialog.getBottomSheet(): FrameLayout {
         return findViewById(com.google.android.material.R.id.design_bottom_sheet)
+    }
+
+    companion object {
+
+        fun newInstance() = TrucoActionsBottomSheetFragment()
     }
 }
