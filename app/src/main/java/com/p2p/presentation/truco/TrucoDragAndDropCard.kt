@@ -36,6 +36,9 @@ class TrucoDragAndDropCard(
                 event.actionMasked == MotionEvent.ACTION_MOVE -> {
                     view.x = initialCoordinates.first + event.rawX - initialPosition.first
                     view.y = initialCoordinates.second + event.rawY - initialPosition.second
+                    val initialDistance = currentDroppingView.y - initialCoordinates.second
+                    val currentDistance = currentDroppingView.y - view.y
+                    view.rotationX = 20f * (1 - currentDistance / initialDistance).coerceAtLeast(0f).coerceAtMost(1f)
                     listener.onMove(this)
                     true
                 }
@@ -49,12 +52,14 @@ class TrucoDragAndDropCard(
                             .x(currentDroppingView.x)
                             .y(currentDroppingView.y)
                             .rotation(currentDroppingView.rotation)
+                            .rotationX(20f)
                             .start()
                         cardView.setOnTouchListener(null)
                     } else {
                         view.animate()
                             .scaleX(1f)
                             .scaleY(1f)
+                            .rotationX(0f)
                             .rotation(initialRotation)
                             .start()
                     }

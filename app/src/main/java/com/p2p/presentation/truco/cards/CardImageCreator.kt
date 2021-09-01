@@ -13,12 +13,18 @@ class CardImageCreator(val context: Context) {
     private val cardWidth = cardsDeck.width / HORIZONTAL_CARDS_COUNT
     private val cardHeight = cardsDeck.height / VERTICAL_CARDS_COUNT
 
-    /** Creates an image represented on a [Bitmap] and it content description on a [String] for the given [card]. */
-    fun create(card: Card): Pair<Bitmap, String> {
-        val cardX = (card.number - 1) * cardWidth
-        val cardY = getSuitVerticalPosition(card.suit) * cardHeight
+    /**
+     * Creates an image represented on a [Bitmap] and it content description on a [String] for the given [card].
+     *
+     * If the card is null, then it return the back of the card.
+     */
+    fun create(card: Card?): Pair<Bitmap, String> {
+        val cardX = (card?.number?.minus(1) ?: NO_CARD_HORIZONTAL_POSITION) * cardWidth
+        val cardY = (card?.let { getSuitVerticalPosition(it.suit) } ?: NO_CARD_VERTICAL_POSITION) * cardHeight
         val image = Bitmap.createBitmap(cardsDeck, cardX, cardY, cardWidth, cardHeight, null, false)
-        val description = context.getString(getStringForSuit(card.suit), card.number)
+        val description = card
+            ?.let { context.getString(getStringForSuit(it.suit), it.number) }
+            ?: context.getString(R.string.truco_unknown_card)
         return image to description
     }
 
@@ -44,5 +50,7 @@ class CardImageCreator(val context: Context) {
         private const val CUPS_VERTICAL_POSITION = 1
         private const val SWORDS_VERTICAL_POSITION = 2
         private const val CLUBS_VERTICAL_POSITION = 3
+        private const val NO_CARD_HORIZONTAL_POSITION = 1
+        private const val NO_CARD_VERTICAL_POSITION = 4
     }
 }

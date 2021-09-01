@@ -17,17 +17,22 @@ import com.p2p.presentation.extensions.animateBackgrondTint
 import com.p2p.presentation.truco.TrucoActionsBottomSheetFragment
 import com.p2p.presentation.truco.cards.CardImageCreator
 import com.p2p.presentation.truco.cards.TrucoCardsHand
+import com.p2p.presentation.truco.cards.TrucoSingleOpponentMyCardsHand
+import com.p2p.presentation.truco.cards.TrucoSingleOpponentTheirCardsHand
 import kotlin.random.Random
 
 // TODO: this is just a test activity, remove it
 class TrucoActivity : BaseActivity(R.layout.activity_truco) {
 
-    lateinit var trucoCardsHand: TrucoCardsHand
+    lateinit var myCardsHand: TrucoCardsHand
+    lateinit var theirCardsHand: TrucoCardsHand
 
     private val cardsImageCreator by lazy { CardImageCreator(baseContext) }
     private lateinit var roundViews: List<View>
-    private lateinit var cardViews: List<ImageView>
+    private lateinit var myCardsViews: List<ImageView>
+    private lateinit var theirCardsViews: List<ImageView>
     private lateinit var dropCardsViews: List<View>
+    private lateinit var theirDroppingPlacesViews: List<View>
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,35 +42,55 @@ class TrucoActivity : BaseActivity(R.layout.activity_truco) {
             findViewById(R.id.second_round),
             findViewById(R.id.third_round)
         )
-        cardViews = listOf<ImageView>(
-            findViewById(R.id.left_card),
-            findViewById(R.id.middle_card),
-            findViewById(R.id.right_card)
+        myCardsViews = listOf<ImageView>(
+            findViewById(R.id.my_left_card),
+            findViewById(R.id.my_middle_card),
+            findViewById(R.id.my_right_card)
+        )
+        theirCardsViews = listOf<ImageView>(
+            findViewById(R.id.their_left_card),
+            findViewById(R.id.their_middle_card),
+            findViewById(R.id.their_right_card)
         )
         dropCardsViews = listOf<View>(
             findViewById(R.id.drop_first_card),
             findViewById(R.id.drop_second_card),
             findViewById(R.id.drop_third_card)
         )
+        theirDroppingPlacesViews = listOf<View>(
+            findViewById(R.id.drop_their_first_card),
+            findViewById(R.id.drop_their_second_card),
+            findViewById(R.id.drop_their_third_card)
+        )
 
         val suits = listOf(Suit.SWORDS, Suit.GOLDS, Suit.CUPS, Suit.CLUBS)
         val numbers: List<Int> = (1..7).plus(10..12)
         val cards = suits.flatMap { suit -> numbers.map { number -> Card(number, suit) } }.shuffled()
-        cardViews.forEachIndexed { index, view ->
+        myCardsViews.forEachIndexed { index, view ->
             val (image, description) = cardsImageCreator.create(cards[index])
+            view.setImageBitmap(image)
+            view.contentDescription = description
+        }
+        theirCardsViews.forEachIndexed { index, view ->
+            val (image, description) = cardsImageCreator.create(null)
             view.setImageBitmap(image)
             view.contentDescription = description
         }
         updateScores(0, 0)
         var currentRound = 0
-        trucoCardsHand = TrucoCardsHand(
-            cardViews.mapIndexed { index, view -> TrucoCardsHand.PlayingCard(cards[index], view) },
+        myCardsHand = TrucoSingleOpponentMyCardsHand(
+            myCardsViews.mapIndexed { index, view -> TrucoCardsHand.PlayingCard(cards[index], view) },
             dropCardsViews,
             object : TrucoCardsHand.Listener {
 
                 override fun onCardPlayed(playingCard: TrucoCardsHand.PlayingCard) {
+                    val opponentCard = cards[currentRound + 3]
+                    theirCardsHand.playCard(
+                        opponentCard,
+                        cardsImageCreator.create(opponentCard),
+                        theirDroppingPlacesViews[currentRound])
                     Toast.makeText(baseContext, "Se jugó la carta ${playingCard.card}", Toast.LENGTH_LONG).show()
-                    playingCard.view.postDelayed({ trucoCardsHand.takeTurn() }, 2_000)
+                    playingCard.view.postDelayed({ myCardsHand.takeTurn() }, 2_000)
                     updateScores(Random.nextInt(1, 4), Random.nextInt(4, 10))
                     finishRound(
                         currentRound,
@@ -79,10 +104,13 @@ class TrucoActivity : BaseActivity(R.layout.activity_truco) {
                 }
             }
         )
+        theirCardsHand = TrucoSingleOpponentTheirCardsHand(
+            theirCardsViews.mapIndexed { index, view -> TrucoCardsHand.PlayingCard(cards[index + 3], view) }
+        )
         if (savedInstanceState == null) {
             TrucoActionsBottomSheetFragment().show(supportFragmentManager, null)
         }
-        trucoCardsHand.takeTurn()
+        myCardsHand.takeTurn()
     }
 
     private fun updateScores(ourScore: Int, their: Int) {
