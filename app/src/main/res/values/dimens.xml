@@ -74,8 +74,9 @@
     <dimen name="truco_actions_open_button_height">20dp</dimen>
     <dimen name="truco_actions_sheet_elevation">10dp</dimen>
     <dimen name="truco_actions_border_size">1dp</dimen>
-    <dimen name="truco_table_margin_bottom">10dp</dimen>
-    <dimen name="truco_table_border_bottom_margin_top">54dp</dimen>
+    <dimen name="truco_table_height">350dp</dimen>
+    <dimen name="truco_table_margin_bottom">80dp</dimen>
+    <dimen name="truco_table_border_bottom">10dp</dimen>
     <dimen name="truco_table_margin_top">4dp</dimen>
     <dimen name="truco_table_margin_horizontal">2dp</dimen>
     <dimen name="truco_table_border_bottom_height">30dp</dimen>

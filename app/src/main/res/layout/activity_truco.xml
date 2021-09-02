@@ -54,12 +54,12 @@
     <View
         android:id="@+id/table_borders"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="@dimen/huge_extra"
+        android:layout_height="@dimen/truco_table_height"
+        android:layout_marginBottom="@dimen/truco_table_margin_bottom"
         android:background="@color/colorPrimary"
         android:rotationX="@integer/truco_card_final_rotation"
-        app:layout_constraintBottom_toBottomOf="@id/drop_first_card"
-        app:layout_constraintTop_toBottomOf="@+id/header_background" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:id="@+id/table"
@@ -67,7 +67,7 @@
         android:layout_height="0dp"
         android:layout_marginHorizontal="@dimen/truco_table_margin_horizontal"
         android:layout_marginTop="@dimen/truco_table_margin_top"
-        android:layout_marginBottom="@dimen/truco_table_margin_bottom"
+        android:layout_marginBottom="@dimen/truco_table_border_bottom"
         android:background="@color/colorPrimaryVariant"
         android:rotationX="@integer/truco_card_final_rotation"
         app:layout_constraintBottom_toBottomOf="@+id/table_borders"
@@ -77,7 +77,6 @@
         android:id="@+id/drop_their_first_card"
         android:layout_width="@dimen/truco_their_card_width"
         android:layout_height="@dimen/truco_their_card_height"
-        android:layout_marginBottom="@dimen/large_extra"
         android:rotationX="@integer/truco_card_final_rotation"
         android:textStyle="bold"
         android:visibility="invisible"
