@@ -82,6 +82,7 @@ class TrucoActionsBottomSheetFragment : BaseBottomSheetDialogFragment<ViewTrucoA
         binding.envidoButton.setOnClickListener { (activity as TrucoActivity).showMyAction(TrucoAction.Envido(false)) }
         binding.realEnvidoButton.setOnClickListener { (activity as TrucoActivity).showMyAction(TrucoAction.RealEnvido) }
         binding.faltaEnvidoButton.setOnClickListener { (activity as TrucoActivity).showMyAction(TrucoAction.FaltaEnvido) }
+        binding.goToDeckButton.setOnClickListener { (activity as TrucoActivity).showMyAction(TrucoAction.GoToDeck) }
         changeVisibleButtonsEnable(false)
         binding.actionsBottomSheet.postDelayed({ binding.actionsBottomSheet.fadeIn() }, SHOW_DELAY)
     }
