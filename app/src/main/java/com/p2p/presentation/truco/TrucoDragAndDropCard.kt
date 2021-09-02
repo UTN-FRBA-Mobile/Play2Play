@@ -54,7 +54,7 @@ class TrucoDragAndDropCard(
                         view.y > initialCoordinates.second -> 1f
                         view.y > currentDroppingView.y ->
                             cardFinalScale + (1f - cardFinalScale) * distanceWithDroppingPlaceMultiplicator
-                        else -> 0.4f + (cardFinalScale - 0.4f) * view.y / currentDroppingView.y
+                        else -> MIN_CARD_SCALE + (cardFinalScale - MIN_CARD_SCALE) * view.y / currentDroppingView.y
                     }
                     view.scaleX = scale
                     view.scaleY = scale
@@ -99,5 +99,10 @@ class TrucoDragAndDropCard(
         fun onMove(dragAndDropCard: TrucoDragAndDropCard)
 
         fun onDrop(dragAndDropCard: TrucoDragAndDropCard, isInDroppingView: Boolean)
+    }
+
+    companion object {
+
+        private const val MIN_CARD_SCALE = 0.4f
     }
 }
