@@ -9,13 +9,11 @@ class TrucoSingleOpponentMyCardsHand(
     listener: Listener?
 ) : TrucoSingleOpponentCardsHand(cards, droppingPlaces, listener) {
 
-    protected val cardsHorizontalMargins = listOf(
+    private val cardsHorizontalMargins = listOf(
         R.dimen.truco_first_card_horizontal_margin,
         R.dimen.truco_second_card_horizontal_margin,
         R.dimen.truco_third_card_horizontal_margin
     ).map { context.resources.getDimension(it) }
-
-    override fun getCardsRotation(playingCards: Int) = cardsRotationForHand.getValue(playingCards)
 
     override fun getCardX(cardView: View, cardIndex: Int) = cardsHorizontalMargins[cardIndex]
 

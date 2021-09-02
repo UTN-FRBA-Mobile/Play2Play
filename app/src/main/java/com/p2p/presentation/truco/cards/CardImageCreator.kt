@@ -18,6 +18,7 @@ class CardImageCreator(val context: Context) {
      *
      * If the card is null, then it return the back of the card.
      */
+    // TODO: perform it on background!
     fun create(card: Card?): Pair<Bitmap, String> {
         val cardX = (card?.number?.minus(1) ?: NO_CARD_HORIZONTAL_POSITION) * cardWidth
         val cardY = (card?.let { getSuitVerticalPosition(it.suit) } ?: NO_CARD_VERTICAL_POSITION) * cardHeight

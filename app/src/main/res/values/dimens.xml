@@ -68,11 +68,15 @@
     <dimen name="truco_their_first_card_horizontal_margin">60dp</dimen>
     <dimen name="truco_their_second_card_horizontal_margin">90dp</dimen>
     <dimen name="truco_their_third_card_horizontal_margin">130dp</dimen>
-    <dimen name="truco_table_margin_bottom">54dp</dimen>
     <dimen name="truco_round_circle_size">16dp</dimen>
     <dimen name="truco_round_circle_elevation">10dp</dimen>
     <dimen name="truco_actions_open_button_width">40dp</dimen>
     <dimen name="truco_actions_open_button_height">20dp</dimen>
     <dimen name="truco_actions_sheet_elevation">10dp</dimen>
     <dimen name="truco_actions_border_size">1dp</dimen>
+    <dimen name="truco_table_margin_bottom">26dp</dimen>
+    <dimen name="truco_table_border_bottom_margin_top">54dp</dimen>
+    <dimen name="truco_table_margin_top">48dp</dimen>
+    <dimen name="truco_table_margin_horizontal">2dp</dimen>
+    <dimen name="truco_table_border_bottom_height">30dp</dimen>
 </resources>

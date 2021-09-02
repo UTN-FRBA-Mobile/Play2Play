@@ -14,8 +14,6 @@ class TrucoSingleOpponentTheirCardsHand(
         R.dimen.truco_their_third_card_horizontal_margin
     ).map { context.resources.getDimension(it) }
 
-    override fun getCardsRotation(playingCards: Int) = cardsRotationForHand.getValue(playingCards)
-
     override fun getCardX(cardView: View, cardIndex: Int): Float {
         val margin = cardsHorizontalMargins[cardIndex]
         return (cardView.parent as View).width - cardView.width - margin
