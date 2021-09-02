@@ -7,6 +7,7 @@ import android.graphics.Bitmap
 import android.view.View
 import android.widget.ImageView
 import androidx.core.view.isVisible
+import com.p2p.R
 import com.p2p.model.truco.Card
 import com.p2p.presentation.extensions.fadeIn
 import com.p2p.presentation.truco.TrucoDragAndDropCard
@@ -24,6 +25,9 @@ abstract class TrucoCardsHand(
     private val dragAndDropCardsInHand = dragAndDropCards.keys.toMutableList()
 
     protected val context: Context = cards.first().view.context
+    private val trucoCardFinalRotation by lazy {
+        context.resources.getInteger(R.integer.truco_card_final_rotation).toFloat()
+    }
 
     init {
         cards.first().view.post { updateCardsHandUI() }
@@ -46,7 +50,7 @@ abstract class TrucoCardsHand(
             .scaleX(1f)
             .scaleY(1f)
             .rotation(0f)
-            .rotationX(20f)
+            .rotationX(trucoCardFinalRotation)
             .setListener(object : AnimatorListenerAdapter() {
 
                 override fun onAnimationStart(animation: Animator?) {

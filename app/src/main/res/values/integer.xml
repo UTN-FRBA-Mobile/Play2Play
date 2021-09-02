@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="truco_card_final_rotation">20</integer>
+</resources>
