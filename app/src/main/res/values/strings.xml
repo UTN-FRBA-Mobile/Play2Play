@@ -123,5 +123,6 @@
     <string name="truco_ask_for_retruco">Quiero\nretruco</string>
     <string name="truco_ask_for_vale_cuatro">Quiero\nvale cuatro</string>
     <string name="truco_go_to_deck">Me voy al mazo</string>
+    <string name="truco_go_to_deck_action">Me voy\nal mazo</string>
 
 </resources>

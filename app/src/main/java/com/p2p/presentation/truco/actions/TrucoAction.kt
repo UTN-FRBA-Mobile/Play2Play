@@ -85,7 +85,7 @@ abstract class TrucoAction(val hasReplication: Boolean) {
         hasReplication = false
     ) {
 
-        override fun getMessage(context: Context) = context.getString(R.string.truco_go_to_deck)
+        override fun getMessage(context: Context) = context.getString(R.string.truco_go_to_deck_action)
 
         override fun getAvailableResponses() = TrucoActionAvailableResponses(iDo = false, iDont = false)
     }

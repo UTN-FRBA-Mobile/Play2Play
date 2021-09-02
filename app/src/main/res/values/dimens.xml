@@ -79,4 +79,6 @@
     <dimen name="truco_table_margin_top">48dp</dimen>
     <dimen name="truco_table_margin_horizontal">2dp</dimen>
     <dimen name="truco_table_border_bottom_height">30dp</dimen>
+    <dimen name="truco_action_bubble_padding">60dp</dimen>
+    <dimen name="truco_action_bubble_elevation">50dp</dimen>
 </resources>
