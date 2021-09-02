@@ -55,7 +55,7 @@ class TrucoDragAndDropCard(
                         view.y > initialCoordinates.second -> 1f
                         view.y > currentDroppingView.y ->
                             cardFinalScale + (1f - cardFinalScale) * distanceWithDroppingPlaceMultiplicator
-                        else -> cardFinalScale * view.y / currentDroppingView.y
+                        else -> 0.4f + (cardFinalScale - 0.4f) * view.y / currentDroppingView.y
                     }
                     view.scaleX = scale
                     view.scaleY = scale

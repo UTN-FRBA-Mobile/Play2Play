@@ -17,6 +17,8 @@
 
     <ImageView
         android:id="@+id/their_right_card"
+        android:scaleX="@integer/truco_their_card_initial_scale"
+        android:scaleY="@integer/truco_their_card_initial_scale"
         android:layout_width="@dimen/truco_their_card_width"
         android:layout_height="@dimen/truco_their_card_height"
         android:layout_marginEnd="@dimen/truco_first_card_horizontal_margin"
@@ -27,6 +29,8 @@
 
     <ImageView
         android:id="@+id/their_middle_card"
+        android:scaleX="@integer/truco_their_card_initial_scale"
+        android:scaleY="@integer/truco_their_card_initial_scale"
         android:layout_width="@dimen/truco_their_card_width"
         android:layout_height="@dimen/truco_their_card_height"
         android:layout_marginEnd="@dimen/truco_first_card_horizontal_margin"
@@ -37,6 +41,8 @@
 
     <ImageView
         android:id="@+id/their_left_card"
+        android:scaleX="@integer/truco_their_card_initial_scale"
+        android:scaleY="@integer/truco_their_card_initial_scale"
         android:layout_width="@dimen/truco_their_card_width"
         android:layout_height="@dimen/truco_their_card_height"
         android:layout_marginEnd="@dimen/truco_first_card_horizontal_margin"
