@@ -57,7 +57,7 @@ internal fun View.fadeIn(
         .start()
 }
 
-fun View.animateBackgrondTint(toColor: Int, onComplete: () -> Unit) {
+fun View.animateBackgroundTint(toColor: Int, onComplete: () -> Unit) {
     val fromColor = backgroundTintList?.defaultColor ?: Color.WHITE
     ValueAnimator.ofObject(ArgbEvaluator(), fromColor, toColor)
         .setDuration(resources.getInteger(android.R.integer.config_mediumAnimTime).toLong())

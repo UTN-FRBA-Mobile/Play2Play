@@ -13,7 +13,7 @@ import androidx.core.content.ContextCompat
 import com.p2p.model.truco.Card
 import com.p2p.model.truco.Suit
 import com.p2p.presentation.base.BaseActivity
-import com.p2p.presentation.extensions.animateBackgrondTint
+import com.p2p.presentation.extensions.animateBackgroundTint
 import com.p2p.presentation.truco.TrucoActionsBottomSheetFragment
 import com.p2p.presentation.truco.cards.CardImageCreator
 import com.p2p.presentation.truco.cards.TrucoCardsHand
@@ -116,7 +116,7 @@ class TrucoActivity : BaseActivity(R.layout.activity_truco) {
             TrucoRoundResult.TIE -> R.color.colorWarning
             TrucoRoundResult.DEFEAT -> R.color.colorError
         }
-        roundViews[round].animateBackgrondTint(ContextCompat.getColor(baseContext, color)) {
+        roundViews[round].animateBackgroundTint(ContextCompat.getColor(baseContext, color)) {
             val colorPrimary = ContextCompat.getColor(baseContext, R.color.colorPrimary)
             roundViews.getOrNull(round + 1)?.backgroundTintList = ColorStateList.valueOf(colorPrimary)
         }
