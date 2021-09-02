@@ -15,7 +15,7 @@ abstract class TrucoAction(val hasReplication: Boolean) {
 
         override fun getMessage(context: Context) = context.getString(R.string.truco_ask_for_truco)
 
-        override fun getAvailableResponses() = TrucoActionAvailableResponses(retruco = true, valeCuatro = true)
+        override fun getAvailableResponses() = TrucoActionAvailableResponses(retruco = true)
     }
 
     object Retruco : TrucoAction(

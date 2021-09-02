@@ -9,7 +9,6 @@ import android.view.animation.BounceInterpolator
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -128,7 +127,10 @@ class TrucoActivity : BaseActivity(R.layout.activity_truco) {
                         cardsImageCreator.create(opponentCard),
                         theirDroppingPlacesViews[currentRound]
                     )
-                    Toast.makeText(baseContext, "Se jugó la carta ${playingCard.card}", Toast.LENGTH_LONG).show()
+                    when (currentRound) {
+                        0 -> showOpponentAction(TrucoAction.Envido(false))
+                        1 -> showOpponentAction(TrucoAction.Truco)
+                    }
                     playingCard.view.postDelayed({ myCardsHand.takeTurn() }, 2_000)
                     updateScores(Random.nextInt(1, 4), Random.nextInt(4, 10))
                     finishRound(
@@ -150,6 +152,14 @@ class TrucoActivity : BaseActivity(R.layout.activity_truco) {
             addActionsBottomSheet()
         }
         myCardsHand.takeTurn()
+
+        actionResponseYesIDo.setOnClickListener { replyAction(TrucoAction.YesIDo) }
+        actionResponseNoIDont.setOnClickListener { replyAction(TrucoAction.NoIDont) }
+        actionResponseEnvido.setOnClickListener { replyAction(TrucoAction.Envido(true)) }
+        actionResponseRealEnvido.setOnClickListener { replyAction(TrucoAction.RealEnvido) }
+        actionResponseFaltaEnvido.setOnClickListener { replyAction(TrucoAction.FaltaEnvido) }
+        actionResponseRetruco.setOnClickListener { replyAction(TrucoAction.Retruco) }
+        actionResponseValeCuatro.setOnClickListener { replyAction(TrucoAction.ValeCuatro) }
     }
 
     private fun updateScores(ourScore: Int, their: Int) {
@@ -190,14 +200,21 @@ class TrucoActivity : BaseActivity(R.layout.activity_truco) {
         showAction(myActionBubble, myActionBubbleText, action)
 
         // TODO: remove it, just for test
-        if (action == TrucoAction.Truco || action.javaClass.simpleName.contains("envido", ignoreCase = true)) {
+        if (action in listOf(
+                TrucoAction.Truco,
+                TrucoAction.Retruco,
+                TrucoAction.ValeCuatro
+            ) || action.javaClass.simpleName.contains("envido", ignoreCase = true)
+        ) {
             myActionBubbleText.postDelayed(
                 {
                     showOpponentAction(
-                        if (action == TrucoAction.Truco)
-                            TrucoAction.YesIDo
-                        else
-                            TrucoAction.CustomFinalActionResponse("Quiero,\n27", hasReplication = true)
+                        when (action) {
+                            TrucoAction.Truco -> TrucoAction.Retruco
+                            TrucoAction.Retruco -> TrucoAction.ValeCuatro
+                            TrucoAction.ValeCuatro -> TrucoAction.NoIDont
+                            else -> TrucoAction.CustomFinalActionResponse("Quiero,\n27", hasReplication = true)
+                        }
                     )
                 },
                 2_000
@@ -216,6 +233,11 @@ class TrucoActivity : BaseActivity(R.layout.activity_truco) {
                 2_000
             )
         }
+    }
+
+    private fun replyAction(action: TrucoAction) {
+        showMyAction(action)
+        actionResponseContainer.fadeOut()
     }
 
     private fun showAction(

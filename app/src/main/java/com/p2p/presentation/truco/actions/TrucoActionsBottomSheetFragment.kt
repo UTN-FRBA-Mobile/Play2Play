@@ -83,7 +83,7 @@ class TrucoActionsBottomSheetFragment : BaseBottomSheetDialogFragment<ViewTrucoA
         binding.realEnvidoButton.setOnClickListener { (activity as TrucoActivity).showMyAction(TrucoAction.RealEnvido) }
         binding.faltaEnvidoButton.setOnClickListener { (activity as TrucoActivity).showMyAction(TrucoAction.FaltaEnvido) }
         changeVisibleButtonsEnable(false)
-        binding.actionsBottomSheet.post { binding.actionsBottomSheet.fadeIn() }
+        binding.actionsBottomSheet.postDelayed({ binding.actionsBottomSheet.fadeIn() }, SHOW_DELAY)
     }
 
     private fun toggleState() {
@@ -120,6 +120,8 @@ class TrucoActionsBottomSheetFragment : BaseBottomSheetDialogFragment<ViewTrucoA
     }
 
     companion object {
+
+        private const val SHOW_DELAY = 1_000L
 
         fun newInstance() = TrucoActionsBottomSheetFragment()
     }

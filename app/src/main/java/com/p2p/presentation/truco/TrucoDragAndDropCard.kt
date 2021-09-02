@@ -1,7 +1,6 @@
 package com.p2p.presentation.truco
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View

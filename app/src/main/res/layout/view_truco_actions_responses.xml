@@ -61,7 +61,7 @@
 
     <Button
         android:id="@+id/action_response_yes_retruco"
-        style="@style/Widget.P2P.Button.SecondOptionButton"
+        style="@style/Widget.P2P.Button.SecondOptionOutline"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/medium"
@@ -73,7 +73,7 @@
 
     <Button
         android:id="@+id/action_response_yes_vale_cuatro"
-        style="@style/Widget.P2P.Button.SecondOptionButton"
+        style="@style/Widget.P2P.Button.SecondOptionOutline"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/medium"
