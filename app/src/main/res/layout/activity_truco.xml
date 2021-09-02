@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/view_truco_header" />
+    <include
+        android:id="@+id/header"
+        layout="@layout/view_truco_header" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_center_vertical"
@@ -301,6 +303,8 @@
         tools:scaleY="1f"
         tools:text="Envido" />
 
-    <include layout="@layout/view_truco_actions_responses" />
+    <include
+        android:id="@+id/actions_responses"
+        layout="@layout/view_truco_actions_responses" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

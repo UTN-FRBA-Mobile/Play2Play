@@ -4,14 +4,13 @@ import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import android.view.animation.BounceInterpolator
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.p2p.databinding.ActivityTrucoBinding
 import com.p2p.model.truco.Card
 import com.p2p.model.truco.Suit
 import com.p2p.presentation.base.BaseActivity
@@ -28,25 +27,11 @@ import com.p2p.utils.setOnEndListener
 import kotlin.random.Random
 
 // TODO: this is just a test activity, remove it
-class TrucoActivity : BaseActivity(R.layout.activity_truco) {
+class TrucoActivity : BaseActivity(0) {
 
+    private lateinit var binding: ActivityTrucoBinding
     private lateinit var myCardsHand: TrucoCardsHand
     private lateinit var theirCardsHand: TrucoCardsHand
-
-    private lateinit var actionBackground: View
-    private lateinit var myActionBubble: View
-    private lateinit var myActionBubbleText: TextView
-    private lateinit var theirActionBubble: View
-    private lateinit var theirActionBubbleText: TextView
-
-    private lateinit var actionResponseContainer: ViewGroup
-    private lateinit var actionResponseYesIDo: Button
-    private lateinit var actionResponseEnvido: Button
-    private lateinit var actionResponseRealEnvido: Button
-    private lateinit var actionResponseFaltaEnvido: Button
-    private lateinit var actionResponseRetruco: Button
-    private lateinit var actionResponseValeCuatro: Button
-    private lateinit var actionResponseNoIDont: Button
 
     private val cardsImageCreator by lazy { CardImageCreator(baseContext) }
     private lateinit var roundViews: List<View>
@@ -61,44 +46,14 @@ class TrucoActivity : BaseActivity(R.layout.activity_truco) {
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        roundViews = listOf<View>(
-            findViewById(R.id.first_round),
-            findViewById(R.id.second_round),
-            findViewById(R.id.third_round)
-        )
-        myCardsViews = listOf<ImageView>(
-            findViewById(R.id.my_left_card),
-            findViewById(R.id.my_middle_card),
-            findViewById(R.id.my_right_card)
-        )
-        theirCardsViews = listOf<ImageView>(
-            findViewById(R.id.their_left_card),
-            findViewById(R.id.their_middle_card),
-            findViewById(R.id.their_right_card)
-        )
-        dropCardsViews = listOf<View>(
-            findViewById(R.id.drop_first_card),
-            findViewById(R.id.drop_second_card),
-            findViewById(R.id.drop_third_card)
-        )
-        theirDroppingPlacesViews = listOf<View>(
-            findViewById(R.id.drop_their_first_card),
-            findViewById(R.id.drop_their_second_card),
-            findViewById(R.id.drop_their_third_card)
-        )
-        actionBackground = findViewById(R.id.action_background)
-        myActionBubble = findViewById(R.id.my_action_bubble)
-        myActionBubbleText = findViewById(R.id.my_action_bubble_text)
-        theirActionBubble = findViewById(R.id.their_action_bubble)
-        theirActionBubbleText = findViewById(R.id.their_action_bubble_text)
-        actionResponseYesIDo = findViewById(R.id.action_response_yes_i_do)
-        actionResponseEnvido = findViewById(R.id.action_response_yes_envido)
-        actionResponseRealEnvido = findViewById(R.id.action_response_yes_real_envido)
-        actionResponseFaltaEnvido = findViewById(R.id.action_response_yes_falta_envido)
-        actionResponseRetruco = findViewById(R.id.action_response_yes_retruco)
-        actionResponseValeCuatro = findViewById(R.id.action_response_yes_vale_cuatro)
-        actionResponseNoIDont = findViewById(R.id.action_response_no_i_dont)
-        actionResponseContainer = findViewById(R.id.action_response_container)
+        binding = ActivityTrucoBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        roundViews = listOf(binding.header.firstRound, binding.header.secondRound, binding.header.thirdRound)
+        myCardsViews = listOf(binding.myLeftCard, binding.myMiddleCard, binding.myRightCard)
+        theirCardsViews = listOf(binding.theirLeftCard, binding.theirMiddleCard, binding.theirRightCard)
+        dropCardsViews = listOf(binding.dropFirstCard, binding.dropSecondCard, binding.dropThirdCard)
+        theirDroppingPlacesViews =
+            listOf(binding.dropTheirFirstCard, binding.dropTheirSecondCard, binding.dropTheirThirdCard)
 
         val suits = listOf(Suit.SWORDS, Suit.GOLDS, Suit.CUPS, Suit.CLUBS)
         val numbers: List<Int> = (1..7).plus(10..12)
@@ -153,18 +108,18 @@ class TrucoActivity : BaseActivity(R.layout.activity_truco) {
         }
         myCardsHand.takeTurn()
 
-        actionResponseYesIDo.setOnClickListener { replyAction(TrucoAction.YesIDo) }
-        actionResponseNoIDont.setOnClickListener { replyAction(TrucoAction.NoIDont) }
-        actionResponseEnvido.setOnClickListener { replyAction(TrucoAction.Envido(true)) }
-        actionResponseRealEnvido.setOnClickListener { replyAction(TrucoAction.RealEnvido) }
-        actionResponseFaltaEnvido.setOnClickListener { replyAction(TrucoAction.FaltaEnvido) }
-        actionResponseRetruco.setOnClickListener { replyAction(TrucoAction.Retruco) }
-        actionResponseValeCuatro.setOnClickListener { replyAction(TrucoAction.ValeCuatro) }
+        binding.actionsResponses.actionResponseYesIDo.setOnClickListener { replyAction(TrucoAction.YesIDo) }
+        binding.actionsResponses.actionResponseNoIDont.setOnClickListener { replyAction(TrucoAction.NoIDont) }
+        binding.actionsResponses.actionResponseYesEnvido.setOnClickListener { replyAction(TrucoAction.Envido(true)) }
+        binding.actionsResponses.actionResponseYesRealEnvido.setOnClickListener { replyAction(TrucoAction.RealEnvido) }
+        binding.actionsResponses.actionResponseYesFaltaEnvido.setOnClickListener { replyAction(TrucoAction.FaltaEnvido) }
+        binding.actionsResponses.actionResponseYesRetruco.setOnClickListener { replyAction(TrucoAction.Retruco) }
+        binding.actionsResponses.actionResponseYesValeCuatro.setOnClickListener { replyAction(TrucoAction.ValeCuatro) }
     }
 
     private fun updateScores(ourScore: Int, their: Int) {
-        updateScore(findViewById(R.id.our_score), ourScore)
-        updateScore(findViewById(R.id.their_score), their)
+        updateScore(binding.header.ourScore, ourScore)
+        updateScore(binding.header.theirScore, their)
     }
 
     private fun updateScore(textView: TextView, score: Int) = when (score) {
@@ -197,7 +152,7 @@ class TrucoActivity : BaseActivity(R.layout.activity_truco) {
     }
 
     fun showMyAction(action: TrucoAction) {
-        showAction(myActionBubble, myActionBubbleText, action)
+        showAction(binding.myActionBubble, binding.myActionBubbleText, action)
 
         // TODO: remove it, just for test
         if (action in listOf(
@@ -206,7 +161,7 @@ class TrucoActivity : BaseActivity(R.layout.activity_truco) {
                 TrucoAction.ValeCuatro
             ) || action.javaClass.simpleName.contains("envido", ignoreCase = true)
         ) {
-            myActionBubbleText.postDelayed(
+            binding.myActionBubbleText.postDelayed(
                 {
                     showOpponentAction(
                         when (action) {
@@ -223,12 +178,12 @@ class TrucoActivity : BaseActivity(R.layout.activity_truco) {
     }
 
     fun showOpponentAction(action: TrucoAction) {
-        showAction(theirActionBubble, theirActionBubbleText, action)
+        showAction(binding.theirActionBubble, binding.theirActionBubbleText, action)
         updateActionAvaileResponses(action)
 
         // TODO: remove it, just for test
         if (action.getMessage(baseContext) == "Quiero,\n27") {
-            myActionBubbleText.postDelayed(
+            binding.myActionBubbleText.postDelayed(
                 { showMyAction(TrucoAction.CustomFinalActionResponse("31 son\nmejores")) },
                 2_000
             )
@@ -237,7 +192,7 @@ class TrucoActivity : BaseActivity(R.layout.activity_truco) {
 
     private fun replyAction(action: TrucoAction) {
         showMyAction(action)
-        actionResponseContainer.fadeOut()
+        binding.actionsResponses.actionResponseContainer.fadeOut()
     }
 
     private fun showAction(
@@ -261,8 +216,8 @@ class TrucoActivity : BaseActivity(R.layout.activity_truco) {
         bubbleText.text = action.getMessage(baseContext)
         showBubbleView(bubbleBackground)
         showBubbleView(bubbleText)
-        actionBackground.isVisible = true
-        actionBackground.animate()
+        binding.actionBackground.isVisible = true
+        binding.actionBackground.animate()
             .setListener(null)
             .alpha(0.5f)
             .start()
@@ -272,14 +227,14 @@ class TrucoActivity : BaseActivity(R.layout.activity_truco) {
     }
 
     private fun updateActionAvaileResponses(action: TrucoAction) = with(action.getAvailableResponses()) {
-        actionResponseYesIDo.isVisible = iDo
-        actionResponseNoIDont.isVisible = iDont
-        actionResponseEnvido.isVisible = envido
-        actionResponseRealEnvido.isVisible = realEnvido
-        actionResponseFaltaEnvido.isVisible = faltaEnvido
-        actionResponseRetruco.isVisible = retruco
-        actionResponseValeCuatro.isVisible = valeCuatro
-        actionResponseContainer.fadeIn()
+        binding.actionsResponses.actionResponseYesIDo.isVisible = iDo
+        binding.actionsResponses.actionResponseNoIDont.isVisible = iDont
+        binding.actionsResponses.actionResponseYesEnvido.isVisible = envido
+        binding.actionsResponses.actionResponseYesRealEnvido.isVisible = realEnvido
+        binding.actionsResponses.actionResponseYesFaltaEnvido.isVisible = faltaEnvido
+        binding.actionsResponses.actionResponseYesRetruco.isVisible = retruco
+        binding.actionsResponses.actionResponseYesValeCuatro.isVisible = valeCuatro
+        binding.actionsResponses.actionResponseContainer.fadeIn()
     }
 
     private fun showBubbleView(view: View) = view.animate()
@@ -290,24 +245,24 @@ class TrucoActivity : BaseActivity(R.layout.activity_truco) {
         .start()
 
     private fun hideMyActionBubble() {
-        hideBubbleView(myActionBubble)
-        hideBubbleView(myActionBubbleText)
+        hideBubbleView(binding.myActionBubble)
+        hideBubbleView(binding.myActionBubbleText)
     }
 
     private fun hideOpponentActionBubble() {
-        hideBubbleView(theirActionBubble)
-        hideBubbleView(theirActionBubbleText)
+        hideBubbleView(binding.theirActionBubble)
+        hideBubbleView(binding.theirActionBubbleText)
     }
 
     private fun hideActions() {
         addActionsBottomSheet()
         hideMyActionBubble()
         hideOpponentActionBubble()
-        actionBackground.animate()
+        binding.actionBackground.animate()
             .alpha(0f)
-            .setOnEndListener { actionBackground.isVisible = false }
+            .setOnEndListener { binding.actionBackground.isVisible = false }
             .start()
-        actionResponseContainer.fadeOut()
+        binding.actionsResponses.actionResponseContainer.fadeOut()
     }
 
     private fun hideBubbleView(view: View, onEndListener: () -> Unit = { }) = view.animate()
