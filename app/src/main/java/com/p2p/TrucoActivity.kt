@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.p2p.databinding.ActivityTrucoBinding
+import com.p2p.databinding.ViewTrucoHeaderBinding
 import com.p2p.model.truco.Card
 import com.p2p.model.truco.Suit
 import com.p2p.presentation.base.BaseActivity
@@ -30,6 +31,7 @@ import kotlin.random.Random
 class TrucoActivity : BaseActivity(0) {
 
     private lateinit var binding: ActivityTrucoBinding
+    private lateinit var headerBinding: ViewTrucoHeaderBinding
     private lateinit var myCardsHand: TrucoCardsHand
     private lateinit var theirCardsHand: TrucoCardsHand
 
@@ -47,8 +49,9 @@ class TrucoActivity : BaseActivity(0) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTrucoBinding.inflate(layoutInflater)
+        headerBinding = ViewTrucoHeaderBinding.bind(binding.root)
         setContentView(binding.root)
-        roundViews = listOf(binding.header.firstRound, binding.header.secondRound, binding.header.thirdRound)
+        roundViews = listOf(headerBinding.firstRound, headerBinding.secondRound, headerBinding.thirdRound)
         myCardsViews = listOf(binding.myLeftCard, binding.myMiddleCard, binding.myRightCard)
         theirCardsViews = listOf(binding.theirLeftCard, binding.theirMiddleCard, binding.theirRightCard)
         dropCardsViews = listOf(binding.dropFirstCard, binding.dropSecondCard, binding.dropThirdCard)
@@ -118,8 +121,8 @@ class TrucoActivity : BaseActivity(0) {
     }
 
     private fun updateScores(ourScore: Int, their: Int) {
-        updateScore(binding.header.ourScore, ourScore)
-        updateScore(binding.header.theirScore, their)
+        updateScore(headerBinding.ourScore, ourScore)
+        updateScore(headerBinding.theirScore, their)
     }
 
     private fun updateScore(textView: TextView, score: Int) = when (score) {
@@ -200,7 +203,7 @@ class TrucoActivity : BaseActivity(0) {
         bubbleText: TextView,
         action: TrucoAction,
     ) {
-        if (bubbleBackground.scaleX >= 0.95f) {
+        if (bubbleBackground.scaleX >= MIN_ACTION_BUBBLE_VISIBLE_SCALING) {
             hideBubbleView(bubbleBackground)
             hideBubbleView(bubbleText) {
                 showActionAfterVisibilityCheck(bubbleBackground, bubbleText, action)
@@ -219,10 +222,10 @@ class TrucoActivity : BaseActivity(0) {
         binding.actionBackground.isVisible = true
         binding.actionBackground.animate()
             .setListener(null)
-            .alpha(0.5f)
+            .alpha(ACTION_BACKGROUND_FINAL_ALPHA)
             .start()
         if (!action.hasReplication) {
-            bubbleBackground.postDelayed({ hideActions() }, 2_000)
+            bubbleBackground.postDelayed({ hideActions() }, HIDE_ACTION_BUBBLES_DELAY)
         }
     }
 
@@ -285,6 +288,9 @@ class TrucoActivity : BaseActivity(0) {
 
     companion object {
         private const val SCORE_ZOOM_ANIMATION = 1.2f
+        private const val ACTION_BACKGROUND_FINAL_ALPHA = 0.5f
+        private const val MIN_ACTION_BUBBLE_VISIBLE_SCALING = 0.9f
+        private const val HIDE_ACTION_BUBBLES_DELAY = 3_000L
         private const val ACTIONS_BOTTOM_SHEET_TAG = "TRUCO_ACTIONS_BOTTOM_SHEET"
     }
 }

@@ -2,10 +2,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout"
+    tools:showIn="@layout/activity_truco">
 
     <View
-        android:id="@+id/header_backgorund"
+        android:id="@+id/header_background"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/colorPrimaryVariant"
@@ -46,7 +47,7 @@
         android:background="@drawable/ic_circle"
         android:backgroundTint="@color/colorPrimary"
         android:elevation="@dimen/truco_round_circle_elevation"
-        app:layout_constraintBottom_toBottomOf="@id/header_backgorund"
+        app:layout_constraintBottom_toBottomOf="@id/header_background"
         app:layout_constraintEnd_toStartOf="@id/second_round"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toEndOf="@id/our_score_label"

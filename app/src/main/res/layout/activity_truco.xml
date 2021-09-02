@@ -5,9 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include
-        android:id="@+id/header"
-        layout="@layout/view_truco_header" />
+    <include layout="@layout/view_truco_header" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_center_vertical"
@@ -19,36 +17,36 @@
 
     <ImageView
         android:id="@+id/their_right_card"
-        android:scaleX="@integer/truco_their_card_initial_scale"
-        android:scaleY="@integer/truco_their_card_initial_scale"
         android:layout_width="@dimen/truco_their_card_width"
         android:layout_height="@dimen/truco_their_card_height"
         android:layout_marginEnd="@dimen/truco_first_card_horizontal_margin"
         android:rotationY="@integer/flip_rotation"
+        android:scaleX="@integer/truco_their_card_initial_scale"
+        android:scaleY="@integer/truco_their_card_initial_scale"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/table"
         tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/their_middle_card"
-        android:scaleX="@integer/truco_their_card_initial_scale"
-        android:scaleY="@integer/truco_their_card_initial_scale"
         android:layout_width="@dimen/truco_their_card_width"
         android:layout_height="@dimen/truco_their_card_height"
         android:layout_marginEnd="@dimen/truco_first_card_horizontal_margin"
         android:rotationY="@integer/flip_rotation"
+        android:scaleX="@integer/truco_their_card_initial_scale"
+        android:scaleY="@integer/truco_their_card_initial_scale"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/their_right_card"
         tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/their_left_card"
-        android:scaleX="@integer/truco_their_card_initial_scale"
-        android:scaleY="@integer/truco_their_card_initial_scale"
         android:layout_width="@dimen/truco_their_card_width"
         android:layout_height="@dimen/truco_their_card_height"
         android:layout_marginEnd="@dimen/truco_first_card_horizontal_margin"
         android:rotationY="@integer/flip_rotation"
+        android:scaleX="@integer/truco_their_card_initial_scale"
+        android:scaleY="@integer/truco_their_card_initial_scale"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/their_right_card"
         tools:ignore="ContentDescription" />
@@ -62,7 +60,7 @@
         android:background="@color/colorPrimary"
         android:rotationX="@integer/truco_card_final_rotation"
         app:layout_constraintBottom_toBottomOf="@id/drop_first_card"
-        app:layout_constraintTop_toBottomOf="@+id/header_backgorund" />
+        app:layout_constraintTop_toBottomOf="@+id/header_background" />
 
     <View
         android:id="@+id/table"
@@ -74,7 +72,7 @@
         android:background="@color/colorPrimaryVariant"
         android:rotationX="@integer/truco_card_final_rotation"
         app:layout_constraintBottom_toBottomOf="@id/drop_first_card"
-        app:layout_constraintTop_toBottomOf="@+id/header_backgorund" />
+        app:layout_constraintTop_toBottomOf="@+id/header_background" />
 
     <View
         android:id="@+id/table_border_bottom"
@@ -230,7 +228,7 @@
         android:focusable="true"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/header_backgorund"
+        app:layout_constraintTop_toBottomOf="@+id/header_background"
         tools:visibility="visible" />
 
     <View
@@ -264,7 +262,7 @@
         android:textSize="@dimen/font_huge_extra"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/header_backgorund"
+        app:layout_constraintTop_toBottomOf="@+id/header_background"
         tools:scaleX="1f"
         tools:scaleY="1f"
         tools:text="Envido" />
