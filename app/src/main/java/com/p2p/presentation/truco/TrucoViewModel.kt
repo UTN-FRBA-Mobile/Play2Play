@@ -12,6 +12,8 @@ import com.p2p.model.truco.Card
 import com.p2p.presentation.basegame.ConnectionType
 import com.p2p.presentation.basegame.GameViewModel
 import com.p2p.presentation.home.games.Game
+import com.p2p.presentation.truco.actions.TrucoAction
+import com.p2p.presentation.truco.actions.TrucoActionAvailableResponses
 
 abstract class TrucoViewModel(
     connectionType: ConnectionType,
@@ -32,6 +34,9 @@ abstract class TrucoViewModel(
     protected val _currentCards = MutableLiveData<List<Card>>()
     val currentCards: LiveData<List<Card>> = _currentCards
 
+    private val _actionAvailableResponses = MutableLiveData<TrucoActionAvailableResponses>()
+    val actionAvailableResponses: LiveData<TrucoActionAvailableResponses> = _actionAvailableResponses
+
     abstract override fun startGame()
 
     override fun goToPlay() {
@@ -47,4 +52,13 @@ abstract class TrucoViewModel(
         }
     }
 
+    fun performAction(action: TrucoAction) {
+        // TODO: perform action
+        dispatchSingleTimeEvent(TrucoShowMyActionEvent(action))
+    }
+
+    fun replyAction(action: TrucoAction) {
+        _actionAvailableResponses.value = TrucoActionAvailableResponses.noActions()
+        dispatchSingleTimeEvent(TrucoShowMyActionEvent(action))
+    }
 }
