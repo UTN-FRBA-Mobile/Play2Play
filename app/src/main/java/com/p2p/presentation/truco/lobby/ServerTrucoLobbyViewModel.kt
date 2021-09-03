@@ -2,7 +2,9 @@ package com.p2p.presentation.truco.lobby
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.p2p.model.truco.PlayerTeam
 import com.p2p.model.tuttifrutti.FinishedRoundInfo
+import com.p2p.model.tuttifrutti.FinishedRoundPointsInfo
 import com.p2p.model.tuttifrutti.RoundInfo
 import com.p2p.presentation.base.BaseViewModel
 
@@ -12,6 +14,10 @@ class ServerTrucoLobbyViewModel: BaseViewModel<LobbyEvent>() {
 
     private var players: List<String>? = null
     private var totalPlayers : Int? = null
+
+    /** List with the teams of players */
+    private val _playersTeams = MutableLiveData(listOf<PlayerTeam>())
+    val playersTeams: LiveData<List<PlayerTeam>> = _playersTeams
 
     fun setPlayers(setPlayers: List<String>) {
         players = setPlayers

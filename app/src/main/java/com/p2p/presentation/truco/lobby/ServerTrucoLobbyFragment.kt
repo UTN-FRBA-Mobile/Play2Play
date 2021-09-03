@@ -47,7 +47,6 @@ class ServerTrucoLobbyFragment : BaseGameFragment<
         gameBinding.helpOrderPlayersDescription.text = resources
             .getString(R.string.tr_lobby_help_order_players)
             .fromHtml()
-        // TODO: Add drag and drop functionality. gameBinding.playersGrid.onItemLongClickListener = OnItemLongClickListener {}
     }
 
     override fun setupObservers() {

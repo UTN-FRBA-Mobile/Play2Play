@@ -1,17 +1,17 @@
 package com.p2p.presentation.truco.lobby
 
+import android.content.ClipData
+import android.content.ClipDescription
 import com.p2p.R
 import android.content.Context
-import android.graphics.Color
-import android.graphics.drawable.Drawable
-import android.media.Image
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
-import com.p2p.model.tuttifrutti.FinishedRoundInfo
+import androidx.core.content.ContextCompat
 
 class ConnectedPlayersTrucoAdapter(
     private val context: Context
@@ -46,18 +46,36 @@ class ConnectedPlayersTrucoAdapter(
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val root: View = layoutInflater.inflate(R.layout.view_truco_connected_user, parent, false)
+        val connectedUserView: View = layoutInflater.inflate(R.layout.view_truco_connected_user, parent, false)
         val player: String = players[position]
-        val playerName = root.findViewById<View>(R.id.name) as TextView
+        val playerName = connectedUserView.findViewById<View>(R.id.name) as TextView
 
         playerName.text = player
 
         if (position == 0) {
-            val imageView = root.findViewById<ImageView>(R.id.avatar)
+            val imageView = connectedUserView.findViewById<ImageView>(R.id.avatar)
             imageView.setImageResource(R.drawable.ic_baseline_account_circle_white)
-            root.setBackgroundResource(R.drawable.grid_view_item_hand_player)
+            connectedUserView.setBackgroundResource(R.drawable.grid_view_item_hand_player)
         };
 
-        return root
+        connectedUserView.setOnLongClickListener { view: View ->
+            val item = ClipData.Item(player as? CharSequence)
+            val dragShadow = DragShadowBuilder(view)
+            val dragData = ClipData(
+                player as? CharSequence,
+                arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN),
+                item)
+
+            view.background = ContextCompat.getDrawable(context, R.drawable.dotted_border)
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                view.startDragAndDrop(dragData, dragShadow, null, 0)
+            } else {
+                view.startDrag(dragData, dragShadow, null, 0)
+            }
+        }
+
+        connectedUserView.setOnDragListener(DragListener())
+        return connectedUserView
     }
 }
