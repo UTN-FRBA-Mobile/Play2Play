@@ -12,6 +12,7 @@ import com.p2p.presentation.bluetooth.HowToConnectBluetoothActivity
 import com.p2p.presentation.home.HomeActivity.Companion.GAME_REQUEST_CODE
 import com.p2p.presentation.home.games.Game
 import com.p2p.presentation.impostor.ImpostorActivity
+import com.p2p.presentation.truco.TrucoActivity
 import com.p2p.presentation.tuttifrutti.TuttiFruttiActivity
 
 class JoinGamesBottomSheetFragment :
@@ -44,9 +45,22 @@ class JoinGamesBottomSheetFragment :
             dismiss()
             HowToConnectBluetoothActivity.start(requireContext())
         }
-        is JoinGame -> when(selectedGame){
-            Game.TUTTI_FRUTTI -> TuttiFruttiActivity.startJoin(requireActivity(), GAME_REQUEST_CODE, event.device)
-            Game.IMPOSTOR -> ImpostorActivity.startJoin(requireActivity(), GAME_REQUEST_CODE, event.device)
+        is JoinGame -> when (selectedGame) {
+            Game.TUTTI_FRUTTI -> TuttiFruttiActivity.startJoin(
+                requireActivity(),
+                GAME_REQUEST_CODE,
+                event.device
+            )
+            Game.IMPOSTOR -> ImpostorActivity.startJoin(
+                requireActivity(),
+                GAME_REQUEST_CODE,
+                event.device
+            )
+            Game.TRUCO -> TrucoActivity.startJoin(
+                requireActivity(),
+                GAME_REQUEST_CODE,
+                event.device
+            )
             else -> throw IllegalStateException("Join game not implemented")
         }
     }
