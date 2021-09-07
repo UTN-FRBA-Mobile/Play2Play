@@ -9,8 +9,8 @@ import com.p2p.data.loadingMessages.LoadingTextRepository
 import com.p2p.data.userInfo.UserSession
 import com.p2p.model.base.message.Conversation
 import com.p2p.model.truco.Card
+import com.p2p.model.truco.PlayerWithCards
 import com.p2p.model.truco.message.TrucoActionMessage
-import com.p2p.model.tuttifrutti.message.TuttiFruttiEnoughForMeEnoughForAllMessage
 import com.p2p.presentation.basegame.ConnectionType
 import com.p2p.presentation.basegame.GameViewModel
 import com.p2p.presentation.home.games.Game
@@ -33,8 +33,8 @@ abstract class TrucoViewModel(
 ) {
 
     /** Current cards for this player */
-    protected val _currentCards = MutableLiveData<List<Card>>()
-    val currentCards: LiveData<List<Card>> = _currentCards
+    protected val _myCards = MutableLiveData<List<Card>>()
+    val myCards: LiveData<List<Card>> = _myCards
 
     private val _actionAvailableResponses = MutableLiveData<TrucoActionAvailableResponses>()
     val actionAvailableResponses: LiveData<TrucoActionAvailableResponses> = _actionAvailableResponses
@@ -48,6 +48,9 @@ abstract class TrucoViewModel(
 
     /** This will only be used by the server */
     protected open fun handOutCards() {}
+
+    protected fun getCardsForPlayer(playersWithCards: List<PlayerWithCards>, player: String) =
+        playersWithCards.first { it.player == player }.cards
 
     @CallSuper
     override fun receiveMessage(conversation: Conversation) {

@@ -46,7 +46,6 @@ class TrucoPlayFor2Fragment :
 
     private lateinit var headerBinding: ViewTrucoHeaderBinding
     private lateinit var myCardsHand: TrucoCardsHand
-    private lateinit var theirCardsHand: TrucoCardsHand
 
     private val cardsImageCreator by lazy { CardImageCreator(requireContext()) }
     private lateinit var roundViews: List<View>
@@ -56,7 +55,6 @@ class TrucoPlayFor2Fragment :
     private lateinit var theirDroppingPlacesViews: List<View>
 
     private var currentRound = 0 // TODO: move it to VM
-    private lateinit var cards: List<Card> // TODO: move it to VM
 
     private val shortDuration by lazy { resources.getInteger(android.R.integer.config_shortAnimTime).toLong() }
     private val longDuration by lazy { resources.getInteger(android.R.integer.config_longAnimTime).toLong() }
@@ -76,9 +74,7 @@ class TrucoPlayFor2Fragment :
         theirCardsViews = listOf(theirLeftCard, theirMiddleCard, theirRightCard)
         myDroppingPlacesViews = listOf(dropFirstCard, dropSecondCard, dropThirdCard)
         theirDroppingPlacesViews = listOf(dropTheirFirstCard, dropTheirSecondCard, dropTheirThirdCard)
-        initCardsHand(cards.take(3), cards.drop(3))
         updateScores(0, 0)
-        takeTurn()
 
         with(actionsResponses) {
             actionResponseYesIDo.setOnClickListener { gameViewModel.replyAction(TrucoAction.YesIDo) }
@@ -95,6 +91,7 @@ class TrucoPlayFor2Fragment :
         super.setupObservers()
         observe(gameViewModel.singleTimeEvent) { onGameEvent(it) }
         observe(gameViewModel.actionAvailableResponses) { updateActionAvaileResponses(it) }
+        observe(gameViewModel.myCards) { initMyCardsHand(it) }
     }
 
     override fun onCardPlayed(playingCard: TrucoCardsHand.PlayingCard) {
@@ -140,11 +137,10 @@ class TrucoPlayFor2Fragment :
             .start()
     }
 
-    private fun initCardsHand(myCards: List<Card>, theirCards: List<Card>) {
+    private fun initMyCardsHand(myCards: List<Card>) {
         val myPlayingCards = getPlayingCards(myCardsViews, myCards)
-        val theirPlayingCards = getPlayingCards(theirCardsViews, theirCards)
         myCardsHand = TrucoSingleOpponentMyCardsHand(myPlayingCards, myDroppingPlacesViews, this@TrucoPlayFor2Fragment)
-        theirCardsHand = TrucoSingleOpponentTheirCardsHand(theirPlayingCards)
+        takeTurn()
     }
 
     private fun getPlayingCards(cardsViews: List<ImageView>, cards: List<Card>) = cardsViews.mapIndexed { i, view ->

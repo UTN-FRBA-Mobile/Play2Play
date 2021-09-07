@@ -26,14 +26,20 @@ class ClientTrucoViewModel(
     override fun receiveMessage(conversation: Conversation) {
         super.receiveMessage(conversation)
         when (val message = conversation.lastMessage) {
-            is TrucoCardsMessage -> pickSelfCards(message.cardsForPlayers)
+            is TrucoCardsMessage -> {
+                pickSelfCards(message.cardsForPlayers)
+                startGame()
+            }
         }
     }
 
-    override fun startGame() = goToPlay()
+    override fun startGame(){
+        startLoading("Espera tus cartas to do change")
+        goToPlay()
+    }
 
     private fun pickSelfCards(playersWithCards: List<PlayerWithCards>) {
-        _currentCards.value = playersWithCards.first { it.player == userName }.cards
+        _myCards.value = getCardsForPlayer(playersWithCards, userName)
     }
 
 }

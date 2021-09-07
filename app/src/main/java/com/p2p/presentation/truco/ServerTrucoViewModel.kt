@@ -34,6 +34,7 @@ class ServerTrucoViewModel(
 
     override fun startGame() {
         closeDiscovery()
+        startLoading("Bancame, estoy mandando las cartas todo change")
         handOutCards()
         goToPlay()
     }
@@ -51,7 +52,7 @@ class ServerTrucoViewModel(
         val playersWithCards = connectedPlayers
             .filterNot { it.first == MYSELF_PEER_ID }
             .map { player -> PlayerWithCards(player.second, cardsForPlayer()) }
-        _currentCards.value = cardsForPlayer()
+        _myCards.value = cardsForPlayer()
         connection.write(TrucoCardsMessage(playersWithCards))
     }
 
