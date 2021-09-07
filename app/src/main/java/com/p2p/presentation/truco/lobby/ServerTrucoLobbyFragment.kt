@@ -1,10 +1,7 @@
 package com.p2p.presentation.truco.lobby
 
-import android.content.ClipData
-import android.content.ClipDescription
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.AdapterView.OnItemLongClickListener
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.p2p.R

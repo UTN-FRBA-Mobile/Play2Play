@@ -1,28 +1,29 @@
 package com.p2p.presentation.truco.lobby
 
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Point
-import android.graphics.drawable.ColorDrawable
 import android.view.View
+import androidx.core.content.ContextCompat
+import com.p2p.R
 
-class DragShadowBuilder(v: View) : View.DragShadowBuilder(v) {
+class DragShadowBuilder(view: View) : View.DragShadowBuilder(view) {
 
-    private val shadow = ColorDrawable(Color.LTGRAY)
+    private val shadow =
+        ContextCompat.getDrawable(view.context, R.drawable.grid_view_item_general_player)
 
     // Defines a callback that sends the drag shadow dimensions and touch point back to the
     // system.+
     override fun onProvideShadowMetrics(size: Point, touch: Point) {
         // Sets the width of the shadow to half the width of the original View
-        val width: Int = view.width / 2
+        val width: Int = view.width
 
         // Sets the height of the shadow to half the height of the original View
-        val height: Int = view.height / 2
+        val height: Int = view.height
 
         // The drag shadow is a ColorDrawable. This sets its dimensions to be the same as the
         // Canvas that the system will provide. As a result, the drag shadow will fill the
         // Canvas.
-        shadow.setBounds(0, 0, width, height)
+        shadow!!.setBounds(0, 0, width, height)
 
         // Sets the size parameter's width and height values. These get back to the system
         // through the size parameter.
@@ -36,6 +37,6 @@ class DragShadowBuilder(v: View) : View.DragShadowBuilder(v) {
     // from the dimensions passed in onProvideShadowMetrics().
     override fun onDrawShadow(canvas: Canvas) {
         // Draws the ColorDrawable in the Canvas passed in from the system.
-        shadow.draw(canvas)
+        shadow!!.draw(canvas)
     }
 }
