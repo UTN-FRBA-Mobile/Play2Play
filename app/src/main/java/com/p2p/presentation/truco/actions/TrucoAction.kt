@@ -9,7 +9,7 @@ abstract class TrucoAction(val hasReplication: Boolean) {
 
     open fun getAvailableResponses() = TrucoActionAvailableResponses()
 
-    object Truco : TrucoAction(
+    object Trucazo : TrucoAction(
         hasReplication = true
     ) {
 
@@ -18,7 +18,7 @@ abstract class TrucoAction(val hasReplication: Boolean) {
         override fun getAvailableResponses() = TrucoActionAvailableResponses(retruco = true)
     }
 
-    object Retruco : TrucoAction(
+    object Retrucazo : TrucoAction(
         hasReplication = true
     ) {
 

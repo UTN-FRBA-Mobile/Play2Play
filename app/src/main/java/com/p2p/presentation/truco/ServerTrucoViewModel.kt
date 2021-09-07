@@ -33,9 +33,9 @@ class ServerTrucoViewModel(
     }
 
     override fun startGame() {
-        // TODO: Start truco game
         closeDiscovery()
         handOutCards()
+        goToPlay()
     }
 
     override fun receiveMessage(conversation: Conversation) {

@@ -82,7 +82,7 @@ class TrucoActionsBottomSheetFragment : BaseBottomSheetDialogFragment<ViewTrucoA
         actionsBottomSheet.postDelayed({ actionsBottomSheet.fadeIn() }, SHOW_DELAY)
         openButton.setOnClickListener { toggleState() }
         envidoOptionsButton.setOnClickListener { toggleEnvidoOptionsState() }
-        trucoButton.setOnClickListener { gameViewModel.performAction(TrucoAction.Truco) }
+        trucoButton.setOnClickListener { gameViewModel.performAction(TrucoAction.Trucazo) }
         envidoButton.setOnClickListener { gameViewModel.performAction(TrucoAction.Envido(false)) }
         realEnvidoButton.setOnClickListener { gameViewModel.performAction(TrucoAction.RealEnvido) }
         faltaEnvidoButton.setOnClickListener { gameViewModel.performAction(TrucoAction.FaltaEnvido) }

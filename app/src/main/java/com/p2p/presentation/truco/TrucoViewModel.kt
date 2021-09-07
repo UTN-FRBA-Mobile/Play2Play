@@ -9,6 +9,8 @@ import com.p2p.data.loadingMessages.LoadingTextRepository
 import com.p2p.data.userInfo.UserSession
 import com.p2p.model.base.message.Conversation
 import com.p2p.model.truco.Card
+import com.p2p.model.truco.message.TrucoActionMessage
+import com.p2p.model.tuttifrutti.message.TuttiFruttiEnoughForMeEnoughForAllMessage
 import com.p2p.presentation.basegame.ConnectionType
 import com.p2p.presentation.basegame.GameViewModel
 import com.p2p.presentation.home.games.Game
@@ -51,12 +53,12 @@ abstract class TrucoViewModel(
     override fun receiveMessage(conversation: Conversation) {
         super.receiveMessage(conversation)
         when (conversation.lastMessage) {
-            // TODO: Implement messages handling
+            is TrucoActionMessage -> dispatchSingleTimeEvent(TrucoShowOpponentActionEvent(conversation.lastMessage.action))
         }
     }
 
     fun performAction(action: TrucoAction) {
-        // TODO: perform action
+        connection.write(TrucoActionMessage(action))
         dispatchSingleTimeEvent(TrucoShowMyActionEvent(action))
     }
 
