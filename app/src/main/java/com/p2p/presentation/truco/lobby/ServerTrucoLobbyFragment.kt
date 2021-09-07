@@ -26,11 +26,8 @@ class ServerTrucoLobbyFragment : BaseGameFragment<
 
     private lateinit var connectedPlayersTrucoAdapter: ConnectedPlayersTrucoAdapter
 
-    // TODO: Delete mocks
-    private val mockedPlayers: List<String> = listOf("Homero", "Marge", "Bart", "Lisa")
-
     override fun initValues() {
-        observe(gameViewModel.players) { viewModel.setPlayers(mockedPlayers) }
+        observe(gameViewModel.players) { viewModel.setPlayers(it) }
         observe(gameViewModel.totalPlayers) { viewModel.setTotalPlayers(it) }
     }
 
@@ -38,12 +35,12 @@ class ServerTrucoLobbyFragment : BaseGameFragment<
         super.initUI()
         gameViewModel.startConnection()
         setupPlayersGrid()
-        gameBinding.startGameButton.setOnClickListener {
-            gameViewModel.startGame()
-        }
         gameBinding.helpOrderPlayersDescription.text = resources
             .getString(R.string.tr_lobby_help_order_players)
             .fromHtml()
+        gameBinding.startGameButton.setOnClickListener {
+            gameViewModel.startGame()
+        }
     }
 
     override fun setupObservers() {
@@ -55,10 +52,12 @@ class ServerTrucoLobbyFragment : BaseGameFragment<
                     .fromHtml()
             }
             observe(players) {
-                connectedPlayersTrucoAdapter.players = mockedPlayers
+                connectedPlayersTrucoAdapter.players = it
+                viewModel.setPlayers(it)
             }
             observe(totalPlayers) {
                 connectedPlayersTrucoAdapter.totalPlayers = it
+                viewModel.setTotalPlayers(it)
             }
         }
         observe(viewModel.isContinueButtonEnabled) { gameBinding.startGameButton.isEnabled = it }

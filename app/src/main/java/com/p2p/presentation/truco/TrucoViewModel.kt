@@ -8,6 +8,7 @@ import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.loadingMessages.LoadingTextRepository
 import com.p2p.data.userInfo.UserSession
 import com.p2p.model.base.message.Conversation
+import com.p2p.model.truco.PlayerTeam
 import com.p2p.presentation.basegame.ConnectionType
 import com.p2p.presentation.basegame.GameViewModel
 import com.p2p.presentation.home.games.Game
@@ -26,9 +27,12 @@ abstract class TrucoViewModel(
     loadingTextRepository,
     Game.TRUCO
 ) {
+    /** List with the teams of players */
+    protected lateinit var playersTeams: List<PlayerTeam>
 
+    // TODO: Must set this value on truco game creation and delete the mocked value
     /** Set the quantity of players selected by the user when creating the game . */
-    protected val _totalPlayers = MutableLiveData<Int>()
+    protected val _totalPlayers = MutableLiveData<Int>(2)
     val totalPlayers: LiveData<Int> = _totalPlayers
 
     abstract fun startGame()
@@ -45,5 +49,4 @@ abstract class TrucoViewModel(
             // TODO: Implement messages handling
         }
     }
-
 }

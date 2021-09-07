@@ -59,8 +59,6 @@ class ConnectedPlayersTrucoAdapter(
             connectedUserView.setBackgroundResource(R.drawable.grid_view_item_hand_player)
         }
 
-
-        // We set the OnTouchListener here because it needs the variables inside this method
         connectedUserView.setOnTouchListener { view, event ->
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {

@@ -7,6 +7,7 @@ import com.p2p.model.tuttifrutti.message.TuttiFruttiEnoughForMeEnoughForAllMessa
 import com.p2p.model.tuttifrutti.message.TuttiFruttiSendWordsMessage
 import com.p2p.model.tuttifrutti.message.TuttiFruttiStartGameMessage
 import com.p2p.model.tuttifrutti.message.TuttiFruttiStartRoundMessage
+import com.p2p.model.truco.message.TrucoStartGameMessage
 import java.io.Serializable
 
 @JsonTypeInfo(
@@ -24,5 +25,6 @@ import java.io.Serializable
     JsonSubTypes.Type(value = TuttiFruttiSendWordsMessage::class),
     JsonSubTypes.Type(value = TuttiFruttiStartRoundMessage::class),
     JsonSubTypes.Type(value = FinalScoreMessage::class),
-)
+    JsonSubTypes.Type(value = TrucoStartGameMessage::class),
+    )
 abstract class Message(private val type: String) : Serializable
