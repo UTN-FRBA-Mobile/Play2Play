@@ -1,7 +1,11 @@
 package com.p2p.presentation.truco.cards
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.content.Context
+import android.graphics.Bitmap
 import android.view.View
+import android.widget.ImageView
 import androidx.core.view.isVisible
 import com.p2p.R
 import com.p2p.model.truco.Card
@@ -9,10 +13,10 @@ import com.p2p.presentation.extensions.fadeIn
 import com.p2p.presentation.truco.TrucoDragAndDropCard
 import kotlin.math.abs
 
-class TrucoCardsHand(
+abstract class TrucoCardsHand(
     cards: List<PlayingCard>,
     private val droppingPlaces: List<View>,
-    private val listener: Listener
+    private val listener: Listener?
 ) : TrucoDragAndDropCard.Listener {
 
     private val dragAndDropCards = cards
@@ -20,28 +24,56 @@ class TrucoCardsHand(
         .toMap()
     private val dragAndDropCardsInHand = dragAndDropCards.keys.toMutableList()
 
-    private val context: Context = droppingPlaces.first().context
-
-    private val cardsHorizontalMargins = listOf(
-        R.dimen.truco_first_card_horizontal_margin,
-        R.dimen.truco_second_card_horizontal_margin,
-        R.dimen.truco_third_card_horizontal_margin
-    ).map { context.resources.getDimension(it) }
-    private val normalVerticalSize = context.resources.getDimension(R.dimen.truco_normal_card_vertical_margin)
-    private val elevatedVerticalSize = context.resources.getDimension(R.dimen.truco_elevated_card_vertical_margin)
-
-    private val cardsRotationForHand = mapOf(
-        COMPLETE_HAND to listOf(-25f, -5f, 15f),
-        TWO_CARDS to listOf(-10f, 10f),
-        SINGLE_CARD to listOf(0f),
-    )
-
-    init {
-        droppingPlaces.first().post { updateCardsHandUI() }
+    protected val context: Context = cards.first().view.context
+    private val trucoCardFinalRotation by lazy {
+        context.resources.getInteger(R.integer.truco_card_final_rotation).toFloat()
     }
 
+    init {
+        cards.first().view.post { updateCardsHandUI() }
+    }
+
+    /** Taking the turn will enable the user to touch and move the card to the next available dropping place. */
     fun takeTurn() {
         droppingPlaces.firstOrNull { !it.isVisible }?.let { updateDroppingPlace(it) }
+    }
+
+    fun playCard(card: Card, cardImage: Pair<Bitmap, String>, droppingPlace: View) {
+        val dragAndDropCardEntry = dragAndDropCards
+            .toList()
+            .first { (_, playingCard) -> playingCard.card == card }
+        val cardView = dragAndDropCardEntry.second.view
+        val movingAnimation = cardView.animate()
+        movingAnimation
+            .x(droppingPlace.x)
+            .y(droppingPlace.y)
+            .scaleX(1f)
+            .scaleY(1f)
+            .rotation(0f)
+            .rotationX(trucoCardFinalRotation)
+            .setListener(object : AnimatorListenerAdapter() {
+
+                override fun onAnimationStart(animation: Animator?) {
+                    updateUIAfterHandChange(dragAndDropCardEntry.first, false)
+                    cardView.elevation = COMPLETE_HAND - dragAndDropCardsInHand.size.toFloat()
+                }
+
+                override fun onAnimationEnd(animator: Animator?) {
+                    movingAnimation.setListener(null)
+                    val flipAnimation = cardView.animate()
+                    flipAnimation
+                        .rotationY(0f)
+                        .setUpdateListener {
+                            if (it.animatedFraction >= HALF_ANIMATION) {
+                                flipAnimation.setUpdateListener(null)
+                                cardView.setImageBitmap(cardImage.first)
+                                cardView.contentDescription = cardImage.second
+                            }
+                        }
+                        .start()
+                }
+            })
+            .start()
     }
 
     override fun onTouch(dragAndDropCard: TrucoDragAndDropCard) {
@@ -59,7 +91,7 @@ class TrucoCardsHand(
         if (isInDroppingView) {
             dragAndDropCard.cardView.elevation = droppingPlaces.count { it.isVisible }.toFloat() - 1
             updateDroppingPlace(null)
-            listener.onCardPlayed(dragAndDropCards.getValue(dragAndDropCard))
+            listener?.onCardPlayed(dragAndDropCards.getValue(dragAndDropCard))
         }
     }
 
@@ -78,23 +110,25 @@ class TrucoCardsHand(
 
     private fun updateCardsHandUI() {
         val playingCardsSize = dragAndDropCardsInHand.size.takeIf { it > 0 } ?: return
-        val cardsRotation = cardsRotationForHand.getValue(playingCardsSize)
+        val cardsRotation = getCardsRotation(playingCardsSize)
         dragAndDropCardsInHand.forEachIndexed { index, dragAndDropCard ->
             val cardView = dragAndDropCard.cardView
-            val cardHorizontalMargin = cardsHorizontalMargins[index]
-            val cardVerticalMargin = if (playingCardsSize == COMPLETE_HAND && index == SECOND_CARD) {
-                elevatedVerticalSize
-            } else {
-                normalVerticalSize
-            }
-            cardView.elevation = index.toFloat()
+            cardView.elevation = if (shouldSetCardInitialElevation()) index.toFloat() else 0f
             cardView.animate()
-                .x(cardHorizontalMargin)
-                .y((cardView.parent as View).height - cardView.height - cardVerticalMargin)
+                .x(getCardX(cardView, index))
+                .y(getCardY(cardView, playingCardsSize, index))
                 .rotation(cardsRotation[index])
                 .start()
         }
     }
+
+    protected abstract fun getCardsRotation(playingCards: Int): List<Float>
+
+    protected abstract fun getCardX(cardView: View, cardIndex: Int): Float
+
+    protected abstract fun getCardY(cardView: View, playingCards: Int, cardIndex: Int): Float
+
+    protected abstract fun shouldSetCardInitialElevation(): Boolean
 
     private fun updateUIAfterHandChange(dragAndDropCard: TrucoDragAndDropCard, isInTheHand: Boolean) {
         val wasInTheHand = dragAndDropCard in dragAndDropCardsInHand
@@ -120,14 +154,14 @@ class TrucoCardsHand(
         fun onCardPlayed(playingCard: PlayingCard)
     }
 
-    data class PlayingCard(val card: Card, val view: View)
+    data class PlayingCard(val card: Card, val view: ImageView)
 
     companion object {
 
-        private const val COMPLETE_HAND = 3
-        private const val TWO_CARDS = 2
-        private const val SINGLE_CARD = 1
-        private const val SECOND_CARD = 1
+        const val COMPLETE_HAND = 3
+        const val TWO_CARDS = 2
+        const val SINGLE_CARD = 1
+        private const val HALF_ANIMATION = 0.5
         private const val THREE_QUARTERS = 0.75
     }
 }

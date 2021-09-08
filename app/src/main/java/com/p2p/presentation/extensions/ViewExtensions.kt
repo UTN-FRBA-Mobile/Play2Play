@@ -8,6 +8,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.view.View
 import androidx.core.view.isVisible
+import com.p2p.utils.setOnEndListener
 
 private const val INVISIBLE_ALPHA = 0f
 private const val VISIBLE_ALPHA = 1f
@@ -25,12 +26,10 @@ internal fun View.fadeOut(
     animate()
         .alpha(INVISIBLE_ALPHA)
         .setDuration(duration)
-        .setListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator?) {
-                this@fadeOut.visibility = finalVisibility
-                onComplete()
-            }
-        })
+        .setOnEndListener {
+            this@fadeOut.visibility = finalVisibility
+            onComplete()
+        }
         .start()
 }
 
@@ -49,11 +48,7 @@ internal fun View.fadeIn(
     animate()
         .alpha(VISIBLE_ALPHA)
         .setDuration(duration)
-        .setListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator?) {
-                onComplete()
-            }
-        })
+        .setOnEndListener { onComplete() }
         .start()
 }
 

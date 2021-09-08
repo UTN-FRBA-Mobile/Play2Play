@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/actions_bottom_sheet"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:alpha="0"
     android:background="@android:color/transparent">
 
     <include layout="@layout/view_guidelines" />
@@ -58,7 +60,7 @@
             app:layout_constraintTop_toTopOf="@+id/guideline_top">
 
             <Button
-                android:id="@+id/envido_button"
+                android:id="@+id/envido_options_button"
                 style="@style/Widget.P2P.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -101,6 +103,7 @@
             app:layout_constraintTop_toBottomOf="@id/truco_button">
 
             <Button
+                android:id="@+id/envido_button"
                 style="@style/Widget.P2P.Button.Outline"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -112,6 +115,7 @@
                 app:layout_constraintTop_toBottomOf="@id/open_button" />
 
             <Button
+                android:id="@+id/real_envido_button"
                 style="@style/Widget.P2P.Button.Outline"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -123,6 +127,7 @@
                 app:layout_constraintTop_toBottomOf="@id/open_button" />
 
             <Button
+                android:id="@+id/falta_envido_button"
                 style="@style/Widget.P2P.Button.Outline"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
