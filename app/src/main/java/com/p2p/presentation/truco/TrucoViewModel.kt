@@ -67,6 +67,7 @@ abstract class TrucoViewModel(
 
     fun replyAction(action: TrucoAction) {
         _actionAvailableResponses.value = TrucoActionAvailableResponses.noActions()
+        connection.write(TrucoActionMessage(action))
         dispatchSingleTimeEvent(TrucoShowMyActionEvent(action))
     }
 }

@@ -1,46 +1,76 @@
 package com.p2p.presentation.truco.actions
 
 import android.content.Context
+import com.fasterxml.jackson.annotation.JsonSubTypes
+import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.p2p.R
+import com.p2p.model.base.message.ClientHandshakeMessage
+import com.p2p.model.base.message.GoodbyePlayerMessage
+import com.p2p.model.base.message.NameInUseMessage
+import com.p2p.model.base.message.ServerHandshakeMessage
+import com.p2p.model.impostor.message.ImpostorAssignWord
+import com.p2p.model.impostor.message.ImpostorEndGame
+import com.p2p.model.truco.message.TrucoActionMessage
+import com.p2p.model.truco.message.TrucoCardsMessage
+import com.p2p.model.tuttifrutti.message.*
+import com.p2p.presentation.truco.actions.TrucoAction.*
 
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    include = JsonTypeInfo.As.PROPERTY,
+    property = "type"
+)
+@JsonSubTypes(
+    JsonSubTypes.Type(value = Trucazo::class, name = "Trucazo"),
+    JsonSubTypes.Type(value = Retrucazo::class, name = "Retrucazo"),
+    JsonSubTypes.Type(value = ValeCuatro::class, name = "ValeCuatro"),
+    JsonSubTypes.Type(value = Envido::class, name = "Envido"),
+    JsonSubTypes.Type(value = RealEnvido::class, name = "RealEnvido"),
+    JsonSubTypes.Type(value = ValeCuatro::class, name = "ValeCuatro"),
+    JsonSubTypes.Type(value = FaltaEnvido::class, name = "FaltaEnvido"),
+    JsonSubTypes.Type(value = YesIDo::class, name = "YesIDo"),
+    JsonSubTypes.Type(value = NoIDont::class, name = "NoIDont"),
+    JsonSubTypes.Type(value = GoToDeck::class, name = "GoToDeck"),
+    JsonSubTypes.Type(value = CustomFinalActionResponse::class, name = "CustomFinalActionResponse"),
+)
 abstract class TrucoAction(val hasReplication: Boolean) {
 
-    abstract fun getMessage(context: Context): String
+    abstract fun message(context: Context): String
 
-    open fun getAvailableResponses() = TrucoActionAvailableResponses()
+    open fun availableResponses() = TrucoActionAvailableResponses()
 
     object Trucazo : TrucoAction(
         hasReplication = true
     ) {
 
-        override fun getMessage(context: Context) = context.getString(R.string.truco_ask_for_truco)
+        override fun message(context: Context) = context.getString(R.string.truco_ask_for_truco)
 
-        override fun getAvailableResponses() = TrucoActionAvailableResponses(retruco = true)
+        override fun availableResponses() = TrucoActionAvailableResponses(retruco = true)
     }
 
     object Retrucazo : TrucoAction(
         hasReplication = true
     ) {
 
-        override fun getMessage(context: Context) = context.getString(R.string.truco_ask_for_retruco)
+        override fun message(context: Context) = context.getString(R.string.truco_ask_for_retruco)
 
-        override fun getAvailableResponses() = TrucoActionAvailableResponses(valeCuatro = true)
+        override fun availableResponses() = TrucoActionAvailableResponses(valeCuatro = true)
     }
 
     object ValeCuatro : TrucoAction(
         hasReplication = true
     ) {
 
-        override fun getMessage(context: Context) = context.getString(R.string.truco_ask_for_vale_cuatro)
+        override fun message(context: Context) = context.getString(R.string.truco_ask_for_vale_cuatro)
     }
 
-    class Envido(private val alreadyReplicatedEnvido: Boolean) : TrucoAction(
+    class Envido(val alreadyReplicatedEnvido: Boolean) : TrucoAction(
         hasReplication = true
     ) {
 
-        override fun getMessage(context: Context) = context.getString(R.string.truco_ask_for_envido)
+        override fun message(context: Context) = context.getString(R.string.truco_ask_for_envido)
 
-        override fun getAvailableResponses() = TrucoActionAvailableResponses(
+        override fun availableResponses() = TrucoActionAvailableResponses(
             envido = !alreadyReplicatedEnvido,
             realEnvido = true,
             faltaEnvido = true
@@ -51,43 +81,43 @@ abstract class TrucoAction(val hasReplication: Boolean) {
         hasReplication = true
     ) {
 
-        override fun getMessage(context: Context) = context.getString(R.string.truco_ask_for_real_envido)
+        override fun message(context: Context) = context.getString(R.string.truco_ask_for_real_envido)
 
-        override fun getAvailableResponses() = TrucoActionAvailableResponses(faltaEnvido = true)
+        override fun availableResponses() = TrucoActionAvailableResponses(faltaEnvido = true)
     }
 
     object FaltaEnvido : TrucoAction(
         hasReplication = true
     ) {
 
-        override fun getMessage(context: Context) = context.getString(R.string.truco_ask_for_falta_envido)
+        override fun message(context: Context) = context.getString(R.string.truco_ask_for_falta_envido)
     }
 
     object YesIDo : TrucoAction(
         hasReplication = false
     ) {
 
-        override fun getMessage(context: Context) = context.getString(R.string.i_do)
+        override fun message(context: Context) = context.getString(R.string.i_do)
 
-        override fun getAvailableResponses() = TrucoActionAvailableResponses(iDo = false, iDont = false)
+        override fun availableResponses() = TrucoActionAvailableResponses(iDo = false, iDont = false)
     }
 
     object NoIDont : TrucoAction(
         hasReplication = false
     ) {
 
-        override fun getMessage(context: Context) = context.getString(R.string.i_dont)
+        override fun message(context: Context) = context.getString(R.string.i_dont)
 
-        override fun getAvailableResponses() = TrucoActionAvailableResponses(iDo = false, iDont = false)
+        override fun availableResponses() = TrucoActionAvailableResponses(iDo = false, iDont = false)
     }
 
     object GoToDeck : TrucoAction(
         hasReplication = false
     ) {
 
-        override fun getMessage(context: Context) = context.getString(R.string.truco_go_to_deck_action)
+        override fun message(context: Context) = context.getString(R.string.truco_go_to_deck_action)
 
-        override fun getAvailableResponses() = TrucoActionAvailableResponses(iDo = false, iDont = false)
+        override fun availableResponses() = TrucoActionAvailableResponses(iDo = false, iDont = false)
     }
 
     class CustomFinalActionResponse(
@@ -97,8 +127,8 @@ abstract class TrucoAction(val hasReplication: Boolean) {
         hasReplication = hasReplication
     ) {
 
-        override fun getMessage(context: Context) = message
+        override fun message(context: Context) = message
 
-        override fun getAvailableResponses() = TrucoActionAvailableResponses(iDo = false, iDont = false)
+        override fun availableResponses() = TrucoActionAvailableResponses(iDo = false, iDont = false)
     }
 }

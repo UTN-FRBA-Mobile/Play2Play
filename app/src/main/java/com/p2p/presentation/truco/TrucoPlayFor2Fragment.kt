@@ -17,7 +17,6 @@ import com.p2p.R
 import com.p2p.databinding.FragmentPlayTrucoFor2Binding
 import com.p2p.databinding.ViewTrucoHeaderBinding
 import com.p2p.model.truco.Card
-import com.p2p.model.truco.Suit
 import com.p2p.presentation.base.NoViewModel
 import com.p2p.presentation.basegame.BaseGameFragment
 import com.p2p.presentation.basegame.GameEvent
@@ -30,9 +29,7 @@ import com.p2p.presentation.truco.actions.TrucoActionsBottomSheetFragment
 import com.p2p.presentation.truco.cards.CardImageCreator
 import com.p2p.presentation.truco.cards.TrucoCardsHand
 import com.p2p.presentation.truco.cards.TrucoSingleOpponentMyCardsHand
-import com.p2p.presentation.truco.cards.TrucoSingleOpponentTheirCardsHand
 import com.p2p.utils.setOnEndListener
-import kotlin.random.Random
 
 class TrucoPlayFor2Fragment :
     BaseGameFragment<FragmentPlayTrucoFor2Binding, Any, NoViewModel, TrucoViewModel>(),
@@ -72,6 +69,7 @@ class TrucoPlayFor2Fragment :
         roundViews = listOf(headerBinding.firstRound, headerBinding.secondRound, headerBinding.thirdRound)
         myCardsViews = listOf(myLeftCard, myMiddleCard, myRightCard)
         theirCardsViews = listOf(theirLeftCard, theirMiddleCard, theirRightCard)
+        loadCardImages(theirCardsViews, emptyList())
         myDroppingPlacesViews = listOf(dropFirstCard, dropSecondCard, dropThirdCard)
         theirDroppingPlacesViews = listOf(dropTheirFirstCard, dropTheirSecondCard, dropTheirThirdCard)
         updateScores(0, 0)
@@ -89,9 +87,9 @@ class TrucoPlayFor2Fragment :
 
     override fun setupObservers() {
         super.setupObservers()
+        observe(gameViewModel.myCards) { initMyCardsHand(it) }
         observe(gameViewModel.singleTimeEvent) { onGameEvent(it) }
         observe(gameViewModel.actionAvailableResponses) { updateActionAvaileResponses(it) }
-        observe(gameViewModel.myCards) { initMyCardsHand(it) }
     }
 
     override fun onCardPlayed(playingCard: TrucoCardsHand.PlayingCard) {
@@ -140,6 +138,7 @@ class TrucoPlayFor2Fragment :
     private fun initMyCardsHand(myCards: List<Card>) {
         val myPlayingCards = getPlayingCards(myCardsViews, myCards)
         myCardsHand = TrucoSingleOpponentMyCardsHand(myPlayingCards, myDroppingPlacesViews, this@TrucoPlayFor2Fragment)
+        loadCardImages(myCardsViews, myCards)
         takeTurn()
     }
 
@@ -164,7 +163,7 @@ class TrucoPlayFor2Fragment :
     private fun showOpponentAction(action: TrucoAction) {
         //Show their bubble
         showAction(gameBinding.theirActionBubble, gameBinding.theirActionBubbleText, action)
-        updateActionAvaileResponses(action.getAvailableResponses())
+        updateActionAvaileResponses(action.availableResponses())
     }
 
     private fun showAction(bubbleBackground: View, bubbleText: TextView, action: TrucoAction) {
@@ -181,7 +180,7 @@ class TrucoPlayFor2Fragment :
 
     private fun showActionAfterVisibilityCheck(bubbleBackground: View, bubbleText: TextView, action: TrucoAction) {
         (parentFragmentManager.findFragmentByTag(ACTIONS_BOTTOM_SHEET_TAG) as BottomSheetDialogFragment?)?.dismiss()
-        bubbleText.text = action.getMessage(requireContext())
+        bubbleText.text = action.message(requireContext())
         showBubbleView(bubbleBackground)
         showBubbleView(bubbleText)
         gameBinding.actionBackground.isVisible = true
