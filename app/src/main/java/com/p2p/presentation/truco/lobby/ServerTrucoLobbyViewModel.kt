@@ -2,7 +2,6 @@ package com.p2p.presentation.truco.lobby
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.p2p.model.truco.PlayerTeam
 import com.p2p.presentation.base.BaseViewModel
 
 class ServerTrucoLobbyViewModel: BaseViewModel<LobbyEvent>() {

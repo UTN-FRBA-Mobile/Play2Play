@@ -11,7 +11,6 @@ import com.p2p.R
 import com.p2p.utils.Logger
 import java.util.*
 
-
 class DragListener : View.OnDragListener {
     override fun onDrag(view: View?, event: DragEvent?): Boolean {
         when (event!!.action) {
