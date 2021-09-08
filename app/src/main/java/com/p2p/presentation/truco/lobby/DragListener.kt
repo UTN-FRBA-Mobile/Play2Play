@@ -47,10 +47,12 @@ class DragListener : View.OnDragListener {
             }
 
             DragEvent.ACTION_DRAG_ENDED -> {
+                view!!.elevation = ELEVATION_DEFAULT
+
                 // If the view is dropped successfully
                 if(event.result) { return true }
 
-                val adapter = getViewAdapter(view!!)
+                val adapter = getViewAdapter(view)
                 val player = getViewPlayerName(view)
                 val players: List<String> = adapter.players
                 val playerIndex = getPlayerIndex(player, players)
@@ -63,8 +65,6 @@ class DragListener : View.OnDragListener {
                         .setImageResource(R.drawable.ic_baseline_account_circle_white)
 
                 }
-                view.elevation = ELEVATION_DEFAULT
-
 
                 return true
             }

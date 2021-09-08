@@ -50,22 +50,48 @@
         app:layout_constraintTop_toBottomOf="@id/connected_players"
         android:text="@string/tr_lobby_help_order_players" />
 
+    <ImageView
+        android:id="@+id/arrow_right"
+        android:layout_width="@dimen/huge_extra"
+        android:layout_height="@dimen/huge_extra"
+        android:layout_marginTop="@dimen/medium"
+        android:layout_marginBottom="@dimen/medium"
+        android:src="@drawable/ic_curved_arrow_right"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/help_order_players_description"
+        app:layout_constraintBottom_toTopOf="@id/players_grid"
+        app:layout_constraintHorizontal_bias="0.5" />
+
     <GridView
         android:id="@+id/players_grid"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="@dimen/largest_extra"
-        android:layout_marginBottom="@dimen/medium"
+        android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/medium"
+        android:padding="@dimen/medium"
+        android:clipToPadding="false"
         android:layout_marginEnd="@dimen/medium"
         android:numColumns="2"
         android:horizontalSpacing="@dimen/medium_more"
         android:verticalSpacing="@dimen/largest_extra"
         android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/help_order_players_description"
+        app:layout_constraintTop_toBottomOf="@id/arrow_right"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
-        app:layout_constraintBottom_toTopOf="@id/start_game_button"
+        app:layout_constraintBottom_toTopOf="@id/arrow_left"
         tools:listitem="@layout/view_truco_connected_user" />
+
+    <ImageView
+        android:id="@+id/arrow_left"
+        android:layout_width="@dimen/huge_extra"
+        android:layout_height="@dimen/huge_extra"
+        android:layout_marginTop="@dimen/medium"
+        android:layout_marginBottom="@dimen/medium"
+        android:src="@drawable/ic_curved_arrow_left"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/players_grid"
+        app:layout_constraintBottom_toTopOf="@id/start_game_button"
+        app:layout_constraintHorizontal_bias="0.5" />
 
     <Button
         android:id="@+id/start_game_button"

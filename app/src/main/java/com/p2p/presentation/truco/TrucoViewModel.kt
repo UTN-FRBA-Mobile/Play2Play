@@ -30,9 +30,9 @@ abstract class TrucoViewModel(
     /** List with the teams of players */
     protected lateinit var playersTeams: List<PlayerTeam>
 
-    // TODO: Must set this value on truco game creation and delete the mocked value
+    // TODO: Must set this value on truco game creation
     /** Set the quantity of players selected by the user when creating the game . */
-    protected val _totalPlayers = MutableLiveData<Int>(2)
+    protected val _totalPlayers = MutableLiveData<Int>()
     val totalPlayers: LiveData<Int> = _totalPlayers
 
     abstract fun startGame()

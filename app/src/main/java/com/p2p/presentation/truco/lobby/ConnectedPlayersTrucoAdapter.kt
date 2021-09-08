@@ -38,10 +38,10 @@ class ConnectedPlayersTrucoAdapter(
     }
 
     override fun getCount(): Int {
-        if (players.count() >= totalPlayers) {
-            return totalPlayers
+        return if (players.count() <= totalPlayers) {
+            players.count()
         } else {
-            return players.count()
+            totalPlayers
         }
     }
 
