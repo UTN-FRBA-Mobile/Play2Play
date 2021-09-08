@@ -2,29 +2,81 @@ package com.p2p.presentation.home
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.bluetooth.BluetoothDevice
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.os.Bundle
 import android.view.WindowManager
+import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.p2p.R
+import com.p2p.data.bluetooth.BluetoothConnection
+import com.p2p.data.bluetooth.BluetoothConnectionCreator
+import com.p2p.data.instructions.InstructionsRepository
+import com.p2p.data.instructions.InstructionsSource
+import com.p2p.data.loadingMessages.LoadingSource
+import com.p2p.data.loadingMessages.LoadingTextRepository
+import com.p2p.data.userInfo.UserSession
+import com.p2p.framework.SharedPreferencesUserInfoStorage
+import com.p2p.model.LoadingMessageType
+import com.p2p.model.base.message.Conversation
+import com.p2p.model.base.message.Message
 import com.p2p.presentation.base.BaseActivity
 import com.p2p.presentation.base.BaseViewModel
+import com.p2p.presentation.basegame.ConnectionType
 import com.p2p.presentation.basegame.GameActivity
-import com.p2p.presentation.home.games.GamesFragment
+import com.p2p.presentation.home.games.Game
+import com.p2p.presentation.truco.ServerTrucoViewModel
+import com.p2p.presentation.truco.TrucoPlayFor2Fragment
+import com.p2p.presentation.truco.TrucoViewModel
 import com.p2p.utils.showSnackBar
 
 class HomeActivity : BaseActivity() {
+
+    private val viewModel: TrucoViewModel by viewModels {
+        object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>) = ServerTrucoViewModel(
+                ConnectionType(null, null),
+                UserSession(SharedPreferencesUserInfoStorage(baseContext)),
+                object : BluetoothConnectionCreator {
+                    override fun getMyDeviceName() = ""
+
+                    override fun createServer() = object : BluetoothConnection {
+                        override fun write(message: Message) {}
+                        override fun talk(conversation: Conversation, sendMessage: Message) {}
+                        override fun close() {}
+                        override fun killPeer(peer: Long) {}
+                    }
+
+                    override fun createClient(serverDevice: BluetoothDevice) = object : BluetoothConnection {
+                        override fun write(message: Message) {}
+                        override fun talk(conversation: Conversation, sendMessage: Message) {}
+                        override fun close() {}
+                        override fun killPeer(peer: Long) {}
+                    }
+                },
+                InstructionsRepository(object : InstructionsSource {
+                    override fun getInstructions(game: Game) = "inst"
+                }),
+                LoadingTextRepository(object : LoadingSource {
+                    override fun getLoadingText(messageType: LoadingMessageType) = ""
+                })
+            ) as T
+        }
+    }
 
     private var hasShownLocationExplanation = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (savedInstanceState == null) {
-            addFragment(GamesFragment.newInstance(), shouldAddToBackStack = false)
+            viewModel.singleTimeEvent
             removeSplashStyle()
+            addFragment(TrucoPlayFor2Fragment.newInstance(), shouldAddToBackStack = false)
         }
         if (!hasLocationPermissions()) requestLocationPermissions()
     }
