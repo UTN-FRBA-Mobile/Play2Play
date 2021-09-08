@@ -79,7 +79,8 @@ class TrucoPlayFor2Fragment :
             actionResponseNoIDont.setOnClickListener { gameViewModel.replyAction(TrucoAction.NoIDont) }
             actionResponseYesEnvido.setOnClickListener { gameViewModel.replyAction(TrucoAction.Envido(true)) }
             actionResponseYesRealEnvido.setOnClickListener { gameViewModel.replyAction(TrucoAction.RealEnvido) }
-            actionResponseYesFaltaEnvido.setOnClickListener { gameViewModel.replyAction(TrucoAction.FaltaEnvido) }
+            //TODO pasarle los puntos del oponente cuando existan los puntos de la ronda
+            actionResponseYesFaltaEnvido.setOnClickListener { gameViewModel.replyAction(TrucoAction.FaltaEnvido(0)) }
             actionResponseYesRetruco.setOnClickListener { gameViewModel.replyAction(TrucoAction.Retrucazo) }
             actionResponseYesValeCuatro.setOnClickListener { gameViewModel.replyAction(TrucoAction.ValeCuatro) }
         }
@@ -100,6 +101,8 @@ class TrucoPlayFor2Fragment :
     private fun onGameEvent(event: GameEvent) = when (event) {
         is TrucoShowMyActionEvent -> showMyAction(event.action)
         is TrucoShowOpponentActionEvent -> showOpponentAction(event.action)
+        //TODO this is a mock, when played put actual values
+        is TrucoFinishRound -> finishRound(1, TrucoRoundResult.WIN)
         else -> super.onEvent(event)
     }
 

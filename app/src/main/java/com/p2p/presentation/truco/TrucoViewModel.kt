@@ -15,6 +15,7 @@ import com.p2p.presentation.basegame.ConnectionType
 import com.p2p.presentation.basegame.GameViewModel
 import com.p2p.presentation.home.games.Game
 import com.p2p.presentation.truco.actions.TrucoAction
+import com.p2p.presentation.truco.actions.TrucoAction.*
 import com.p2p.presentation.truco.actions.TrucoActionAvailableResponses
 
 abstract class TrucoViewModel(
@@ -36,8 +37,15 @@ abstract class TrucoViewModel(
     protected val _myCards = MutableLiveData<List<Card>>()
     val myCards: LiveData<List<Card>> = _myCards
 
+    var currentActionPoints: Int = 0
+
+    var currentAction: TrucoAction? = null
+
+    private val trucazoActions = listOf(Trucazo, Retrucazo, ValeCuatro)
+
     private val _actionAvailableResponses = MutableLiveData<TrucoActionAvailableResponses>()
-    val actionAvailableResponses: LiveData<TrucoActionAvailableResponses> = _actionAvailableResponses
+    val actionAvailableResponses: LiveData<TrucoActionAvailableResponses> =
+        _actionAvailableResponses
 
     abstract override fun startGame()
 
@@ -55,19 +63,50 @@ abstract class TrucoViewModel(
     @CallSuper
     override fun receiveMessage(conversation: Conversation) {
         super.receiveMessage(conversation)
-        when (conversation.lastMessage) {
-            is TrucoActionMessage -> dispatchSingleTimeEvent(TrucoShowOpponentActionEvent(conversation.lastMessage.action))
+        when (val message = conversation.lastMessage) {
+            is TrucoActionMessage -> {
+                updateActionValues(message.action)
+                dispatchSingleTimeEvent(
+                    TrucoShowOpponentActionEvent(
+                        message.action
+                    )
+                )
+            }
         }
     }
 
     fun performAction(action: TrucoAction) {
+        when (action) {
+            is NoIDont -> {
+                //TODO mandar mensaje para que sume los puntos al oponente
+                cleanActionValues()
+                if (trucazoActions.contains(currentAction)) {
+                    dispatchSingleTimeEvent(TrucoFinishRound)
+                }
+            }
+            is YesIDo -> {
+                //TODO mandar mensaje para jugar y sumar puntos
+                cleanActionValues()
+            }
+        }
         connection.write(TrucoActionMessage(action))
+        updateActionValues(action)
         dispatchSingleTimeEvent(TrucoShowMyActionEvent(action))
+    }
+
+    protected fun updateActionValues(action: TrucoAction) {
+        currentActionPoints += action.points
+        currentAction = action
+    }
+
+    //TODO Llamar cuando los puntos actuales hayan sido asignados a algun equipo
+    protected fun cleanActionValues() {
+        currentActionPoints = 0
+        currentAction = null
     }
 
     fun replyAction(action: TrucoAction) {
         _actionAvailableResponses.value = TrucoActionAvailableResponses.noActions()
-        connection.write(TrucoActionMessage(action))
-        dispatchSingleTimeEvent(TrucoShowMyActionEvent(action))
+        performAction(action)
     }
 }

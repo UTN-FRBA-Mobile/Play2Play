@@ -85,7 +85,8 @@ class TrucoActionsBottomSheetFragment : BaseBottomSheetDialogFragment<ViewTrucoA
         trucoButton.setOnClickListener { gameViewModel.performAction(TrucoAction.Trucazo) }
         envidoButton.setOnClickListener { gameViewModel.performAction(TrucoAction.Envido(false)) }
         realEnvidoButton.setOnClickListener { gameViewModel.performAction(TrucoAction.RealEnvido) }
-        faltaEnvidoButton.setOnClickListener { gameViewModel.performAction(TrucoAction.FaltaEnvido) }
+        //TODO pasarle los puntos del oponente cuando existan los puntos de la ronda
+        faltaEnvidoButton.setOnClickListener { gameViewModel.performAction(TrucoAction.FaltaEnvido(0)) }
         goToDeckButton.setOnClickListener { gameViewModel.performAction(TrucoAction.GoToDeck) }
         changeVisibleButtonsEnable(false)
     }
