@@ -98,7 +98,7 @@ class ServerTuttiFruttiViewModel(
     private fun saidEnough(peer: Long) {
         startLoading(loadingTextRepository.getText(LoadingMessageType.TF_WAITING_FOR_WORDS))
         saidEnoughPeer = peer
-        _finishedRoundInfos.value = emptyList()
+        _finishedRoundInfos.value = emptySet()
         waitingWordsJob = viewModelScope.launch(Dispatchers.Default) {
             delay(WAITING_WORDS_TIMEOUT_MS)
             withContext(Dispatchers.Main) { stopAcceptingWords() }
