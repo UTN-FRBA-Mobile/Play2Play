@@ -6,12 +6,15 @@
 
     <!-- Common -->
     <string name="continue_">Continuar</string> <!-- The `_` should be because continue is a reserved symbol :( -->
+    <string name="start">Iniciar</string>
     <string name="connect">Conectarse</string>
     <string name="understood">Entendido</string>
     <string name="unknown">Desconocido</string>
     <string name="points">Puntos</string>
     <string name="thanks">¡Gracias!</string>
     <string name="share">Compartir</string>
+    <string name="finish_game">Terminar partida</string>
+
 
     <!-- Request location permission -->
     <string name="request_location_title">Lo necesitás para jugar</string>
@@ -21,7 +24,6 @@
     <string name="games_user_name">Tu nombre</string>
     <string name="games_join">Unirse</string>
     <string name="games_create">Crear partida</string>
-
     <!-- Join games -->
     <string name="join_games_title">Seleccioná el celular de quien creó el juego</string>
     <string name="join_game_troubleshoot">En caso de no encontrar el celular deben conectarse manualmente. Hacé click acá y sigan las instrucciones en ambos celulares.</string>
@@ -29,6 +31,7 @@
 
     <!-- Games names -->
     <string name="games_tutti_frutti">Tutti Frutti</string>
+    <string name="games_impostor">Impostor</string>
     <string name="games_truco">Truco</string>
     <string name="games_name_error">¡Para jugar primero tenés que decirnos tu nombre!</string>
     <string name="games_name_max_length_error">Tu nombre puede tener hasta 7 letras</string>
@@ -61,17 +64,39 @@
     <string name="lobby_give_help_players_title">Pedile al resto que se sumen</string>
     <string name="lobby_give_help_players_decription"><![CDATA[Para sumarse a la partida se tienen que unir al celular con el nombre <b>%s</b>]]></string>
     <string name="lobby_connected_players">Jugadores listos</string>
+    <string name="lobby_no_players_yet">Aun no hay jugadores...</string>
     <string name="lobby_waiting_players">Esperando jugadores</string>
     <string name="lobby_start_game">Comenzar juego</string>
     <string name="tr_lobby_help_order_players"><![CDATA[Arrastrá los jugadores según la posición que vayan a ocupar en la mesa. El jugador en la posición <font color=#FFB349><b>marcada</b></font> será la mano.]]></string>
+
+    <!-- Tutti Frutti - Review screen -->
     <string name="tf_enough_player"><![CDATA[¡<b>%s</b> dijo basta!]]></string>
+
     <!-- Tutti Frutti - Loading screen -->
     <string name="tf_wait_for_review">¡Discutan con quien creó el juego los puntajes!</string>
     <string name="tf_wait_for_words">Esperando las palabras del resto de les jugadores</string>
+
     <!-- Tutti Frutti - Final Score -->
     <string name="tf_winner">Ganó %s</string>
     <string name="tf_points">%d puntos</string>
     <string name="tf_exit">Salir</string>
+
+    <!-- Impostor - Game -->
+
+    <!-- Impostor create game -->
+    <string name="im_write_key_word">Ingrese la palabra clave</string>
+    <string name="im_validation_error_input">¡Debes ingresar la palabra para poder arrancar!</string>
+    <string name="im_validation_error_players">¡Se debe unir al menos un jugador!</string>
+
+    <!-- Impostor play info -->
+    <string name="im_key_word_is">La palabra clave es</string>
+    <string name="im_impostor_is">El impostor es</string>
+
+    <!-- Impostor play -->
+    <string name="im_you_are_impostor">Sos el impostor, no sabes la palabra clave</string>
+    <string name="im_you_are_not_impostor">No sos el impostor, la palabra clave es</string>
+    <string name="im_simulate">Simula</string>
+
 
     <!-- Error screen -->
     <string name="error_bluetooth_off">Se apagó el bluetooth. Para poder jugar tenés que mantenerlo encendido.</string>
@@ -82,4 +107,19 @@
     <string name="error_client_connection_lost">Se perdió la conexión con %s.</string>
     <string name="error_connection_write_failure">Se perdió la conexión con la sala de juego, lo sentimos mucho.</string>
     <string name="tf_error_single_player">El resto de los jugadores abandonaron el juego… ¡felicitaciones ganador!</string>
+
+    <!-- Truco -->
+    <string name="truco_card_dropping_place">Jugá tu carta</string>
+    <string name="truco_their_score_label">Ell</string>
+    <string name="truco_our_score_label">Nos</string>
+    <string name="truco_actions_open_button">Abrir las acciones de la ronda del truco</string>
+    <string name="truco_swords_card">%d de espada</string>
+    <string name="truco_cups_card">%d de copa</string>
+    <string name="truco_clubs_card">%d de basto</string>
+    <string name="truco_golds_card">%d de oro</string>
+    <string name="truco_ask_for_envido">Envido</string>
+    <string name="truco_ask_for_truco">Truco</string>
+    <string name="truco_ask_for_real_envido">Real envido</string>
+    <string name="truco_ask_for_falta_envido">Falta envido</string>
+    <string name="truco_go_to_deck">Me voy al mazo</string>
 </resources>

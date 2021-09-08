@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+            <solid android:color="@color/colorPrimary" />
+            <corners
+                android:topLeftRadius="@dimen/medium"
+                android:topRightRadius="@dimen/medium" />
+        </shape>
+    </item>
+    <item
+        android:left="@dimen/truco_actions_border_size"
+        android:right="@dimen/truco_actions_border_size"
+        android:top="@dimen/truco_actions_border_size">
+        <shape>
+            <solid android:color="@android:color/white" />
+            <corners
+                android:topLeftRadius="@dimen/medium"
+                android:topRightRadius="@dimen/medium" />
+        </shape>
+    </item>
+</layer-list>
