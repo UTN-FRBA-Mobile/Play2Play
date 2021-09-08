@@ -1,7 +1,6 @@
 package com.p2p.presentation.truco
 
 import android.annotation.SuppressLint
-import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
 import com.p2p.R
@@ -19,11 +18,6 @@ class TrucoDragAndDropCard(
     private var initialRotation: Float = 0f
     private val cardFinalRotation by lazy {
         cardView.context.resources.getInteger(R.integer.truco_card_final_rotation).toFloat()
-    }
-    private val cardFinalScale by lazy {
-        TypedValue()
-            .apply { cardView.context.resources.getValue(R.integer.truco_card_final_scale, this, true) }
-            .float
     }
 
     init {
@@ -53,8 +47,8 @@ class TrucoDragAndDropCard(
                     val scale = when {
                         view.y > initialCoordinates.second -> 1f
                         view.y > currentDroppingView.y ->
-                            cardFinalScale + (1f - cardFinalScale) * distanceWithDroppingPlaceMultiplicator
-                        else -> MIN_CARD_SCALE + (cardFinalScale - MIN_CARD_SCALE) * view.y / currentDroppingView.y
+                            currentDroppingView.scaleX + (1f - currentDroppingView.scaleX) * distanceWithDroppingPlaceMultiplicator
+                        else -> MIN_CARD_SCALE + (currentDroppingView.scaleX - MIN_CARD_SCALE) * view.y / currentDroppingView.y
                     }
                     view.scaleX = scale
                     view.scaleY = scale
@@ -71,8 +65,8 @@ class TrucoDragAndDropCard(
                             .x(currentDroppingView.x)
                             .y(currentDroppingView.y)
                             .rotation(currentDroppingView.rotation)
-                            .scaleX(cardFinalScale)
-                            .scaleY(cardFinalScale)
+                            .scaleX(currentDroppingView.scaleX)
+                            .scaleY(currentDroppingView.scaleX)
                             .rotationX(cardFinalRotation)
                             .start()
                         cardView.setOnTouchListener(null)

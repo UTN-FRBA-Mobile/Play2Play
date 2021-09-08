@@ -96,7 +96,7 @@ class TrucoPlayFor2Fragment :
     override fun setupObservers() {
         super.setupObservers()
         observe(gameViewModel.singleTimeEvent) { onGameEvent(it) }
-        observe(gameViewModel.actionAvailableResponses) { updateActionAvaileResponses(it) }
+        observe(gameViewModel.actionAvailableResponses) { updateActionAvailableResponses(it) }
     }
 
     override fun onCardPlayed(playingCard: TrucoCardsHand.PlayingCard) {
@@ -167,7 +167,7 @@ class TrucoPlayFor2Fragment :
 
     private fun showOpponentAction(action: TrucoAction) {
         showAction(gameBinding.theirActionBubble, gameBinding.theirActionBubbleText, action)
-        updateActionAvaileResponses(action.getAvailableResponses())
+        updateActionAvailableResponses(action.getAvailableResponses())
         mockReplyToTheirAction(action) // TODO: delete
     }
 
@@ -199,7 +199,7 @@ class TrucoPlayFor2Fragment :
         }
     }
 
-    private fun updateActionAvaileResponses(
+    private fun updateActionAvailableResponses(
         availableResponses: TrucoActionAvailableResponses
     ) = with(availableResponses) {
         with(gameBinding.actionsResponses) {
