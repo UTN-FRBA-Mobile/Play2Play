@@ -9,18 +9,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.p2p.R
-import com.p2p.TrucoActivity
 import com.p2p.databinding.ViewTrucoActionsBinding
 import com.p2p.presentation.base.BaseBottomSheetDialogFragment
 import com.p2p.presentation.extensions.animateRotation
 import com.p2p.presentation.extensions.fadeIn
+import com.p2p.presentation.truco.TrucoViewModel
 
 class TrucoActionsBottomSheetFragment : BaseBottomSheetDialogFragment<ViewTrucoActionsBinding>() {
+
+    private val gameViewModel: TrucoViewModel by activityViewModels()
 
     private var isExpanded = false
     private val bottomSheetCallback = object : BottomSheetBehavior.BottomSheetCallback() {
@@ -75,16 +78,16 @@ class TrucoActionsBottomSheetFragment : BaseBottomSheetDialogFragment<ViewTrucoA
         }
     }
 
-    override fun initUI() {
-        binding.openButton.setOnClickListener { toggleState() }
-        binding.envidoOptionsButton.setOnClickListener { toggleEnvidoOptionsState() }
-        binding.trucoButton.setOnClickListener { (activity as TrucoActivity).showMyAction(TrucoAction.Truco) }
-        binding.envidoButton.setOnClickListener { (activity as TrucoActivity).showMyAction(TrucoAction.Envido(false)) }
-        binding.realEnvidoButton.setOnClickListener { (activity as TrucoActivity).showMyAction(TrucoAction.RealEnvido) }
-        binding.faltaEnvidoButton.setOnClickListener { (activity as TrucoActivity).showMyAction(TrucoAction.FaltaEnvido) }
-        binding.goToDeckButton.setOnClickListener { (activity as TrucoActivity).showMyAction(TrucoAction.GoToDeck) }
+    override fun initUI() = with(binding) {
+        actionsBottomSheet.postDelayed({ actionsBottomSheet.fadeIn() }, SHOW_DELAY)
+        openButton.setOnClickListener { toggleState() }
+        envidoOptionsButton.setOnClickListener { toggleEnvidoOptionsState() }
+        trucoButton.setOnClickListener { gameViewModel.performAction(TrucoAction.Truco) }
+        envidoButton.setOnClickListener { gameViewModel.performAction(TrucoAction.Envido(false)) }
+        realEnvidoButton.setOnClickListener { gameViewModel.performAction(TrucoAction.RealEnvido) }
+        faltaEnvidoButton.setOnClickListener { gameViewModel.performAction(TrucoAction.FaltaEnvido) }
+        goToDeckButton.setOnClickListener { gameViewModel.performAction(TrucoAction.GoToDeck) }
         changeVisibleButtonsEnable(false)
-        binding.actionsBottomSheet.postDelayed({ binding.actionsBottomSheet.fadeIn() }, SHOW_DELAY)
     }
 
     private fun toggleState() {

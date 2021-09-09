@@ -115,7 +115,7 @@
 
     <TextView
         android:id="@+id/drop_first_card"
-        android:layout_width="0dp"
+        android:layout_width="@dimen/truco_my_card_width"
         android:layout_height="@dimen/truco_my_card_height"
         android:layout_marginTop="@dimen/truco_card_drop_height"
         android:background="@drawable/dashed_border"
@@ -129,14 +129,13 @@
         android:textStyle="bold"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="62:95"
         app:layout_constraintEnd_toStartOf="@id/guideline_center_vertical"
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible" />
 
     <TextView
         android:id="@+id/drop_second_card"
-        android:layout_width="0dp"
+        android:layout_width="@dimen/truco_my_card_width"
         android:layout_height="@dimen/truco_my_card_height"
         android:layout_marginTop="@dimen/truco_card_drop_height"
         android:background="@drawable/dashed_border"
@@ -150,7 +149,6 @@
         android:textStyle="bold"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="62:95"
         app:layout_constraintEnd_toEndOf="@id/drop_first_card"
         app:layout_constraintStart_toEndOf="@id/drop_first_card"
         app:layout_constraintTop_toTopOf="parent"
@@ -158,7 +156,7 @@
 
     <TextView
         android:id="@+id/drop_third_card"
-        android:layout_width="0dp"
+        android:layout_width="@dimen/truco_my_card_width"
         android:layout_height="@dimen/truco_my_card_height"
         android:layout_marginTop="@dimen/truco_card_drop_height"
         android:background="@drawable/dashed_border"
@@ -172,7 +170,6 @@
         android:textStyle="bold"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="62:95"
         app:layout_constraintEnd_toEndOf="@id/drop_second_card"
         app:layout_constraintStart_toEndOf="@id/drop_second_card"
         app:layout_constraintTop_toTopOf="parent"
@@ -180,31 +177,28 @@
 
     <ImageView
         android:id="@+id/my_left_card"
-        android:layout_width="0dp"
+        android:layout_width="@dimen/truco_my_card_width"
         android:layout_height="@dimen/truco_my_card_height"
         android:layout_marginStart="@dimen/truco_first_card_horizontal_margin"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="62:95"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/my_middle_card"
-        android:layout_width="0dp"
+        android:layout_width="@dimen/truco_my_card_width"
         android:layout_height="@dimen/truco_my_card_height"
         android:layout_marginStart="@dimen/truco_first_card_horizontal_margin"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="62:95"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/my_right_card"
-        android:layout_width="0dp"
+        android:layout_width="@dimen/truco_my_card_width"
         android:layout_height="@dimen/truco_my_card_height"
         android:layout_marginStart="@dimen/truco_first_card_horizontal_margin"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="62:95"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="ContentDescription" />
 
