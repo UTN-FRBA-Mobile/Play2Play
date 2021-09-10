@@ -112,20 +112,26 @@ abstract class TrucoViewModel(
         _currentRound.value = _currentRound.value?.plus(1)
     }
 
+
+    fun replyAction(action: TrucoAction) {
+        _actionAvailableResponses.value = TrucoActionAvailableResponses.noActions()
+        performAction(action)
+    }
+
     /** Updates currentActionPoints and currentAction.
      * currentAction value only will be replaced if the action received is not yes or no, in order to keep the history */
-    protected fun updateActionValues(action: TrucoAction) {
+    private fun updateActionValues(action: TrucoAction) {
         currentActionPoints += action.points
         currentAction = if (listOf(YesIDo, NoIDont).contains(action)) currentAction else action
     }
 
     //TODO Llamar cuando los puntos actuales hayan sido asignados a algun equipo
-    protected fun cleanActionValues() {
+    private fun cleanActionValues() {
         currentActionPoints = 0
         currentAction = null
     }
 
-    fun setTrucoOrEnvidoAsAskedIfApplies(action: TrucoAction) {
+    private fun setTrucoOrEnvidoAsAskedIfApplies(action: TrucoAction) {
         when (action) {
             // Envido can be asked after truco on the first round, so it is not fully asked unless receives a YesIDo
             is Trucazo -> if (currentRound.requireValue() > 1) _trucoAlreadyAsked.value = true
@@ -135,9 +141,5 @@ abstract class TrucoViewModel(
         }
     }
 
-    fun replyAction(action: TrucoAction) {
-        _actionAvailableResponses.value = TrucoActionAvailableResponses.noActions()
-        performAction(action)
-    }
 }
 
