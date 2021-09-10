@@ -77,6 +77,7 @@ abstract class TrucoViewModel(
                 setTrucoOrEnvidoAsAskedIfApplies(message.action)
                 updateActionValues(message.action)
                 dispatchSingleTimeEvent(TrucoShowOpponentActionEvent(message.action))
+                // TODO: si se recibe quiero o no quiero, calcular los puntos
             }
         }
     }
@@ -111,9 +112,11 @@ abstract class TrucoViewModel(
         _currentRound.value = _currentRound.value?.plus(1)
     }
 
+    /** Updates currentActionPoints and currentAction.
+     * currentAction value only will be replaced if the action received is not yes or no, in order to keep the history */
     protected fun updateActionValues(action: TrucoAction) {
         currentActionPoints += action.points
-        currentAction = action
+        currentAction = if (listOf(YesIDo, NoIDont).contains(action)) currentAction else action
     }
 
     //TODO Llamar cuando los puntos actuales hayan sido asignados a algun equipo
