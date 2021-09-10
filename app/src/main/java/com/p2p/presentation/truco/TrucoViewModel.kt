@@ -17,7 +17,6 @@ import com.p2p.presentation.home.games.Game
 import com.p2p.presentation.truco.actions.TrucoAction
 import com.p2p.presentation.truco.actions.TrucoAction.*
 import com.p2p.presentation.truco.actions.TrucoActionAvailableResponses
-import com.p2p.utils.Logger
 
 abstract class TrucoViewModel(
     connectionType: ConnectionType,
@@ -108,7 +107,7 @@ abstract class TrucoViewModel(
     }
 
     fun finishRound() {
-        _currentRound.value?.plus(1)
+        _currentRound.value = _currentRound.value?.plus(1)
     }
 
     protected fun updateActionValues(action: TrucoAction) {
@@ -123,7 +122,6 @@ abstract class TrucoViewModel(
     }
 
     fun setTrucoOrEnvidoAsAskedIfApplies(action: TrucoAction) {
-        Logger.d("P2P_TrucoViewModel", "actionApplies, action: $action")
         when (action) {
             is Trucazo -> _trucoAlreadyAsked.value = true
             is Envido, is RealEnvido, is FaltaEnvido -> _envidoAlreadyAsked.value = true

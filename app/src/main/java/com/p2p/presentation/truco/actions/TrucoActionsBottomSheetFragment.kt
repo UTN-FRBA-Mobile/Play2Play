@@ -35,6 +35,7 @@ class TrucoActionsBottomSheetFragment :
 
     /** Once truco is asked in a hand, neither it or envido can be asked. */
     private var trucoDisabledForHand = false
+
     private val bottomSheetCallback = object : BottomSheetBehavior.BottomSheetCallback() {
 
         override fun onStateChanged(bottomSheet: View, newState: Int) {
