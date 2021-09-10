@@ -57,8 +57,7 @@ abstract class TrucoAction(val hasReplication: Boolean, val points: Int) {
         points = 1
     ) {
 
-        override fun message(context: Context) =
-            context.getString(R.string.truco_ask_for_vale_cuatro)
+        override fun message(context: Context) = context.getString(R.string.truco_ask_for_vale_cuatro)
     }
 
     data class Envido(val alreadyReplicatedEnvido: Boolean) : TrucoAction(
@@ -80,8 +79,7 @@ abstract class TrucoAction(val hasReplication: Boolean, val points: Int) {
         points = 1
     ) {
 
-        override fun message(context: Context) =
-            context.getString(R.string.truco_ask_for_real_envido)
+        override fun message(context: Context) = context.getString(R.string.truco_ask_for_real_envido)
 
         override fun availableResponses() = TrucoActionAvailableResponses(faltaEnvido = true)
     }
@@ -91,16 +89,14 @@ abstract class TrucoAction(val hasReplication: Boolean, val points: Int) {
         points = 30 - totalOpponentPoints
     ) {
 
-        override fun message(context: Context) =
-            context.getString(R.string.truco_ask_for_falta_envido)
+        override fun message(context: Context) = context.getString(R.string.truco_ask_for_falta_envido)
     }
 
     object EnvidoGoesFirst : TrucoAction(
         hasReplication = true,
         points = 1
     ) {
-        override fun message(context: Context): String =
-            context.getString(R.string.truco_ask_for_envido_goes_first)
+        override fun message(context: Context): String = context.getString(R.string.truco_ask_for_envido_goes_first)
 
     }
 

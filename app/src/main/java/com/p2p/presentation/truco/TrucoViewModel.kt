@@ -125,7 +125,7 @@ abstract class TrucoViewModel(
         when (action) {
             // Envido can be asked after truco on the first round, so it is not fully asked unless receives a YesIDo
             is Trucazo -> if (currentRound.requireValue() > 1) _trucoAlreadyAsked.value = true
-            is YesIDo, -> if (currentAction is Trucazo) _trucoAlreadyAsked.value = true
+            is YesIDo -> if (currentAction is Trucazo) _trucoAlreadyAsked.value = true
             is Envido, is RealEnvido, is FaltaEnvido, is EnvidoGoesFirst -> _envidoAlreadyAsked.value = true
             else -> Unit
         }
