@@ -18,6 +18,7 @@ import com.p2p.presentation.home.games.Game
 import com.p2p.presentation.truco.actions.TrucoAction
 import com.p2p.presentation.truco.actions.TrucoAction.*
 import com.p2p.presentation.truco.actions.TrucoActionAvailableResponses
+import com.p2p.utils.Logger
 
 abstract class TrucoViewModel(
     connectionType: ConnectionType,
@@ -73,9 +74,9 @@ abstract class TrucoViewModel(
         super.receiveMessage(conversation)
         when (val message = conversation.lastMessage) {
             is TrucoActionMessage -> {
+                setTrucoOrEnvidoAsAskedIfApplies(message.action)
                 updateActionValues(message.action)
                 dispatchSingleTimeEvent(TrucoShowOpponentActionEvent(message.action))
-                setTrucoOrEnvidoAsAskedIfApplies(message.action)
             }
         }
     }
