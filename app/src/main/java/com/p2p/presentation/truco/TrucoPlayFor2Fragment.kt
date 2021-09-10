@@ -51,8 +51,6 @@ class TrucoPlayFor2Fragment :
     private lateinit var myDroppingPlacesViews: List<View>
     private lateinit var theirDroppingPlacesViews: List<View>
 
-    private var currentRound = 0 // TODO: move it to VM
-
     private val shortDuration by lazy { resources.getInteger(android.R.integer.config_shortAnimTime).toLong() }
     private val longDuration by lazy { resources.getInteger(android.R.integer.config_longAnimTime).toLong() }
 
@@ -90,12 +88,11 @@ class TrucoPlayFor2Fragment :
         super.setupObservers()
         observe(gameViewModel.myCards) { initMyCardsHand(it) }
         observe(gameViewModel.singleTimeEvent) { onGameEvent(it) }
-        observe(gameViewModel.actionAvailableResponses) { updateActionAvaileResponses(it) }
+        observe(gameViewModel.actionAvailableResponses) { updateActionAvailableResponses(it) }
     }
 
     override fun onCardPlayed(playingCard: TrucoCardsHand.PlayingCard) {
-        //TODO vale mock on card played
-        currentRound = 1
+        //TODO mock on card played
     }
 
     private fun onGameEvent(event: GameEvent) = when (event) {
@@ -103,6 +100,8 @@ class TrucoPlayFor2Fragment :
         is TrucoShowOpponentActionEvent -> showOpponentAction(event.action)
         //TODO this is a mock, when played put actual values
         is TrucoFinishRound -> finishRound(1, TrucoRoundResult.WIN)
+        is TrucoFinishHand -> TODO("Do finish hand logic")
+        is TrucoNewHand -> TODO("Do new hand logic")
         else -> super.onEvent(event)
     }
 
@@ -116,6 +115,7 @@ class TrucoPlayFor2Fragment :
         view.contentDescription = description
     }
 
+    // TODO
     private fun updateScores(ourScore: Int, their: Int) {
         updateScore(headerBinding.ourScore, ourScore)
         updateScore(headerBinding.theirScore, their)
@@ -152,6 +152,7 @@ class TrucoPlayFor2Fragment :
     private fun takeTurn() = myCardsHand.takeTurn()
 
     private fun finishRound(round: Int, result: TrucoRoundResult) {
+        gameViewModel.finishRound()
         roundViews[round].animateBackgroundTint(ContextCompat.getColor(requireContext(), result.color)) {
             val colorPrimary = ContextCompat.getColor(requireContext(), R.color.colorPrimary)
             roundViews.getOrNull(round + 1)?.backgroundTintList = ColorStateList.valueOf(colorPrimary)
@@ -166,7 +167,7 @@ class TrucoPlayFor2Fragment :
     private fun showOpponentAction(action: TrucoAction) {
         //Show their bubble
         showAction(gameBinding.theirActionBubble, gameBinding.theirActionBubbleText, action)
-        updateActionAvaileResponses(action.availableResponses())
+        updateActionAvailableResponses(action.availableResponses())
     }
 
     private fun showAction(bubbleBackground: View, bubbleText: TextView, action: TrucoAction) {
@@ -197,7 +198,7 @@ class TrucoPlayFor2Fragment :
         }
     }
 
-    private fun updateActionAvaileResponses(
+    private fun updateActionAvailableResponses(
         availableResponses: TrucoActionAvailableResponses
     ) = with(availableResponses) {
         with(gameBinding.actionsResponses) {

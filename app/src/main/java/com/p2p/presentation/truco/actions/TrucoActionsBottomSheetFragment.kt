@@ -16,16 +16,25 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDE
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.p2p.R
 import com.p2p.databinding.ViewTrucoActionsBinding
-import com.p2p.presentation.base.BaseBottomSheetDialogFragment
+import com.p2p.presentation.base.BaseMVVMBottomSheetDialogFragment
+import com.p2p.presentation.basegame.GameEvent
 import com.p2p.presentation.extensions.animateRotation
 import com.p2p.presentation.extensions.fadeIn
+import com.p2p.presentation.truco.TrucoNewHand
 import com.p2p.presentation.truco.TrucoViewModel
 
-class TrucoActionsBottomSheetFragment : BaseBottomSheetDialogFragment<ViewTrucoActionsBinding>() {
+class TrucoActionsBottomSheetFragment :
+    BaseMVVMBottomSheetDialogFragment<ViewTrucoActionsBinding, GameEvent, TrucoViewModel>() {
 
-    private val gameViewModel: TrucoViewModel by activityViewModels()
+    override val viewModel: TrucoViewModel by activityViewModels()
 
     private var isExpanded = false
+
+    /** Once envido is asked in a hand, it can't be asked again. */
+    private var envidoDisabledForHand = false
+
+    /** Once truco is asked in a hand, neither it or envido can be asked. */
+    private var trucoDisabledForHand = false
     private val bottomSheetCallback = object : BottomSheetBehavior.BottomSheetCallback() {
 
         override fun onStateChanged(bottomSheet: View, newState: Int) {
@@ -82,13 +91,37 @@ class TrucoActionsBottomSheetFragment : BaseBottomSheetDialogFragment<ViewTrucoA
         actionsBottomSheet.postDelayed({ actionsBottomSheet.fadeIn() }, SHOW_DELAY)
         openButton.setOnClickListener { toggleState() }
         envidoOptionsButton.setOnClickListener { toggleEnvidoOptionsState() }
-        trucoButton.setOnClickListener { gameViewModel.performAction(TrucoAction.Trucazo) }
-        envidoButton.setOnClickListener { gameViewModel.performAction(TrucoAction.Envido(false)) }
-        realEnvidoButton.setOnClickListener { gameViewModel.performAction(TrucoAction.RealEnvido) }
+        trucoButton.setOnClickListener { viewModel.performAction(TrucoAction.Trucazo) }
+        envidoButton.setOnClickListener { viewModel.performAction(TrucoAction.Envido(false)) }
+        realEnvidoButton.setOnClickListener { viewModel.performAction(TrucoAction.RealEnvido) }
         //TODO pasarle los puntos del oponente cuando existan los puntos de la ronda
-        faltaEnvidoButton.setOnClickListener { gameViewModel.performAction(TrucoAction.FaltaEnvido(0)) }
-        goToDeckButton.setOnClickListener { gameViewModel.performAction(TrucoAction.GoToDeck) }
-        changeVisibleButtonsEnable(false)
+        faltaEnvidoButton.setOnClickListener { viewModel.performAction(TrucoAction.FaltaEnvido(0)) }
+        goToDeckButton.setOnClickListener { viewModel.performAction(TrucoAction.GoToDeck) }
+        disableEnvidoAndTrucoButtons()
+        setupObservers()
+    }
+
+    override fun setupObservers() {
+        super.setupObservers()
+        observe(viewModel.trucoAlreadyAsked) {
+            if (it) {
+                envidoDisabledForHand = true
+                trucoDisabledForHand = true
+                disableEnvidoAndTrucoButtons()
+            }
+        }
+        observe(viewModel.envidoAlreadyAsked) { if (it) disableEnvidoForHand() }
+        observe(viewModel.currentRound) { if (it > 1) disableEnvidoForHand() } // Envido can only be asked on round 1
+        observe(viewModel.singleTimeEvent) { onGameEvent(it) }
+    }
+
+    private fun onGameEvent(event: GameEvent) = when (event) {
+        is TrucoNewHand -> {
+            trucoDisabledForHand = false
+            envidoDisabledForHand = false
+            enableEnvidoAndTrucoButtons()
+        }
+        else -> super.onEvent(event)
     }
 
     private fun toggleState() {
@@ -106,18 +139,36 @@ class TrucoActionsBottomSheetFragment : BaseBottomSheetDialogFragment<ViewTrucoA
 
     private fun onCollapsed() {
         binding.openButtonIcon.animateRotation(0f)
-        changeVisibleButtonsEnable(false)
+        disableEnvidoAndTrucoButtons()
     }
 
     private fun onExpanded() {
         binding.openButtonIcon.animateRotation(180f)
-        changeVisibleButtonsEnable(true)
+        enableEnvidoAndTrucoButtons()
     }
 
-    private fun changeVisibleButtonsEnable(isEnabled: Boolean) {
-        binding.envidoOptionsButton.isEnabled = isEnabled
-        binding.trucoButton.isEnabled = isEnabled
-        binding.trucoButton.alpha = if (isEnabled) 1f else 0.3f
+    private fun disableEnvidoAndTrucoButtons() {
+        changeEnvidoButtonAvailability(false)
+        changeTrucoButtonAvailability(false)
+    }
+
+    private fun enableEnvidoAndTrucoButtons() {
+        changeEnvidoButtonAvailability(true)
+        changeTrucoButtonAvailability(true)
+    }
+
+    private fun disableEnvidoForHand() {
+        changeEnvidoButtonAvailability(false)
+        envidoDisabledForHand = true
+    }
+
+    private fun changeEnvidoButtonAvailability(enabled: Boolean) {
+        binding.envidoOptionsButton.isEnabled = enabled && !envidoDisabledForHand
+    }
+
+    private fun changeTrucoButtonAvailability(enabled: Boolean) {
+        binding.trucoButton.isEnabled = (enabled && !trucoDisabledForHand)
+        binding.trucoButton.alpha = if (enabled && !trucoDisabledForHand) 1f else 0.3f
     }
 
     private fun Dialog.getBottomSheet(): FrameLayout {

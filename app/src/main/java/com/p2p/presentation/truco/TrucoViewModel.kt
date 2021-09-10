@@ -17,6 +17,7 @@ import com.p2p.presentation.home.games.Game
 import com.p2p.presentation.truco.actions.TrucoAction
 import com.p2p.presentation.truco.actions.TrucoAction.*
 import com.p2p.presentation.truco.actions.TrucoActionAvailableResponses
+import com.p2p.utils.Logger
 
 abstract class TrucoViewModel(
     connectionType: ConnectionType,
@@ -47,6 +48,15 @@ abstract class TrucoViewModel(
     val actionAvailableResponses: LiveData<TrucoActionAvailableResponses> =
         _actionAvailableResponses
 
+    private val _trucoAlreadyAsked = MutableLiveData(false)
+    val trucoAlreadyAsked: LiveData<Boolean> = _trucoAlreadyAsked
+
+    private val _envidoAlreadyAsked = MutableLiveData(false)
+    val envidoAlreadyAsked: LiveData<Boolean> = _envidoAlreadyAsked
+
+    private val _currentRound = MutableLiveData(1)
+    val currentRound: LiveData<Int> = _currentRound
+
     abstract override fun startGame()
 
     override fun goToPlay() {
@@ -66,11 +76,8 @@ abstract class TrucoViewModel(
         when (val message = conversation.lastMessage) {
             is TrucoActionMessage -> {
                 updateActionValues(message.action)
-                dispatchSingleTimeEvent(
-                    TrucoShowOpponentActionEvent(
-                        message.action
-                    )
-                )
+                dispatchSingleTimeEvent(TrucoShowOpponentActionEvent(message.action))
+                setTrucoOrEnvidoAsAskedIfApplies(message.action)
             }
         }
     }
@@ -80,18 +87,28 @@ abstract class TrucoViewModel(
             is NoIDont -> {
                 //TODO mandar mensaje para que sume los puntos al oponente
                 cleanActionValues()
-                if (trucazoActions.contains(currentAction)) {
-                    dispatchSingleTimeEvent(TrucoFinishRound)
-                }
+                if (trucazoActions.contains(currentAction))
+                    dispatchSingleTimeEvent(TrucoFinishHand)
             }
             is YesIDo -> {
                 //TODO mandar mensaje para jugar y sumar puntos
                 cleanActionValues()
             }
         }
+        setTrucoOrEnvidoAsAskedIfApplies(action)
         connection.write(TrucoActionMessage(action))
         updateActionValues(action)
         dispatchSingleTimeEvent(TrucoShowMyActionEvent(action))
+    }
+
+    fun newHand() {
+        dispatchSingleTimeEvent(TrucoNewHand)
+        _trucoAlreadyAsked.value = false
+        _envidoAlreadyAsked.value = false
+    }
+
+    fun finishRound() {
+        _currentRound.value?.plus(1)
     }
 
     protected fun updateActionValues(action: TrucoAction) {
@@ -105,8 +122,18 @@ abstract class TrucoViewModel(
         currentAction = null
     }
 
+    fun setTrucoOrEnvidoAsAskedIfApplies(action: TrucoAction) {
+        Logger.d("P2P_TrucoViewModel", "actionApplies, action: $action")
+        when (action) {
+            is Trucazo -> _trucoAlreadyAsked.value = true
+            is Envido, is RealEnvido, is FaltaEnvido -> _envidoAlreadyAsked.value = true
+            else -> Unit
+        }
+    }
+
     fun replyAction(action: TrucoAction) {
         _actionAvailableResponses.value = TrucoActionAvailableResponses.noActions()
         performAction(action)
     }
 }
+
