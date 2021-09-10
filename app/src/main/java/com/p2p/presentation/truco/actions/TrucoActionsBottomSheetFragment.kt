@@ -20,6 +20,7 @@ import com.p2p.presentation.base.BaseMVVMBottomSheetDialogFragment
 import com.p2p.presentation.basegame.GameEvent
 import com.p2p.presentation.extensions.animateRotation
 import com.p2p.presentation.extensions.fadeIn
+import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.truco.TrucoNewHand
 import com.p2p.presentation.truco.TrucoViewModel
 
@@ -33,7 +34,7 @@ class TrucoActionsBottomSheetFragment :
     /** Once envido is asked in a hand, it can't be asked again. */
     private var envidoDisabledForHand = false
 
-    /** Once truco is asked in a hand, neither it or envido can be asked. */
+    /** Once truco is asked in a hand, neither it nor envido can be asked. */
     private var trucoDisabledForHand = false
 
     private val bottomSheetCallback = object : BottomSheetBehavior.BottomSheetCallback() {
@@ -92,7 +93,14 @@ class TrucoActionsBottomSheetFragment :
         actionsBottomSheet.postDelayed({ actionsBottomSheet.fadeIn() }, SHOW_DELAY)
         openButton.setOnClickListener { toggleState() }
         envidoOptionsButton.setOnClickListener { toggleEnvidoOptionsState() }
-        trucoButton.setOnClickListener { viewModel.performAction(TrucoAction.Trucazo) }
+        trucoButton.setOnClickListener {
+            viewModel.performAction(
+                TrucoAction.Trucazo(
+                    viewModel.currentRound.requireValue(),
+                    viewModel.envidoAlreadyAsked.requireValue()
+                )
+            )
+        }
         envidoButton.setOnClickListener { viewModel.performAction(TrucoAction.Envido(false)) }
         realEnvidoButton.setOnClickListener { viewModel.performAction(TrucoAction.RealEnvido) }
         //TODO pasarle los puntos del oponente cuando existan los puntos de la ronda

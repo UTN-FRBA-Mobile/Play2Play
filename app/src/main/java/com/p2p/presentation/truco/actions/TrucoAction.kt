@@ -4,15 +4,6 @@ import android.content.Context
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.p2p.R
-import com.p2p.model.base.message.ClientHandshakeMessage
-import com.p2p.model.base.message.GoodbyePlayerMessage
-import com.p2p.model.base.message.NameInUseMessage
-import com.p2p.model.base.message.ServerHandshakeMessage
-import com.p2p.model.impostor.message.ImpostorAssignWord
-import com.p2p.model.impostor.message.ImpostorEndGame
-import com.p2p.model.truco.message.TrucoActionMessage
-import com.p2p.model.truco.message.TrucoCardsMessage
-import com.p2p.model.tuttifrutti.message.*
 import com.p2p.presentation.truco.actions.TrucoAction.*
 
 @JsonTypeInfo(
@@ -26,8 +17,8 @@ import com.p2p.presentation.truco.actions.TrucoAction.*
     JsonSubTypes.Type(value = ValeCuatro::class, name = "ValeCuatro"),
     JsonSubTypes.Type(value = Envido::class, name = "Envido"),
     JsonSubTypes.Type(value = RealEnvido::class, name = "RealEnvido"),
-    JsonSubTypes.Type(value = ValeCuatro::class, name = "ValeCuatro"),
     JsonSubTypes.Type(value = FaltaEnvido::class, name = "FaltaEnvido"),
+    JsonSubTypes.Type(value = EnvidoGoesFirst::class, name = "EnvidoGoesFirst"),
     JsonSubTypes.Type(value = YesIDo::class, name = "YesIDo"),
     JsonSubTypes.Type(value = NoIDont::class, name = "NoIDont"),
     JsonSubTypes.Type(value = GoToDeck::class, name = "GoToDeck"),
@@ -39,14 +30,16 @@ abstract class TrucoAction(val hasReplication: Boolean, val points: Int) {
 
     open fun availableResponses() = TrucoActionAvailableResponses()
 
-    object Trucazo : TrucoAction(
+    data class Trucazo(val round: Int, val envidoAlreadyAsked: Boolean = false) : TrucoAction(
         hasReplication = true,
         points = 1
     ) {
 
         override fun message(context: Context) = context.getString(R.string.truco_ask_for_truco)
 
-        override fun availableResponses() = TrucoActionAvailableResponses(retruco = true)
+        override fun availableResponses() =
+            if (round == 1 && !envidoAlreadyAsked) TrucoActionAvailableResponses(retruco = true, envidoGoesFirst = true)
+            else TrucoActionAvailableResponses(retruco = true)
     }
 
     object Retrucazo : TrucoAction(
@@ -64,7 +57,8 @@ abstract class TrucoAction(val hasReplication: Boolean, val points: Int) {
         points = 1
     ) {
 
-        override fun message(context: Context) = context.getString(R.string.truco_ask_for_vale_cuatro)
+        override fun message(context: Context) =
+            context.getString(R.string.truco_ask_for_vale_cuatro)
     }
 
     data class Envido(val alreadyReplicatedEnvido: Boolean) : TrucoAction(
@@ -86,7 +80,8 @@ abstract class TrucoAction(val hasReplication: Boolean, val points: Int) {
         points = 1
     ) {
 
-        override fun message(context: Context) = context.getString(R.string.truco_ask_for_real_envido)
+        override fun message(context: Context) =
+            context.getString(R.string.truco_ask_for_real_envido)
 
         override fun availableResponses() = TrucoActionAvailableResponses(faltaEnvido = true)
     }
@@ -96,7 +91,17 @@ abstract class TrucoAction(val hasReplication: Boolean, val points: Int) {
         points = 30 - totalOpponentPoints
     ) {
 
-        override fun message(context: Context) = context.getString(R.string.truco_ask_for_falta_envido)
+        override fun message(context: Context) =
+            context.getString(R.string.truco_ask_for_falta_envido)
+    }
+
+    object EnvidoGoesFirst : TrucoAction(
+        hasReplication = true,
+        points = 1
+    ) {
+        override fun message(context: Context): String =
+            context.getString(R.string.truco_ask_for_envido_goes_first)
+
     }
 
     object YesIDo : TrucoAction(
@@ -106,7 +111,8 @@ abstract class TrucoAction(val hasReplication: Boolean, val points: Int) {
 
         override fun message(context: Context) = context.getString(R.string.i_do)
 
-        override fun availableResponses() = TrucoActionAvailableResponses(iDo = false, iDont = false)
+        override fun availableResponses() =
+            TrucoActionAvailableResponses(iDo = false, iDont = false)
     }
 
     object NoIDont : TrucoAction(
@@ -116,7 +122,8 @@ abstract class TrucoAction(val hasReplication: Boolean, val points: Int) {
 
         override fun message(context: Context) = context.getString(R.string.i_dont)
 
-        override fun availableResponses() = TrucoActionAvailableResponses(iDo = false, iDont = false)
+        override fun availableResponses() =
+            TrucoActionAvailableResponses(iDo = false, iDont = false)
     }
 
     object GoToDeck : TrucoAction(
@@ -126,7 +133,8 @@ abstract class TrucoAction(val hasReplication: Boolean, val points: Int) {
 
         override fun message(context: Context) = context.getString(R.string.truco_go_to_deck_action)
 
-        override fun availableResponses() = TrucoActionAvailableResponses(iDo = false, iDont = false)
+        override fun availableResponses() =
+            TrucoActionAvailableResponses(iDo = false, iDont = false)
     }
 
     class CustomFinalActionResponse(
@@ -140,6 +148,7 @@ abstract class TrucoAction(val hasReplication: Boolean, val points: Int) {
 
         override fun message(context: Context) = message
 
-        override fun availableResponses() = TrucoActionAvailableResponses(iDo = false, iDont = false)
+        override fun availableResponses() =
+            TrucoActionAvailableResponses(iDo = false, iDont = false)
     }
 }

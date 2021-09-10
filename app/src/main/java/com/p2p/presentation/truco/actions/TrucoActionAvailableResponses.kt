@@ -8,6 +8,7 @@ data class TrucoActionAvailableResponses(
     val faltaEnvido: Boolean = false,
     val retruco: Boolean = false,
     val valeCuatro: Boolean = false,
+    val envidoGoesFirst: Boolean = false
 ) {
 
     fun hasAvailableResponses() = listOf(iDo, iDont, envido, realEnvido, faltaEnvido, retruco, valeCuatro).any { it }

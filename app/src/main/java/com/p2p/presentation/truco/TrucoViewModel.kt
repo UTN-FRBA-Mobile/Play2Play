@@ -13,6 +13,7 @@ import com.p2p.model.truco.PlayerWithCards
 import com.p2p.model.truco.message.TrucoActionMessage
 import com.p2p.presentation.basegame.ConnectionType
 import com.p2p.presentation.basegame.GameViewModel
+import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.home.games.Game
 import com.p2p.presentation.truco.actions.TrucoAction
 import com.p2p.presentation.truco.actions.TrucoAction.*
@@ -40,8 +41,6 @@ abstract class TrucoViewModel(
     var currentActionPoints: Int = 0
 
     var currentAction: TrucoAction? = null
-
-    private val trucazoActions = listOf(Trucazo, Retrucazo, ValeCuatro)
 
     private val _actionAvailableResponses = MutableLiveData<TrucoActionAvailableResponses>()
     val actionAvailableResponses: LiveData<TrucoActionAvailableResponses> =
@@ -82,22 +81,23 @@ abstract class TrucoViewModel(
     }
 
     fun performAction(action: TrucoAction) {
+        setTrucoOrEnvidoAsAskedIfApplies(action)
+        connection.write(TrucoActionMessage(action))
+        updateActionValues(action)
+        dispatchSingleTimeEvent(TrucoShowMyActionEvent(action))
         when (action) {
             is NoIDont -> {
                 //TODO mandar mensaje para que sume los puntos al oponente
+                when (currentAction) {
+                    is Trucazo, is Retrucazo, is ValeCuatro -> dispatchSingleTimeEvent(TrucoFinishHand)
+                }
                 cleanActionValues()
-                if (trucazoActions.contains(currentAction))
-                    dispatchSingleTimeEvent(TrucoFinishHand)
             }
             is YesIDo -> {
                 //TODO mandar mensaje para jugar y sumar puntos
                 cleanActionValues()
             }
         }
-        setTrucoOrEnvidoAsAskedIfApplies(action)
-        connection.write(TrucoActionMessage(action))
-        updateActionValues(action)
-        dispatchSingleTimeEvent(TrucoShowMyActionEvent(action))
     }
 
     fun newHand() {
@@ -123,8 +123,10 @@ abstract class TrucoViewModel(
 
     fun setTrucoOrEnvidoAsAskedIfApplies(action: TrucoAction) {
         when (action) {
-            is Trucazo -> _trucoAlreadyAsked.value = true
-            is Envido, is RealEnvido, is FaltaEnvido -> _envidoAlreadyAsked.value = true
+            // Envido can be asked after truco on the first round, so it is not fully asked unless receives a YesIDo
+            is Trucazo -> if (currentRound.requireValue() > 1) _trucoAlreadyAsked.value = true
+            is YesIDo, -> if (currentAction is Trucazo) _trucoAlreadyAsked.value = true
+            is Envido, is RealEnvido, is FaltaEnvido, is EnvidoGoesFirst -> _envidoAlreadyAsked.value = true
             else -> Unit
         }
     }

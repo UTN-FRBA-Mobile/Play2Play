@@ -81,6 +81,7 @@ class TrucoPlayFor2Fragment :
             actionResponseYesFaltaEnvido.setOnClickListener { gameViewModel.replyAction(TrucoAction.FaltaEnvido(0)) }
             actionResponseYesRetruco.setOnClickListener { gameViewModel.replyAction(TrucoAction.Retrucazo) }
             actionResponseYesValeCuatro.setOnClickListener { gameViewModel.replyAction(TrucoAction.ValeCuatro) }
+            actionResponseEnvidoGoesFirst.setOnClickListener { gameViewModel.replyAction(TrucoAction.EnvidoGoesFirst) }
         }
     }
 
@@ -209,6 +210,7 @@ class TrucoPlayFor2Fragment :
             actionResponseYesFaltaEnvido.isVisible = faltaEnvido
             actionResponseYesRetruco.isVisible = retruco
             actionResponseYesValeCuatro.isVisible = valeCuatro
+            actionResponseEnvidoGoesFirst.isVisible = envidoGoesFirst
             if (hasAvailableResponses()) actionResponseContainer.fadeIn() else actionResponseContainer.fadeOut()
         }
     }
