@@ -63,7 +63,6 @@ class ConnectedPlayersTrucoAdapter(
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
                     val item = ClipData.Item(player as? CharSequence)
-                    val dragShadow = DragShadowBuilder(view!!)
                     val dragData = ClipData(
                         player as? CharSequence,
                         arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN),
@@ -79,9 +78,9 @@ class ConnectedPlayersTrucoAdapter(
                     }
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        view.startDragAndDrop(dragData, dragShadow, null, 0)
+                        view.startDragAndDrop(dragData, View.DragShadowBuilder(view), null, 0)
                     } else {
-                        view.startDrag(dragData, dragShadow, null, 0)
+                        view.startDrag(dragData, View.DragShadowBuilder(view), null, 0)
                     }
                 }
                 MotionEvent.ACTION_UP -> view.performClick()
