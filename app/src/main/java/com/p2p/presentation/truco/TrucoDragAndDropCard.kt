@@ -3,6 +3,7 @@ package com.p2p.presentation.truco
 import android.annotation.SuppressLint
 import android.view.MotionEvent
 import android.view.View
+import com.p2p.R
 
 @SuppressLint("ClickableViewAccessibility")
 class TrucoDragAndDropCard(
@@ -15,6 +16,9 @@ class TrucoDragAndDropCard(
     private lateinit var initialPosition: Pair<Float, Float>
     private lateinit var initialCoordinates: Pair<Float, Float>
     private var initialRotation: Float = 0f
+    private val cardFinalRotation by lazy {
+        cardView.context.resources.getInteger(R.integer.truco_card_final_rotation).toFloat()
+    }
 
     init {
         cardView.setOnTouchListener { view: View, event: MotionEvent ->
@@ -26,8 +30,6 @@ class TrucoDragAndDropCard(
                     initialCoordinates = view.x to view.y
                     initialRotation = view.rotation
                     view.animate()
-                        .scaleX(0.9f)
-                        .scaleY(0.9f)
                         .rotation(0f)
                         .start()
                     listener.onTouch(this)
@@ -36,6 +38,20 @@ class TrucoDragAndDropCard(
                 event.actionMasked == MotionEvent.ACTION_MOVE -> {
                     view.x = initialCoordinates.first + event.rawX - initialPosition.first
                     view.y = initialCoordinates.second + event.rawY - initialPosition.second
+                    val initialDistance = currentDroppingView.y - initialCoordinates.second
+                    val currentDistance = currentDroppingView.y - view.y
+                    val distanceWithDroppingPlaceMultiplicator = (currentDistance / initialDistance)
+                        .coerceAtLeast(0f)
+                        .coerceAtMost(1f)
+                    view.rotationX = cardFinalRotation * (1f - distanceWithDroppingPlaceMultiplicator)
+                    val scale = when {
+                        view.y > initialCoordinates.second -> 1f
+                        view.y > currentDroppingView.y ->
+                            currentDroppingView.scaleX + (1f - currentDroppingView.scaleX) * distanceWithDroppingPlaceMultiplicator
+                        else -> MIN_CARD_SCALE + (currentDroppingView.scaleX - MIN_CARD_SCALE) * view.y / currentDroppingView.y
+                    }
+                    view.scaleX = scale
+                    view.scaleY = scale
                     listener.onMove(this)
                     true
                 }
@@ -49,12 +65,16 @@ class TrucoDragAndDropCard(
                             .x(currentDroppingView.x)
                             .y(currentDroppingView.y)
                             .rotation(currentDroppingView.rotation)
+                            .scaleX(currentDroppingView.scaleX)
+                            .scaleY(currentDroppingView.scaleX)
+                            .rotationX(cardFinalRotation)
                             .start()
                         cardView.setOnTouchListener(null)
                     } else {
                         view.animate()
                             .scaleX(1f)
                             .scaleY(1f)
+                            .rotationX(0f)
                             .rotation(initialRotation)
                             .start()
                     }
@@ -73,5 +93,10 @@ class TrucoDragAndDropCard(
         fun onMove(dragAndDropCard: TrucoDragAndDropCard)
 
         fun onDrop(dragAndDropCard: TrucoDragAndDropCard, isInDroppingView: Boolean)
+    }
+
+    companion object {
+
+        private const val MIN_CARD_SCALE = 0.4f
     }
 }

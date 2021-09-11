@@ -14,6 +14,8 @@
     <string name="thanks">¡Gracias!</string>
     <string name="share">Compartir</string>
     <string name="finish_game">Terminar partida</string>
+    <string name="i_do">Quiero</string>
+    <string name="i_dont">No quiero</string>
 
 
     <!-- Request location permission -->
@@ -117,9 +119,13 @@
     <string name="truco_cups_card">%d de copa</string>
     <string name="truco_clubs_card">%d de basto</string>
     <string name="truco_golds_card">%d de oro</string>
+    <string name="truco_unknown_card">Carta desconocida</string>
     <string name="truco_ask_for_envido">Envido</string>
-    <string name="truco_ask_for_truco">Truco</string>
     <string name="truco_ask_for_real_envido">Real envido</string>
     <string name="truco_ask_for_falta_envido">Falta envido</string>
+    <string name="truco_ask_for_truco">Truco</string>
+    <string name="truco_ask_for_retruco">Quiero\nretruco</string>
+    <string name="truco_ask_for_vale_cuatro">Quiero\nvale cuatro</string>
     <string name="truco_go_to_deck">Me voy al mazo</string>
+    <string name="truco_go_to_deck_action">Me voy\nal mazo</string>
 </resources>

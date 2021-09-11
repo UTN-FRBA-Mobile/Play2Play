@@ -3,6 +3,7 @@ package com.p2p.presentation.basegame
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
+import androidx.core.view.isVisible
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.appbar.MaterialToolbar
 import com.p2p.R
@@ -21,6 +22,8 @@ abstract class BaseGameFragment<GVB : ViewBinding, E : Any, VM : BaseViewModel<E
     BaseFragment<BaseGameBinding, E, VM>() {
 
     protected abstract val gameViewModel: GVM
+
+    protected open val isHeaderVisible = true
 
     override val inflater: (LayoutInflater, ViewGroup?, Boolean) -> BaseGameBinding =
         { inflater, container, boolean ->
@@ -42,6 +45,7 @@ abstract class BaseGameFragment<GVB : ViewBinding, E : Any, VM : BaseViewModel<E
 
     @CallSuper
     override fun initUI() {
+        binding.header.isVisible = isHeaderVisible
         setHeaderEvents(binding.header)
     }
 

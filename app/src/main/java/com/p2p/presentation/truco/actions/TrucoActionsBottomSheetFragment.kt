@@ -1,4 +1,4 @@
-package com.p2p.presentation.truco
+package com.p2p.presentation.truco.actions
 
 import android.annotation.SuppressLint
 import android.app.Dialog
@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
@@ -17,8 +18,12 @@ import com.p2p.R
 import com.p2p.databinding.ViewTrucoActionsBinding
 import com.p2p.presentation.base.BaseBottomSheetDialogFragment
 import com.p2p.presentation.extensions.animateRotation
+import com.p2p.presentation.extensions.fadeIn
+import com.p2p.presentation.truco.TrucoViewModel
 
 class TrucoActionsBottomSheetFragment : BaseBottomSheetDialogFragment<ViewTrucoActionsBinding>() {
+
+    private val gameViewModel: TrucoViewModel by activityViewModels()
 
     private var isExpanded = false
     private val bottomSheetCallback = object : BottomSheetBehavior.BottomSheetCallback() {
@@ -73,9 +78,16 @@ class TrucoActionsBottomSheetFragment : BaseBottomSheetDialogFragment<ViewTrucoA
         }
     }
 
-    override fun initUI() {
-        binding.openButton.setOnClickListener { toggleState() }
-        binding.envidoButton.setOnClickListener { toggleEnvidoOptionsState() }
+    override fun initUI() = with(binding) {
+        actionsBottomSheet.postDelayed({ actionsBottomSheet.fadeIn() }, SHOW_DELAY)
+        openButton.setOnClickListener { toggleState() }
+        envidoOptionsButton.setOnClickListener { toggleEnvidoOptionsState() }
+        trucoButton.setOnClickListener { gameViewModel.performAction(TrucoAction.Truco) }
+        envidoButton.setOnClickListener { gameViewModel.performAction(TrucoAction.Envido(false)) }
+        realEnvidoButton.setOnClickListener { gameViewModel.performAction(TrucoAction.RealEnvido) }
+        faltaEnvidoButton.setOnClickListener { gameViewModel.performAction(TrucoAction.FaltaEnvido) }
+        goToDeckButton.setOnClickListener { gameViewModel.performAction(TrucoAction.GoToDeck) }
+        changeVisibleButtonsEnable(false)
     }
 
     private fun toggleState() {
@@ -93,13 +105,28 @@ class TrucoActionsBottomSheetFragment : BaseBottomSheetDialogFragment<ViewTrucoA
 
     private fun onCollapsed() {
         binding.openButtonIcon.animateRotation(0f)
+        changeVisibleButtonsEnable(false)
     }
 
     private fun onExpanded() {
         binding.openButtonIcon.animateRotation(180f)
+        changeVisibleButtonsEnable(true)
+    }
+
+    private fun changeVisibleButtonsEnable(isEnabled: Boolean) {
+        binding.envidoOptionsButton.isEnabled = isEnabled
+        binding.trucoButton.isEnabled = isEnabled
+        binding.trucoButton.alpha = if (isEnabled) 1f else 0.3f
     }
 
     private fun Dialog.getBottomSheet(): FrameLayout {
         return findViewById(com.google.android.material.R.id.design_bottom_sheet)
+    }
+
+    companion object {
+
+        private const val SHOW_DELAY = 1_000L
+
+        fun newInstance() = TrucoActionsBottomSheetFragment()
     }
 }
