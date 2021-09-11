@@ -59,7 +59,7 @@ class ServerTrucoViewModel(
     private fun setPlayersTeams(): List<PlayerTeam> {
         val playersTeams = mutableListOf<PlayerTeam>()
         players.requireValue().take(totalPlayers.requireValue()).forEachIndexed { index, element ->
-            val teamNumber = if(index % 2 == 0) 1 else 2
+            val teamNumber = index % PLAYERS_PER_TEAM + 1
             playersTeams.add(PlayerTeam(element, teamNumber, index == 0))
         }
         return playersTeams
@@ -85,5 +85,9 @@ class ServerTrucoViewModel(
         val suits = listOf(SWORDS, GOLDS, CUPS, CLUBS)
         val numbers: List<Int> = (1..7).plus(10..12)
         cards = suits.flatMap { suit -> numbers.map { number -> Card(number, suit) } }.shuffled()
+    }
+
+    companion object {
+        const val PLAYERS_PER_TEAM = 2
     }
 }

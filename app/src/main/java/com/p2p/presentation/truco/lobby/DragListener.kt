@@ -12,25 +12,25 @@ import com.p2p.utils.Logger
 import java.util.*
 
 class DragListener : View.OnDragListener {
-    override fun onDrag(view: View?, event: DragEvent?): Boolean {
+    override fun onDrag(view: View, event: DragEvent?): Boolean {
         when (event!!.action) {
             DragEvent.ACTION_DRAG_STARTED -> {
-                view!!.elevation = ELEVATION_DRAG_START
+                view.elevation = ELEVATION_DRAG_START
                 return true
             }
             DragEvent.ACTION_DRAG_ENTERED -> {
-                view!!.elevation = ELEVATION_DRAG_ENTER
+                view.elevation = ELEVATION_DRAG_ENTER
                 return true
             }
             DragEvent.ACTION_DRAG_LOCATION ->
                 return true
             DragEvent.ACTION_DRAG_EXITED -> {
-                view!!.elevation = ELEVATION_DRAG_START
+                view.elevation = ELEVATION_DRAG_START
                 return true
             }
             DragEvent.ACTION_DROP -> {
-                val adapter = getViewAdapter(view!!)
-                val droppedPlayer = getViewPlayerName(view!!)
+                val adapter = getViewAdapter(view)
+                val droppedPlayer = getViewPlayerName(view)
                 val players: List<String> = adapter.players
 
                 val replacedItem: ClipData.Item = event.clipData.getItemAt(0)
@@ -46,7 +46,7 @@ class DragListener : View.OnDragListener {
             }
 
             DragEvent.ACTION_DRAG_ENDED -> {
-                view!!.elevation = ELEVATION_DEFAULT
+                view.elevation = ELEVATION_DEFAULT
 
                 // If the view is dropped successfully
                 if(event.result) { return true }

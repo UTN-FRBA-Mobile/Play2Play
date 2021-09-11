@@ -37,13 +37,7 @@ class ConnectedPlayersTrucoAdapter(
         return position.toLong()
     }
 
-    override fun getCount(): Int {
-        return if (players.count() <= totalPlayers) {
-            players.count()
-        } else {
-            totalPlayers
-        }
-    }
+    override fun getCount(): Int = players.count().coerceAtMost(totalPlayers)
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -69,18 +63,18 @@ class ConnectedPlayersTrucoAdapter(
                         item
                     )
 
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        view.startDragAndDrop(dragData, View.DragShadowBuilder(view), null, 0)
+                    } else {
+                        view.startDrag(dragData, View.DragShadowBuilder(view), null, 0)
+                    }
+
                     if (position != 0) {
                         view.background = ContextCompat.getDrawable(context, R.drawable.dotted_border)
                     } else {
                         view.background = ContextCompat.getDrawable(context, R.drawable.dotted_border)
                         view.findViewById<ImageView>(R.id.avatar)
                             .setImageResource(R.drawable.ic_baseline_account_circle_yellow)
-                    }
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        view.startDragAndDrop(dragData, View.DragShadowBuilder(view), null, 0)
-                    } else {
-                        view.startDrag(dragData, View.DragShadowBuilder(view), null, 0)
                     }
                 }
                 MotionEvent.ACTION_UP -> view.performClick()
