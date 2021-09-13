@@ -65,7 +65,7 @@
         android:layout_marginBottom="@dimen/screen_padding"
         android:contentDescription="@string/share"
         android:src="@drawable/ic_share"
-        app:backgroundTint="@color/colorPrimary"
+        app:backgroundTint="@color/coral"
         app:layout_constraintBottom_toTopOf="@id/bottom_background"
         app:layout_constraintEnd_toStartOf="@id/guideline_end" />
 
