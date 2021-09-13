@@ -60,6 +60,7 @@
     <dimen name="truco_their_card_separation">12dp</dimen>
     <dimen name="truco_their_card_width">62dp</dimen>
     <dimen name="truco_their_card_height">95dp</dimen>
+    <dimen name="truco_their_card_half_height">40dp</dimen>
     <dimen name="truco_normal_card_vertical_margin">10dp</dimen>
     <dimen name="truco_elevated_card_vertical_margin">20dp</dimen>
     <dimen name="truco_first_card_horizontal_margin">30dp</dimen>

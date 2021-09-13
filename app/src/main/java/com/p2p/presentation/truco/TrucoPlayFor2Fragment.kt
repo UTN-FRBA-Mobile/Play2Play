@@ -14,7 +14,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.p2p.R
-import com.p2p.databinding.FragmentPlayTrucoFor2Binding
+import com.p2p.databinding.FragmentPlayTrucoFor4Binding
 import com.p2p.databinding.ViewTrucoHeaderBinding
 import com.p2p.model.truco.Card
 import com.p2p.model.truco.Suit
@@ -35,14 +35,14 @@ import com.p2p.utils.setOnEndListener
 import kotlin.random.Random
 
 class TrucoPlayFor2Fragment :
-    BaseGameFragment<FragmentPlayTrucoFor2Binding, Any, NoViewModel, TrucoViewModel>(),
+    BaseGameFragment<FragmentPlayTrucoFor4Binding, Any, NoViewModel, TrucoViewModel>(),
     TrucoCardsHand.Listener {
 
     override val viewModel by viewModels<NoViewModel>()
     override val gameViewModel by activityViewModels<TrucoViewModel>()
     override val isHeaderVisible: Boolean = false
-    override val gameInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentPlayTrucoFor2Binding =
-        FragmentPlayTrucoFor2Binding::inflate
+    override val gameInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentPlayTrucoFor4Binding =
+        FragmentPlayTrucoFor4Binding::inflate
 
     private lateinit var headerBinding: ViewTrucoHeaderBinding
     private lateinit var myCardsHand: TrucoCardsHand
