@@ -91,7 +91,7 @@ abstract class TrucoViewModel(
             is NoIDont -> {
                 //TODO mandar mensaje para que sume los puntos al oponente
                 when (currentAction) {
-                    is Trucazo, is Retrucazo, is ValeCuatro -> dispatchSingleTimeEvent(TrucoFinishHand)
+                    is Truco, is Retruco, is ValeCuatro -> dispatchSingleTimeEvent(TrucoFinishHand)
                 }
                 cleanActionValues()
             }
@@ -134,8 +134,8 @@ abstract class TrucoViewModel(
     private fun setTrucoOrEnvidoAsAskedIfApplies(action: TrucoAction) {
         when (action) {
             // Envido can be asked after truco on the first round, so it is not fully asked unless receives a YesIDo
-            is Trucazo -> if (currentRound.requireValue() > 1) _trucoAlreadyAsked.value = true
-            is YesIDo -> if (currentAction is Trucazo) _trucoAlreadyAsked.value = true
+            is Truco -> if (currentRound.requireValue() > 1) _trucoAlreadyAsked.value = true
+            is YesIDo -> if (currentAction is Truco) _trucoAlreadyAsked.value = true
             is Envido, is RealEnvido, is FaltaEnvido, is EnvidoGoesFirst -> _envidoAlreadyAsked.value = true
             else -> Unit
         }

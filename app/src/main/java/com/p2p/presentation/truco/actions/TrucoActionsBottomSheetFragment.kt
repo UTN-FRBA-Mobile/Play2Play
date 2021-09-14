@@ -95,7 +95,7 @@ class TrucoActionsBottomSheetFragment :
         envidoOptionsButton.setOnClickListener { toggleEnvidoOptionsState() }
         trucoButton.setOnClickListener {
             viewModel.performAction(
-                TrucoAction.Trucazo(
+                TrucoAction.Truco(
                     viewModel.currentRound.requireValue(),
                     viewModel.envidoAlreadyAsked.requireValue()
                 )

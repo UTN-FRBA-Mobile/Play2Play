@@ -79,7 +79,7 @@ class TrucoPlayFor2Fragment :
             actionResponseYesRealEnvido.setOnClickListener { gameViewModel.replyAction(TrucoAction.RealEnvido) }
             //TODO pasarle los puntos del oponente cuando existan los puntos de la ronda
             actionResponseYesFaltaEnvido.setOnClickListener { gameViewModel.replyAction(TrucoAction.FaltaEnvido(0)) }
-            actionResponseYesRetruco.setOnClickListener { gameViewModel.replyAction(TrucoAction.Retrucazo) }
+            actionResponseYesRetruco.setOnClickListener { gameViewModel.replyAction(TrucoAction.Retruco) }
             actionResponseYesValeCuatro.setOnClickListener { gameViewModel.replyAction(TrucoAction.ValeCuatro) }
             actionResponseEnvidoGoesFirst.setOnClickListener { gameViewModel.replyAction(TrucoAction.EnvidoGoesFirst) }
         }

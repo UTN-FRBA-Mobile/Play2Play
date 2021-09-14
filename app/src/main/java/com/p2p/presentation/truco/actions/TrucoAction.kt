@@ -12,8 +12,8 @@ import com.p2p.presentation.truco.actions.TrucoAction.*
     property = "type"
 )
 @JsonSubTypes(
-    JsonSubTypes.Type(value = Trucazo::class, name = "Trucazo"),
-    JsonSubTypes.Type(value = Retrucazo::class, name = "Retrucazo"),
+    JsonSubTypes.Type(value = Truco::class, name = "Truco"),
+    JsonSubTypes.Type(value = Retruco::class, name = "Retruco"),
     JsonSubTypes.Type(value = ValeCuatro::class, name = "ValeCuatro"),
     JsonSubTypes.Type(value = Envido::class, name = "Envido"),
     JsonSubTypes.Type(value = RealEnvido::class, name = "RealEnvido"),
@@ -30,7 +30,7 @@ abstract class TrucoAction(val hasReplication: Boolean, val points: Int) {
 
     open fun availableResponses() = TrucoActionAvailableResponses()
 
-    data class Trucazo(val round: Int, val envidoAlreadyAsked: Boolean = false) : TrucoAction(
+    data class Truco(val round: Int, val envidoAlreadyAsked: Boolean = false) : TrucoAction(
         hasReplication = true,
         points = 1
     ) {
@@ -42,7 +42,7 @@ abstract class TrucoAction(val hasReplication: Boolean, val points: Int) {
             else TrucoActionAvailableResponses(retruco = true)
     }
 
-    object Retrucazo : TrucoAction(
+    object Retruco : TrucoAction(
         hasReplication = true,
         points = 1
     ) {
