@@ -12,17 +12,17 @@ import com.p2p.presentation.truco.actions.TrucoAction.*
     property = "type"
 )
 @JsonSubTypes(
-    JsonSubTypes.Type(value = Truco::class, name = "Truco"),
-    JsonSubTypes.Type(value = Retruco::class, name = "Retruco"),
-    JsonSubTypes.Type(value = ValeCuatro::class, name = "ValeCuatro"),
-    JsonSubTypes.Type(value = Envido::class, name = "Envido"),
-    JsonSubTypes.Type(value = RealEnvido::class, name = "RealEnvido"),
-    JsonSubTypes.Type(value = FaltaEnvido::class, name = "FaltaEnvido"),
-    JsonSubTypes.Type(value = EnvidoGoesFirst::class, name = "EnvidoGoesFirst"),
-    JsonSubTypes.Type(value = YesIDo::class, name = "YesIDo"),
-    JsonSubTypes.Type(value = NoIDont::class, name = "NoIDont"),
-    JsonSubTypes.Type(value = GoToDeck::class, name = "GoToDeck"),
-    JsonSubTypes.Type(value = CustomFinalActionResponse::class, name = "CustomFinalActionResponse"),
+    JsonSubTypes.Type(value = Truco::class, name = "truco"),
+    JsonSubTypes.Type(value = Retruco::class, name = "retruco"),
+    JsonSubTypes.Type(value = ValeCuatro::class, name = "vale_cuatro"),
+    JsonSubTypes.Type(value = Envido::class, name = "envido"),
+    JsonSubTypes.Type(value = RealEnvido::class, name = "real_envido"),
+    JsonSubTypes.Type(value = FaltaEnvido::class, name = "falta_envido"),
+    JsonSubTypes.Type(value = EnvidoGoesFirst::class, name = "envido_goes_first"),
+    JsonSubTypes.Type(value = YesIDo::class, name = "yes_i_do"),
+    JsonSubTypes.Type(value = NoIDont::class, name = "no_i_dont"),
+    JsonSubTypes.Type(value = GoToDeck::class, name = "go_to_deck"),
+    JsonSubTypes.Type(value = CustomFinalActionResponse::class, name = "truco_custom"),
 )
 abstract class TrucoAction(val hasReplication: Boolean, val points: Int) {
 
