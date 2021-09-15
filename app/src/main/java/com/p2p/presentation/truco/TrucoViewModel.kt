@@ -66,9 +66,6 @@ abstract class TrucoViewModel(
     /** This will only be used by the server */
     protected open fun handOutCards() {}
 
-    protected fun getCardsForPlayer(playersWithCards: List<PlayerWithCards>, player: String) =
-        playersWithCards.first { it.player == player }.cards
-
     @CallSuper
     override fun receiveMessage(conversation: Conversation) {
         super.receiveMessage(conversation)
@@ -133,9 +130,9 @@ abstract class TrucoViewModel(
 
     private fun setTrucoOrEnvidoAsAskedIfApplies(action: TrucoAction) {
         when (action) {
-            // Envido can be asked after truco on the first round, so it is not fully asked unless receives a YesIDo
+            // Envido can be asked after truco on the first round, so it is not fully asked until is answered with yes or no
             is Truco -> if (currentRound.requireValue() > 1) _trucoAlreadyAsked.value = true
-            is YesIDo -> if (currentAction is Truco) _trucoAlreadyAsked.value = true
+            is YesIDo, is NoIDont -> if (currentAction is Truco) _trucoAlreadyAsked.value = true
             is Envido, is RealEnvido, is FaltaEnvido, is EnvidoGoesFirst -> _envidoAlreadyAsked.value = true
             else -> Unit
         }

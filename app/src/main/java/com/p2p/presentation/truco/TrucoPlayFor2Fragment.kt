@@ -51,8 +51,12 @@ class TrucoPlayFor2Fragment :
     private lateinit var myDroppingPlacesViews: List<View>
     private lateinit var theirDroppingPlacesViews: List<View>
 
-    private val shortDuration by lazy { resources.getInteger(android.R.integer.config_shortAnimTime).toLong() }
-    private val longDuration by lazy { resources.getInteger(android.R.integer.config_longAnimTime).toLong() }
+    private val shortDuration by lazy {
+        resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
+    }
+    private val longDuration by lazy {
+        resources.getInteger(android.R.integer.config_longAnimTime).toLong()
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -64,21 +68,35 @@ class TrucoPlayFor2Fragment :
     override fun initUI() = with(gameBinding) {
         super.initUI()
         headerBinding = ViewTrucoHeaderBinding.bind(root)
-        roundViews = listOf(headerBinding.firstRound, headerBinding.secondRound, headerBinding.thirdRound)
+        roundViews =
+            listOf(headerBinding.firstRound, headerBinding.secondRound, headerBinding.thirdRound)
         myCardsViews = listOf(myLeftCard, myMiddleCard, myRightCard)
         theirCardsViews = listOf(theirLeftCard, theirMiddleCard, theirRightCard)
         loadCardImages(theirCardsViews, emptyList())
         myDroppingPlacesViews = listOf(dropFirstCard, dropSecondCard, dropThirdCard)
-        theirDroppingPlacesViews = listOf(dropTheirFirstCard, dropTheirSecondCard, dropTheirThirdCard)
+        theirDroppingPlacesViews =
+            listOf(dropTheirFirstCard, dropTheirSecondCard, dropTheirThirdCard)
         updateScores(0, 0)
 
         with(actionsResponses) {
             actionResponseYesIDo.setOnClickListener { gameViewModel.replyAction(TrucoAction.YesIDo) }
             actionResponseNoIDont.setOnClickListener { gameViewModel.replyAction(TrucoAction.NoIDont) }
-            actionResponseYesEnvido.setOnClickListener { gameViewModel.replyAction(TrucoAction.Envido(true)) }
+            actionResponseYesEnvido.setOnClickListener {
+                gameViewModel.replyAction(
+                    TrucoAction.Envido(
+                        true
+                    )
+                )
+            }
             actionResponseYesRealEnvido.setOnClickListener { gameViewModel.replyAction(TrucoAction.RealEnvido) }
-            //TODO pasarle los puntos del oponente cuando existan los puntos de la ronda
-            actionResponseYesFaltaEnvido.setOnClickListener { gameViewModel.replyAction(TrucoAction.FaltaEnvido(0)) }
+            // TODO pasarle los puntos del oponente cuando existan los puntos de la ronda
+            actionResponseYesFaltaEnvido.setOnClickListener {
+                gameViewModel.replyAction(
+                    TrucoAction.FaltaEnvido(
+                        0
+                    )
+                )
+            }
             actionResponseYesRetruco.setOnClickListener { gameViewModel.replyAction(TrucoAction.Retruco) }
             actionResponseYesValeCuatro.setOnClickListener { gameViewModel.replyAction(TrucoAction.ValeCuatro) }
             actionResponseEnvidoGoesFirst.setOnClickListener { gameViewModel.replyAction(TrucoAction.EnvidoGoesFirst) }
@@ -93,13 +111,13 @@ class TrucoPlayFor2Fragment :
     }
 
     override fun onCardPlayed(playingCard: TrucoCardsHand.PlayingCard) {
-        //TODO mock on card played
+        // TODO
     }
 
     private fun onGameEvent(event: GameEvent) = when (event) {
         is TrucoShowMyActionEvent -> showMyAction(event.action)
         is TrucoShowOpponentActionEvent -> showOpponentAction(event.action)
-        //TODO this is a mock, when played put actual values
+        // TODO this is a mock, when played put actual values
         is TrucoFinishRound -> finishRound(1, TrucoRoundResult.WIN)
         is TrucoFinishHand -> TODO("Do finish hand logic")
         is TrucoNewHand -> TODO("Do new hand logic")
@@ -110,11 +128,12 @@ class TrucoPlayFor2Fragment :
         .newInstance()
         .show(parentFragmentManager, ACTIONS_BOTTOM_SHEET_TAG)
 
-    private fun loadCardImages(cardViews: List<ImageView>, cards: List<Card?>) = cardViews.forEachIndexed { i, view ->
-        val (image, description) = cardsImageCreator.create(cards.getOrNull(i))
-        view.setImageBitmap(image)
-        view.contentDescription = description
-    }
+    private fun loadCardImages(cardViews: List<ImageView>, cards: List<Card?>) =
+        cardViews.forEachIndexed { i, view ->
+            val (image, description) = cardsImageCreator.create(cards.getOrNull(i))
+            view.setImageBitmap(image)
+            view.contentDescription = description
+        }
 
     // TODO
     private fun updateScores(ourScore: Int, their: Int) {
@@ -141,32 +160,40 @@ class TrucoPlayFor2Fragment :
 
     private fun initMyCardsHand(myCards: List<Card>) {
         val myPlayingCards = getPlayingCards(myCardsViews, myCards)
-        myCardsHand = TrucoSingleOpponentMyCardsHand(myPlayingCards, myDroppingPlacesViews, this@TrucoPlayFor2Fragment)
+        myCardsHand = TrucoSingleOpponentMyCardsHand(
+            myPlayingCards,
+            myDroppingPlacesViews,
+            this@TrucoPlayFor2Fragment
+        )
         loadCardImages(myCardsViews, myCards)
         takeTurn()
     }
 
-    private fun getPlayingCards(cardsViews: List<ImageView>, cards: List<Card>) = cardsViews.mapIndexed { i, view ->
-        TrucoCardsHand.PlayingCard(cards[i], view)
-    }
+    private fun getPlayingCards(cardsViews: List<ImageView>, cards: List<Card>) =
+        cardsViews.mapIndexed { i, view ->
+            TrucoCardsHand.PlayingCard(cards[i], view)
+        }
 
     private fun takeTurn() = myCardsHand.takeTurn()
 
     private fun finishRound(round: Int, result: TrucoRoundResult) {
         gameViewModel.finishRound()
-        roundViews[round].animateBackgroundTint(ContextCompat.getColor(requireContext(), result.color)) {
+        roundViews[round].animateBackgroundTint(
+            ContextCompat.getColor(
+                requireContext(),
+                result.color
+            )
+        ) {
             val colorPrimary = ContextCompat.getColor(requireContext(), R.color.colorPrimary)
-            roundViews.getOrNull(round + 1)?.backgroundTintList = ColorStateList.valueOf(colorPrimary)
+            roundViews.getOrNull(round + 1)?.backgroundTintList =
+                ColorStateList.valueOf(colorPrimary)
         }
     }
 
-    private fun showMyAction(action: TrucoAction) {
-        //Show my bubble
+    private fun showMyAction(action: TrucoAction) =
         showAction(gameBinding.myActionBubble, gameBinding.myActionBubbleText, action)
-    }
 
     private fun showOpponentAction(action: TrucoAction) {
-        //Show their bubble
         showAction(gameBinding.theirActionBubble, gameBinding.theirActionBubbleText, action)
         updateActionAvailableResponses(action.availableResponses())
     }
@@ -183,7 +210,11 @@ class TrucoPlayFor2Fragment :
         }
     }
 
-    private fun showActionAfterVisibilityCheck(bubbleBackground: View, bubbleText: TextView, action: TrucoAction) {
+    private fun showActionAfterVisibilityCheck(
+        bubbleBackground: View,
+        bubbleText: TextView,
+        action: TrucoAction
+    ) {
         (parentFragmentManager.findFragmentByTag(ACTIONS_BOTTOM_SHEET_TAG) as BottomSheetDialogFragment?)?.dismiss()
         bubbleText.text = action.message(requireContext())
         showBubbleView(bubbleBackground)

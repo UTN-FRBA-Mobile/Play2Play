@@ -34,7 +34,6 @@ class ServerTrucoViewModel(
 
     override fun startGame() {
         closeDiscovery()
-        startLoading("Bancame, estoy mandando las cartas todo change")
         handOutCards()
         goToPlay()
     }

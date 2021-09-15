@@ -33,13 +33,12 @@ class ClientTrucoViewModel(
         }
     }
 
-    override fun startGame(){
-        startLoading("Espera tus cartas to do change")
+    override fun startGame() {
         goToPlay()
     }
 
     private fun pickSelfCards(playersWithCards: List<PlayerWithCards>) {
-        _myCards.value = getCardsForPlayer(playersWithCards, userName)
+        _myCards.value =  playersWithCards.first { it.player == userName }.cards
     }
 
 }
