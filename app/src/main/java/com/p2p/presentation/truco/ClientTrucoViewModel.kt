@@ -26,9 +26,7 @@ class ClientTrucoViewModel(
     override fun receiveMessage(conversation: Conversation) {
         super.receiveMessage(conversation)
         when (val message = conversation.lastMessage) {
-            is TrucoCardsMessage -> {
-                pickSelfCards(message.cardsForPlayers)
-            }
+            is TrucoCardsMessage -> pickSelfCards(message.cardsForPlayers)
         }
     }
 
