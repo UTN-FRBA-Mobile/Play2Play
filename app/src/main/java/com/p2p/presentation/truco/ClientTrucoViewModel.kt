@@ -28,7 +28,6 @@ class ClientTrucoViewModel(
         when (val message = conversation.lastMessage) {
             is TrucoCardsMessage -> {
                 pickSelfCards(message.cardsForPlayers)
-                startGame()
             }
         }
     }
