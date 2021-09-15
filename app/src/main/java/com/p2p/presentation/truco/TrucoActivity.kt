@@ -14,7 +14,7 @@ class TrucoActivity : GameActivity<TrucoSpecificGameEvent, TrucoViewModel>() {
 
     // TODO: Create truco game
     override fun goToCreate(){
-        //TODO aca va al lobby del server del truco
+        // TODO: aca va a la creación de partida de truco
     }
 
     override fun goToPlay() {
