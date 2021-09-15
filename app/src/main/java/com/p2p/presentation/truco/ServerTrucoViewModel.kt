@@ -33,11 +33,6 @@ class ServerTrucoViewModel(
     /** Be careful: this will be called for every client on a broadcast. */
     override fun onSentSuccessfully(conversation: Conversation) {
         super.onSentSuccessfully(conversation)
-        when (conversation.lastMessage) {
-            is TrucoStartGameMessage -> if (!gameAlreadyStarted) {
-                goToPlay() // starts the game when the first StartGame message was sent successfully.
-            }
-        }
     }
 
     override fun startGame() {
@@ -47,6 +42,7 @@ class ServerTrucoViewModel(
         )
         closeDiscovery()
         handOutCards()
+        goToPlay()
     }
 
     override fun receiveMessage(conversation: Conversation) {
@@ -60,7 +56,7 @@ class ServerTrucoViewModel(
         val playersTeams = mutableListOf<PlayerTeam>()
         players.requireValue().take(totalPlayers.requireValue()).forEachIndexed { index, element ->
             val teamNumber = index % PLAYERS_PER_TEAM + 1
-            playersTeams.add(PlayerTeam(element, teamNumber, index == 0))
+            playersTeams.add(PlayerTeam(element, teamNumber))
         }
         return playersTeams
     }
