@@ -53,12 +53,10 @@ class ServerTrucoViewModel(
     }
 
     private fun setPlayersTeams(): List<PlayerTeam> {
-        val playersTeams = mutableListOf<PlayerTeam>()
-        players.requireValue().take(totalPlayers.requireValue()).forEachIndexed { index, element ->
+        return players.requireValue().take(totalPlayers.requireValue()).mapIndexed { index, element ->
             val teamNumber = index % PLAYERS_PER_TEAM + 1
-            playersTeams.add(PlayerTeam(element, teamNumber))
+            PlayerTeam(element, teamNumber)
         }
-        return playersTeams
     }
 
     /** Sends all client players the cards for each one and picks self cards. */
