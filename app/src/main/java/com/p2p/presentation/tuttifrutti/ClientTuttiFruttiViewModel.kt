@@ -3,9 +3,14 @@ package com.p2p.presentation.tuttifrutti
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.loadingMessages.LoadingTextRepository
+import com.p2p.model.LoadingMessageType
 import com.p2p.data.userInfo.UserSession
 import com.p2p.model.base.message.Conversation
-import com.p2p.model.tuttifrutti.message.*
+import com.p2p.model.tuttifrutti.message.FinalScoreMessage
+import com.p2p.model.tuttifrutti.message.TuttiFruttiEnoughForMeEnoughForAllMessage
+import com.p2p.model.tuttifrutti.message.TuttiFruttiSendWordsMessage
+import com.p2p.model.tuttifrutti.message.TuttiFruttiStartGameMessage
+import com.p2p.model.tuttifrutti.message.TuttiFruttiStartRoundMessage
 import com.p2p.presentation.basegame.ConnectionType
 import com.p2p.presentation.tuttifrutti.create.categories.Category
 
@@ -50,13 +55,13 @@ class ClientTuttiFruttiViewModel(
     }
 
     override fun enoughForMeEnoughForAll() {
-        startLoading(loadingTextRepository.getText(TuttiFruttiEnoughForMeEnoughForAllMessage.TYPE))
+        startLoading(loadingTextRepository.getText(LoadingMessageType.TF_WAITING_FOR_REVIEW))
         super.enoughForMeEnoughForAll()
     }
 
     override fun onReceiveEnoughForAll(conversation: Conversation) {
         enoughForAllConversation = conversation
-        startLoading(loadingTextRepository.getText(TuttiFruttiEnoughForMeEnoughForAllMessage.TYPE))
+        startLoading(loadingTextRepository.getText(LoadingMessageType.TF_WAITING_FOR_REVIEW))
         super.onReceiveEnoughForAll(conversation)
     }
 

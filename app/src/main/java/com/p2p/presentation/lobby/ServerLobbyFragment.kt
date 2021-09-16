@@ -1,30 +1,28 @@
-package com.p2p.presentation.tuttifrutti.lobby
+package com.p2p.presentation.lobby
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.p2p.R
-import com.p2p.databinding.FragmentTuttiFruttiServerLobbyBinding
+import com.p2p.databinding.FragmentServerLobbyBinding
 import com.p2p.presentation.basegame.BaseGameFragment
-import com.p2p.presentation.tuttifrutti.TuttiFruttiViewModel
+import com.p2p.presentation.basegame.GameViewModel
 import com.p2p.utils.fromHtml
 
-class ServerTuttiFruttiLobbyFragment : BaseGameFragment<
-        FragmentTuttiFruttiServerLobbyBinding,
+abstract class ServerLobbyFragment<GVM : GameViewModel> : BaseGameFragment<
+        FragmentServerLobbyBinding,
         LobbyEvent,
-        ServerTuttiFruttiLobbyViewModel,
-        TuttiFruttiViewModel>() {
+        ServerLobbyViewModel,
+        GVM>() {
 
-    override val gameViewModel: TuttiFruttiViewModel by activityViewModels()
 
-    override val viewModel: ServerTuttiFruttiLobbyViewModel by viewModels()
+    override val viewModel: ServerLobbyViewModel by viewModels()
 
-    override val gameInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentTuttiFruttiServerLobbyBinding =
-        FragmentTuttiFruttiServerLobbyBinding::inflate
+    override val gameInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentServerLobbyBinding =
+        FragmentServerLobbyBinding::inflate
 
-    private lateinit var connectedPlayersTuttiFruttiAdapter: ConnectedPlayersTuttiFruttiAdapter
+    private lateinit var connectedPlayersAdapter: ConnectedPlayersAdapter
 
     override fun initUI() {
         super.initUI()
@@ -44,7 +42,7 @@ class ServerTuttiFruttiLobbyFragment : BaseGameFragment<
                     .fromHtml()
             }
             observe(players) {
-                connectedPlayersTuttiFruttiAdapter.players = it
+                connectedPlayersAdapter.players = it
                 viewModel.updatePlayers(it)
             }
         }
@@ -53,8 +51,8 @@ class ServerTuttiFruttiLobbyFragment : BaseGameFragment<
 
     private fun setupPlayersRecycler() = with(gameBinding.playersRecycler) {
         layoutManager = LinearLayoutManager(context)
-        adapter = ConnectedPlayersTuttiFruttiAdapter().also {
-            this@ServerTuttiFruttiLobbyFragment.connectedPlayersTuttiFruttiAdapter = it
+        adapter = ConnectedPlayersAdapter().also {
+            this@ServerLobbyFragment.connectedPlayersAdapter = it
         }
     }
 
@@ -62,9 +60,5 @@ class ServerTuttiFruttiLobbyFragment : BaseGameFragment<
         when (event) {
             is GoToPlay -> Unit
         }
-    }
-
-    companion object {
-        fun newInstance() = ServerTuttiFruttiLobbyFragment()
     }
 }

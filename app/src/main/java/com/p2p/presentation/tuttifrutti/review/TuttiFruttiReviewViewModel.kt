@@ -25,9 +25,9 @@ class TuttiFruttiReviewViewModel :
         finishedRoundInfos?.let { initializeBaseRoundPoints(setActualRound, it) }
     }
 
-    fun setInitialFinishedRoundInfos(setFinishedRoundInfo: List<FinishedRoundInfo>) {
-        finishedRoundInfos = setFinishedRoundInfo
-        actualRound?.let { initializeBaseRoundPoints(it, setFinishedRoundInfo) }
+    fun setInitialFinishedRoundInfos(finishedRoundInfos: List<FinishedRoundInfo>) {
+        this.finishedRoundInfos = finishedRoundInfos
+        actualRound?.let { initializeBaseRoundPoints(it, finishedRoundInfos) }
     }
 
     fun onAddRoundPoints(player: String, categoryIndex: Int) {

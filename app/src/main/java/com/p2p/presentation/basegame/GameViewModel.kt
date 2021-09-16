@@ -14,18 +14,14 @@ import com.p2p.data.userInfo.UserSession
 import com.p2p.model.HiddenLoadingScreen
 import com.p2p.model.LoadingScreen
 import com.p2p.model.VisibleLoadingScreen
-import com.p2p.model.base.message.ClientHandshakeMessage
-import com.p2p.model.base.message.Conversation
-import com.p2p.model.base.message.GoodbyePlayerMessage
-import com.p2p.model.base.message.Message
-import com.p2p.model.base.message.NameInUseMessage
-import com.p2p.model.base.message.ServerHandshakeMessage
+import com.p2p.model.base.message.*
 import com.p2p.presentation.base.BaseViewModel
 import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.home.games.Game
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+
 
 abstract class GameViewModel(
     private val connectionType: ConnectionType,
@@ -39,7 +35,7 @@ abstract class GameViewModel(
     protected var gameAlreadyStarted = false
     protected var gameAlreadyFinished = false
 
-    private val userName by lazy { userSession.getUserNameOrEmpty() }
+    protected val userName by lazy { userSession.getUserNameOrEmpty() }
     private val instructions by lazy { instructionsRepository.getInstructions(game.requireValue()) }
     private val failingMessagesRetries = mutableMapOf<Message, Int>()
 
@@ -155,10 +151,11 @@ abstract class GameViewModel(
 
     /** Invoked when there was an error while trying to connect the client with the server. */
     @CallSuper
-    open fun onClientConnectionFailure() = dispatchErrorScreen(CannotEstablishClientConnectionError {
-        clearError()
-        startConnection()
-    })
+    open fun onClientConnectionFailure() =
+        dispatchErrorScreen(CannotEstablishClientConnectionError {
+            clearError()
+            startConnection()
+        })
 
     /** Invoked when the connection with the given [peerId] was lost. */
     @CallSuper
@@ -191,6 +188,8 @@ abstract class GameViewModel(
 
     fun goToLobby() = dispatchSingleTimeEvent(if (isServer()) GoToServerLobby else GoToClientLobby)
 
+    abstract fun startGame()
+
     @CallSuper
     open fun goToPlay() = dispatchSingleTimeEvent(GoToPlay)
 
@@ -202,7 +201,7 @@ abstract class GameViewModel(
         _connection?.close()
     }
 
-    protected fun isServer() = connectionType.type == GameConnectionType.SERVER
+    fun isServer() = connectionType.type == GameConnectionType.SERVER
 
     protected fun getPlayerById(playerId: Long) =
         connectedPlayers.first { it.first == playerId }.second
@@ -230,6 +229,9 @@ abstract class GameViewModel(
             dispatchSingleTimeEvent(GoToClientLobby)
         }
     }
+
+    fun getOtherPlayers(): List<String>? =
+        players.value?.let { it - userName }
 
     private fun removePlayer(playerLost: Pair<Long, String>) {
         connectedPlayers = connectedPlayers - playerLost

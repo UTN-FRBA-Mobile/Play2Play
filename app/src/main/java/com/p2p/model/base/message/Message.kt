@@ -2,6 +2,9 @@ package com.p2p.model.base.message
 
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
+import com.p2p.model.truco.message.TrucoCardsMessage
+import com.p2p.model.impostor.message.ImpostorAssignWord
+import com.p2p.model.impostor.message.ImpostorEndGame
 import com.p2p.model.tuttifrutti.message.FinalScoreMessage
 import com.p2p.model.tuttifrutti.message.TuttiFruttiEnoughForMeEnoughForAllMessage
 import com.p2p.model.tuttifrutti.message.TuttiFruttiSendWordsMessage
@@ -24,5 +27,8 @@ import java.io.Serializable
     JsonSubTypes.Type(value = TuttiFruttiSendWordsMessage::class),
     JsonSubTypes.Type(value = TuttiFruttiStartRoundMessage::class),
     JsonSubTypes.Type(value = FinalScoreMessage::class),
+    JsonSubTypes.Type(value = ImpostorAssignWord::class),
+    JsonSubTypes.Type(value = ImpostorEndGame::class),
+    JsonSubTypes.Type(value = TrucoCardsMessage::class),
 )
 abstract class Message(private val type: String) : Serializable

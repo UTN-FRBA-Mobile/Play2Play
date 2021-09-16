@@ -29,7 +29,7 @@ class TuttiFruttiReviewFragment : BaseGameFragment<
 
     override fun initValues() {
         observe(gameViewModel.actualRound) { viewModel.setInitialActualRound(it) }
-        observe(gameViewModel.finishedRoundInfos) { viewModel.setInitialFinishedRoundInfos(it) }
+        observe(gameViewModel.finishedRoundInfos) { viewModel.setInitialFinishedRoundInfos(it.toList()) }
     }
 
     override fun initUI() {
@@ -57,7 +57,7 @@ class TuttiFruttiReviewFragment : BaseGameFragment<
                     .fromHtml()
             }
             observe(finishedRoundInfos) { finishedRoundInfo ->
-                tuttiFruttiReviewRoundAdapter.finishedRoundInfo = finishedRoundInfo
+                tuttiFruttiReviewRoundAdapter.finishedRoundInfo = finishedRoundInfo.toList()
                 gameBinding.enoughPlayer.text = resources
                     .getString(R.string.tf_enough_player, finishedRoundInfo.first { it.saidEnough }.player)
                     .fromHtml()

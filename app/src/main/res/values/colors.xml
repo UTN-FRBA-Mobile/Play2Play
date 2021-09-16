@@ -9,6 +9,8 @@
     <color name="colorOnSecondary">@color/white_alpha_100</color>
     <color name="colorBackground">@color/white_alpha_100</color>
     <color name="colorBackgroundSelected">@color/colorPrimaryVariant</color>
+    <color name="colorSuccess">#22bb33</color>
+    <color name="colorWarning">@color/yellow_orange</color>
     <color name="colorError">@color/persimmon</color>
     <color name="colorOnError">@color/white_alpha_100</color>
     <color name="colorDivider">@color/gray</color>

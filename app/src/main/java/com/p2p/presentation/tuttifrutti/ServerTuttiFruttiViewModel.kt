@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.loadingMessages.LoadingTextRepository
+import com.p2p.model.LoadingMessageType
 import com.p2p.data.userInfo.UserSession
 import com.p2p.model.base.message.Conversation
 import com.p2p.model.tuttifrutti.FinishedRoundInfo
@@ -79,14 +80,12 @@ class ServerTuttiFruttiViewModel(
         acceptWords(MYSELF_PEER_ID, categoriesWords)
 
     override fun enoughForMeEnoughForAll() {
-        startLoading(loadingMessage = "")
         saidEnough(MYSELF_PEER_ID)
         super.enoughForMeEnoughForAll()
         stopRound()
     }
 
     override fun onReceiveEnoughForAll(conversation: Conversation) {
-        startLoading(loadingMessage = "")
         saidEnough(conversation.peer)
         super.onReceiveEnoughForAll(conversation)
     }
@@ -97,8 +96,9 @@ class ServerTuttiFruttiViewModel(
     }
 
     private fun saidEnough(peer: Long) {
+        startLoading(loadingTextRepository.getText(LoadingMessageType.TF_WAITING_FOR_WORDS))
         saidEnoughPeer = peer
-        _finishedRoundInfos.value = emptyList()
+        _finishedRoundInfos.value = emptySet()
         waitingWordsJob = viewModelScope.launch(Dispatchers.Default) {
             delay(WAITING_WORDS_TIMEOUT_MS)
             withContext(Dispatchers.Main) { stopAcceptingWords() }

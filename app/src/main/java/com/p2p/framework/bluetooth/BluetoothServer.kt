@@ -16,8 +16,11 @@ class BluetoothServer(
 
     private var shouldLoop = true
 
+    private val communicationsWithClients = mutableListOf<Pair<MessageSenderThread, BluetoothConnectionThread>>()
+
     /** This list of [BluetoothConnectionThread]s contains the communication with each client. */
-    private val connectionsToClients = mutableListOf<BluetoothConnectionThread>()
+    private val connectionsToClients: List<BluetoothConnectionThread>
+        get() = communicationsWithClients.map { it.second }
 
     /** The server socket is used to accept connections, then it should be closed. */
     private val acceptingConnectionsSocket: BluetoothServerSocket? by lazy(LazyThreadSafetyMode.NONE) {
@@ -45,20 +48,20 @@ class BluetoothServer(
                 onMessageReceived = { isConversation, length, buffer ->
                     if (!isConversation) {
                         Logger.d(TAG, "Received message and broadcasting")
-                        connectionsToClients
-                            .filterNot { it == this }
-                            .forEach { it.write(buffer, length, false) }
+                        communicationsWithClients
+                            .filterNot { (_, connection) -> connection == this }
+                            .forEach { (sender, connection) -> sender.putMessage(connection, buffer, length, false) }
                     }
                 }
                 onConnectionLost = {
-                    connectionsToClients.remove(this)
+                    communicationsWithClients.removeAll { (_, connection) -> connection == this }
                     handler
                         .obtainMessage(BluetoothHandlerMessages.ON_CLIENT_CONNECTION_LOST, id)
                         .sendToTarget()
                 }
             }
-            connectionsToClients.add(bluetoothConnectionThread)
-            if (connectionsToClients.size >= maxAccepted) {
+            communicationsWithClients.add(MessageSenderThread() to bluetoothConnectionThread)
+            if (communicationsWithClients.size >= maxAccepted) {
                 stopAccepting()
             }
         }
@@ -78,14 +81,14 @@ class BluetoothServer(
         connectionsToClients.firstOrNull { it.id == peer }?.close()
     }
 
-    override fun write(message: Message) = connectionsToClients.forEach {
-        writeOnConnection(it, message, isConversation = false)
+    override fun write(message: Message) = communicationsWithClients.forEach { (sender, connection) ->
+        sendMessage(sender, connection, message, isConversation = false)
     }
 
     override fun talk(conversation: Conversation, sendMessage: Message) {
-        connectionsToClients
-            .firstOrNull { it.id == conversation.peer }
-            ?.let { writeOnConnection(it, sendMessage, isConversation = true) }
+        communicationsWithClients
+            .firstOrNull { (_, connection) -> connection.id == conversation.peer }
+            ?.let { (sender, connection) -> sendMessage(sender, connection, sendMessage, isConversation = true) }
     }
 
     override fun stopAccepting() {

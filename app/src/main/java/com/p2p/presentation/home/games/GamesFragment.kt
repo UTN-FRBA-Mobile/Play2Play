@@ -11,6 +11,8 @@ import com.p2p.presentation.bluetooth.TurnOnBluetoothActivity
 import com.p2p.presentation.extensions.clearAndAppend
 import com.p2p.presentation.home.HomeActivity.Companion.GAME_REQUEST_CODE
 import com.p2p.presentation.home.join.JoinGamesBottomSheetFragment
+import com.p2p.presentation.impostor.ImpostorActivity
+import com.p2p.presentation.truco.TrucoActivity
 import com.p2p.presentation.tuttifrutti.TuttiFruttiActivity
 
 class GamesFragment : BaseFragment<FragmentGamesBinding, GamesEvents, GamesViewModel>() {
@@ -25,6 +27,7 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesEvents, GamesViewM
         setupGamesRecycler()
         binding.createButton.isEnabled = false
         binding.createButton.setOnClickListener { viewModel.createGame(getUserName()) }
+        binding.joinButton.isEnabled = false
         binding.joinButton.setOnClickListener { viewModel.joinGame(getUserName()) }
         binding.shareButton.setOnClickListener { ApplicationSharer.share(requireActivity()) }
     }
@@ -32,12 +35,18 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesEvents, GamesViewM
     override fun setupObservers() = with(viewModel) {
         observe(games) { adapter.games = it }
         observe(userName) { binding.userNameInput.clearAndAppend(it) }
-        observe(createButtonEnabled) { binding.createButton.isEnabled = it }
+        observe(buttonsEnabled) {
+            binding.createButton.isEnabled = it
+            binding.joinButton.isEnabled = it
+        }
     }
 
     override fun onEvent(event: GamesEvents) = when (event) {
         GoToCreateTuttiFrutti -> TuttiFruttiActivity.startCreate(requireActivity(), GAME_REQUEST_CODE)
-        JoinGame -> JoinGamesBottomSheetFragment.newInstance().show(parentFragmentManager, null)
+        GoToCreateImpostor -> ImpostorActivity.startCreate(requireActivity(), GAME_REQUEST_CODE)
+        GoToCreateTruco -> TrucoActivity.startCreate(requireActivity(), GAME_REQUEST_CODE)
+        is JoinGame -> JoinGamesBottomSheetFragment.newInstance(event.game)
+            .show(parentFragmentManager, null)
         TurnOnBluetooth -> TurnOnBluetoothActivity.start(requireContext())
     }
 

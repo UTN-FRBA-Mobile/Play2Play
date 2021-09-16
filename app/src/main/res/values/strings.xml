@@ -6,12 +6,17 @@
 
     <!-- Common -->
     <string name="continue_">Continuar</string> <!-- The `_` should be because continue is a reserved symbol :( -->
+    <string name="start">Iniciar</string>
     <string name="connect">Conectarse</string>
     <string name="understood">Entendido</string>
     <string name="unknown">Desconocido</string>
     <string name="points">Puntos</string>
     <string name="thanks">¡Gracias!</string>
     <string name="share">Compartir</string>
+    <string name="finish_game">Terminar partida</string>
+    <string name="i_do">Quiero</string>
+    <string name="i_dont">No quiero</string>
+
 
     <!-- Request location permission -->
     <string name="request_location_title">Lo necesitás para jugar</string>
@@ -21,7 +26,6 @@
     <string name="games_user_name">Tu nombre</string>
     <string name="games_join">Unirse</string>
     <string name="games_create">Crear partida</string>
-
     <!-- Join games -->
     <string name="join_games_title">Seleccioná el celular de quien creó el juego</string>
     <string name="join_game_troubleshoot">En caso de no encontrar el celular deben conectarse manualmente. Hacé click acá y sigan las instrucciones en ambos celulares.</string>
@@ -29,10 +33,13 @@
 
     <!-- Games names -->
     <string name="games_tutti_frutti">Tutti Frutti</string>
+    <string name="games_impostor">Impostor</string>
+    <string name="games_truco">Truco</string>
     <string name="games_name_error">¡Para jugar primero tenés que decirnos tu nombre!</string>
     <string name="games_name_max_length_error">Tu nombre puede tener hasta 7 letras</string>
 
     <!-- Tutti Frutti - Categories -->
+    <string name="tf_categories_custom">Ingresá una categoría personalizada</string>
     <string name="tf_categories_selected_categories">Categorías seleccionadas</string>
     <string name="tf_categories_count_error">¡Debes seleccionar al menos 5!</string>
 
@@ -43,8 +50,8 @@
 
     <!-- Tutti Frutti - Rounds -->
     <string name="tutti_frutti_rounds">¿Cuántas rondas van a jugar?</string>
-    <string name="decrease_number">Decrease number</string>
-    <string name="increase_number">Increase number</string>
+    <string name="decrease_number">Disminuir número</string>
+    <string name="increase_number">Incrementar número</string>
 
     <!-- How to connect Bluetooth screen -->
     <string name="how_to_connect_bluetooth_title">¿Cómo conectarse con otro dispositivo Bluetooth?</string>
@@ -53,22 +60,41 @@
     <string name="tf_letter"><![CDATA[Letra: <font color=#FF8550>%s</font>]]></string>
     <string name="tf_round"><![CDATA[Ronda: <font color=#FF8550>%d</font>/%d]]></string>
     <string name="tf_validation_error">¡Falta completar!</string>
-    <string name="tf_finish_round">¡Basta para mi, basta para todos!</string>
+    <string name="tf_finish_round">¡Basta para mi, basta para todes!</string>
 
     <!-- Lobby -->
     <string name="lobby_give_help_players_title">Pedile al resto que se sumen</string>
     <string name="lobby_give_help_players_decription"><![CDATA[Para sumarse a la partida se tienen que unir al celular con el nombre <b>%s</b>]]></string>
     <string name="lobby_connected_players">Jugadores listos</string>
+    <string name="lobby_no_players_yet">Aun no hay jugadores...</string>
     <string name="lobby_waiting_players">Esperando jugadores</string>
     <string name="lobby_start_game">Comenzar juego</string>
 
     <string name="tf_enough_player"><![CDATA[¡<b>%s</b> dijo basta!]]></string>
     <!-- Tutti Frutti - Loading screen -->
-    <string name="tf_wait_for_results">¡Discutan con el creador del juego los puntajes!</string>
+    <string name="tf_wait_for_review">¡Discutan con quien creó el juego los puntajes!</string>
+    <string name="tf_wait_for_words">Esperando las palabras del resto de les jugadores</string>
     <!-- Tutti Frutti - Final Score -->
     <string name="tf_winner">Ganó %s</string>
     <string name="tf_points">%d puntos</string>
     <string name="tf_exit">Salir</string>
+
+    <!-- Impostor - Game -->
+
+    <!-- Impostor create game -->
+    <string name="im_write_key_word">Ingrese la palabra clave</string>
+    <string name="im_validation_error_input">¡Debes ingresar la palabra para poder arrancar!</string>
+    <string name="im_validation_error_players">¡Se debe unir al menos un jugador!</string>
+
+    <!-- Impostor play info -->
+    <string name="im_key_word_is">La palabra clave es</string>
+    <string name="im_impostor_is">El impostor es</string>
+
+    <!-- Impostor play -->
+    <string name="im_you_are_impostor">Sos el impostor, no sabes la palabra clave</string>
+    <string name="im_you_are_not_impostor">No sos el impostor, la palabra clave es</string>
+    <string name="im_simulate">Simula</string>
+
 
     <!-- Error screen -->
     <string name="error_bluetooth_off">Se apagó el bluetooth. Para poder jugar tenés que mantenerlo encendido.</string>
@@ -83,4 +109,24 @@
     <string name="exit_game">¿Está seguro que desea abandonar el juego?</string>
     <string name="exit_game_yes">Si</string>
     <string name="exit_game_no">No</string>
+
+    <!-- Truco -->
+    <string name="truco_card_dropping_place">Jugá tu carta</string>
+    <string name="truco_their_score_label">Ell</string>
+    <string name="truco_our_score_label">Nos</string>
+    <string name="truco_actions_open_button">Abrir las acciones de la ronda del truco</string>
+    <string name="truco_swords_card">%d de espada</string>
+    <string name="truco_cups_card">%d de copa</string>
+    <string name="truco_clubs_card">%d de basto</string>
+    <string name="truco_golds_card">%d de oro</string>
+    <string name="truco_unknown_card">Carta desconocida</string>
+    <string name="truco_ask_for_envido">Envido</string>
+    <string name="truco_ask_for_real_envido">Real envido</string>
+    <string name="truco_ask_for_falta_envido">Falta envido</string>
+    <string name="truco_ask_for_truco">Truco</string>
+    <string name="truco_ask_for_retruco">Quiero\nretruco</string>
+    <string name="truco_ask_for_vale_cuatro">Quiero\nvale cuatro</string>
+    <string name="truco_go_to_deck">Me voy al mazo</string>
+    <string name="truco_go_to_deck_action">Me voy\nal mazo</string>
+
 </resources>

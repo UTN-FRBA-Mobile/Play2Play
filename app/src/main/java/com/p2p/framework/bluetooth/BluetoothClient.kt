@@ -17,6 +17,7 @@ class BluetoothClient(
 
     /** This [BluetoothConnectionThread] contains the communication with the server. */
     private var connectionToServer: BluetoothConnectionThread? = null
+    private val messageSenderThread = MessageSenderThread()
 
     private var isClosed = false
 
@@ -90,7 +91,7 @@ class BluetoothClient(
     }
 
     private fun write(message: Message, isConversation: Boolean) {
-        connectionToServer?.let { writeOnConnection(it, message, isConversation) }
+        connectionToServer?.let { sendMessage(messageSenderThread, it, message, isConversation) }
     }
 
     companion object {
