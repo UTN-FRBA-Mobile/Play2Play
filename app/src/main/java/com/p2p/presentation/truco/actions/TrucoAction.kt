@@ -38,8 +38,7 @@ abstract class TrucoAction(val hasReplication: Boolean, val points: Int) {
         override fun message(context: Context) = context.getString(R.string.truco_ask_for_truco)
 
         override fun availableResponses() =
-            if (round == 1 && !envidoAlreadyAsked) TrucoActionAvailableResponses(retruco = true, envidoGoesFirst = true)
-            else TrucoActionAvailableResponses(retruco = true)
+            TrucoActionAvailableResponses(retruco = true, envidoGoesFirst = round == 1 && !envidoAlreadyAsked)
     }
 
     object Retruco : TrucoAction(
