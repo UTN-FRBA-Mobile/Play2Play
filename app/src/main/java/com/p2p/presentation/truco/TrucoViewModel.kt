@@ -143,22 +143,25 @@ abstract class TrucoViewModel(
     private fun setTrucoOrEnvidoAsAskedIfApplies(action: TrucoAction, actionPerformer: Boolean) {
         when (action) {
             // Envido can be asked after truco on the first round, so it is not fully asked until is answered with yes or no
-            is TrucoGameAction -> {
-                _lastTrucoAction.value = action
-                _trucoButtonEnabled.value = !actionPerformer
-            }
+            is ValeCuatro -> updateTrucoValues(action, buttonEnabled = false)
+            is TrucoGameAction -> updateTrucoValues(action, buttonEnabled = !actionPerformer)
             is EnvidoGoesFirst -> {
                 _lastTrucoAction.value = null
                 _trucoButtonEnabled.value = true
                 _envidoDisabled.value = true
             }
-            is Envido, is RealEnvido, is FaltaEnvido, EnvidoGoesFirst -> _envidoDisabled.value = true
-            is YesIDo -> if(isAcceptingTruco()) _envidoDisabled.value = true
+            is Envido, is RealEnvido, is FaltaEnvido, EnvidoGoesFirst -> _envidoDisabled.value =
+                true
+            is YesIDo -> if (isAcceptingTruco()) _envidoDisabled.value = true
             else -> Unit
         }
     }
 
     private fun isAcceptingTruco() = _lastTrucoAction.value != null
+    private fun updateTrucoValues(action: TrucoGameAction, buttonEnabled: Boolean) {
+        _lastTrucoAction.value = action
+        _trucoButtonEnabled.value = buttonEnabled
+    }
 
 
 }

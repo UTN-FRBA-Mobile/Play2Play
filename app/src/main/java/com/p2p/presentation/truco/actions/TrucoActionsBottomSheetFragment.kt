@@ -123,7 +123,7 @@ class TrucoActionsBottomSheetFragment :
     }
 
     private fun updateTrucoVisibility(visible: Boolean){
-        binding.trucoButton.isVisible = visible
+        binding.trucoButton.isEnabled = visible
     }
     private fun updateTrucoText(text: String?){
         binding.trucoButton.text = text ?: resources.getString(R.string.truco_ask_for_truco)
