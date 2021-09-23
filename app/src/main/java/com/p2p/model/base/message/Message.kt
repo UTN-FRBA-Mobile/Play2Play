@@ -33,5 +33,6 @@ import java.io.Serializable
     JsonSubTypes.Type(value = ImpostorEndGame::class),
     JsonSubTypes.Type(value = TrucoCardsMessage::class),
     JsonSubTypes.Type(value = TrucoStartGameMessage::class),
+    JsonSubTypes.Type(value = TrucoActionMessage::class),
 )
 abstract class Message(private val type: String) : Serializable

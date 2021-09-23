@@ -39,7 +39,8 @@ abstract class TrucoViewModel(
 
     // TODO: Must set this value on truco game creation
     /** Set the quantity of players selected by the user when creating the game . */
-    protected val _totalPlayers = MutableLiveData<Int>()
+    //TODO this is a mock!!!!
+    protected val _totalPlayers = MutableLiveData<Int>(2)
     val totalPlayers: LiveData<Int> = _totalPlayers
 
     /** Current cards for this player */
