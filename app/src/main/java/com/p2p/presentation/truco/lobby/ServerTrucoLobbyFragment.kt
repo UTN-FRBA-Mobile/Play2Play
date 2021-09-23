@@ -28,7 +28,8 @@ class ServerTrucoLobbyFragment : BaseGameFragment<
 
     override fun initValues() {
         observe(gameViewModel.players) { viewModel.setPlayers(it) }
-        observe(gameViewModel.totalPlayers) { viewModel.setTotalPlayers(it) }
+        // TODO: Delete mock of 2, change to it
+        observe(gameViewModel.totalPlayers) { viewModel.setTotalPlayers(2) }
     }
 
     override fun initUI() {
@@ -56,8 +57,9 @@ class ServerTrucoLobbyFragment : BaseGameFragment<
                 viewModel.setPlayers(it)
             }
             observe(totalPlayers) {
-                connectedPlayersTrucoAdapter.totalPlayers = it
-                viewModel.setTotalPlayers(it)
+                // TODO: Delete mock of 2, change to it
+                connectedPlayersTrucoAdapter.totalPlayers = 2
+                viewModel.setTotalPlayers(2)
             }
         }
         observe(viewModel.isContinueButtonEnabled) { gameBinding.startGameButton.isEnabled = it }
