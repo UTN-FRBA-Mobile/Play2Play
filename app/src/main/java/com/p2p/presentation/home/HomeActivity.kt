@@ -32,6 +32,7 @@ import com.p2p.presentation.basegame.GameActivity
 import com.p2p.presentation.home.games.Game
 import com.p2p.presentation.truco.ServerTrucoViewModel
 import com.p2p.presentation.truco.TrucoPlayFor2Fragment
+import com.p2p.presentation.truco.TrucoPlayFor4Fragment
 import com.p2p.presentation.truco.TrucoViewModel
 import com.p2p.utils.showSnackBar
 
