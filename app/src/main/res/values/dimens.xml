@@ -54,6 +54,9 @@
     <!-- Countdown -->
     <dimen name="countdown_number_width">100dp</dimen>
     <dimen name="countdown_number_height">200dp</dimen>
+
+    <!-- Truco -->
+    <dimen name="truco_create_game_card">180dp</dimen>
     <dimen name="truco_card_drop_height">90dp</dimen>
     <dimen name="truco_my_card_width">98dp</dimen>
     <dimen name="truco_my_card_height">150dp</dimen>

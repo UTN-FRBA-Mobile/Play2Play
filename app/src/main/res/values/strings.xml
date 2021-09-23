@@ -107,6 +107,12 @@
     <string name="tf_error_single_player">El resto de los jugadores abandonaron el juego… ¡felicitaciones ganador!</string>
 
     <!-- Truco -->
+    <!-- Create game -->
+    <string name="truco_create_game_title">Crea tu partida de truco</string>
+    <string name="truco_create_game_two_player">2 jugadores</string>
+    <string name="truco_create_game_four_player">4 jugadores</string>
+
+    <!-- Play -->
     <string name="truco_card_dropping_place">Jugá tu carta</string>
     <string name="truco_their_score_label">Ell</string>
     <string name="truco_our_score_label">Nos</string>
