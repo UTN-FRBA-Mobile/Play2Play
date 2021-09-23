@@ -77,7 +77,7 @@ class HomeActivity : BaseActivity() {
         if (savedInstanceState == null) {
             viewModel.singleTimeEvent
             removeSplashStyle()
-            addFragment(TrucoPlayFor2Fragment.newInstance(), shouldAddToBackStack = false)
+            addFragment(TrucoPlayFor4Fragment.newInstance(), shouldAddToBackStack = false)
         }
         if (!hasLocationPermissions()) requestLocationPermissions()
     }

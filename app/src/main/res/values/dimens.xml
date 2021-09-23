@@ -78,7 +78,7 @@
     <dimen name="truco_for_4_their_first_card_horizontal_margin">15dp</dimen>
     <dimen name="truco_for_4_their_second_card_horizontal_margin">40dp</dimen>
     <dimen name="truco_for_4_their_third_card_horizontal_margin">65dp</dimen>
-    <dimen name="truco_for_4_dropping_place_separation">10dp</dimen>
+    <dimen name="truco_for_4_dropping_place_separation">20dp</dimen>
     <dimen name="truco_round_circle_size">16dp</dimen>
     <dimen name="truco_round_circle_elevation">10dp</dimen>
     <dimen name="truco_actions_open_button_width">40dp</dimen>

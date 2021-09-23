@@ -98,16 +98,15 @@
         tools:ignore="ContentDescription" />
 
     <ImageView
-        android:id="@+id/right_player_right_card"
+        android:id="@+id/right_player_left_card"
         android:layout_width="@dimen/truco_for_4_card_width"
         android:layout_height="@dimen/truco_for_4_card_height"
         android:layout_marginEnd="@dimen/truco_first_card_horizontal_margin"
         android:rotationY="@integer/flip_rotation"
         android:scaleX="@integer/truco_their_card_initial_scale"
         android:scaleY="@integer/truco_their_card_initial_scale"
-        app:layout_constraintBottom_toBottomOf="@id/table"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/table"
+        app:layout_constraintTop_toTopOf="@id/right_player_right_card"
         tools:ignore="ContentDescription" />
 
     <ImageView
@@ -123,15 +122,16 @@
         tools:ignore="ContentDescription" />
 
     <ImageView
-        android:id="@+id/right_player_left_card"
+        android:id="@+id/right_player_right_card"
         android:layout_width="@dimen/truco_for_4_card_width"
         android:layout_height="@dimen/truco_for_4_card_height"
         android:layout_marginEnd="@dimen/truco_first_card_horizontal_margin"
         android:rotationY="@integer/flip_rotation"
         android:scaleX="@integer/truco_their_card_initial_scale"
         android:scaleY="@integer/truco_their_card_initial_scale"
+        app:layout_constraintBottom_toBottomOf="@id/table"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/right_player_right_card"
+        app:layout_constraintTop_toBottomOf="@id/table"
         tools:ignore="ContentDescription" />
 
     <androidx.constraintlayout.widget.Guideline

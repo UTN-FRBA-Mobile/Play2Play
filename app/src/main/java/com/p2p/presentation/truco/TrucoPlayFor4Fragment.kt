@@ -173,6 +173,6 @@ class TrucoPlayFor4Fragment : TrucoFragment<FragmentPlayTrucoFor4Binding>() {
 
     companion object {
 
-        fun newInstance() = TrucoPlayFor2Fragment()
+        fun newInstance() = TrucoPlayFor4Fragment()
     }
 }
