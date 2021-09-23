@@ -83,7 +83,7 @@ class GamesAdapter(private val onSelectedChanged: (Game?) -> Unit) :
     companion object {
 
         private const val SELECTED_OPACITY = 1f
-        private const val NO_SELECTED_OPACITY = 0.5f
-        private const val NONE_SELECTED_OPACITY = 0.8f
+        private const val NO_SELECTED_OPACITY = 0.3f
+        private const val NONE_SELECTED_OPACITY = 0.4f
     }
 }
