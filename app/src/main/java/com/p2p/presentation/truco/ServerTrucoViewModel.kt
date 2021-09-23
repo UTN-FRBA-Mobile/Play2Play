@@ -5,11 +5,14 @@ import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.loadingMessages.LoadingTextRepository
 import com.p2p.data.userInfo.UserSession
 import com.p2p.model.base.message.Conversation
+import com.p2p.model.truco.PlayerTeam
+import com.p2p.model.truco.message.TrucoStartGameMessage
 import com.p2p.model.truco.Card
 import com.p2p.model.truco.PlayerWithCards
 import com.p2p.model.truco.Suit.*
 import com.p2p.model.truco.message.TrucoCardsMessage
 import com.p2p.presentation.basegame.ConnectionType
+import com.p2p.presentation.extensions.requireValue
 
 class ServerTrucoViewModel(
     connectionType: ConnectionType,
@@ -33,15 +36,26 @@ class ServerTrucoViewModel(
     }
 
     override fun startGame() {
-        // TODO: Start truco game
+        playersTeams = setPlayersTeams()
+        connection.write(
+            TrucoStartGameMessage(playersTeams)
+        )
         closeDiscovery()
         handOutCards()
+        goToPlay()
     }
 
     override fun receiveMessage(conversation: Conversation) {
         super.receiveMessage(conversation)
         when (val message = conversation.lastMessage) {
             // TODO: Implement messages handling
+        }
+    }
+
+    private fun setPlayersTeams(): List<PlayerTeam> {
+        return players.requireValue().take(totalPlayers.requireValue()).mapIndexed { index, element ->
+            val teamNumber = index % PLAYERS_PER_TEAM + 1
+            PlayerTeam(element, teamNumber)
         }
     }
 
@@ -67,4 +81,7 @@ class ServerTrucoViewModel(
         cards = suits.flatMap { suit -> numbers.map { number -> Card(number, suit) } }.shuffled()
     }
 
+    companion object {
+        const val PLAYERS_PER_TEAM = 2
+    }
 }

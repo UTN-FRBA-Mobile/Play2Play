@@ -69,11 +69,15 @@
     <string name="lobby_no_players_yet">Aun no hay jugadores...</string>
     <string name="lobby_waiting_players">Esperando jugadores</string>
     <string name="lobby_start_game">Comenzar juego</string>
+    <string name="tr_lobby_help_order_players"><![CDATA[Arrastrá los jugadores según la posición que vayan a ocupar en la mesa. El jugador en la posición <font color=#FFB349><b>marcada</b></font> será la mano.]]></string>
 
+    <!-- Tutti Frutti - Review screen -->
     <string name="tf_enough_player"><![CDATA[¡<b>%s</b> dijo basta!]]></string>
+
     <!-- Tutti Frutti - Loading screen -->
     <string name="tf_wait_for_review">¡Discutan con quien creó el juego los puntajes!</string>
     <string name="tf_wait_for_words">Esperando las palabras del resto de les jugadores</string>
+
     <!-- Tutti Frutti - Final Score -->
     <string name="tf_winner">Ganó %s</string>
     <string name="tf_points">%d puntos</string>
@@ -130,5 +134,4 @@
     <string name="truco_ask_for_vale_cuatro">Quiero\nvale cuatro</string>
     <string name="truco_go_to_deck">Me voy al mazo</string>
     <string name="truco_go_to_deck_action">Me voy\nal mazo</string>
-
 </resources>

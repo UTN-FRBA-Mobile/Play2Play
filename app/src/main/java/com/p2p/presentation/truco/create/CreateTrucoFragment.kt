@@ -37,9 +37,8 @@ class CreateTrucoFragment : BaseGameFragment<
 
     override fun onEvent(event: CreateTrucoEvents) = when(event) {
         is CreateTrucoLobbyEvent -> {
-            //TODO JUNTAR CON LO DE VALE
-            //gameViewModel._totalPlayers = event.numberOfPlayers
-            //gameViewModel.goToServerLobby()
+            gameViewModel.setTotalPlayers(event.numberOfPlayers);
+            gameViewModel.goToLobby()
         }
     }
 }

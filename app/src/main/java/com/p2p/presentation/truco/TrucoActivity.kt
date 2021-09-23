@@ -4,6 +4,7 @@ import android.app.Activity
 import android.bluetooth.BluetoothDevice
 import androidx.activity.viewModels
 import com.p2p.presentation.basegame.GameActivity
+import com.p2p.presentation.truco.lobby.ServerTrucoLobbyFragment
 import com.p2p.presentation.truco.create.CreateTrucoFragment
 import com.p2p.presentation.truco.lobby.TrucoClientLobbyFragment
 
@@ -23,7 +24,8 @@ class TrucoActivity : GameActivity<TrucoSpecificGameEvent, TrucoViewModel>() {
     override fun goToClientLobby() =
         addFragment(TrucoClientLobbyFragment.newInstance(), shouldAddToBackStack = false)
 
-    override fun goToServerLobby() = TODO("Not yet implemented")
+    override fun goToServerLobby() =
+        addFragment(ServerTrucoLobbyFragment.newInstance(), shouldAddToBackStack = false)
 
     override fun onGameEvent(event: TrucoSpecificGameEvent) {
         super.onGameEvent(event)

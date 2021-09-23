@@ -10,7 +10,7 @@
         android:id="@+id/first_avatar"
         android:layout_width="@dimen/huge"
         android:layout_height="@dimen/huge"
-        android:src="@drawable/ic_baseline_account_circle_24"
+        android:src="@drawable/ic_baseline_account_circle_yellow"
         app:layout_constraintStart_toEndOf="@id/second_avatar"
         app:layout_constraintTop_toTopOf="parent"/>
 
@@ -19,7 +19,7 @@
         android:id="@+id/second_avatar"
         android:layout_width="@dimen/huge"
         android:layout_height="@dimen/huge"
-        android:src="@drawable/ic_baseline_account_circle_24"
+        android:src="@drawable/ic_baseline_account_circle_yellow"
         app:layout_constraintStart_toStartOf="@id/parent"
         app:layout_constraintTop_toBottomOf="@id/first_avatar"/>
 
@@ -27,7 +27,7 @@
         android:id="@+id/third_avatar"
         android:layout_width="@dimen/huge"
         android:layout_height="@dimen/huge"
-        android:src="@drawable/ic_baseline_account_circle_24"
+        android:src="@drawable/ic_baseline_account_circle_yellow"
         app:layout_constraintStart_toEndOf="@id/first_avatar"
         app:layout_constraintTop_toBottomOf="@id/first_avatar"/>
 
@@ -35,7 +35,7 @@
         android:id="@+id/fourth_avatar"
         android:layout_width="@dimen/huge"
         android:layout_height="@dimen/huge"
-        android:src="@drawable/ic_baseline_account_circle_24"
+        android:src="@drawable/ic_baseline_account_circle_yellow"
         app:layout_constraintStart_toEndOf="@id/second_avatar"
         app:layout_constraintTop_toBottomOf="@id/second_avatar"/>
 
