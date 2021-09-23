@@ -33,30 +33,35 @@ abstract class TrucoAction(val hasReplication: Boolean, val points: Int) {
     data class Truco(val round: Int, val envidoAlreadyAsked: Boolean = false) : TrucoAction(
         hasReplication = true,
         points = 1
-    ) {
+    ), TrucoGameAction {
 
         override fun message(context: Context) = context.getString(R.string.truco_ask_for_truco)
 
         override fun availableResponses() =
             TrucoActionAvailableResponses(retruco = true, envidoGoesFirst = round == 1 && !envidoAlreadyAsked)
+
+        override fun nextAction(): TrucoAction = Retruco
     }
 
     object Retruco : TrucoAction(
         hasReplication = true,
         points = 1
-    ) {
+    ), TrucoGameAction {
 
         override fun message(context: Context) = context.getString(R.string.truco_ask_for_retruco)
 
         override fun availableResponses() = TrucoActionAvailableResponses(valeCuatro = true)
+        override fun nextAction(): TrucoAction = ValeCuatro
     }
 
     object ValeCuatro : TrucoAction(
         hasReplication = true,
         points = 1
-    ) {
+    ), TrucoGameAction {
 
         override fun message(context: Context) = context.getString(R.string.truco_ask_for_vale_cuatro)
+
+        override fun nextAction(): TrucoAction? = null
     }
 
     data class Envido(val alreadyReplicatedEnvido: Boolean) : TrucoAction(

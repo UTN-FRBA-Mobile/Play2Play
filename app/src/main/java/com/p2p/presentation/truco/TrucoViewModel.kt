@@ -9,7 +9,6 @@ import com.p2p.data.loadingMessages.LoadingTextRepository
 import com.p2p.data.userInfo.UserSession
 import com.p2p.model.base.message.Conversation
 import com.p2p.model.truco.Card
-import com.p2p.model.truco.PlayerWithCards
 import com.p2p.model.truco.message.TrucoActionMessage
 import com.p2p.presentation.basegame.ConnectionType
 import com.p2p.presentation.basegame.GameViewModel
@@ -18,7 +17,7 @@ import com.p2p.presentation.home.games.Game
 import com.p2p.presentation.truco.actions.TrucoAction
 import com.p2p.presentation.truco.actions.TrucoAction.*
 import com.p2p.presentation.truco.actions.TrucoActionAvailableResponses
-import com.p2p.utils.Logger
+import com.p2p.presentation.truco.actions.TrucoGameAction
 
 abstract class TrucoViewModel(
     connectionType: ConnectionType,
@@ -47,11 +46,14 @@ abstract class TrucoViewModel(
     val actionAvailableResponses: LiveData<TrucoActionAvailableResponses> =
         _actionAvailableResponses
 
-    private val _trucoAlreadyAsked = MutableLiveData(false)
-    val trucoAlreadyAsked: LiveData<Boolean> = _trucoAlreadyAsked
+    private val _lastTrucoAction = MutableLiveData<TrucoGameAction?>(null)
+    val lastTrucoAction: LiveData<TrucoGameAction?> = _lastTrucoAction
 
-    private val _envidoAlreadyAsked = MutableLiveData(false)
-    val envidoAlreadyAsked: LiveData<Boolean> = _envidoAlreadyAsked
+    private val _trucoButtonEnabled = MutableLiveData(true)
+    val trucoButtonEnabled: LiveData<Boolean> = _trucoButtonEnabled
+
+    private val _envidoDisabled = MutableLiveData(false)
+    val envidoDisabled: LiveData<Boolean> = _envidoDisabled
 
     private val _currentRound = MutableLiveData(1)
     val currentRound: LiveData<Int> = _currentRound
@@ -71,7 +73,7 @@ abstract class TrucoViewModel(
         super.receiveMessage(conversation)
         when (val message = conversation.lastMessage) {
             is TrucoActionMessage -> {
-                setTrucoOrEnvidoAsAskedIfApplies(message.action)
+                setTrucoOrEnvidoAsAskedIfApplies(message.action, actionPerformer = false)
                 updateActionValues(message.action)
                 dispatchSingleTimeEvent(TrucoShowOpponentActionEvent(message.action))
                 // TODO: si se recibe quiero o no quiero, calcular los puntos
@@ -79,8 +81,17 @@ abstract class TrucoViewModel(
         }
     }
 
+    fun performTruco() {
+        val nextTrucoAction = _lastTrucoAction.value?.nextAction()
+            ?: Truco(
+                currentRound.requireValue(),
+                envidoDisabled.requireValue()
+            )
+        performAction(nextTrucoAction)
+    }
+
     fun performAction(action: TrucoAction) {
-        setTrucoOrEnvidoAsAskedIfApplies(action)
+        setTrucoOrEnvidoAsAskedIfApplies(action, actionPerformer = true)
         connection.write(TrucoActionMessage(action))
         updateActionValues(action)
         dispatchSingleTimeEvent(TrucoShowMyActionEvent(action))
@@ -101,8 +112,9 @@ abstract class TrucoViewModel(
 
     fun newHand() {
         dispatchSingleTimeEvent(TrucoNewHand)
-        _trucoAlreadyAsked.value = false
-        _envidoAlreadyAsked.value = false
+        _lastTrucoAction.value = null
+        _envidoDisabled.value = false
+        _trucoButtonEnabled.value = true
     }
 
     fun finishRound() {
@@ -128,15 +140,26 @@ abstract class TrucoViewModel(
         currentAction = null
     }
 
-    private fun setTrucoOrEnvidoAsAskedIfApplies(action: TrucoAction) {
+    private fun setTrucoOrEnvidoAsAskedIfApplies(action: TrucoAction, actionPerformer: Boolean) {
         when (action) {
             // Envido can be asked after truco on the first round, so it is not fully asked until is answered with yes or no
-            is Truco -> if (currentRound.requireValue() > 1) _trucoAlreadyAsked.value = true
-            is YesIDo, is NoIDont -> if (currentAction is Truco) _trucoAlreadyAsked.value = true
-            is Envido, is RealEnvido, is FaltaEnvido, is EnvidoGoesFirst -> _envidoAlreadyAsked.value = true
+            is TrucoGameAction -> {
+                _lastTrucoAction.value = action
+                _trucoButtonEnabled.value = !actionPerformer
+            }
+            is EnvidoGoesFirst -> {
+                _lastTrucoAction.value = null
+                _trucoButtonEnabled.value = true
+                _envidoDisabled.value = true
+            }
+            is Envido, is RealEnvido, is FaltaEnvido, EnvidoGoesFirst -> _envidoDisabled.value = true
+            is YesIDo -> if(isAcceptingTruco()) _envidoDisabled.value = true
             else -> Unit
         }
     }
+
+    private fun isAcceptingTruco() = _lastTrucoAction.value != null
+
 
 }
 
