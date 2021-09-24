@@ -128,4 +128,11 @@
     <string name="truco_ask_for_vale_cuatro">Quiero\nvale cuatro</string>
     <string name="truco_go_to_deck">Me voy al mazo</string>
     <string name="truco_go_to_deck_action">Me voy\nal mazo</string>
+
+    <!-- Truco final score -->
+    <string name="tr_final_score_other_team">Ellos</string>
+    <string name="tr_winner">¡Ganamos!</string>
+    <string name="tr_loser">Perdimos...</string>
+    <string name="tr_points">%d pts</string>
+
 </resources>

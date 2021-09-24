@@ -15,8 +15,8 @@ import com.p2p.presentation.basegame.GameViewModel
 import com.p2p.presentation.home.games.Game
 import com.p2p.presentation.truco.actions.TrucoAction
 import com.p2p.presentation.truco.actions.TrucoActionAvailableResponses
-import com.p2p.presentation.truco.finalscore.TrucoFinalScore
-import com.p2p.presentation.tuttifrutti.finalscore.TuttiFruttiFinalScore
+import com.p2p.model.truco.TrucoFinalScore
+import com.p2p.presentation.extensions.requireValue
 
 abstract class TrucoViewModel(
     connectionType: ConnectionType,
@@ -47,6 +47,7 @@ abstract class TrucoViewModel(
     private val _actionAvailableResponses = MutableLiveData<TrucoActionAvailableResponses>()
     val actionAvailableResponses: LiveData<TrucoActionAvailableResponses> = _actionAvailableResponses
 
+    // TODO: When setting this values, order them in a descendant order of scores
     private val _finalScores = MutableLiveData<List<TrucoFinalScore>>()
     val finalScores: LiveData<List<TrucoFinalScore>> = _finalScores
 
@@ -76,5 +77,9 @@ abstract class TrucoViewModel(
     fun replyAction(action: TrucoAction) {
         _actionAvailableResponses.value = TrucoActionAvailableResponses.noActions()
         dispatchSingleTimeEvent(TrucoShowMyActionEvent(action))
+    }
+
+    fun isPlayerInWinnerTeam(trucoFinalScores: List<TrucoFinalScore>): Boolean {
+        return userName in trucoFinalScores.first().players
     }
 }

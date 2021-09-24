@@ -4,9 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.p2p.R
 import com.p2p.databinding.FragmentTrucoFinalScoreBinding
+import com.p2p.model.truco.TrucoFinalScore
 import com.p2p.presentation.basegame.BaseGameFragment
 import com.p2p.presentation.truco.TrucoViewModel
 
@@ -23,13 +23,9 @@ class FinalScoreTrucoFragment : BaseGameFragment<
 
     override val viewModel: FinalScoreTrucoViewModel by viewModels()
 
-    private lateinit var trucoFinalScoreAdapter: TrucoFinalScoreAdapter
-
     override fun initUI() {
         super.initUI()
         setupObservers()
-        setupScoreRecycler()
-        gameViewModel.stopLoading()
         gameBinding.exitButton.setOnClickListener { viewModel.exit() }
     }
 
@@ -37,18 +33,36 @@ class FinalScoreTrucoFragment : BaseGameFragment<
         super.setupObservers()
         with(gameViewModel) {
             observe(finalScores) {
-                trucoFinalScoreAdapter.results = it
-                gameBinding.winner.text = resources.getString(R.string.tf_winner, it.first().player)
+                gameBinding.resultText.text = getResultText(it)
+                gameBinding.resultIcon.setImageResource(getResultIcon(it))
+                gameBinding.resultBackground.setBackgroundColor(getResultBackground(it))
+                gameBinding.resultPoints.text = resources.getString(R.string.tr_points, it.first().finalScore)
+                gameBinding.otherTeamPoints.text = resources.getString(R.string.tr_points, it.last().finalScore)
             }
         }
     }
 
-    private fun setupScoreRecycler() {
-        with(gameBinding.playersScores) {
-            layoutManager = LinearLayoutManager(context)
-            adapter = TrucoFinalScoreAdapter().also {
-                this@FinalScoreTrucoFragment.trucoFinalScoreAdapter = it
-            }
+    private fun getResultText(trucoFinalScores: List<TrucoFinalScore>): CharSequence {
+        return if(gameViewModel.isPlayerInWinnerTeam(trucoFinalScores)) {
+            resources.getString(R.string.tr_winner)
+        } else {
+            resources.getString(R.string.tr_loser)
+        }
+    }
+
+    private fun getResultIcon(trucoFinalScores: List<TrucoFinalScore>): Int {
+        return if(gameViewModel.isPlayerInWinnerTeam(trucoFinalScores)) {
+            R.drawable.ic_crown
+        } else {
+            R.drawable.ic_broken_heart
+        }
+    }
+
+    private fun getResultBackground(trucoFinalScores: List<TrucoFinalScore>): Int {
+        return if(gameViewModel.isPlayerInWinnerTeam(trucoFinalScores)) {
+            R.color.colorSecondaryVariant
+        } else {
+            R.color.colorPrimaryVariant
         }
     }
 

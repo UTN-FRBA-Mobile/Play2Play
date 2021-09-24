@@ -10,55 +10,91 @@
     <include layout="@layout/view_guidelines" />
 
     <View
-        android:id="@+id/winner_background"
+        android:id="@+id/result_background"
         android:background="@color/colorSecondaryVariant"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="@id/winner"
+        app:layout_constraintBottom_toBottomOf="@id/result_points"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/big_crown"
-        android:layout_width="@dimen/final_score_image_size"
-        android:layout_height="@dimen/final_score_image_size"
-        android:layout_marginTop="@dimen/medium"
+        android:id="@+id/result_icon"
+        android:layout_width="@dimen/tr_final_score_image_size"
+        android:layout_height="@dimen/tr_final_score_image_size"
+        android:layout_marginTop="@dimen/largest"
         android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:contentDescription="@string/tf_winner"
-        app:tint="@color/persimmon"
         android:src="@drawable/ic_crown"/>
 
     <TextView
-        android:id="@+id/winner"
+        android:id="@+id/result_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/P2P_Title"
-        android:background="@color/colorSecondaryVariant"
-        android:textColor="@color/persimmon"
-        android:layout_marginTop="@dimen/small"
-        android:paddingBottom="@dimen/medium"
-        app:layout_constraintTop_toBottomOf="@id/big_crown"
-        app:layout_constraintStart_toStartOf="@id/winner_background"
+        android:textSize="@dimen/big_extra"
+        android:textColor="@color/coral"
+        android:layout_marginTop="@dimen/medium"
+        app:layout_constraintTop_toBottomOf="@id/result_icon"
+        app:layout_constraintStart_toStartOf="@id/result_background"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/playersScores"
-        tools:text="Ganó Pepito"
-        />
+        tools:text="¡Ganamos!" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/playersScores"
+    <TextView
+        android:id="@+id/result_points"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/P2P_Title"
+        android:textSize="@dimen/largest"
+        android:textColor="@color/colorSecondary"
+        android:layout_marginTop="@dimen/medium"
+        android:paddingBottom="@dimen/largest"
+        app:layout_constraintTop_toBottomOf="@id/result_text"
+        app:layout_constraintStart_toStartOf="@id/result_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="75 pts" />
+
+    <View
+        android:id="@+id/other_team_background"
+        android:background="@color/white_alpha_100"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/large"
-        android:requiresFadingEdge="vertical"
+        android:layout_marginBottom="@dimen/font_large"
+        app:layout_constraintBottom_toTopOf="@id/exit_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/winner"
-        app:layout_constraintBottom_toTopOf="@id/exit_button"
-        tools:listitem="@layout/view_tutti_frutti_final_score_item" />
+        app:layout_constraintTop_toBottomOf="@id/result_points" />
+
+    <TextView
+        android:id="@+id/other_team_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/green_black"
+        android:textSize="@dimen/font_huge"
+        android:textStyle="bold"
+        android:layout_marginStart="@dimen/large"
+        android:paddingBottom="@dimen/medium_more"
+        android:paddingTop="@dimen/medium_extra"
+        app:layout_constraintTop_toBottomOf="@id/result_background"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="@string/tr_final_score_other_team" />
+
+    <TextView
+        android:id="@+id/other_team_points"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/P2P_Description"
+        android:textColor="@color/green_black"
+        android:textSize="@dimen/font_huge"
+        android:paddingBottom="@dimen/medium_more"
+        android:paddingTop="@dimen/medium_extra"
+        android:paddingRight="@dimen/large"
+        app:layout_constraintTop_toBottomOf="@id/result_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="15 pts" />
 
     <View
         android:id="@+id/exit_button_background"
@@ -68,7 +104,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/playersScores" />
+        app:layout_constraintTop_toBottomOf="@id/other_team_background" />
 
     <Button
         android:id="@+id/exit_button"

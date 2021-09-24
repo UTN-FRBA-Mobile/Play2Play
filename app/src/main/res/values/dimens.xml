@@ -17,7 +17,6 @@
     <dimen name="huge_extra">46dp</dimen>
     <dimen name="largest">54dp</dimen>
     <dimen name="largest_extra">64dp</dimen>
-    <dimen name="final_score_image_size">96dp</dimen>
 
     <!-- Text sizes -->
     <dimen name="font_tiny">6sp</dimen>
@@ -50,6 +49,9 @@
 
     <!-- Tutti frutti categories -->
     <dimen name="tf_categories_custom_elevation">10dp</dimen>
+
+    <!-- Tutti frutti final score -->
+    <dimen name="tf_final_score_image_size">96dp</dimen>
 
     <!-- Countdown -->
     <dimen name="countdown_number_width">100dp</dimen>
@@ -87,4 +89,7 @@
     <dimen name="truco_table_border_bottom_height">30dp</dimen>
     <dimen name="truco_action_bubble_padding">60dp</dimen>
     <dimen name="truco_action_bubble_elevation">50dp</dimen>
+
+    <!-- Truco final score -->
+    <dimen name="tr_final_score_image_size">120dp</dimen>
 </resources>
