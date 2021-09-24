@@ -14,6 +14,8 @@ import com.p2p.presentation.basegame.GameViewModel
 import com.p2p.presentation.home.games.Game
 import com.p2p.presentation.truco.actions.TrucoAction
 import com.p2p.presentation.truco.actions.TrucoActionAvailableResponses
+import com.p2p.presentation.truco.finalscore.TrucoFinalScore
+import com.p2p.presentation.tuttifrutti.finalscore.TuttiFruttiFinalScore
 
 abstract class TrucoViewModel(
     connectionType: ConnectionType,
@@ -36,6 +38,9 @@ abstract class TrucoViewModel(
 
     private val _actionAvailableResponses = MutableLiveData<TrucoActionAvailableResponses>()
     val actionAvailableResponses: LiveData<TrucoActionAvailableResponses> = _actionAvailableResponses
+
+    private val _finalScores = MutableLiveData<List<TrucoFinalScore>>()
+    val finalScores: LiveData<List<TrucoFinalScore>> = _finalScores
 
     abstract override fun startGame()
 

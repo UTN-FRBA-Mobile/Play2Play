@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground">
+
+    <include layout="@layout/view_guidelines" />
+
+    <View
+        android:id="@+id/winner_background"
+        android:background="@color/colorSecondaryVariant"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@id/winner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/big_crown"
+        android:layout_width="@dimen/final_score_image_size"
+        android:layout_height="@dimen/final_score_image_size"
+        android:layout_marginTop="@dimen/medium"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:contentDescription="@string/tf_winner"
+        app:tint="@color/persimmon"
+        android:src="@drawable/ic_crown"/>
+
+    <TextView
+        android:id="@+id/winner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/P2P_Title"
+        android:background="@color/colorSecondaryVariant"
+        android:textColor="@color/persimmon"
+        android:layout_marginTop="@dimen/small"
+        android:paddingBottom="@dimen/medium"
+        app:layout_constraintTop_toBottomOf="@id/big_crown"
+        app:layout_constraintStart_toStartOf="@id/winner_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/playersScores"
+        tools:text="Ganó Pepito"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/playersScores"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/large"
+        android:requiresFadingEdge="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/winner"
+        app:layout_constraintBottom_toTopOf="@id/exit_button"
+        tools:listitem="@layout/view_tutti_frutti_final_score_item" />
+
+    <View
+        android:id="@+id/exit_button_background"
+        android:background="@color/colorPrimary"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/playersScores" />
+
+    <Button
+        android:id="@+id/exit_button"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/largest_extra"
+        android:text="@string/tf_exit"
+        android:layout_marginHorizontal="@dimen/large"
+        android:layout_marginVertical="@dimen/large"
+        app:layout_constraintBottom_toBottomOf="parent"
+        style="@style/Widget.P2P.Button"
+    />
+</androidx.constraintlayout.widget.ConstraintLayout>
