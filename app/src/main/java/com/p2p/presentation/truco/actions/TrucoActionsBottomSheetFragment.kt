@@ -93,10 +93,10 @@ class TrucoActionsBottomSheetFragment :
         trucoButton.setOnClickListener {
             viewModel.performTruco()
         }
-        envidoButton.setOnClickListener { viewModel.performAction(TrucoAction.Envido(false)) }
-        realEnvidoButton.setOnClickListener { viewModel.performAction(TrucoAction.RealEnvido) }
+        envidoButton.setOnClickListener { viewModel.performAction(viewModel.createEnvido(false)) }
+        realEnvidoButton.setOnClickListener { viewModel.performAction(viewModel.createRealEnvido()) }
         //TODO pasarle los puntos del oponente cuando existan los puntos de la ronda
-        faltaEnvidoButton.setOnClickListener { viewModel.performAction(TrucoAction.FaltaEnvido(0)) }
+        faltaEnvidoButton.setOnClickListener { viewModel.performAction(viewModel.createFaltaEnvido()) }
         goToDeckButton.setOnClickListener { viewModel.performAction(TrucoAction.GoToDeck) }
         changeEnvidoButtonAvailability(false)
         setupObservers()

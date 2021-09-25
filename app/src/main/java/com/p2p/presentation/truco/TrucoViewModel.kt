@@ -19,6 +19,7 @@ import com.p2p.presentation.truco.actions.TrucoAction
 import com.p2p.presentation.truco.actions.TrucoAction.*
 import com.p2p.presentation.truco.actions.TrucoActionAvailableResponses
 import com.p2p.presentation.truco.actions.TrucoGameAction
+import com.p2p.utils.Logger
 
 abstract class TrucoViewModel(
     connectionType: ConnectionType,
@@ -47,9 +48,10 @@ abstract class TrucoViewModel(
     protected val _myCards = MutableLiveData<List<Card>>()
     val myCards: LiveData<List<Card>> = _myCards
 
+    // TODO: this should update the game points when an action is finished with a yes or no.
     var currentActionPoints: Int = 0
 
-    var currentAction: TrucoAction? = null
+    var previousActions: List<TrucoAction> = emptyList()
 
     private val _actionAvailableResponses = MutableLiveData<TrucoActionAvailableResponses>()
     val actionAvailableResponses: LiveData<TrucoActionAvailableResponses> =
@@ -107,7 +109,7 @@ abstract class TrucoViewModel(
         when (action) {
             is NoIDont -> {
                 //TODO mandar mensaje para que sume los puntos al oponente
-                when (currentAction) {
+                when (previousActions.last()) {
                     is Truco, is Retruco, is ValeCuatro -> dispatchSingleTimeEvent(TrucoFinishHand)
                 }
                 cleanActionValues()
@@ -136,17 +138,28 @@ abstract class TrucoViewModel(
         performAction(action)
     }
 
+    fun createEnvido(alreadyReplicated: Boolean) =
+        Envido(alreadyReplicated, previousActions)
+
+    fun createRealEnvido() = RealEnvido(previousActions)
+
+    // TODO: receive total opponent points
+    fun createFaltaEnvido() = FaltaEnvido(0, previousActions)
+
     /** Updates currentActionPoints and currentAction.
-     * currentAction value only will be replaced if the action received is not yes or no, in order to keep the history */
+     * currentAction value only will be recorded if the action received is not yes or no, in order to keep the history */
     private fun updateActionValues(action: TrucoAction) {
-        currentActionPoints += action.points
-        currentAction = if (listOf(YesIDo, NoIDont).contains(action)) currentAction else action
+        when (action) {
+            is YesIDo -> currentActionPoints = previousActions.last().yesPoints
+            is NoIDont -> currentActionPoints = previousActions.last().noPoints
+            else -> previousActions = previousActions + action
+        }
     }
 
     //TODO Llamar cuando los puntos actuales hayan sido asignados a algun equipo
     private fun cleanActionValues() {
         currentActionPoints = 0
-        currentAction = null
+        previousActions = emptyList()
     }
 
     private fun disableButtonsIfApplies(action: TrucoAction, actionPerformer: Boolean) {
