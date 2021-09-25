@@ -44,10 +44,7 @@ abstract class TrucoAction(
         override fun message(context: Context) = context.getString(R.string.truco_ask_for_truco)
 
         override fun availableResponses() =
-            TrucoActionAvailableResponses(
-                retruco = true,
-                envidoGoesFirst = round == 1 && !envidoAlreadyAsked
-            )
+            TrucoActionAvailableResponses(retruco = true, envidoGoesFirst = round == 1 && !envidoAlreadyAsked)
 
         override fun nextAction(): TrucoAction = Retruco
     }
@@ -70,8 +67,7 @@ abstract class TrucoAction(
         noPoints = 3
     ), TrucoGameAction {
 
-        override fun message(context: Context) =
-            context.getString(R.string.truco_ask_for_vale_cuatro)
+        override fun message(context: Context) = context.getString(R.string.truco_ask_for_vale_cuatro)
 
         override fun nextAction(): TrucoAction? = null
     }
@@ -100,8 +96,7 @@ abstract class TrucoAction(
         noPoints = previousActions.lastOrNull()?.yesPoints ?: 1
     ) {
 
-        override fun message(context: Context) =
-            context.getString(R.string.truco_ask_for_real_envido)
+        override fun message(context: Context) = context.getString(R.string.truco_ask_for_real_envido)
 
         override fun availableResponses() = TrucoActionAvailableResponses(faltaEnvido = true)
     }
@@ -113,8 +108,7 @@ abstract class TrucoAction(
         noPoints = previousActions.lastOrNull()?.yesPoints ?: 1
     ) {
 
-        override fun message(context: Context) =
-            context.getString(R.string.truco_ask_for_falta_envido)
+        override fun message(context: Context) = context.getString(R.string.truco_ask_for_falta_envido)
     }
 
     object EnvidoGoesFirst : TrucoAction(
@@ -122,8 +116,7 @@ abstract class TrucoAction(
         yesPoints = 2,
         noPoints = 1
     ) {
-        override fun message(context: Context): String =
-            context.getString(R.string.truco_ask_for_envido_goes_first)
+        override fun message(context: Context): String = context.getString(R.string.truco_ask_for_envido_goes_first)
 
         override fun availableResponses() = TrucoActionAvailableResponses(
             envido = true,

@@ -19,7 +19,6 @@ import com.p2p.presentation.truco.actions.TrucoAction
 import com.p2p.presentation.truco.actions.TrucoAction.*
 import com.p2p.presentation.truco.actions.TrucoActionAvailableResponses
 import com.p2p.presentation.truco.actions.TrucoGameAction
-import com.p2p.utils.Logger
 
 abstract class TrucoViewModel(
     connectionType: ConnectionType,
@@ -138,8 +137,7 @@ abstract class TrucoViewModel(
         performAction(action)
     }
 
-    fun createEnvido(alreadyReplicated: Boolean) =
-        Envido(alreadyReplicated, previousActions)
+    fun createEnvido(alreadyReplicated: Boolean) = Envido(alreadyReplicated, previousActions)
 
     fun createRealEnvido() = RealEnvido(previousActions)
 
