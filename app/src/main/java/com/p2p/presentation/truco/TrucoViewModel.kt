@@ -8,8 +8,8 @@ import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.loadingMessages.LoadingTextRepository
 import com.p2p.data.userInfo.UserSession
 import com.p2p.model.base.message.Conversation
-import com.p2p.model.truco.PlayerTeam
 import com.p2p.model.truco.Card
+import com.p2p.model.truco.PlayerTeam
 import com.p2p.model.truco.message.TrucoActionMessage
 import com.p2p.presentation.basegame.ConnectionType
 import com.p2p.presentation.basegame.GameViewModel
@@ -61,8 +61,8 @@ abstract class TrucoViewModel(
     private val _trucoButtonEnabled = MutableLiveData(true)
     val trucoButtonEnabled: LiveData<Boolean> = _trucoButtonEnabled
 
-    private val _envidoDisabled = MutableLiveData(false)
-    val envidoDisabled: LiveData<Boolean> = _envidoDisabled
+    private val _envidoButtonEnabled = MutableLiveData(true)
+    val envidoButtonEnabled: LiveData<Boolean> = _envidoButtonEnabled
 
     private val _currentRound = MutableLiveData(1)
     val currentRound: LiveData<Int> = _currentRound
@@ -82,7 +82,7 @@ abstract class TrucoViewModel(
         super.receiveMessage(conversation)
         when (val message = conversation.lastMessage) {
             is TrucoActionMessage -> {
-                setTrucoOrEnvidoAsAskedIfApplies(message.action, actionPerformer = false)
+                disableButtonsIfApplies(message.action, actionPerformer = false)
                 updateActionValues(message.action)
                 dispatchSingleTimeEvent(TrucoShowOpponentActionEvent(message.action))
                 // TODO: si se recibe quiero o no quiero, calcular los puntos
@@ -94,13 +94,13 @@ abstract class TrucoViewModel(
         val nextTrucoAction = _lastTrucoAction.value?.nextAction()
             ?: Truco(
                 currentRound.requireValue(),
-                envidoDisabled.requireValue()
+                !envidoButtonEnabled.requireValue()
             )
         performAction(nextTrucoAction)
     }
 
     fun performAction(action: TrucoAction) {
-        setTrucoOrEnvidoAsAskedIfApplies(action, actionPerformer = true)
+        disableButtonsIfApplies(action, actionPerformer = true)
         connection.write(TrucoActionMessage(action))
         updateActionValues(action)
         dispatchSingleTimeEvent(TrucoShowMyActionEvent(action))
@@ -122,7 +122,7 @@ abstract class TrucoViewModel(
     fun newHand() {
         dispatchSingleTimeEvent(TrucoNewHand)
         _lastTrucoAction.value = null
-        _envidoDisabled.value = false
+        _envidoButtonEnabled.value = true
         _trucoButtonEnabled.value = true
     }
 
@@ -149,7 +149,7 @@ abstract class TrucoViewModel(
         currentAction = null
     }
 
-    private fun setTrucoOrEnvidoAsAskedIfApplies(action: TrucoAction, actionPerformer: Boolean) {
+    private fun disableButtonsIfApplies(action: TrucoAction, actionPerformer: Boolean) {
         when (action) {
             // Envido can be asked after truco on the first round, so it is not fully asked until is answered with yes or no
             is ValeCuatro -> updateTrucoValues(action, buttonEnabled = false)
@@ -157,11 +157,11 @@ abstract class TrucoViewModel(
             is EnvidoGoesFirst -> {
                 _lastTrucoAction.value = null
                 _trucoButtonEnabled.value = true
-                _envidoDisabled.value = true
+                _envidoButtonEnabled.value = false
             }
-            is Envido, is RealEnvido, is FaltaEnvido, EnvidoGoesFirst -> _envidoDisabled.value =
-                true
-            is YesIDo -> if (isAcceptingTruco()) _envidoDisabled.value = true
+            is Envido, is RealEnvido, is FaltaEnvido, EnvidoGoesFirst ->
+                _envidoButtonEnabled.value = false
+            is YesIDo -> if (isAcceptingTruco()) _envidoButtonEnabled.value = false
             else -> Unit
         }
     }

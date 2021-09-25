@@ -104,7 +104,10 @@ class TrucoActionsBottomSheetFragment :
 
     override fun setupObservers() {
         super.setupObservers()
-        observe(viewModel.envidoDisabled) { if (it) disableEnvidoForHand() }
+        observe(viewModel.envidoButtonEnabled) {
+            changeEnvidoButtonAvailability(it)
+            envidoDisabledForHand = !it
+        }
         observe(viewModel.singleTimeEvent) { onGameEvent(it) }
         observe(viewModel.trucoButtonEnabled) {
             updateTrucoVisibility(it)
@@ -122,10 +125,11 @@ class TrucoActionsBottomSheetFragment :
         else -> super.onEvent(event)
     }
 
-    private fun updateTrucoVisibility(visible: Boolean){
+    private fun updateTrucoVisibility(visible: Boolean) {
         binding.trucoButton.isEnabled = visible
     }
-    private fun updateTrucoText(text: String?){
+
+    private fun updateTrucoText(text: String?) {
         binding.trucoButton.text = text ?: resources.getString(R.string.truco_ask_for_truco)
     }
 
@@ -149,21 +153,15 @@ class TrucoActionsBottomSheetFragment :
 
     private fun onExpanded() {
         binding.openButtonIcon.animateRotation(180f)
-        changeEnvidoButtonAvailability(true)
-    }
-
-    private fun disableEnvidoForHand() {
-        changeEnvidoButtonAvailability(false)
-        envidoDisabledForHand = true
+        changeEnvidoButtonAvailability(!envidoDisabledForHand)
     }
 
     private fun changeEnvidoButtonAvailability(enabled: Boolean) {
-        binding.envidoOptionsButton.isEnabled = enabled && !envidoDisabledForHand
+        binding.envidoOptionsButton.isEnabled = enabled
     }
 
-    private fun Dialog.getBottomSheet(): FrameLayout {
-        return findViewById(com.google.android.material.R.id.design_bottom_sheet)
-    }
+    private fun Dialog.getBottomSheet(): FrameLayout =
+        findViewById(com.google.android.material.R.id.design_bottom_sheet)
 
     companion object {
 
