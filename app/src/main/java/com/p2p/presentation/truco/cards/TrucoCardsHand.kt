@@ -47,10 +47,10 @@ abstract class TrucoCardsHand(
         movingAnimation
             .x(droppingPlace.x)
             .y(droppingPlace.y)
-            .scaleX(1f)
-            .scaleY(1f)
+            .scaleX(droppingPlace.scaleX)
+            .scaleY(droppingPlace.scaleY)
             .rotation(0f)
-            .rotationX(trucoCardFinalRotation)
+            .rotationX(droppingPlace.rotationX)
             .setListener(object : AnimatorListenerAdapter() {
 
                 override fun onAnimationStart(animation: Animator?) {
@@ -161,6 +161,8 @@ abstract class TrucoCardsHand(
         const val COMPLETE_HAND = 3
         const val TWO_CARDS = 2
         const val SINGLE_CARD = 1
+        const val FIRST_CARD = 0
+        const val SECOND_CARD = 1
         private const val HALF_ANIMATION = 0.5
         private const val THREE_QUARTERS = 0.75
     }

@@ -2,15 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
-    android:id="@+id/action_response_container"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="@dimen/medium_more"
-    android:layout_marginBottom="@dimen/medium"
-    android:elevation="50dp"
     android:orientation="vertical"
-    android:visibility="gone"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent">
+    android:paddingHorizontal="@dimen/medium_more"
+    android:paddingVertical="@dimen/medium"
+    android:visibility="gone">
 
     <Button
         android:id="@+id/action_response_yes_i_do"
