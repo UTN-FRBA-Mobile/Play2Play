@@ -2,7 +2,7 @@ package com.p2p.presentation.truco
 
 import com.p2p.model.truco.PlayerTeam
 
-enum class TrucoRivalPosition {
+enum class TrucoPlayerPosition {
     FRONT,
     LEFT,
     RIGHT,

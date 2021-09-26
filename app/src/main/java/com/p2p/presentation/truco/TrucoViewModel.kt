@@ -218,7 +218,7 @@ abstract class TrucoViewModel(
     private fun onRivalCardPlayed(playedCard: PlayedCard) {
         dispatchSingleTimeEvent(
             TrucoRivalPlayedCardEvent(
-                TrucoRivalPosition.get(playedCard.playerTeam, playersTeams, myPlayerTeam),
+                TrucoPlayerPosition.get(playedCard.playerTeam, playersTeams, myPlayerTeam),
                 playedCard.card,
                 currentRound.requireValue()
             )

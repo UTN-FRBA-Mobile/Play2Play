@@ -22,7 +22,7 @@ class TrucoFinishRound(
 object TrucoNewHand : TrucoSpecificGameEvent()
 
 data class TrucoRivalPlayedCardEvent(
-    val rivalPosition: TrucoRivalPosition,
+    val playerPosition: TrucoPlayerPosition,
     val card: Card,
     val round: Int
 ) : TrucoSpecificGameEvent()

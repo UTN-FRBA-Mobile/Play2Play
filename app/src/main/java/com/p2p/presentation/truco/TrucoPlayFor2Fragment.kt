@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.view.animation.BounceInterpolator
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
@@ -275,12 +274,12 @@ class TrucoPlayFor2Fragment :
         val cardImage = cardsImageCreator.create(event.card)
         val roundAsIndex = event.round - 1
         val droppingPlace = theirDroppingPlacesViews[roundAsIndex]
-        getPlayerCardsHand(event.rivalPosition).playCard(cardImage, droppingPlace, roundAsIndex)
+        getPlayerCardsHand(event.playerPosition).playCard(cardImage, droppingPlace, roundAsIndex)
     }
 
-    private fun getPlayerCardsHand(rivalPosition: TrucoRivalPosition) = when (rivalPosition) {
-        TrucoRivalPosition.MY_SELF -> myCardsHand
-        TrucoRivalPosition.FRONT -> theirCardsHand
+    private fun getPlayerCardsHand(playerPosition: TrucoPlayerPosition) = when (playerPosition) {
+        TrucoPlayerPosition.MY_SELF -> myCardsHand
+        TrucoPlayerPosition.FRONT -> theirCardsHand
         else -> throw IllegalStateException("There's only myself and front player on truco for 2")
     }
 
