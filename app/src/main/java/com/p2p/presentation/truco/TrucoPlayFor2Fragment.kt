@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.animation.BounceInterpolator
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
@@ -85,10 +86,10 @@ class TrucoPlayFor2Fragment :
         with(actionsResponses) {
             actionResponseYesIDo.setOnClickListener { gameViewModel.replyAction(TrucoAction.YesIDo) }
             actionResponseNoIDont.setOnClickListener { gameViewModel.replyAction(TrucoAction.NoIDont) }
-            actionResponseYesEnvido.setOnClickListener { gameViewModel.replyAction(TrucoAction.Envido(true)) }
-            actionResponseYesRealEnvido.setOnClickListener { gameViewModel.replyAction(TrucoAction.RealEnvido) }
+            actionResponseYesEnvido.setOnClickListener { gameViewModel.replyAction(gameViewModel.createEnvido(true)) }
+            actionResponseYesRealEnvido.setOnClickListener { gameViewModel.replyAction(gameViewModel.createRealEnvido()) }
             // TODO pasarle los puntos del oponente cuando existan los puntos de la ronda
-            actionResponseYesFaltaEnvido.setOnClickListener { gameViewModel.replyAction(TrucoAction.FaltaEnvido(0)) }
+            actionResponseYesFaltaEnvido.setOnClickListener { gameViewModel.replyAction(gameViewModel.createFaltaEnvido()) }
             actionResponseYesRetruco.setOnClickListener { gameViewModel.replyAction(TrucoAction.Retruco) }
             actionResponseYesValeCuatro.setOnClickListener { gameViewModel.replyAction(TrucoAction.ValeCuatro) }
             actionResponseEnvidoGoesFirst.setOnClickListener { gameViewModel.replyAction(TrucoAction.EnvidoGoesFirst) }
@@ -111,10 +112,9 @@ class TrucoPlayFor2Fragment :
     private fun onGameEvent(event: GameEvent) = when (event) {
         is TrucoShowMyActionEvent -> showMyAction(event.action)
         is TrucoShowOpponentActionEvent -> showOpponentAction(event.action)
-        // TODO this is a mock, when played put actual values
-        is TrucoFinishRound -> finishRound(1, TrucoRoundResult.WIN)
+        is TrucoFinishRound -> finishRound(event.round, event.result)
         is TrucoFinishHand -> TODO("Do finish hand logic")
-        is TrucoNewHand -> TODO("Do new hand logic")
+        is TrucoNewHand -> Unit
         is TrucoRivalPlayedCardEvent -> onRivalPlayedCard(event)
         TrucoTakeTurnEvent -> myCardsHand.takeTurn()
         else -> super.onEvent(event)
@@ -167,14 +167,14 @@ class TrucoPlayFor2Fragment :
     private fun takeTurn() = myCardsHand.takeTurn()
 
     private fun finishRound(round: Int, result: TrucoRoundResult) {
-        roundViews[round].animateBackgroundTint(
+        roundViews[round - 1].animateBackgroundTint(
             ContextCompat.getColor(
                 requireContext(),
                 result.color
             )
         ) {
             val colorPrimary = ContextCompat.getColor(requireContext(), R.color.colorPrimary)
-            roundViews.getOrNull(round + 1)?.backgroundTintList =
+            roundViews.getOrNull(round)?.backgroundTintList =
                 ColorStateList.valueOf(colorPrimary)
         }
     }

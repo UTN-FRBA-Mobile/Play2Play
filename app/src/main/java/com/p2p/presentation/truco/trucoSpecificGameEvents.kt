@@ -14,7 +14,10 @@ class TrucoShowOpponentActionEvent(val action: TrucoAction) : TrucoSpecificGameE
 
 object TrucoFinishHand : TrucoSpecificGameEvent()
 
-object TrucoFinishRound : TrucoSpecificGameEvent()
+class TrucoFinishRound(
+    val round: Int,
+    val result: TrucoRoundResult
+) : TrucoSpecificGameEvent()
 
 object TrucoNewHand : TrucoSpecificGameEvent()
 
