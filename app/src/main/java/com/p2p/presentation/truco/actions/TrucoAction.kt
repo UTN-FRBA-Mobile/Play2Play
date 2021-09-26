@@ -73,7 +73,6 @@ abstract class TrucoAction(
     }
 
     data class Envido(
-        val alreadyReplicatedEnvido: Boolean,
         override val previousActions: List<TrucoAction>
     ) : TrucoAction(
         hasReplication = true,
@@ -84,7 +83,7 @@ abstract class TrucoAction(
         override fun message(context: Context) = context.getString(R.string.truco_ask_for_envido)
 
         override fun availableResponses() = TrucoActionAvailableResponses(
-            envido = !alreadyReplicatedEnvido,
+            envido = previousActions.isEmpty(),
             realEnvido = true,
             faltaEnvido = true
         )

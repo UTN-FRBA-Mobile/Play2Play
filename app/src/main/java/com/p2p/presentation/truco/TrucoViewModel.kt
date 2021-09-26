@@ -131,18 +131,27 @@ abstract class TrucoViewModel(
         _currentRound.value = _currentRound.value?.plus(1)
     }
 
+    fun performEnvido(isReply: Boolean = false) =
+        performOrReplyAction(isReply, Envido(previousActions))
+
+    fun performRealEnvido(isReply: Boolean = false) =
+        performOrReplyAction(isReply, RealEnvido(previousActions))
+
+    // TODO: receive total opponent points
+    fun performFaltaEnvido(isReply: Boolean = false) =
+        performOrReplyAction(isReply, FaltaEnvido(0, previousActions))
 
     fun replyAction(action: TrucoAction) {
         _actionAvailableResponses.value = TrucoActionAvailableResponses.noActions()
         performAction(action)
     }
 
-    fun createEnvido(alreadyReplicated: Boolean) = Envido(alreadyReplicated, previousActions)
-
-    fun createRealEnvido() = RealEnvido(previousActions)
-
-    // TODO: receive total opponent points
-    fun createFaltaEnvido() = FaltaEnvido(0, previousActions)
+    private fun performOrReplyAction(isReply: Boolean, action: TrucoAction) {
+        if (isReply)
+            replyAction(action)
+        else
+            performAction(action)
+    }
 
     /** Updates currentActionPoints and currentAction.
      * currentAction value only will be recorded if the action received is not yes or no, in order to keep the history */
@@ -182,7 +191,4 @@ abstract class TrucoViewModel(
         _lastTrucoAction.value = action
         _trucoButtonEnabled.value = buttonEnabled
     }
-
-
 }
-
