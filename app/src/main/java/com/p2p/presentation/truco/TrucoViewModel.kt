@@ -110,7 +110,7 @@ abstract class TrucoViewModel(
                 disableButtonsIfApplies(message.action, actionPerformer = false)
                 updateActionValues(message.action)
                 dispatchSingleTimeEvent(TrucoShowOpponentActionEvent(message.action))
-                // TODO: si se recibe quiero o no quiero, calcular los puntos
+                onActionDone(message.action, message.playerTeam.team)
             }
             is TrucoPlayCardMessage -> onRivalCardPlayed(message.playedCard)
         }
@@ -127,22 +127,10 @@ abstract class TrucoViewModel(
 
     fun performAction(action: TrucoAction) {
         disableButtonsIfApplies(action, actionPerformer = true)
-        connection.write(TrucoActionMessage(action))
+        connection.write(TrucoActionMessage(action, myPlayerTeam))
         updateActionValues(action)
         dispatchSingleTimeEvent(TrucoShowMyActionEvent(action))
-        when (action) {
-            is NoIDont -> {
-                //TODO mandar mensaje para que sume los puntos al oponente
-                when (previousActions.last()) {
-                    is Truco, is Retruco, is ValeCuatro -> dispatchSingleTimeEvent(TrucoFinishHand)
-                }
-                cleanActionValues()
-            }
-            is YesIDo -> {
-                //TODO mandar mensaje para jugar y sumar puntos
-                cleanActionValues()
-            }
-        }
+        onActionDone(action, myPlayerTeam.team)
     }
 
     fun replyAction(action: TrucoAction) {
@@ -169,14 +157,17 @@ abstract class TrucoViewModel(
 
     private fun newHand() {
         dispatchSingleTimeEvent(TrucoNewHand)
+        cleanActionValues()
         currentHandWinners.clear()
         _lastTrucoAction.value = null
         _envidoButtonEnabled.value = true
         _trucoButtonEnabled.value = true
     }
 
-    /** Updates currentActionPoints and currentAction.
-     * currentAction value only will be recorded if the action received is not yes or no, in order to keep the history */
+    /**
+     * Updates currentActionPoints and currentAction.
+     * currentAction value only will be recorded if the action received is not yes or no, in order to keep the history.
+     */
     private fun updateActionValues(action: TrucoAction) {
         when (action) {
             is YesIDo -> currentActionPoints = previousActions.last().yesPoints
@@ -185,7 +176,6 @@ abstract class TrucoViewModel(
         }
     }
 
-    //TODO Llamar cuando los puntos actuales hayan sido asignados a algun equipo
     private fun cleanActionValues() {
         currentActionPoints = 1
         previousActions = emptyList()
@@ -254,9 +244,8 @@ abstract class TrucoViewModel(
         }
     }
 
-    private fun onHandFinished() {
-        val handWinnerPlayerTeam = getCurrentHandWinner()
-        val score = if (handWinnerPlayerTeam.team == myPlayerTeam.team) _ourScore else _theirScore
+    private fun onHandFinished(handWinnerPlayerTeam: Int = getCurrentHandWinner().team) {
+        val score = if (handWinnerPlayerTeam == myPlayerTeam.team) _ourScore else _theirScore
         score.value = score.requireValue() + currentActionPoints
         newHand()
     }
@@ -325,6 +314,24 @@ abstract class TrucoViewModel(
         currentPlayerTurn = player
         if (player == myPlayerTeam) {
             dispatchSingleTimeEvent(TrucoTakeTurnEvent)
+        }
+    }
+
+    private fun onActionDone(action: TrucoAction, performedByTeam: Int) {
+        when (action) {
+            is NoIDont -> onNoIDont(performedByTeam)
+            is YesIDo -> {
+                //TODO mandar mensaje para jugar y sumar puntos
+            }
+        }
+    }
+
+    private fun onNoIDont(performedByTeam: Int) {
+        when (previousActions.last()) {
+            is Truco, is Retruco, is ValeCuatro -> {
+                val winner = playersTeams.first { it.team != performedByTeam }.team
+                onHandFinished(winner)
+            }
         }
     }
 
