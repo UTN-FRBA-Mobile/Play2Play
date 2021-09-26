@@ -8,15 +8,24 @@ import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.loadingMessages.LoadingTextRepository
 import com.p2p.data.userInfo.UserSession
 import com.p2p.model.base.message.Conversation
-import com.p2p.model.truco.PlayerTeam
 import com.p2p.model.truco.Card
+import com.p2p.model.truco.PlayerTeam
 import com.p2p.model.truco.message.TrucoActionMessage
+import com.p2p.model.truco.message.TrucoPlayCardMessage
 import com.p2p.presentation.basegame.ConnectionType
 import com.p2p.presentation.basegame.GameViewModel
 import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.home.games.Game
 import com.p2p.presentation.truco.actions.TrucoAction
-import com.p2p.presentation.truco.actions.TrucoAction.*
+import com.p2p.presentation.truco.actions.TrucoAction.Envido
+import com.p2p.presentation.truco.actions.TrucoAction.EnvidoGoesFirst
+import com.p2p.presentation.truco.actions.TrucoAction.FaltaEnvido
+import com.p2p.presentation.truco.actions.TrucoAction.NoIDont
+import com.p2p.presentation.truco.actions.TrucoAction.RealEnvido
+import com.p2p.presentation.truco.actions.TrucoAction.Retruco
+import com.p2p.presentation.truco.actions.TrucoAction.Truco
+import com.p2p.presentation.truco.actions.TrucoAction.ValeCuatro
+import com.p2p.presentation.truco.actions.TrucoAction.YesIDo
 import com.p2p.presentation.truco.actions.TrucoActionAvailableResponses
 import com.p2p.presentation.truco.actions.TrucoGameAction
 
@@ -47,9 +56,11 @@ abstract class TrucoViewModel(
     protected val _myCards = MutableLiveData<List<Card>>()
     val myCards: LiveData<List<Card>> = _myCards
 
-    var currentActionPoints: Int = 0
+    private val _ourScore = MutableLiveData<Int>()
+    val ourScore: LiveData<Int> = _ourScore
 
-    var currentAction: TrucoAction? = null
+    private val _theirScore = MutableLiveData<Int>()
+    val theirScore: LiveData<Int> = _theirScore
 
     private val _actionAvailableResponses = MutableLiveData<TrucoActionAvailableResponses>()
     val actionAvailableResponses: LiveData<TrucoActionAvailableResponses> =
@@ -66,6 +77,20 @@ abstract class TrucoViewModel(
 
     private val _currentRound = MutableLiveData(1)
     val currentRound: LiveData<Int> = _currentRound
+
+    private lateinit var currentPlayerTurn: PlayerTeam
+
+    private var currentActionPoints: Int = 1
+    private var currentAction: TrucoAction? = null
+
+    private val myPlayerTeam: PlayerTeam by lazy { playersTeams.first { it.player == userName } }
+    private val playedCards: MutableList<MutableList<PlayedCard>> = mutableListOf(mutableListOf())
+    private val currentHandWinners: MutableList<PlayerTeam?> = mutableListOf()
+
+    init {
+        _ourScore.value = 0
+        _theirScore.value = 0
+    }
 
     abstract override fun startGame()
 
@@ -87,6 +112,7 @@ abstract class TrucoViewModel(
                 dispatchSingleTimeEvent(TrucoShowOpponentActionEvent(message.action))
                 // TODO: si se recibe quiero o no quiero, calcular los puntos
             }
+            is TrucoPlayCardMessage -> onRivalCardPlayed(message.playedCard)
         }
     }
 
@@ -121,19 +147,19 @@ abstract class TrucoViewModel(
 
     fun newHand() {
         dispatchSingleTimeEvent(TrucoNewHand)
+        currentHandWinners.clear()
         _lastTrucoAction.value = null
         _envidoDisabled.value = false
         _trucoButtonEnabled.value = true
     }
 
-    fun finishRound() {
-        _currentRound.value = _currentRound.value?.plus(1)
-    }
-
-
     fun replyAction(action: TrucoAction) {
         _actionAvailableResponses.value = TrucoActionAvailableResponses.noActions()
         performAction(action)
+    }
+
+    fun onGameStarted() {
+        nextTurn(playersTeams.first())
     }
 
     /** Updates currentActionPoints and currentAction.
@@ -145,7 +171,7 @@ abstract class TrucoViewModel(
 
     //TODO Llamar cuando los puntos actuales hayan sido asignados a algun equipo
     private fun cleanActionValues() {
-        currentActionPoints = 0
+        currentActionPoints = 1
         currentAction = null
     }
 
@@ -172,6 +198,121 @@ abstract class TrucoViewModel(
         _trucoButtonEnabled.value = buttonEnabled
     }
 
+    fun playCard(card: Card) {
+        val playedCard = PlayedCard(myPlayerTeam, card)
+        connection.write(TrucoPlayCardMessage(playedCard))
+        onCardPlayed(playedCard)
+    }
 
+    private fun onRivalCardPlayed(playedCard: PlayedCard) {
+        dispatchSingleTimeEvent(
+            TrucoRivalPlayedCardEvent(
+                TrucoRivalPosition.get(playedCard.playerTeam, playersTeams, myPlayerTeam),
+                playedCard.card,
+                currentRound.requireValue()
+            )
+        )
+        onCardPlayed(playedCard)
+    }
+
+    private fun onCardPlayed(playedCard: PlayedCard) {
+        val currentRoundPlayedCards = playedCards.last()
+        currentRoundPlayedCards.add(playedCard)
+
+        if (hasRoundFinished(currentRoundPlayedCards)) {
+            onRoundFinished(currentRoundPlayedCards)
+        } else {
+            nextTurn()
+        }
+    }
+
+    private fun onRoundFinished(currentRoundPlayedCards: List<PlayedCard>) {
+        _currentRound.value = _currentRound.value?.plus(1)
+        playedCards.add(mutableListOf())
+
+        val roundWinnerPlayerTeam = getRoundWinnerPlayerTeam(currentRoundPlayedCards)
+        currentHandWinners.add(roundWinnerPlayerTeam)
+
+        if (hasCurrentHandFinished()) {
+            onHandFinished()
+        } else {
+            nextTurn(roundWinnerPlayerTeam)
+        }
+    }
+
+    private fun onHandFinished() {
+        val handWinnerPlayerTeam = getCurrentHandWinner()
+        val score = if (handWinnerPlayerTeam == myPlayerTeam.team) _ourScore else _theirScore
+        score.value = score.requireValue() + currentActionPoints
+        newHand()
+    }
+
+    private fun hasRoundFinished(currentRoundPlayedCards: List<PlayedCard>): Boolean {
+        return currentRoundPlayedCards.size == totalPlayers.requireValue()
+    }
+
+    private fun hasCurrentHandFinished(): Boolean {
+        return currentHandWinners.size == MAX_HAND_ROUNDS ||
+                groupCurrentHandWinners().any { it.size >= WINNER_HAND_ROUNDS_THRESHOLD } ||
+                (currentHandWinners.first() == null && currentHandWinners.count { it == null } > 0)
+    }
+
+    private fun getRoundWinnerPlayerTeam(currentRoundPlayedCards: List<PlayedCard>): PlayerTeam? {
+        val winnerCard = TrucoCardsChallenger.getWinnerCard(currentRoundPlayedCards.map { it.card })
+        return currentRoundPlayedCards
+            .filter { it.card == winnerCard }
+            .takeIf { winners -> winners.size == 1 || winners.all { it.playerTeam == winners.first().playerTeam } }
+            ?.first()
+            ?.playerTeam
+    }
+
+    private fun getCurrentHandAbsoluteWinner() = groupCurrentHandWinners()
+        .firstOrNull { it.size >= WINNER_HAND_ROUNDS_THRESHOLD }
+        ?.first()
+        ?.team
+
+    /**
+     * Ways to win a hand:
+     * - Win two rounds.
+     * - Win the first round and tie the second or lose the second and tie the last.
+     * - Tie the first (and maybe the second) and wining the next round.
+     * - Tie all the rounds and be the hand.
+     */
+    private fun getCurrentHandWinner(): Int {
+        if (currentHandWinners.all { it == null }) {
+            TODO("Here the current round hand should be set as winner")
+        }
+
+        return getCurrentHandAbsoluteWinner()
+            ?: currentHandWinners.first()?.team
+            ?: currentHandWinners.filterNotNull().first().team
+    }
+
+    private fun groupCurrentHandWinners() = currentHandWinners
+        .groupBy { it?.team }
+        .filterKeys { it != null }
+        .values
+
+    private fun nextTurn(forceNextTurnPlayer: PlayerTeam? = null) {
+        setCurrentPlayerTurn(forceNextTurnPlayer ?: getNextPlayerTurn())
+    }
+
+    private fun getNextPlayerTurn(): PlayerTeam {
+        val nextIndex = playersTeams.indexOf(currentPlayerTurn) + 1
+        return playersTeams[nextIndex % playersTeams.size]
+    }
+
+    private fun setCurrentPlayerTurn(player: PlayerTeam) {
+        currentPlayerTurn = player
+        if (player == myPlayerTeam) {
+            dispatchSingleTimeEvent(TrucoTakeTurnEvent)
+        }
+    }
+
+    companion object {
+
+        private const val MAX_HAND_ROUNDS = 3
+        private const val WINNER_HAND_ROUNDS_THRESHOLD = 2
+    }
 }
 

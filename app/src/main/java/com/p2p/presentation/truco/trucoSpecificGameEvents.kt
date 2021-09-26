@@ -1,5 +1,6 @@
 package com.p2p.presentation.truco
 
+import com.p2p.model.truco.Card
 import com.p2p.presentation.basegame.SpecificGameEvent
 import com.p2p.presentation.truco.actions.TrucoAction
 
@@ -16,3 +17,11 @@ object TrucoFinishHand : TrucoSpecificGameEvent()
 object TrucoFinishRound : TrucoSpecificGameEvent()
 
 object TrucoNewHand : TrucoSpecificGameEvent()
+
+data class TrucoRivalPlayedCardEvent(
+    val rivalPosition: TrucoRivalPosition,
+    val card: Card,
+    val round: Int
+) : TrucoSpecificGameEvent()
+
+object TrucoTakeTurnEvent : TrucoSpecificGameEvent()

@@ -30,11 +30,6 @@ class ServerTrucoViewModel(
     /** Deck of cards being used by all players in a hand  */
     private var cards = listOf<Card>()
 
-    /** Be careful: this will be called for every client on a broadcast. */
-    override fun onSentSuccessfully(conversation: Conversation) {
-        super.onSentSuccessfully(conversation)
-    }
-
     override fun startGame() {
         playersTeams = setPlayersTeams()
         connection.write(

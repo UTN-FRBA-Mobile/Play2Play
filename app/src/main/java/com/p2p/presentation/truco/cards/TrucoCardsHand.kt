@@ -38,10 +38,8 @@ abstract class TrucoCardsHand(
         droppingPlaces.firstOrNull { !it.isVisible }?.let { updateDroppingPlace(it) }
     }
 
-    fun playCard(card: Card, cardImage: Pair<Bitmap, String>, droppingPlace: View) {
-        val dragAndDropCardEntry = dragAndDropCards
-            .toList()
-            .first { (_, playingCard) -> playingCard.card == card }
+    fun playCard(cardImage: Pair<Bitmap, String>, droppingPlace: View, round: Int) {
+        val dragAndDropCardEntry = dragAndDropCards.toList()[round]
         val cardView = dragAndDropCardEntry.second.view
         val movingAnimation = cardView.animate()
         movingAnimation

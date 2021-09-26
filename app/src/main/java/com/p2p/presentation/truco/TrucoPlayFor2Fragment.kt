@@ -29,6 +29,7 @@ import com.p2p.presentation.truco.actions.TrucoActionsBottomSheetFragment
 import com.p2p.presentation.truco.cards.CardImageCreator
 import com.p2p.presentation.truco.cards.TrucoCardsHand
 import com.p2p.presentation.truco.cards.TrucoSingleOpponentMyCardsHand
+import com.p2p.presentation.truco.cards.TrucoSingleOpponentTheirCardsHand
 import com.p2p.utils.setOnEndListener
 
 class TrucoPlayFor2Fragment :
@@ -43,6 +44,7 @@ class TrucoPlayFor2Fragment :
 
     private lateinit var headerBinding: ViewTrucoHeaderBinding
     private lateinit var myCardsHand: TrucoCardsHand
+    private lateinit var theirCardsHand: TrucoCardsHand
 
     private val cardsImageCreator by lazy { CardImageCreator(requireContext()) }
     private lateinit var roundViews: List<View>
@@ -76,7 +78,9 @@ class TrucoPlayFor2Fragment :
         myDroppingPlacesViews = listOf(dropFirstCard, dropSecondCard, dropThirdCard)
         theirDroppingPlacesViews =
             listOf(dropTheirFirstCard, dropTheirSecondCard, dropTheirThirdCard)
-        updateScores(0, 0)
+        theirCardsHand = TrucoSingleOpponentTheirCardsHand(theirCardsViews.map {
+            TrucoCardsHand.PlayingCard(Card.unknown(), it)
+        })
 
         with(actionsResponses) {
             actionResponseYesIDo.setOnClickListener { gameViewModel.replyAction(TrucoAction.YesIDo) }
@@ -96,10 +100,12 @@ class TrucoPlayFor2Fragment :
         observe(gameViewModel.myCards) { initMyCardsHand(it) }
         observe(gameViewModel.singleTimeEvent) { onGameEvent(it) }
         observe(gameViewModel.actionAvailableResponses) { updateActionAvailableResponses(it) }
+        observe(gameViewModel.ourScore) { updateScore(headerBinding.ourScore, it) }
+        observe(gameViewModel.theirScore) { updateScore(headerBinding.theirScore, it) }
     }
 
     override fun onCardPlayed(playingCard: TrucoCardsHand.PlayingCard) {
-        // TODO
+        gameViewModel.playCard(playingCard.card)
     }
 
     private fun onGameEvent(event: GameEvent) = when (event) {
@@ -109,6 +115,8 @@ class TrucoPlayFor2Fragment :
         is TrucoFinishRound -> finishRound(1, TrucoRoundResult.WIN)
         is TrucoFinishHand -> TODO("Do finish hand logic")
         is TrucoNewHand -> TODO("Do new hand logic")
+        is TrucoRivalPlayedCardEvent -> onRivalPlayedCard(event)
+        TrucoTakeTurnEvent -> myCardsHand.takeTurn()
         else -> super.onEvent(event)
     }
 
@@ -122,12 +130,6 @@ class TrucoPlayFor2Fragment :
             view.setImageBitmap(image)
             view.contentDescription = description
         }
-
-    // TODO
-    private fun updateScores(ourScore: Int, their: Int) {
-        updateScore(headerBinding.ourScore, ourScore)
-        updateScore(headerBinding.theirScore, their)
-    }
 
     private fun updateScore(textView: TextView, score: Int) = when (score) {
         0 -> textView.text = score.toString()
@@ -154,7 +156,7 @@ class TrucoPlayFor2Fragment :
             this@TrucoPlayFor2Fragment
         )
         loadCardImages(myCardsViews, myCards)
-        takeTurn()
+        gameViewModel.onGameStarted()
     }
 
     private fun getPlayingCards(cardsViews: List<ImageView>, cards: List<Card>) =
@@ -165,7 +167,6 @@ class TrucoPlayFor2Fragment :
     private fun takeTurn() = myCardsHand.takeTurn()
 
     private fun finishRound(round: Int, result: TrucoRoundResult) {
-        gameViewModel.finishRound()
         roundViews[round].animateBackgroundTint(
             ContextCompat.getColor(
                 requireContext(),
@@ -269,6 +270,19 @@ class TrucoPlayFor2Fragment :
         .setInterpolator(null)
         .setOnEndListener(onEndListener)
         .start()
+
+    private fun onRivalPlayedCard(event: TrucoRivalPlayedCardEvent) {
+        val cardImage = cardsImageCreator.create(event.card)
+        val roundAsIndex = event.round - 1
+        val droppingPlace = theirDroppingPlacesViews[roundAsIndex]
+        getPlayerCardsHand(event.rivalPosition).playCard(cardImage, droppingPlace, roundAsIndex)
+    }
+
+    private fun getPlayerCardsHand(rivalPosition: TrucoRivalPosition) = when (rivalPosition) {
+        TrucoRivalPosition.MY_SELF -> myCardsHand
+        TrucoRivalPosition.FRONT -> theirCardsHand
+        else -> throw IllegalStateException("There's only myself and front player on truco for 2")
+    }
 
     companion object {
 
