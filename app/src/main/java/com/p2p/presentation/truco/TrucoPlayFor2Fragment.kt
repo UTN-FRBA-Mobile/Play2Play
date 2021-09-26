@@ -163,8 +163,6 @@ class TrucoPlayFor2Fragment :
             TrucoCardsHand.PlayingCard(cards[i], view)
         }
 
-    private fun takeTurn() = myCardsHand.takeTurn()
-
     private fun finishRound(round: Int, result: TrucoRoundResult) {
         roundViews[round - 1].animateBackgroundTint(
             ContextCompat.getColor(
