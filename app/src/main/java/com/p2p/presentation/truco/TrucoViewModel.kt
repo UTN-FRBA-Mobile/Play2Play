@@ -257,7 +257,7 @@ abstract class TrucoViewModel(
 
     private fun hasRoundFinishedBecauseAceOfSwords() = playedCards.last()
         .firstOrNull { it.card == TrucoCardsChallenger.aceOfSwords }
-        ?.let { it.playerTeam in currentHandWinners }
+        ?.let { it.playerTeam in currentHandWinners || currentHandWinners.any { winner -> winner == null } }
         ?: false
 
     private fun hasCurrentHandFinished(): Boolean {

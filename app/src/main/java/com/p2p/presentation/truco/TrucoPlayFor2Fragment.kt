@@ -112,10 +112,9 @@ class TrucoPlayFor2Fragment :
         is TrucoShowMyActionEvent -> showMyAction(event.action)
         is TrucoShowOpponentActionEvent -> showOpponentAction(event.action)
         is TrucoFinishRound -> finishRound(event.round, event.result)
-        is TrucoFinishHand -> TODO("Do finish hand logic")
         is TrucoNewHand -> {
             // TODO: reorder the cards and give the new ones.
-            requireView().postDelayed({activity?.finish()}, 5_000)
+            requireView().postDelayed({ activity?.finish() }, 10_000)
             Unit
         }
         is TrucoRivalPlayedCardEvent -> onRivalPlayedCard(event)

@@ -4,13 +4,15 @@ import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.loadingMessages.LoadingTextRepository
 import com.p2p.data.userInfo.UserSession
-import com.p2p.model.base.message.Conversation
-import com.p2p.model.truco.PlayerTeam
-import com.p2p.model.truco.message.TrucoStartGameMessage
 import com.p2p.model.truco.Card
+import com.p2p.model.truco.PlayerTeam
 import com.p2p.model.truco.PlayerWithCards
-import com.p2p.model.truco.Suit.*
+import com.p2p.model.truco.Suit.CLUBS
+import com.p2p.model.truco.Suit.CUPS
+import com.p2p.model.truco.Suit.GOLDS
+import com.p2p.model.truco.Suit.SWORDS
 import com.p2p.model.truco.message.TrucoCardsMessage
+import com.p2p.model.truco.message.TrucoStartGameMessage
 import com.p2p.presentation.basegame.ConnectionType
 import com.p2p.presentation.extensions.requireValue
 
@@ -38,13 +40,6 @@ class ServerTrucoViewModel(
         closeDiscovery()
         handOutCards()
         goToPlay()
-    }
-
-    override fun receiveMessage(conversation: Conversation) {
-        super.receiveMessage(conversation)
-        when (val message = conversation.lastMessage) {
-            // TODO: Implement messages handling
-        }
     }
 
     private fun setPlayersTeams(): List<PlayerTeam> {
