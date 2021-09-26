@@ -288,7 +288,7 @@ abstract class TrucoViewModel(
      */
     private fun getCurrentHandWinner(): PlayerTeam {
         if (currentHandWinners.all { it == null }) {
-            TODO("Here the current round hand should be set as winner")
+            return playedCards.first().first().playerTeam // The first player that played a card is the hand
         }
 
         return getCurrentHandAbsoluteWinner()
