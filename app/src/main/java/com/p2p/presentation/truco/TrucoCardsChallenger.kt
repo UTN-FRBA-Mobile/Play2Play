@@ -5,7 +5,7 @@ import com.p2p.model.truco.Suit
 
 object TrucoCardsChallenger {
 
-    private val aceOfSwords = Card(1, Suit.SWORDS)
+    val aceOfSwords = Card(1, Suit.SWORDS)
     private val aceOfClubs = Card(1, Suit.CLUBS)
     private val sevenOfSwords = Card(7, Suit.SWORDS)
     private val sevenOfGolds = Card(7, Suit.GOLDS)

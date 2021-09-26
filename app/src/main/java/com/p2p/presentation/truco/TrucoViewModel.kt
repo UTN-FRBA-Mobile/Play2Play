@@ -145,14 +145,6 @@ abstract class TrucoViewModel(
         }
     }
 
-    fun newHand() {
-        dispatchSingleTimeEvent(TrucoNewHand)
-        currentHandWinners.clear()
-        _lastTrucoAction.value = null
-        _envidoButtonEnabled.value = true
-        _trucoButtonEnabled.value = true
-    }
-
     fun replyAction(action: TrucoAction) {
         _actionAvailableResponses.value = TrucoActionAvailableResponses.noActions()
         performAction(action)
@@ -168,6 +160,14 @@ abstract class TrucoViewModel(
 
     // TODO: receive total opponent points
     fun createFaltaEnvido() = FaltaEnvido(0, previousActions)
+
+    private fun newHand() {
+        dispatchSingleTimeEvent(TrucoNewHand)
+        currentHandWinners.clear()
+        _lastTrucoAction.value = null
+        _envidoButtonEnabled.value = true
+        _trucoButtonEnabled.value = true
+    }
 
     /** Updates currentActionPoints and currentAction.
      * currentAction value only will be recorded if the action received is not yes or no, in order to keep the history */
@@ -230,7 +230,7 @@ abstract class TrucoViewModel(
         val currentRoundPlayedCards = playedCards.last()
         currentRoundPlayedCards.add(playedCard)
 
-        if (hasRoundFinished(currentRoundPlayedCards)) {
+        if (hasRoundFinished()) {
             onRoundFinished(currentRoundPlayedCards)
         } else {
             nextTurn()
@@ -256,19 +256,25 @@ abstract class TrucoViewModel(
 
     private fun onHandFinished() {
         val handWinnerPlayerTeam = getCurrentHandWinner()
-        val score = if (handWinnerPlayerTeam == myPlayerTeam.team) _ourScore else _theirScore
+        val score = if (handWinnerPlayerTeam.team == myPlayerTeam.team) _ourScore else _theirScore
         score.value = score.requireValue() + currentActionPoints
         newHand()
     }
 
-    private fun hasRoundFinished(currentRoundPlayedCards: List<PlayedCard>): Boolean {
-        return currentRoundPlayedCards.size == totalPlayers.requireValue()
+    private fun hasRoundFinished(): Boolean {
+        return playedCards.last().size == totalPlayers.requireValue() ||
+                hasRoundFinishedBecauseAceOfSwords()
     }
+
+    private fun hasRoundFinishedBecauseAceOfSwords() = playedCards.last()
+        .firstOrNull { it.card == TrucoCardsChallenger.aceOfSwords }
+        ?.let { it.playerTeam in currentHandWinners }
+        ?: false
 
     private fun hasCurrentHandFinished(): Boolean {
         return currentHandWinners.size == MAX_HAND_ROUNDS ||
                 groupCurrentHandWinners().any { it.size >= WINNER_HAND_ROUNDS_THRESHOLD } ||
-                (currentHandWinners.first() == null && currentHandWinners.count { it != null } > 0)
+                (currentHandWinners.any { it == null } && currentHandWinners.any { it != null })
     }
 
     private fun getRoundWinnerPlayerTeam(currentRoundPlayedCards: List<PlayedCard>): PlayerTeam? {
@@ -283,7 +289,6 @@ abstract class TrucoViewModel(
     private fun getCurrentHandAbsoluteWinner() = groupCurrentHandWinners()
         .firstOrNull { it.size >= WINNER_HAND_ROUNDS_THRESHOLD }
         ?.first()
-        ?.team
 
     /**
      * Ways to win a hand:
@@ -292,14 +297,14 @@ abstract class TrucoViewModel(
      * - Tie the first (and maybe the second) and wining the next round.
      * - Tie all the rounds and be the hand.
      */
-    private fun getCurrentHandWinner(): Int {
+    private fun getCurrentHandWinner(): PlayerTeam {
         if (currentHandWinners.all { it == null }) {
             TODO("Here the current round hand should be set as winner")
         }
 
         return getCurrentHandAbsoluteWinner()
-            ?: currentHandWinners.first()?.team
-            ?: currentHandWinners.filterNotNull().first().team
+            ?: currentHandWinners.first()
+            ?: currentHandWinners.filterNotNull().first()
     }
 
     private fun groupCurrentHandWinners() = currentHandWinners

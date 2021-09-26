@@ -114,7 +114,7 @@ class TrucoPlayFor2Fragment :
         is TrucoShowOpponentActionEvent -> showOpponentAction(event.action)
         is TrucoFinishRound -> finishRound(event.round, event.result)
         is TrucoFinishHand -> TODO("Do finish hand logic")
-        is TrucoNewHand -> Unit
+        is TrucoNewHand -> activity?.finish()
         is TrucoRivalPlayedCardEvent -> onRivalPlayedCard(event)
         TrucoTakeTurnEvent -> myCardsHand.takeTurn()
         else -> super.onEvent(event)
