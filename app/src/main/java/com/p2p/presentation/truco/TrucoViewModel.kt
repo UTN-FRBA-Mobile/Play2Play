@@ -161,6 +161,12 @@ abstract class TrucoViewModel(
     // TODO: receive total opponent points
     fun createFaltaEnvido() = FaltaEnvido(0, previousActions)
 
+    fun playCard(card: Card) {
+        val playedCard = PlayedCard(myPlayerTeam, card)
+        connection.write(TrucoPlayCardMessage(playedCard))
+        onCardPlayed(playedCard)
+    }
+
     private fun newHand() {
         dispatchSingleTimeEvent(TrucoNewHand)
         currentHandWinners.clear()
@@ -207,12 +213,6 @@ abstract class TrucoViewModel(
     private fun updateTrucoValues(action: TrucoGameAction, buttonEnabled: Boolean) {
         _lastTrucoAction.value = action
         _trucoButtonEnabled.value = buttonEnabled
-    }
-
-    fun playCard(card: Card) {
-        val playedCard = PlayedCard(myPlayerTeam, card)
-        connection.write(TrucoPlayCardMessage(playedCard))
-        onCardPlayed(playedCard)
     }
 
     private fun onRivalCardPlayed(playedCard: PlayedCard) {
