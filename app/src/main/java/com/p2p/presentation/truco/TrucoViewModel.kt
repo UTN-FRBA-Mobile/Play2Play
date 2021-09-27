@@ -82,4 +82,8 @@ abstract class TrucoViewModel(
     fun isPlayerInWinnerTeam(trucoFinalScores: List<TrucoFinalScore>): Boolean {
         return userName in trucoFinalScores.first().players
     }
+
+    fun getPlayerTeam(trucoFinalScores: List<TrucoFinalScore>) : Int {
+        return trucoFinalScores.first { it.players.contains(userName) }.team
+    }
 }

@@ -41,7 +41,7 @@
         app:layout_constraintTop_toBottomOf="@id/result_icon"
         app:layout_constraintStart_toStartOf="@id/result_background"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:text="¡Ganamos!" />
+        android:text="¡Ganamos!" />
 
     <TextView
         android:id="@+id/result_points"
@@ -55,14 +55,14 @@
         app:layout_constraintTop_toBottomOf="@id/result_text"
         app:layout_constraintStart_toStartOf="@id/result_background"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:text="75 pts" />
+        android:text="75 pts" />
 
     <View
         android:id="@+id/other_team_background"
         android:background="@color/white_alpha_100"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/font_large"
+        android:layout_marginBottom="@dimen/large"
         app:layout_constraintBottom_toTopOf="@id/exit_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -75,12 +75,10 @@
         android:textColor="@color/green_black"
         android:textSize="@dimen/font_huge"
         android:textStyle="bold"
-        android:layout_marginStart="@dimen/large"
-        android:paddingBottom="@dimen/medium_more"
         android:paddingTop="@dimen/medium_extra"
         app:layout_constraintTop_toBottomOf="@id/result_background"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:text="@string/tr_final_score_other_team" />
+        app:layout_constraintStart_toStartOf="@id/guideline_begin"
+        android:text="@string/tr_final_score_other_team" />
 
     <TextView
         android:id="@+id/other_team_points"
@@ -89,12 +87,10 @@
         style="@style/P2P_Description"
         android:textColor="@color/green_black"
         android:textSize="@dimen/font_huge"
-        android:paddingBottom="@dimen/medium_more"
         android:paddingTop="@dimen/medium_extra"
-        android:paddingRight="@dimen/large"
         app:layout_constraintTop_toBottomOf="@id/result_background"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:text="15 pts" />
+        app:layout_constraintEnd_toStartOf="@id/guideline_end"
+        android:text="15 pts" />
 
     <View
         android:id="@+id/exit_button_background"
@@ -114,6 +110,6 @@
         android:layout_marginHorizontal="@dimen/large"
         android:layout_marginVertical="@dimen/large"
         app:layout_constraintBottom_toBottomOf="parent"
-        style="@style/Widget.P2P.Button"
-    />
+        style="@style/Widget.P2P.Button" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
