@@ -14,7 +14,6 @@ import com.p2p.presentation.truco.actions.TrucoAction
 import com.p2p.presentation.truco.cards.TrucoCardsHand
 import com.p2p.presentation.truco.cards.TrucoSingleOpponentMyCardsHand
 import com.p2p.presentation.truco.cards.TrucoSingleOpponentTheirCardsHand
-import kotlin.random.Random
 
 class TrucoPlayFor2Fragment : TrucoFragment<FragmentPlayTrucoFor2Binding>() {
 

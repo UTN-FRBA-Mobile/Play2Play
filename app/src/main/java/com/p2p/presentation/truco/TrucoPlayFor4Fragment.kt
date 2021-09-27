@@ -8,13 +8,7 @@ import androidx.fragment.app.activityViewModels
 import com.p2p.databinding.FragmentPlayTrucoFor4Binding
 import com.p2p.model.truco.Card
 import com.p2p.model.truco.Suit
-import com.p2p.presentation.truco.actions.TrucoAction
-import com.p2p.presentation.truco.cards.TrucoCardsHand
-import com.p2p.presentation.truco.cards.TrucoFor4FrontPlayerCardsHand
-import com.p2p.presentation.truco.cards.TrucoFor4LeftPlayerCardsHand
-import com.p2p.presentation.truco.cards.TrucoFor4MyCardsHand
-import com.p2p.presentation.truco.cards.TrucoFor4RightPlayerCardsHand
-import kotlin.random.Random
+import com.p2p.presentation.truco.cards.*
 
 class TrucoPlayFor4Fragment : TrucoFragment<FragmentPlayTrucoFor4Binding>() {
 
