@@ -18,9 +18,4 @@ abstract class TrucoSingleOpponentCardsHand(
     )
 
     override fun getCardsRotation(playingCards: Int) = cardsRotationForHand.getValue(playingCards)
-
-    companion object {
-
-        const val SECOND_CARD = 1
-    }
 }

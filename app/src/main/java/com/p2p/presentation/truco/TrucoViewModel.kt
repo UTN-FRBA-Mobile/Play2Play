@@ -19,6 +19,7 @@ import com.p2p.presentation.truco.actions.TrucoAction
 import com.p2p.presentation.truco.actions.TrucoAction.*
 import com.p2p.presentation.truco.actions.TrucoActionAvailableResponses
 import com.p2p.presentation.truco.actions.TrucoGameAction
+import com.p2p.utils.Logger
 
 abstract class TrucoViewModel(
     connectionType: ConnectionType,
@@ -49,6 +50,10 @@ abstract class TrucoViewModel(
 
     // TODO: this should update the game points when an action is finished with a yes or no.
     var currentActionPoints: Int = 0
+        set(value) {
+            field = value
+            Logger.d("P2P_POINTS", "currentActionPoints $value")
+        }
 
     var previousActions: List<TrucoAction> = emptyList()
 

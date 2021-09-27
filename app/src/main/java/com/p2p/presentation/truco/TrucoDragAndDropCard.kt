@@ -3,7 +3,6 @@ package com.p2p.presentation.truco
 import android.annotation.SuppressLint
 import android.view.MotionEvent
 import android.view.View
-import com.p2p.R
 
 @SuppressLint("ClickableViewAccessibility")
 class TrucoDragAndDropCard(
@@ -16,9 +15,6 @@ class TrucoDragAndDropCard(
     private lateinit var initialPosition: Pair<Float, Float>
     private lateinit var initialCoordinates: Pair<Float, Float>
     private var initialRotation: Float = 0f
-    private val cardFinalRotation by lazy {
-        cardView.context.resources.getInteger(R.integer.truco_card_final_rotation).toFloat()
-    }
 
     init {
         cardView.setOnTouchListener { view: View, event: MotionEvent ->
@@ -43,7 +39,7 @@ class TrucoDragAndDropCard(
                     val distanceWithDroppingPlaceMultiplicator = (currentDistance / initialDistance)
                         .coerceAtLeast(0f)
                         .coerceAtMost(1f)
-                    view.rotationX = cardFinalRotation * (1f - distanceWithDroppingPlaceMultiplicator)
+                    view.rotationX = currentDroppingView.rotationX * (1f - distanceWithDroppingPlaceMultiplicator)
                     val scale = when {
                         view.y > initialCoordinates.second -> 1f
                         view.y > currentDroppingView.y ->
@@ -67,7 +63,7 @@ class TrucoDragAndDropCard(
                             .rotation(currentDroppingView.rotation)
                             .scaleX(currentDroppingView.scaleX)
                             .scaleY(currentDroppingView.scaleX)
-                            .rotationX(cardFinalRotation)
+                            .rotationX(currentDroppingView.rotationX)
                             .start()
                         cardView.setOnTouchListener(null)
                     } else {
