@@ -62,9 +62,12 @@
     <dimen name="truco_card_drop_height">90dp</dimen>
     <dimen name="truco_my_card_width">98dp</dimen>
     <dimen name="truco_my_card_height">150dp</dimen>
+    <dimen name="truco_for_4_card_width">78dp</dimen>
+    <dimen name="truco_for_4_card_height">120dp</dimen>
     <dimen name="truco_their_card_separation">12dp</dimen>
     <dimen name="truco_their_card_width">62dp</dimen>
     <dimen name="truco_their_card_height">95dp</dimen>
+    <dimen name="truco_their_card_half_height">40dp</dimen>
     <dimen name="truco_normal_card_vertical_margin">10dp</dimen>
     <dimen name="truco_elevated_card_vertical_margin">20dp</dimen>
     <dimen name="truco_first_card_horizontal_margin">30dp</dimen>
@@ -73,6 +76,14 @@
     <dimen name="truco_their_first_card_horizontal_margin">60dp</dimen>
     <dimen name="truco_their_second_card_horizontal_margin">90dp</dimen>
     <dimen name="truco_their_third_card_horizontal_margin">130dp</dimen>
+    <dimen name="truco_for_4_elevated_card_vertical_margin">14dp</dimen>
+    <dimen name="truco_for_4_my_first_card_horizontal_margin">30dp</dimen>
+    <dimen name="truco_for_4_my_second_card_horizontal_margin">70dp</dimen>
+    <dimen name="truco_for_4_my_third_card_horizontal_margin">110dp</dimen>
+    <dimen name="truco_for_4_their_first_card_horizontal_margin">15dp</dimen>
+    <dimen name="truco_for_4_their_second_card_horizontal_margin">40dp</dimen>
+    <dimen name="truco_for_4_their_third_card_horizontal_margin">65dp</dimen>
+    <dimen name="truco_for_4_dropping_place_separation">20dp</dimen>
     <dimen name="truco_round_circle_size">16dp</dimen>
     <dimen name="truco_round_circle_elevation">10dp</dimen>
     <dimen name="truco_actions_open_button_width">40dp</dimen>

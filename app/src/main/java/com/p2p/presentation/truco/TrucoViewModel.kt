@@ -29,6 +29,7 @@ import com.p2p.presentation.truco.actions.TrucoAction.YesIDo
 import com.p2p.presentation.truco.actions.TrucoActionAvailableResponses
 import com.p2p.presentation.truco.actions.TrucoGameAction
 
+
 abstract class TrucoViewModel(
     connectionType: ConnectionType,
     userSession: UserSession,
@@ -133,6 +134,16 @@ abstract class TrucoViewModel(
         onActionDone(action, myPlayerTeam.team)
     }
 
+    fun performEnvido(isReply: Boolean = false) =
+        performOrReplyAction(isReply, Envido(previousActions))
+
+    fun performRealEnvido(isReply: Boolean = false) =
+        performOrReplyAction(isReply, RealEnvido(previousActions))
+
+    // TODO: receive total opponent points
+    fun performFaltaEnvido(isReply: Boolean = false) =
+        performOrReplyAction(isReply, FaltaEnvido(0, previousActions))
+
     fun replyAction(action: TrucoAction) {
         _actionAvailableResponses.value = TrucoActionAvailableResponses.noActions()
         performAction(action)
@@ -142,12 +153,12 @@ abstract class TrucoViewModel(
         nextTurn(playersTeams.first())
     }
 
-    fun createEnvido(alreadyReplicated: Boolean) = Envido(alreadyReplicated, previousActions)
-
-    fun createRealEnvido() = RealEnvido(previousActions)
-
-    // TODO: receive total opponent points
-    fun createFaltaEnvido() = FaltaEnvido(0, previousActions)
+    private fun performOrReplyAction(isReply: Boolean, action: TrucoAction) {
+        if (isReply)
+            replyAction(action)
+        else
+            performAction(action)
+    }
 
     fun playCard(card: Card) {
         val playedCard = PlayedCard(myPlayerTeam, card)
@@ -207,7 +218,7 @@ abstract class TrucoViewModel(
 
     private fun onRivalCardPlayed(playedCard: PlayedCard) {
         dispatchSingleTimeEvent(
-            TrucoRivalPlayedCardEvent(
+            TrucoOtherPlayedCardEvent(
                 TrucoPlayerPosition.get(playedCard.playerTeam, playersTeams, myPlayerTeam),
                 playedCard.card,
                 currentRound.requireValue()
@@ -341,4 +352,3 @@ abstract class TrucoViewModel(
         private const val WINNER_HAND_ROUNDS_THRESHOLD = 2
     }
 }
-

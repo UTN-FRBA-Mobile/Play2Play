@@ -17,7 +17,7 @@ class TrucoFinishRound(
 
 object TrucoNewHand : TrucoSpecificGameEvent()
 
-data class TrucoRivalPlayedCardEvent(
+data class TrucoOtherPlayedCardEvent(
     val playerPosition: TrucoPlayerPosition,
     val card: Card,
     val round: Int
