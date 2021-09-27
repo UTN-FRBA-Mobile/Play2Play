@@ -2,15 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
-    android:id="@+id/action_response_container"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="@dimen/medium_more"
-    android:layout_marginBottom="@dimen/medium"
-    android:elevation="50dp"
     android:orientation="vertical"
-    android:visibility="gone"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent">
+    android:paddingHorizontal="@dimen/medium_more"
+    android:paddingVertical="@dimen/medium"
+    android:visibility="gone">
 
     <Button
         android:id="@+id/action_response_yes_i_do"
@@ -84,6 +80,18 @@
         app:layout_constraintWidth_min="wrap" />
 
     <Button
+        android:id="@+id/action_response_envido_goes_first"
+        style="@style/Widget.P2P.Button.SecondOptionOutline"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/medium"
+        android:text="@string/truco_ask_for_envido_goes_first"
+        app:layout_constraintEnd_toEndOf="@id/end_barrier"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/action_response_yes_vale_cuatro"
+        app:layout_constraintWidth_min="wrap" />
+
+    <Button
         android:id="@+id/action_response_no_i_dont"
         style="@style/Widget.P2P.Button.Outline"
         android:layout_width="0dp"
@@ -92,7 +100,7 @@
         android:text="@string/i_dont"
         app:layout_constraintEnd_toEndOf="@id/end_barrier"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/action_response_yes_vale_cuatro"
+        app:layout_constraintTop_toBottomOf="@id/action_response_envido_goes_first"
         app:layout_constraintWidth_min="wrap" />
 
     <androidx.constraintlayout.widget.Barrier
@@ -107,6 +115,7 @@
         action_response_yes_falta_envido,
         action_response_yes_retruco,
         action_response_yes_vale_cuatro,
+        action_response_envido_goes_first,
         action_response_no_i_dont" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

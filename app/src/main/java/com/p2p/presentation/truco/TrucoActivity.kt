@@ -13,13 +13,13 @@ class TrucoActivity : GameActivity<TrucoSpecificGameEvent, TrucoViewModel>() {
         TrucoViewModelFactory(this, gameViewModelFactoryData)
     }
 
-    // TODO: Create truco game
     override fun goToCreate() =
         addFragment(ServerTrucoLobbyFragment.newInstance(), shouldAddToBackStack = false)
 
     override fun goToPlay() {
         viewModel.stopLoading()
-        // TODO: Start truco game
+        //TODO it could be for 4
+        addFragment(TrucoPlayFor2Fragment.newInstance(), shouldAddToBackStack = false)
     }
 
     override fun goToClientLobby() =

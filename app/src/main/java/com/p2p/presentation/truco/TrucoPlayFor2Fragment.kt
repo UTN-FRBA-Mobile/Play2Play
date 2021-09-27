@@ -1,143 +1,58 @@
+
 package com.p2p.presentation.truco
 
-import android.content.res.ColorStateList
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.BounceInterpolator
 import android.widget.ImageView
-import android.widget.TextView
-import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.p2p.R
 import com.p2p.databinding.FragmentPlayTrucoFor2Binding
-import com.p2p.databinding.ViewTrucoHeaderBinding
 import com.p2p.model.truco.Card
 import com.p2p.model.truco.Suit
-import com.p2p.presentation.base.NoViewModel
-import com.p2p.presentation.basegame.BaseGameFragment
 import com.p2p.presentation.basegame.GameEvent
-import com.p2p.presentation.extensions.animateBackgroundTint
-import com.p2p.presentation.extensions.fadeIn
-import com.p2p.presentation.extensions.fadeOut
 import com.p2p.presentation.truco.actions.TrucoAction
-import com.p2p.presentation.truco.actions.TrucoActionAvailableResponses
-import com.p2p.presentation.truco.actions.TrucoActionsBottomSheetFragment
-import com.p2p.presentation.truco.cards.CardImageCreator
 import com.p2p.presentation.truco.cards.TrucoCardsHand
 import com.p2p.presentation.truco.cards.TrucoSingleOpponentMyCardsHand
 import com.p2p.presentation.truco.cards.TrucoSingleOpponentTheirCardsHand
-import com.p2p.utils.setOnEndListener
-import kotlin.random.Random
 
-class TrucoPlayFor2Fragment :
-    BaseGameFragment<FragmentPlayTrucoFor2Binding, Any, NoViewModel, TrucoViewModel>(),
-    TrucoCardsHand.Listener {
+class TrucoPlayFor2Fragment : TrucoFragment<FragmentPlayTrucoFor2Binding>() {
 
-    override val viewModel by viewModels<NoViewModel>()
     override val gameViewModel by activityViewModels<TrucoViewModel>()
-    override val isHeaderVisible: Boolean = false
     override val gameInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentPlayTrucoFor2Binding =
         FragmentPlayTrucoFor2Binding::inflate
 
-    private lateinit var headerBinding: ViewTrucoHeaderBinding
-    private lateinit var myCardsHand: TrucoCardsHand
     private lateinit var theirCardsHand: TrucoCardsHand
 
-    private val cardsImageCreator by lazy { CardImageCreator(requireContext()) }
-    private lateinit var roundViews: List<View>
-    private lateinit var myCardsViews: List<ImageView>
     private lateinit var theirCardsViews: List<ImageView>
-    private lateinit var myDroppingPlacesViews: List<View>
     private lateinit var theirDroppingPlacesViews: List<View>
 
     private var currentRound = 0 // TODO: move it to VM
     private lateinit var cards: List<Card> // TODO: move it to VM
 
-    private val shortDuration by lazy { resources.getInteger(android.R.integer.config_shortAnimTime).toLong() }
-    private val longDuration by lazy { resources.getInteger(android.R.integer.config_longAnimTime).toLong() }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        if (savedInstanceState == null) {
-            addActionsBottomSheet()
-        }
-    }
 
     override fun initUI() = with(gameBinding) {
         super.initUI()
-        headerBinding = ViewTrucoHeaderBinding.bind(root)
-        roundViews = listOf(headerBinding.firstRound, headerBinding.secondRound, headerBinding.thirdRound)
-        myCardsViews = listOf(myLeftCard, myMiddleCard, myRightCard)
         theirCardsViews = listOf(theirLeftCard, theirMiddleCard, theirRightCard)
-        myDroppingPlacesViews = listOf(dropFirstCard, dropSecondCard, dropThirdCard)
         theirDroppingPlacesViews = listOf(dropTheirFirstCard, dropTheirSecondCard, dropTheirThirdCard)
 
         cards = mockCards() // TODO: delete
-        initCardsHand(cards.take(3), cards.drop(3))
-        updateScores(0, 0)
-        takeTurn()
-
-        with(actionsResponses) {
-            actionResponseYesIDo.setOnClickListener { gameViewModel.replyAction(TrucoAction.YesIDo) }
-            actionResponseNoIDont.setOnClickListener { gameViewModel.replyAction(TrucoAction.NoIDont) }
-            actionResponseYesEnvido.setOnClickListener { gameViewModel.replyAction(TrucoAction.Envido(true)) }
-            actionResponseYesRealEnvido.setOnClickListener { gameViewModel.replyAction(TrucoAction.RealEnvido) }
-            actionResponseYesFaltaEnvido.setOnClickListener { gameViewModel.replyAction(TrucoAction.FaltaEnvido) }
-            actionResponseYesRetruco.setOnClickListener { gameViewModel.replyAction(TrucoAction.Retruco) }
-            actionResponseYesValeCuatro.setOnClickListener { gameViewModel.replyAction(TrucoAction.ValeCuatro) }
-        }
-    }
-
-    override fun setupObservers() {
-        super.setupObservers()
-        observe(gameViewModel.singleTimeEvent) { onGameEvent(it) }
-        observe(gameViewModel.actionAvailableResponses) { updateActionAvailableResponses(it) }
+        initCardsHand(cards.take(3), cards.drop(3)) // TODO: delete
+        updateScores(0, 0) // TODO: delete
+        takeTurn() // TODO: delete
     }
 
     override fun onCardPlayed(playingCard: TrucoCardsHand.PlayingCard) {
-        currentRound = mockOnCardPlayed(playingCard, currentRound) // TODO: delete
     }
 
-    private fun onGameEvent(event: GameEvent) = when (event) {
-        is TrucoShowMyActionEvent -> showMyAction(event.action)
-        else -> super.onEvent(event)
+    override fun hideAllActions() {
+        hideActionBubble(gameBinding.theirActionBubble, gameBinding.theirActionBubbleText)
     }
 
-    private fun addActionsBottomSheet() = TrucoActionsBottomSheetFragment
-        .newInstance()
-        .show(parentFragmentManager, ACTIONS_BOTTOM_SHEET_TAG)
-
-    private fun loadCardImages(cardViews: List<ImageView>, cards: List<Card?>) = cardViews.forEachIndexed { i, view ->
-        val (image, description) = cardsImageCreator.create(cards.getOrNull(i))
-        view.setImageBitmap(image)
-        view.contentDescription = description
-    }
-
-    private fun updateScores(ourScore: Int, their: Int) {
-        updateScore(headerBinding.ourScore, ourScore)
-        updateScore(headerBinding.theirScore, their)
-    }
-
-    private fun updateScore(textView: TextView, score: Int) = when (score) {
-        0 -> textView.text = score.toString()
-        textView.text?.toString()?.toIntOrNull() -> Unit
-        else -> textView
-            .animate()
-            .scaleX(SCORE_ZOOM_ANIMATION)
-            .scaleY(SCORE_ZOOM_ANIMATION)
-            .setOnEndListener {
-                textView.text = score.toString()
-                textView.animate()
-                    .scaleX(1f)
-                    .scaleY(1f)
-                    .start()
-            }
-            .start()
+    override fun onGameEvent(event: GameEvent) {
+        when (event) {
+            is TrucoShowOpponentActionEvent -> showOpponentAction(event.action)
+            else -> super.onGameEvent(event)
+        }
     }
 
     private fun initCardsHand(myCards: List<Card>, theirCards: List<Card>) {
@@ -147,108 +62,11 @@ class TrucoPlayFor2Fragment :
         theirCardsHand = TrucoSingleOpponentTheirCardsHand(theirPlayingCards)
     }
 
-    private fun getPlayingCards(cardsViews: List<ImageView>, cards: List<Card>) = cardsViews.mapIndexed { i, view ->
-        TrucoCardsHand.PlayingCard(cards[i], view)
-    }
-
-    private fun takeTurn() = myCardsHand.takeTurn()
-
-    private fun finishRound(round: Int, result: TrucoRoundResult) {
-        roundViews[round].animateBackgroundTint(ContextCompat.getColor(requireContext(), result.color)) {
-            val colorPrimary = ContextCompat.getColor(requireContext(), R.color.colorPrimary)
-            roundViews.getOrNull(round + 1)?.backgroundTintList = ColorStateList.valueOf(colorPrimary)
-        }
-    }
-
-    private fun showMyAction(action: TrucoAction) {
-        showAction(gameBinding.myActionBubble, gameBinding.myActionBubbleText, action)
-        mockReplyToMyAction(action) // TODO: delete
-    }
-
-    private fun showOpponentAction(action: TrucoAction) {
-        showAction(gameBinding.theirActionBubble, gameBinding.theirActionBubbleText, action)
-        updateActionAvailableResponses(action.getAvailableResponses())
-        mockReplyToTheirAction(action) // TODO: delete
-    }
-
-    private fun showAction(bubbleBackground: View, bubbleText: TextView, action: TrucoAction) {
-        if (bubbleBackground.scaleX >= MIN_ACTION_BUBBLE_VISIBLE_SCALING) {
-            hideBubbleView(bubbleBackground)
-            hideBubbleView(bubbleText) {
-                showActionAfterVisibilityCheck(bubbleBackground, bubbleText, action)
-                bubbleText.animate().setListener(null)
-            }
-        } else {
-            showActionAfterVisibilityCheck(bubbleBackground, bubbleText, action)
-        }
-    }
-
-    private fun showActionAfterVisibilityCheck(bubbleBackground: View, bubbleText: TextView, action: TrucoAction) {
-        (parentFragmentManager.findFragmentByTag(ACTIONS_BOTTOM_SHEET_TAG) as BottomSheetDialogFragment?)?.dismiss()
-        bubbleText.text = action.getMessage(requireContext())
-        showBubbleView(bubbleBackground)
-        showBubbleView(bubbleText)
-        gameBinding.actionBackground.isVisible = true
-        gameBinding.actionBackground
-            .animate()
-            .setListener(null)
-            .alpha(ACTION_BACKGROUND_FINAL_ALPHA)
-            .start()
-        if (!action.hasReplication) {
-            bubbleBackground.postDelayed({ hideActions() }, HIDE_ACTION_BUBBLES_DELAY)
-        }
-    }
-
-    private fun updateActionAvailableResponses(
-        availableResponses: TrucoActionAvailableResponses
-    ) = with(availableResponses) {
-        with(gameBinding.actionsResponses) {
-            actionResponseYesIDo.isVisible = iDo
-            actionResponseNoIDont.isVisible = iDont
-            actionResponseYesEnvido.isVisible = envido
-            actionResponseYesRealEnvido.isVisible = realEnvido
-            actionResponseYesFaltaEnvido.isVisible = faltaEnvido
-            actionResponseYesRetruco.isVisible = retruco
-            actionResponseYesValeCuatro.isVisible = valeCuatro
-            if (hasAvailableResponses()) actionResponseContainer.fadeIn() else actionResponseContainer.fadeOut()
-        }
-    }
-
-    private fun showBubbleView(view: View) = view.animate()
-        .scaleX(1f)
-        .scaleY(1f)
-        .setDuration(longDuration)
-        .setInterpolator(BounceInterpolator())
-        .start()
-
-    private fun hideMyActionBubble() {
-        hideBubbleView(gameBinding.myActionBubble)
-        hideBubbleView(gameBinding.myActionBubbleText)
-    }
-
-    private fun hideOpponentActionBubble() {
-        hideBubbleView(gameBinding.theirActionBubble)
-        hideBubbleView(gameBinding.theirActionBubbleText)
-    }
-
-    private fun hideActions() {
-        addActionsBottomSheet()
-        hideMyActionBubble()
-        hideOpponentActionBubble()
-        gameBinding.actionBackground.animate()
-            .alpha(0f)
-            .setOnEndListener { gameBinding.actionBackground.isVisible = false }
-            .start()
-        gameBinding.actionsResponses.actionResponseContainer.fadeOut()
-    }
-
-    private fun hideBubbleView(view: View, onEndListener: () -> Unit = { }) = view.animate()
-        .scaleX(0f)
-        .scaleY(0f)
-        .setDuration(shortDuration)
-        .setInterpolator(null)
-        .setOnEndListener(onEndListener)
-        .start()
+    private fun showOpponentAction(action: TrucoAction) = showRivalAction(
+        gameBinding.theirActionBubble,
+        gameBinding.theirActionBubbleText,
+        action
+    )
 
     // TODO: delete
     private fun mockCards(): List<Card> {
@@ -260,72 +78,7 @@ class TrucoPlayFor2Fragment :
         return cards
     }
 
-    // TODO: delete
-    private fun mockOnCardPlayed(playingCard: TrucoCardsHand.PlayingCard, currentRound: Int): Int {
-        val opponentCard = cards[currentRound + 3]
-        theirCardsHand.playCard(
-            opponentCard,
-            cardsImageCreator.create(opponentCard),
-            theirDroppingPlacesViews[currentRound]
-        )
-        when (currentRound) {
-            0 -> showOpponentAction(TrucoAction.Envido(false))
-            1 -> showOpponentAction(TrucoAction.Truco)
-        }
-        playingCard.view.postDelayed({ myCardsHand.takeTurn() }, 2_000)
-        updateScores(Random.nextInt(1, 4), Random.nextInt(4, 10))
-        finishRound(
-            currentRound,
-            when (currentRound) {
-                0 -> TrucoRoundResult.WIN
-                1 -> TrucoRoundResult.DEFEAT
-                else -> TrucoRoundResult.TIE
-            }
-        )
-        return currentRound + 1
-    }
-
-    // TODO: delete
-    private fun mockReplyToMyAction(action: TrucoAction) {
-        if (action in listOf(
-                TrucoAction.Truco,
-                TrucoAction.Retruco,
-                TrucoAction.ValeCuatro
-            ) || action.javaClass.simpleName.contains("envido", ignoreCase = true)
-        ) {
-            requireView().postDelayed(
-                {
-                    showOpponentAction(
-                        when (action) {
-                            TrucoAction.Truco -> TrucoAction.Retruco
-                            TrucoAction.Retruco -> TrucoAction.ValeCuatro
-                            TrucoAction.ValeCuatro -> TrucoAction.NoIDont
-                            else -> TrucoAction.CustomFinalActionResponse("Quiero,\n27", hasReplication = true)
-                        }
-                    )
-                },
-                2_000
-            )
-        }
-    }
-
-    // TODO: delete
-    private fun mockReplyToTheirAction(action: TrucoAction) {
-        if (action.getMessage(requireContext()) == "Quiero,\n27") {
-            gameBinding.myActionBubbleText.postDelayed(
-                { showMyAction(TrucoAction.CustomFinalActionResponse("31 son\nmejores")) },
-                2_000
-            )
-        }
-    }
-
     companion object {
-
-        private const val ACTION_BACKGROUND_FINAL_ALPHA = 0.5f
-        private const val MIN_ACTION_BUBBLE_VISIBLE_SCALING = 0.9f
-        private const val SCORE_ZOOM_ANIMATION = 1.2f
-        private const val HIDE_ACTION_BUBBLES_DELAY = 3_000L
-        private const val ACTIONS_BOTTOM_SHEET_TAG = "TRUCO_ACTIONS_BOTTOM_SHEET"
 
         fun newInstance() = TrucoPlayFor2Fragment()
     }
