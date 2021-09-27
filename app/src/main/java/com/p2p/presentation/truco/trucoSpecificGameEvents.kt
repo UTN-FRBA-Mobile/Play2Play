@@ -5,6 +5,14 @@ import com.p2p.presentation.truco.actions.TrucoAction
 
 sealed class TrucoSpecificGameEvent : SpecificGameEvent()
 
+object HandOutCards : TrucoSpecificGameEvent()
+
 class TrucoShowMyActionEvent(val action: TrucoAction) : TrucoSpecificGameEvent()
 
-object HandOutCards : TrucoSpecificGameEvent()
+class TrucoShowOpponentActionEvent(val action: TrucoAction) : TrucoSpecificGameEvent()
+
+object TrucoFinishHand : TrucoSpecificGameEvent()
+
+object TrucoFinishRound : TrucoSpecificGameEvent()
+
+object TrucoNewHand : TrucoSpecificGameEvent()

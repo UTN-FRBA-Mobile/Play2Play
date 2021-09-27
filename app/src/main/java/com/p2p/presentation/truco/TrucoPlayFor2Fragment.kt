@@ -1,3 +1,4 @@
+
 package com.p2p.presentation.truco
 
 import android.view.LayoutInflater
@@ -8,11 +9,11 @@ import androidx.fragment.app.activityViewModels
 import com.p2p.databinding.FragmentPlayTrucoFor2Binding
 import com.p2p.model.truco.Card
 import com.p2p.model.truco.Suit
+import com.p2p.presentation.basegame.GameEvent
 import com.p2p.presentation.truco.actions.TrucoAction
 import com.p2p.presentation.truco.cards.TrucoCardsHand
 import com.p2p.presentation.truco.cards.TrucoSingleOpponentMyCardsHand
 import com.p2p.presentation.truco.cards.TrucoSingleOpponentTheirCardsHand
-import kotlin.random.Random
 
 class TrucoPlayFor2Fragment : TrucoFragment<FragmentPlayTrucoFor2Binding>() {
 
@@ -41,11 +42,17 @@ class TrucoPlayFor2Fragment : TrucoFragment<FragmentPlayTrucoFor2Binding>() {
     }
 
     override fun onCardPlayed(playingCard: TrucoCardsHand.PlayingCard) {
-        currentRound = mockOnCardPlayed(playingCard, currentRound) // TODO: delete
     }
 
     override fun hideAllActions() {
         hideActionBubble(gameBinding.theirActionBubble, gameBinding.theirActionBubbleText)
+    }
+
+    override fun onGameEvent(event: GameEvent) {
+        when (event) {
+            is TrucoShowOpponentActionEvent -> showOpponentAction(event.action)
+            else -> super.onGameEvent(event)
+        }
     }
 
     private fun initCardsHand(myCards: List<Card>, theirCards: List<Card>) {
@@ -69,65 +76,6 @@ class TrucoPlayFor2Fragment : TrucoFragment<FragmentPlayTrucoFor2Binding>() {
         loadCardImages(myCardsViews, cards)
         loadCardImages(theirCardsViews, emptyList())
         return cards
-    }
-
-    // TODO: delete
-    private fun mockOnCardPlayed(playingCard: TrucoCardsHand.PlayingCard, currentRound: Int): Int {
-        val opponentCard = cards[currentRound + 3]
-        theirCardsHand.playCard(
-            opponentCard,
-            cardsImageCreator.create(opponentCard),
-            theirDroppingPlacesViews[currentRound]
-        )
-        when (currentRound) {
-            0 -> showOpponentAction(TrucoAction.Envido(false))
-            1 -> showOpponentAction(TrucoAction.Truco)
-        }
-        playingCard.view.postDelayed({ myCardsHand.takeTurn() }, 2_000)
-        updateScores(Random.nextInt(1, 4), Random.nextInt(4, 10))
-        finishRound(
-            currentRound,
-            when (currentRound) {
-                0 -> TrucoRoundResult.WIN
-                1 -> TrucoRoundResult.DEFEAT
-                else -> TrucoRoundResult.TIE
-            }
-        )
-        return currentRound + 1
-    }
-
-    // TODO: delete
-    override fun mockReplyToMyAction(action: TrucoAction) {
-        if (action in listOf(
-                TrucoAction.Truco,
-                TrucoAction.Retruco,
-                TrucoAction.ValeCuatro
-            ) || action.javaClass.simpleName.contains("envido", ignoreCase = true)
-        ) {
-            requireView().postDelayed(
-                {
-                    showOpponentAction(
-                        when (action) {
-                            TrucoAction.Truco -> TrucoAction.Retruco
-                            TrucoAction.Retruco -> TrucoAction.ValeCuatro
-                            TrucoAction.ValeCuatro -> TrucoAction.NoIDont
-                            else -> TrucoAction.CustomFinalActionResponse("Quiero,\n27", hasReplication = true)
-                        }
-                    )
-                },
-                2_000
-            )
-        }
-    }
-
-    // TODO: delete
-    override fun mockReplyToTheirAction(action: TrucoAction) {
-        if (action.getMessage(requireContext()) == "Quiero,\n27") {
-            gameBinding.myActionBubbleText.postDelayed(
-                { showMyAction(TrucoAction.CustomFinalActionResponse("31 son\nmejores")) },
-                2_000
-            )
-        }
     }
 
     companion object {

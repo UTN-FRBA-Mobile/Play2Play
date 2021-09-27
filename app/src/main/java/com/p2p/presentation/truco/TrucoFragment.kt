@@ -81,13 +81,13 @@ abstract class TrucoFragment<VB : ViewBinding> :
             gameViewModel.replyAction(TrucoAction.NoIDont)
         }
         findViewById<View>(R.id.action_response_yes_envido).setOnClickListener {
-            gameViewModel.replyAction(TrucoAction.Envido(true))
+            gameViewModel.performEnvido(isReply = true)
         }
         findViewById<View>(R.id.action_response_yes_real_envido).setOnClickListener {
-            gameViewModel.replyAction(TrucoAction.RealEnvido)
+            gameViewModel.performRealEnvido(isReply = true)
         }
         findViewById<View>(R.id.action_response_yes_falta_envido).setOnClickListener {
-            gameViewModel.replyAction(TrucoAction.FaltaEnvido)
+            gameViewModel.performFaltaEnvido(isReply = true)
         }
         findViewById<View>(R.id.action_response_yes_retruco).setOnClickListener {
             gameViewModel.replyAction(TrucoAction.Retruco)
@@ -95,17 +95,18 @@ abstract class TrucoFragment<VB : ViewBinding> :
         findViewById<View>(R.id.action_response_yes_vale_cuatro).setOnClickListener {
             gameViewModel.replyAction(TrucoAction.ValeCuatro)
         }
+        findViewById<View>(R.id.action_response_envido_goes_first).setOnClickListener {
+            gameViewModel.replyAction(TrucoAction.EnvidoGoesFirst)
+        }
     }
-
-    abstract fun mockReplyToMyAction(action: TrucoAction) // TODO: delete
-
-    abstract fun mockReplyToTheirAction(action: TrucoAction) // TODO: delete
 
     abstract fun hideAllActions()
 
     @CallSuper
     protected open fun onGameEvent(event: GameEvent) = when (event) {
         is TrucoShowMyActionEvent -> showMyAction(event.action)
+        is TrucoFinishHand -> TODO("Do finish hand logic")
+        is TrucoNewHand -> TODO("Do new hand logic")
         else -> super.onEvent(event)
     }
 
@@ -121,8 +122,7 @@ abstract class TrucoFragment<VB : ViewBinding> :
 
     protected fun showRivalAction(rivalActionBubble: View, rivalActionTextView: TextView, action: TrucoAction) {
         showAction(rivalActionBubble, rivalActionTextView, action)
-        updateActionAvailableResponses(action.getAvailableResponses())
-        mockReplyToTheirAction(action) // TODO: delete
+        updateActionAvailableResponses(action.availableResponses())
     }
 
     protected fun getPlayingCards(cardsViews: List<ImageView>, cards: List<Card>) = cardsViews.mapIndexed { i, view ->
@@ -148,7 +148,6 @@ abstract class TrucoFragment<VB : ViewBinding> :
         val bubbleBackground = requireView().findViewById<View>(R.id.my_action_bubble)
         val bubbleText = requireView().findViewById<TextView>(R.id.my_action_bubble_text)
         showAction(bubbleBackground, bubbleText, action)
-        mockReplyToMyAction(action) // TODO: delete
     }
 
     private fun showAction(bubbleBackground: View, bubbleText: TextView, action: TrucoAction) {
@@ -194,7 +193,7 @@ abstract class TrucoFragment<VB : ViewBinding> :
 
     private fun showActionAfterVisibilityCheck(bubbleBackground: View, bubbleText: TextView, action: TrucoAction) {
         (parentFragmentManager.findFragmentByTag(ACTIONS_BOTTOM_SHEET_TAG) as BottomSheetDialogFragment?)?.dismiss()
-        bubbleText.text = action.getMessage(requireContext())
+        bubbleText.text = action.message(requireContext())
         showBubbleView(bubbleBackground)
         showBubbleView(bubbleText)
         val actionBackground = requireView().findViewById<View>(R.id.action_background)
@@ -241,6 +240,7 @@ abstract class TrucoFragment<VB : ViewBinding> :
             findViewById<View>(R.id.action_response_yes_falta_envido).isVisible = faltaEnvido
             findViewById<View>(R.id.action_response_yes_retruco).isVisible = retruco
             findViewById<View>(R.id.action_response_yes_vale_cuatro).isVisible = valeCuatro
+            findViewById<View>(R.id.action_response_envido_goes_first).isVisible = envidoGoesFirst
             val actionResponseContainer = findViewById<View>(R.id.actions_responses)
             if (hasAvailableResponses()) actionResponseContainer.fadeIn() else actionResponseContainer.fadeOut()
         }
