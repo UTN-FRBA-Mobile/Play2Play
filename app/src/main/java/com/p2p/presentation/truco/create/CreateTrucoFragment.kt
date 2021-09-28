@@ -14,11 +14,6 @@ class CreateTrucoFragment : BaseGameFragment<
         CreateTrucoViewModel,
         TrucoViewModel>() {
 
-    companion object {
-        /** Create a new instance of the [CreateTrucoFragment]. */
-        fun newInstance() = CreateTrucoFragment()
-    }
-
     override val gameViewModel: TrucoViewModel by activityViewModels()
     override val gameInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentCreateTrucoBinding =
         FragmentCreateTrucoBinding::inflate
@@ -37,8 +32,13 @@ class CreateTrucoFragment : BaseGameFragment<
 
     override fun onEvent(event: CreateTrucoEvents) = when(event) {
         is CreateTrucoLobbyEvent -> {
-            gameViewModel.setTotalPlayers(event.numberOfPlayers);
+            gameViewModel.setTotalPlayers(event.numberOfPlayers)
             gameViewModel.goToLobby()
         }
+    }
+
+    companion object {
+        /** Create a new instance of the [CreateTrucoFragment]. */
+        fun newInstance() = CreateTrucoFragment()
     }
 }
