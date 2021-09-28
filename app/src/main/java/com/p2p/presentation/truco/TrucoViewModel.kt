@@ -281,7 +281,7 @@ abstract class TrucoViewModel(
         val winnerCards = TrucoCardsChallenger.getWinnerCards(currentRoundPlayedCards.map { it.card })
         return currentRoundPlayedCards
             .filter { it.card in winnerCards }
-            .takeIf { winners -> winners.size == 1 || winners.all { it.playerTeam == winners.first().playerTeam } }
+            .takeIf { winners -> winners.all { it.playerTeam == winners.first().playerTeam } }
             ?.first()
             ?.playerTeam
     }
@@ -302,9 +302,7 @@ abstract class TrucoViewModel(
             return playedCards.first().first().playerTeam // The first player that played a card is the hand
         }
 
-        return getCurrentHandAbsoluteWinner()
-            ?: currentHandWinners.first()
-            ?: currentHandWinners.filterNotNull().first()
+        return getCurrentHandAbsoluteWinner() ?: currentHandWinners.filterNotNull().first()
     }
 
     private fun groupCurrentHandWinners() = currentHandWinners
