@@ -1,0 +1,525 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container_constraint"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/view_truco_header" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <View
+        android:id="@+id/guideline_center_table_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        app:layout_constraintBottom_toBottomOf="@id/table"
+        app:layout_constraintTop_toTopOf="@id/table" />
+
+    <ImageView
+        android:id="@+id/left_player_right_card"
+        android:layout_width="@dimen/truco_for_4_card_width"
+        android:layout_height="@dimen/truco_for_4_card_height"
+        android:layout_marginStart="@dimen/truco_first_card_horizontal_margin"
+        android:rotationY="@integer/flip_rotation"
+        android:scaleX="@integer/truco_their_card_initial_scale"
+        android:scaleY="@integer/truco_their_card_initial_scale"
+        app:layout_constraintBottom_toTopOf="@id/table"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/table"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/left_player_middle_card"
+        android:layout_width="@dimen/truco_for_4_card_width"
+        android:layout_height="@dimen/truco_for_4_card_height"
+        android:layout_marginStart="@dimen/truco_first_card_horizontal_margin"
+        android:rotationY="@integer/flip_rotation"
+        android:scaleX="@integer/truco_their_card_initial_scale"
+        android:scaleY="@integer/truco_their_card_initial_scale"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/left_player_right_card"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/left_player_left_card"
+        android:layout_width="@dimen/truco_for_4_card_width"
+        android:layout_height="@dimen/truco_for_4_card_height"
+        android:layout_marginStart="@dimen/truco_first_card_horizontal_margin"
+        android:rotationY="@integer/flip_rotation"
+        android:scaleX="@integer/truco_their_card_initial_scale"
+        android:scaleY="@integer/truco_their_card_initial_scale"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/left_player_right_card"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/front_player_right_card"
+        android:layout_width="@dimen/truco_for_4_card_width"
+        android:layout_height="@dimen/truco_for_4_card_height"
+        android:layout_marginEnd="@dimen/truco_first_card_horizontal_margin"
+        android:rotationY="@integer/flip_rotation"
+        android:scaleX="@integer/truco_their_card_initial_scale"
+        android:scaleY="@integer/truco_their_card_initial_scale"
+        app:layout_constraintBottom_toTopOf="@id/table"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/table"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/front_player_middle_card"
+        android:layout_width="@dimen/truco_for_4_card_width"
+        android:layout_height="@dimen/truco_for_4_card_height"
+        android:layout_marginEnd="@dimen/truco_first_card_horizontal_margin"
+        android:rotationY="@integer/flip_rotation"
+        android:scaleX="@integer/truco_their_card_initial_scale"
+        android:scaleY="@integer/truco_their_card_initial_scale"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/front_player_right_card"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/front_player_left_card"
+        android:layout_width="@dimen/truco_for_4_card_width"
+        android:layout_height="@dimen/truco_for_4_card_height"
+        android:layout_marginEnd="@dimen/truco_first_card_horizontal_margin"
+        android:rotationY="@integer/flip_rotation"
+        android:scaleX="@integer/truco_their_card_initial_scale"
+        android:scaleY="@integer/truco_their_card_initial_scale"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/front_player_right_card"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/right_player_left_card"
+        android:layout_width="@dimen/truco_for_4_card_width"
+        android:layout_height="@dimen/truco_for_4_card_height"
+        android:layout_marginEnd="@dimen/truco_first_card_horizontal_margin"
+        android:rotationY="@integer/flip_rotation"
+        android:scaleX="@integer/truco_their_card_initial_scale"
+        android:scaleY="@integer/truco_their_card_initial_scale"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/right_player_right_card"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/right_player_middle_card"
+        android:layout_width="@dimen/truco_for_4_card_width"
+        android:layout_height="@dimen/truco_for_4_card_height"
+        android:layout_marginEnd="@dimen/truco_first_card_horizontal_margin"
+        android:rotationY="@integer/flip_rotation"
+        android:scaleX="@integer/truco_their_card_initial_scale"
+        android:scaleY="@integer/truco_their_card_initial_scale"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/right_player_right_card"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/right_player_right_card"
+        android:layout_width="@dimen/truco_for_4_card_width"
+        android:layout_height="@dimen/truco_for_4_card_height"
+        android:layout_marginEnd="@dimen/truco_first_card_horizontal_margin"
+        android:rotationY="@integer/flip_rotation"
+        android:scaleX="@integer/truco_their_card_initial_scale"
+        android:scaleY="@integer/truco_their_card_initial_scale"
+        app:layout_constraintBottom_toBottomOf="@id/table"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/table"
+        tools:ignore="ContentDescription" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_table_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_begin="-10dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_table_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_end="-10dp" />
+
+    <View
+        android:id="@+id/table"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/large"
+        android:background="@drawable/ic_circle"
+        android:backgroundTint="@color/colorPrimaryVariant"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintTop_toBottomOf="@+id/header_background" />
+
+    <View
+        android:id="@+id/drop_front_player_first_card"
+        android:layout_width="@dimen/truco_for_4_card_width"
+        android:layout_height="@dimen/truco_for_4_card_height"
+        android:scaleX="@integer/truco_for_4_card_final_scale"
+        android:scaleY="@integer/truco_for_4_card_final_scale"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/guideline_center_table_horizontal"
+        app:layout_constraintStart_toStartOf="@id/guideline_center_vertical"
+        tools:background="@drawable/dashed_border"
+        tools:visibility="visible" />
+
+    <View
+        android:id="@+id/drop_front_player_second_card"
+        android:layout_width="@dimen/truco_for_4_card_width"
+        android:layout_height="@dimen/truco_for_4_card_height"
+        android:layout_marginStart="@dimen/truco_for_4_dropping_place_separation"
+        android:scaleX="@integer/truco_for_4_card_final_scale"
+        android:scaleY="@integer/truco_for_4_card_final_scale"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/drop_front_player_first_card"
+        app:layout_constraintStart_toStartOf="@id/drop_front_player_first_card"
+        app:layout_constraintTop_toTopOf="@id/drop_front_player_first_card"
+        tools:background="@drawable/dashed_border"
+        tools:visibility="visible" />
+
+    <View
+        android:id="@+id/drop_front_player_third_card"
+        android:layout_width="@dimen/truco_for_4_card_width"
+        android:layout_height="@dimen/truco_for_4_card_height"
+        android:layout_marginStart="@dimen/truco_for_4_dropping_place_separation"
+        android:scaleX="@integer/truco_for_4_card_final_scale"
+        android:scaleY="@integer/truco_for_4_card_final_scale"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/drop_front_player_first_card"
+        app:layout_constraintStart_toStartOf="@id/drop_front_player_second_card"
+        app:layout_constraintTop_toTopOf="@id/drop_front_player_first_card"
+        tools:background="@drawable/dashed_border"
+        tools:visibility="visible" />
+
+    <View
+        android:id="@+id/drop_left_player_first_card"
+        android:layout_width="@dimen/truco_for_4_card_width"
+        android:layout_height="@dimen/truco_for_4_card_height"
+        android:scaleX="@integer/truco_for_4_card_final_scale"
+        android:scaleY="@integer/truco_for_4_card_final_scale"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/guideline_center_table_horizontal"
+        app:layout_constraintEnd_toEndOf="@id/guideline_center_vertical"
+        tools:background="@drawable/dashed_border"
+        tools:visibility="visible" />
+
+    <View
+        android:id="@+id/drop_left_player_second_card"
+        android:layout_width="@dimen/truco_for_4_card_width"
+        android:layout_height="@dimen/truco_for_4_card_height"
+        android:layout_marginEnd="@dimen/truco_for_4_dropping_place_separation"
+        android:scaleX="@integer/truco_for_4_card_final_scale"
+        android:scaleY="@integer/truco_for_4_card_final_scale"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/drop_left_player_third_card"
+        app:layout_constraintEnd_toEndOf="@id/drop_left_player_first_card"
+        app:layout_constraintTop_toTopOf="@id/drop_left_player_first_card"
+        tools:background="@drawable/dashed_border"
+        tools:visibility="visible" />
+
+    <View
+        android:id="@+id/drop_left_player_third_card"
+        android:layout_width="@dimen/truco_for_4_card_width"
+        android:layout_height="@dimen/truco_for_4_card_height"
+        android:layout_marginEnd="@dimen/truco_for_4_dropping_place_separation"
+        android:scaleX="@integer/truco_for_4_card_final_scale"
+        android:scaleY="@integer/truco_for_4_card_final_scale"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/guideline_center_table_horizontal"
+        app:layout_constraintEnd_toEndOf="@id/drop_left_player_second_card"
+        app:layout_constraintTop_toTopOf="@id/drop_left_player_second_card"
+        tools:background="@drawable/dashed_border"
+        tools:visibility="visible" />
+
+    <View
+        android:id="@+id/drop_right_player_first_card"
+        android:layout_width="@dimen/truco_for_4_card_width"
+        android:layout_height="@dimen/truco_for_4_card_height"
+        android:scaleX="@integer/truco_for_4_card_final_scale"
+        android:scaleY="@integer/truco_for_4_card_final_scale"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="@id/guideline_center_vertical"
+        app:layout_constraintTop_toTopOf="@id/guideline_center_table_horizontal"
+        tools:background="@drawable/dashed_border"
+        tools:visibility="visible" />
+
+    <View
+        android:id="@+id/drop_right_player_second_card"
+        android:layout_width="@dimen/truco_for_4_card_width"
+        android:layout_height="@dimen/truco_for_4_card_height"
+        android:layout_marginStart="@dimen/truco_for_4_dropping_place_separation"
+        android:scaleX="@integer/truco_for_4_card_final_scale"
+        android:scaleY="@integer/truco_for_4_card_final_scale"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/drop_right_player_first_card"
+        app:layout_constraintStart_toStartOf="@id/drop_right_player_first_card"
+        app:layout_constraintTop_toTopOf="@id/drop_right_player_first_card"
+        tools:background="@drawable/dashed_border"
+        tools:visibility="visible" />
+
+    <View
+        android:id="@+id/drop_right_player_third_card"
+        android:layout_width="@dimen/truco_for_4_card_width"
+        android:layout_height="@dimen/truco_for_4_card_height"
+        android:layout_marginStart="@dimen/truco_for_4_dropping_place_separation"
+        android:scaleX="@integer/truco_for_4_card_final_scale"
+        android:scaleY="@integer/truco_for_4_card_final_scale"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/drop_right_player_first_card"
+        app:layout_constraintStart_toStartOf="@id/drop_right_player_second_card"
+        app:layout_constraintTop_toTopOf="@id/drop_right_player_first_card"
+        tools:background="@drawable/dashed_border"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/drop_first_card"
+        android:layout_width="@dimen/truco_for_4_card_width"
+        android:layout_height="@dimen/truco_for_4_card_height"
+        android:layout_marginStart="@dimen/largest_extra"
+        android:background="@drawable/dashed_border"
+        android:gravity="center"
+        android:outlineProvider="none"
+        android:scaleX="@integer/truco_for_4_card_final_scale"
+        android:scaleY="@integer/truco_for_4_card_final_scale"
+        android:text="@string/truco_card_dropping_place"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toStartOf="@id/guideline_center_vertical"
+        app:layout_constraintTop_toTopOf="@id/guideline_center_table_horizontal"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/drop_second_card"
+        android:layout_width="@dimen/truco_for_4_card_width"
+        android:layout_height="@dimen/truco_for_4_card_height"
+        android:layout_marginEnd="@dimen/truco_for_4_dropping_place_separation"
+        android:background="@drawable/dashed_border"
+        android:gravity="center"
+        android:outlineProvider="none"
+        android:scaleX="@integer/truco_for_4_card_final_scale"
+        android:scaleY="@integer/truco_for_4_card_final_scale"
+        android:text="@string/truco_card_dropping_place"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/drop_first_card"
+        app:layout_constraintEnd_toEndOf="@id/drop_first_card"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/drop_third_card"
+        android:layout_width="@dimen/truco_for_4_card_width"
+        android:layout_height="@dimen/truco_for_4_card_height"
+        android:layout_marginEnd="@dimen/truco_for_4_dropping_place_separation"
+        android:background="@drawable/dashed_border"
+        android:gravity="center"
+        android:outlineProvider="none"
+        android:scaleX="@integer/truco_for_4_card_final_scale"
+        android:scaleY="@integer/truco_for_4_card_final_scale"
+        android:text="@string/truco_card_dropping_place"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/drop_second_card"
+        app:layout_constraintEnd_toEndOf="@id/drop_second_card"
+        tools:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/my_left_card"
+        android:layout_width="@dimen/truco_for_4_card_width"
+        android:layout_height="@dimen/truco_for_4_card_height"
+        android:layout_marginStart="@dimen/truco_first_card_horizontal_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/my_middle_card"
+        android:layout_width="@dimen/truco_for_4_card_width"
+        android:layout_height="@dimen/truco_for_4_card_height"
+        android:layout_marginStart="@dimen/truco_first_card_horizontal_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:id="@+id/my_right_card"
+        android:layout_width="@dimen/truco_for_4_card_width"
+        android:layout_height="@dimen/truco_for_4_card_height"
+        android:layout_marginStart="@dimen/truco_first_card_horizontal_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="ContentDescription" />
+
+    <View
+        android:id="@+id/action_background"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:alpha="0"
+        android:background="@android:color/white"
+        android:clickable="true"
+        android:elevation="40dp"
+        android:focusable="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/header_background"
+        tools:visibility="visible" />
+
+    <View
+        android:id="@+id/left_player_action_bubble"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/dialog_bubble"
+        android:elevation="@dimen/truco_action_bubble_elevation"
+        android:rotationX="@integer/flip_rotation"
+        android:scaleX="0"
+        android:scaleY="0"
+        app:layout_constraintBottom_toBottomOf="@id/left_player_action_bubble_text"
+        app:layout_constraintEnd_toEndOf="@id/left_player_action_bubble_text"
+        app:layout_constraintStart_toStartOf="@id/left_player_action_bubble_text"
+        app:layout_constraintTop_toTopOf="@id/left_player_action_bubble_text"
+        tools:scaleX="1f"
+        tools:scaleY="1f" />
+
+    <TextView
+        android:id="@+id/left_player_action_bubble_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="@dimen/truco_action_bubble_elevation"
+        android:gravity="center"
+        android:padding="@dimen/truco_action_bubble_padding"
+        android:scaleX="0"
+        android:scaleY="0"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/font_huge_extra"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/header_background"
+        tools:scaleX="1f"
+        tools:scaleY="1f"
+        tools:text="Envido" />
+
+    <View
+        android:id="@+id/front_player_action_bubble"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/dialog_bubble"
+        android:elevation="@dimen/truco_action_bubble_elevation"
+        android:rotationX="@integer/flip_rotation"
+        android:rotationY="@integer/flip_rotation"
+        android:scaleX="0"
+        android:scaleY="0"
+        app:layout_constraintBottom_toBottomOf="@id/front_player_action_bubble_text"
+        app:layout_constraintEnd_toEndOf="@id/front_player_action_bubble_text"
+        app:layout_constraintStart_toStartOf="@id/front_player_action_bubble_text"
+        app:layout_constraintTop_toTopOf="@id/front_player_action_bubble_text"
+        tools:scaleX="1f"
+        tools:scaleY="1f" />
+
+    <TextView
+        android:id="@+id/front_player_action_bubble_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="@dimen/truco_action_bubble_elevation"
+        android:gravity="center"
+        android:padding="@dimen/truco_action_bubble_padding"
+        android:scaleX="0"
+        android:scaleY="0"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/font_huge_extra"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/header_background"
+        tools:scaleX="1f"
+        tools:scaleY="1f"
+        tools:text="Envido" />
+
+    <View
+        android:id="@+id/my_action_bubble"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/dialog_bubble"
+        android:elevation="@dimen/truco_action_bubble_elevation"
+        android:scaleX="0"
+        android:scaleY="0"
+        app:layout_constraintBottom_toBottomOf="@id/my_action_bubble_text"
+        app:layout_constraintEnd_toEndOf="@id/my_action_bubble_text"
+        app:layout_constraintStart_toStartOf="@id/my_action_bubble_text"
+        app:layout_constraintTop_toTopOf="@id/my_action_bubble_text"
+        tools:scaleX="1f"
+        tools:scaleY="1f" />
+
+    <TextView
+        android:id="@+id/my_action_bubble_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="@dimen/truco_action_bubble_elevation"
+        android:gravity="center"
+        android:padding="@dimen/truco_action_bubble_padding"
+        android:scaleX="0"
+        android:scaleY="0"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/font_huge_extra"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:scaleX="1f"
+        tools:scaleY="1f"
+        tools:text="Envido" />
+
+    <View
+        android:id="@+id/right_player_action_bubble"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/dialog_bubble"
+        android:elevation="@dimen/truco_action_bubble_elevation"
+        android:rotationY="180"
+        android:scaleX="0"
+        android:scaleY="0"
+        app:layout_constraintBottom_toBottomOf="@id/right_player_action_bubble_text"
+        app:layout_constraintEnd_toEndOf="@id/right_player_action_bubble_text"
+        app:layout_constraintStart_toStartOf="@id/right_player_action_bubble_text"
+        app:layout_constraintTop_toTopOf="@id/right_player_action_bubble_text"
+        tools:scaleX="1f"
+        tools:scaleY="1f" />
+
+    <TextView
+        android:id="@+id/right_player_action_bubble_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="@dimen/truco_action_bubble_elevation"
+        android:gravity="center"
+        android:padding="@dimen/truco_action_bubble_padding"
+        android:scaleX="0"
+        android:scaleY="0"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/font_huge_extra"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:scaleX="1f"
+        tools:scaleY="1f"
+        tools:text="Envido" />
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/header_background">
+
+        <include
+            android:id="@+id/actions_responses"
+            layout="@layout/view_truco_actions_responses" />
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

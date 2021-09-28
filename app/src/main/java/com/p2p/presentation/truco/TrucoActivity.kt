@@ -18,7 +18,8 @@ class TrucoActivity : GameActivity<TrucoSpecificGameEvent, TrucoViewModel>() {
 
     override fun goToPlay() {
         viewModel.stopLoading()
-        // TODO: Start truco game
+        //TODO it could be for 4
+        addFragment(TrucoPlayFor2Fragment.newInstance(), shouldAddToBackStack = false)
     }
 
     override fun goToClientLobby() =

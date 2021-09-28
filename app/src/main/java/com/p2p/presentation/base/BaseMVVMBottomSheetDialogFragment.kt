@@ -15,7 +15,6 @@ import com.p2p.utils.showSnackBar
  * [E]: Event
  * [VM]: BaseViewModel with the same event defined
  */
-// TODO: reduce boilerplate with flor's PR
 abstract class BaseMVVMBottomSheetDialogFragment<VB : ViewBinding, E : Any, VM : BaseViewModel<E>> :
     BaseBottomSheetDialogFragment<VB>() {
 
