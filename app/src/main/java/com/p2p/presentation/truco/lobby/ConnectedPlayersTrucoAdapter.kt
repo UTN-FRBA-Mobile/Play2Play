@@ -23,7 +23,7 @@ class ConnectedPlayersTrucoAdapter(
             field = value
             notifyDataSetChanged()
         }
-    var totalPlayers : Int = 4
+    var totalPlayers : Int = 2
         set(value) {
             field = value
             notifyDataSetChanged()
