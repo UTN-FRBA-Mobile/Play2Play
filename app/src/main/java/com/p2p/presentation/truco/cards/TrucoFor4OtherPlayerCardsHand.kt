@@ -1,10 +1,15 @@
 package com.p2p.presentation.truco.cards
 
+import android.view.View
+import android.widget.ImageView
 import com.p2p.R
+import com.p2p.model.truco.Card
 
 abstract class TrucoFor4OtherPlayerCardsHand(
     cards: List<PlayingCard>
 ) : TrucoCardsHand(cards, emptyList(), null) {
+
+    constructor(vararg cardViews: ImageView) : this(cardViews.map { PlayingCard(Card.unknown(), it) })
 
     protected abstract val cardsRotationForHand: Map<Int, List<Float>>
 

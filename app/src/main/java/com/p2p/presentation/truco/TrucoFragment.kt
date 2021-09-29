@@ -56,8 +56,11 @@ abstract class TrucoFragment<VB : ViewBinding> :
 
     override fun setupObservers() {
         super.setupObservers()
+        observe(gameViewModel.myCards) { initMyCardsHand(it) }
         observe(gameViewModel.singleTimeEvent) { onGameEvent(it) }
         observe(gameViewModel.actionAvailableResponses) { updateActionAvailableResponses(it) }
+        observe(gameViewModel.ourScore) { updateScore(headerBinding.ourScore, it) }
+        observe(gameViewModel.theirScore) { updateScore(headerBinding.theirScore, it) }
     }
 
     override fun initUI() = with(requireView()) {
@@ -100,19 +103,30 @@ abstract class TrucoFragment<VB : ViewBinding> :
         }
     }
 
+    override final fun onCardPlayed(playingCard: TrucoCardsHand.PlayingCard) {
+        gameViewModel.playCard(playingCard.card)
+    }
+
+    abstract fun createMyCardsHand(myPlayingCards: List<TrucoCardsHand.PlayingCard>): TrucoCardsHand
+
+    abstract fun getPlayerCardsHand(playerPosition: TrucoPlayerPosition): TrucoCardsHand
+
+    abstract fun getDroppingPlaces(playerPosition: TrucoPlayerPosition): List<View>
+
     abstract fun hideAllActions()
 
     @CallSuper
     protected open fun onGameEvent(event: GameEvent) = when (event) {
         is TrucoShowMyActionEvent -> showMyAction(event.action)
-        is TrucoFinishHand -> TODO("Do finish hand logic")
-        is TrucoNewHand -> TODO("Do new hand logic")
+        is TrucoFinishRound -> finishRound(event.round, event.result)
+        is TrucoNewHand -> {
+            // TODO: reorder the cards and give the new ones.
+            requireView().postDelayed({ activity?.finish() }, 10_000)
+            Unit
+        }
+        is TrucoOtherPlayedCardEvent -> onOtherPlayedCard(event)
+        TrucoTakeTurnEvent -> myCardsHand.takeTurn()
         else -> super.onEvent(event)
-    }
-
-    protected fun updateScores(ourScore: Int, their: Int) {
-        updateScore(headerBinding.ourScore, ourScore)
-        updateScore(headerBinding.theirScore, their)
     }
 
     protected fun hideActionBubble(bubbleView: View, bubbleTextView: TextView) {
@@ -129,22 +143,13 @@ abstract class TrucoFragment<VB : ViewBinding> :
         TrucoCardsHand.PlayingCard(cards[i], view)
     }
 
-    protected fun takeTurn() = myCardsHand.takeTurn()
-
-    protected fun finishRound(round: Int, result: TrucoRoundResult) {
-        roundViews[round].animateBackgroundTint(ContextCompat.getColor(requireContext(), result.color)) {
-            val colorPrimary = ContextCompat.getColor(requireContext(), R.color.colorPrimary)
-            roundViews.getOrNull(round + 1)?.backgroundTintList = ColorStateList.valueOf(colorPrimary)
-        }
-    }
-
     protected fun loadCardImages(cardViews: List<ImageView>, cards: List<Card?>) = cardViews.forEachIndexed { i, view ->
         val (image, description) = cardsImageCreator.create(cards.getOrNull(i))
         view.setImageBitmap(image)
         view.contentDescription = description
     }
 
-    protected fun showMyAction(action: TrucoAction) {
+    private fun showMyAction(action: TrucoAction) {
         val bubbleBackground = requireView().findViewById<View>(R.id.my_action_bubble)
         val bubbleText = requireView().findViewById<TextView>(R.id.my_action_bubble_text)
         showAction(bubbleBackground, bubbleText, action)
@@ -243,6 +248,31 @@ abstract class TrucoFragment<VB : ViewBinding> :
             findViewById<View>(R.id.action_response_envido_goes_first).isVisible = envidoGoesFirst
             val actionResponseContainer = findViewById<View>(R.id.actions_responses)
             if (hasAvailableResponses()) actionResponseContainer.fadeIn() else actionResponseContainer.fadeOut()
+        }
+    }
+
+    private fun initMyCardsHand(myCards: List<Card>) {
+        val myPlayingCards = getPlayingCards(myCardsViews, myCards)
+        myCardsHand = createMyCardsHand(myPlayingCards)
+        loadCardImages(myCardsViews, myCards)
+        gameViewModel.onGameStarted()
+    }
+
+    private fun onOtherPlayedCard(event: TrucoOtherPlayedCardEvent) {
+        val cardImage = cardsImageCreator.create(event.card)
+        val roundAsIndex = event.round - 1
+        val droppingPlace = getDroppingPlaces(event.playerPosition)[roundAsIndex]
+        getPlayerCardsHand(event.playerPosition).playCard(cardImage, droppingPlace, roundAsIndex)
+    }
+
+    private fun finishRound(round: Int, result: TrucoRoundResult) {
+        roundViews[round - 1].animateBackgroundTint(
+            ContextCompat.getColor(requireContext(), result.color)
+        ) {
+            val colorPrimary = ColorStateList.valueOf(
+                ContextCompat.getColor(requireContext(), R.color.colorPrimary)
+            )
+            roundViews.getOrNull(round)?.backgroundTintList = colorPrimary
         }
     }
 
