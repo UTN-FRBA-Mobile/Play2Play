@@ -47,7 +47,6 @@ abstract class TrucoViewModel(
     /** List with the teams of players */
     protected lateinit var playersTeams: List<PlayerTeam>
 
-    // TODO: Must set this value on truco game creation
     /** Set the quantity of players selected by the user when creating the game . */
     //TODO this is a mock!!!!
     private val _totalPlayers = MutableLiveData<Int>(2)
@@ -214,6 +213,10 @@ abstract class TrucoViewModel(
     private fun updateTrucoValues(action: TrucoGameAction, buttonEnabled: Boolean) {
         _lastTrucoAction.value = action
         _trucoButtonEnabled.value = buttonEnabled
+    }
+
+    fun setTotalPlayers(players: Int) {
+        _totalPlayers.value = players;
     }
 
     private fun onRivalCardPlayed(playedCard: PlayedCard) {

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/view_guidelines" />
+
+    <TextView
+        android:id="@+id/create_truco_title"
+        style="@style/P2P_Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="@string/truco_create_game_title"
+        android:layout_marginTop="@dimen/medium"
+        app:layout_constraintStart_toStartOf="@id/guideline_begin"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintTop_toTopOf="@id/guideline_top" />
+
+    <RelativeLayout
+        android:id="@+id/create_two_player"
+        android:layout_width="@dimen/truco_create_game_card"
+        android:layout_height="@dimen/truco_create_game_card"
+        android:layout_marginTop="@dimen/huge_extra"
+        app:layout_constraintTop_toBottomOf="@id/create_truco_title"
+        app:layout_constraintBottom_toTopOf="@id/create_four_player"
+        app:layout_constraintStart_toStartOf="@id/guideline_begin"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        android:paddingBottom="@dimen/medium_extra"
+
+        android:background="@drawable/full_border"
+        >
+
+        <TextView
+            android:id="@+id/two_player_text"
+            style="@style/P2P_Description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/truco_create_game_two_player" />
+
+
+        <include
+            android:id="@+id/two_player_icons"
+            layout="@layout/view_create_game_two_player"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/largest"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/create_four_player"
+        android:layout_width="@dimen/truco_create_game_card"
+        android:layout_height="@dimen/truco_create_game_card"
+        app:layout_constraintTop_toBottomOf="@id/create_two_player"
+        app:layout_constraintStart_toStartOf="@id/guideline_begin"
+        android:layout_marginTop="@dimen/big_extra"
+        app:layout_constraintEnd_toStartOf="@id/guideline_end"
+        android:background="@drawable/full_border" >
+
+        <TextView
+            android:id="@+id/four_player_text"
+            style="@style/P2P_Description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/medium_extra"
+            android:textStyle="bold"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="@string/truco_create_game_four_player" />
+
+        <include
+            android:id="@+id/four_player_icons"
+            layout="@layout/view_create_game_four_player"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/medium_extra"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            />
+
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
