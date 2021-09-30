@@ -289,6 +289,9 @@ abstract class TrucoViewModel(
             ?.playerTeam
     }
 
+    private fun getEnvidoPoints(): Int =
+        EnvidoCardsChallenger.getPoints(requireNotNull(_myCards.value))
+
     private fun getCurrentHandAbsoluteWinner() = groupCurrentHandWinners()
         .firstOrNull { it.size >= WINNER_HAND_ROUNDS_THRESHOLD }
         ?.first()
