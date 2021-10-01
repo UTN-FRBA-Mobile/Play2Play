@@ -41,7 +41,7 @@
         app:layout_constraintTop_toBottomOf="@id/result_icon"
         app:layout_constraintStart_toStartOf="@id/result_background"
         app:layout_constraintEnd_toEndOf="parent"
-        android:text="¡Ganamos!" />
+        tools:text="¡Ganamos!" />
 
     <TextView
         android:id="@+id/result_points"
@@ -55,7 +55,7 @@
         app:layout_constraintTop_toBottomOf="@id/result_text"
         app:layout_constraintStart_toStartOf="@id/result_background"
         app:layout_constraintEnd_toEndOf="parent"
-        android:text="75 pts" />
+        tools:text="75 pts" />
 
     <View
         android:id="@+id/other_team_background"
@@ -90,7 +90,7 @@
         android:paddingTop="@dimen/medium_extra"
         app:layout_constraintTop_toBottomOf="@id/result_background"
         app:layout_constraintEnd_toStartOf="@id/guideline_end"
-        android:text="15 pts" />
+        tools:text="15 pts" />
 
     <View
         android:id="@+id/exit_button_background"

@@ -27,7 +27,6 @@ import com.p2p.presentation.truco.actions.TrucoAction.Truco
 import com.p2p.presentation.truco.actions.TrucoAction.ValeCuatro
 import com.p2p.presentation.truco.actions.TrucoAction.YesIDo
 import com.p2p.presentation.truco.actions.TrucoActionAvailableResponses
-import com.p2p.model.truco.TrucoFinalScore
 import com.p2p.presentation.truco.actions.TrucoGameAction
 
 abstract class TrucoViewModel(
@@ -76,10 +75,6 @@ abstract class TrucoViewModel(
 
     private val _currentRound = MutableLiveData(1)
     val currentRound: LiveData<Int> = _currentRound
-
-    // TODO: When setting this values, order them in a descendant order of scores
-    private val _finalScores = MutableLiveData<List<TrucoFinalScore>>()
-    val finalScores: LiveData<List<TrucoFinalScore>> = _finalScores
 
     private lateinit var currentPlayerTurn: PlayerTeam
 
@@ -216,14 +211,6 @@ abstract class TrucoViewModel(
     private fun updateTrucoValues(action: TrucoGameAction, buttonEnabled: Boolean) {
         _lastTrucoAction.value = action
         _trucoButtonEnabled.value = buttonEnabled
-    }
-
-    fun isPlayerInWinnerTeam(trucoFinalScores: List<TrucoFinalScore>): Boolean {
-        return userName in trucoFinalScores.first().players
-    }
-
-    fun getPlayerTeam(trucoFinalScores: List<TrucoFinalScore>) : Int {
-        return trucoFinalScores.first { it.players.contains(userName) }.team
     }
 
     fun setTotalPlayers(players: Int) {
