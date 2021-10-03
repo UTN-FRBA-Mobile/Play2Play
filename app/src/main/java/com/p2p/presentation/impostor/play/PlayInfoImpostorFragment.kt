@@ -4,12 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import com.p2p.R
-import com.p2p.databinding.FragmentPlayImpostorBinding
 import com.p2p.databinding.FragmentPlayInfoImpostorBinding
 import com.p2p.presentation.basegame.BaseGameFragment
 import com.p2p.presentation.impostor.ImpostorViewModel
-import com.p2p.presentation.impostor.ServerImpostorViewModel
 
 class PlayInfoImpostorFragment : BaseGameFragment<
         FragmentPlayInfoImpostorBinding,

@@ -26,7 +26,7 @@ enum class Game(
     ),
     IMPOSTOR(
         R.string.games_impostor,
-        R.drawable.ic_impostor,
+        R.drawable.ic_emulate_impostor,
         R.raw.impostor_instructions
     ),
 }
