@@ -11,9 +11,9 @@ enum class TrucoRoundResult(@ColorRes val color: Int) {
 
     companion object {
 
-        fun get(winner: PlayerTeam?, mySelf: PlayerTeam) = when (winner) {
+        fun get(winner: PlayerTeam?, mySelf: PlayerTeam) = when (winner?.team) {
             null -> TIE
-            mySelf -> WIN
+            mySelf.team -> WIN
             else -> DEFEAT
         }
     }
