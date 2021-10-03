@@ -22,7 +22,6 @@ import com.p2p.presentation.truco.actions.TrucoAction.*
     JsonSubTypes.Type(value = YesIDo::class, name = "yes_i_do"),
     JsonSubTypes.Type(value = NoIDont::class, name = "no_i_dont"),
     JsonSubTypes.Type(value = GoToDeck::class, name = "go_to_deck"),
-    JsonSubTypes.Type(value = ShowEnvido::class, name = "show_envido"),
     JsonSubTypes.Type(value = CustomActionResponse::class, name = "truco_custom"),
 )
 abstract class TrucoAction(
@@ -151,16 +150,6 @@ abstract class TrucoAction(
     ) {
 
         override fun message(context: Context) = context.getString(R.string.truco_go_to_deck_action)
-
-        override fun availableResponses() =
-            TrucoActionAvailableResponses(iDo = false, iDont = false)
-    }
-
-    data class ShowEnvido(val points: Int? = null) : TrucoAction(
-        hasReplication = false
-    ) {
-
-        override fun message(context: Context) = points?.toString() ?: context.getString(R.string.truco_answer_envido_are_good)
 
         override fun availableResponses() =
             TrucoActionAvailableResponses(iDo = false, iDont = false)

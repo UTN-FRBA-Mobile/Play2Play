@@ -51,7 +51,7 @@ abstract class TrucoViewModel(
 
     /** Set the quantity of players selected by the user when creating the game . */
     //TODO this is a mock!!!!
-    private val _totalPlayers = MutableLiveData<Int>(2)
+    private val _totalPlayers = MutableLiveData(2)
     val totalPlayers: LiveData<Int> = _totalPlayers
 
     /** Current cards for this player */
@@ -376,15 +376,14 @@ abstract class TrucoViewModel(
         }
 
         val winner = pointsByPlayer.maxByOrNull { it.second }!!
-        val maxValue = winner.second
 
-        //List of the players that have to say they points until the winner
-        val (playersThatShowEnvidoPoints, playersThatSayAreGood) = pointsByPlayer.partition { it.second == maxValue }
         val actionsByPlayer: Map<TrucoPlayerPosition, TrucoAction> =
-            (playersThatShowEnvidoPoints.map { it.first to TrucoAction.ShowEnvido(it.second) } +
-                    playersThatSayAreGood.map { it.first to TrucoAction.ShowEnvido() }).map {
+            pointsByPlayer.map {
                 val playerPosition = TrucoPlayerPosition.get(it.first, playersTeams, myPlayerTeam)
-                playerPosition to it.second
+                //TODO aca falta poner el mensaje dependiendo el turno de la ronda,
+                // dicen numeros los primeros, dsp el que gana dice numero, son mejores
+                // y dsp el resto son buenas
+                playerPosition to TrucoAction.CustomActionResponse(it.second.toString())
             }.toMap()
 
         dispatchSingleTimeEvent(TrucoShowManyActionsEvent(actionsByPlayer))

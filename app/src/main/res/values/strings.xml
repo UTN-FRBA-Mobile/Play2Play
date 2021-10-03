@@ -134,6 +134,7 @@
     <string name="truco_ask_for_vale_cuatro">Quiero\nvale cuatro</string>
     <string name="truco_ask_for_envido_goes_first">Envido\nva primero</string>
     <string name="truco_answer_envido_are_good">Son buenas</string>
+    <string name="truco_answer_envido_are_better">%d, son mejores</string>
     <string name="truco_go_to_deck">Me voy al mazo</string>
     <string name="truco_go_to_deck_action">Me voy\nal mazo</string>
 </resources>
