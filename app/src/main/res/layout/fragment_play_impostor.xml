@@ -8,7 +8,18 @@
     android:gravity="center"
     android:orientation="vertical"
     android:paddingHorizontal="@dimen/screen_padding">
+
     <include layout="@layout/view_guidelines" />
+
+    <ImageView
+        android:id="@+id/task_image"
+        android:layout_width="@dimen/game_task_image_size"
+        android:layout_height="@dimen/game_task_image_size"
+        android:layout_marginTop="@dimen/medium"
+        android:gravity="center"
+        android:contentDescription="@string/tf_winner"
+        android:layout_marginBottom="@dimen/large_extra"
+        android:src="@drawable/ic_impostor" />
 
     <TextView
         android:id="@+id/screen_description"

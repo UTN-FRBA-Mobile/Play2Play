@@ -101,4 +101,8 @@
     <dimen name="truco_table_border_bottom_height">30dp</dimen>
     <dimen name="truco_action_bubble_padding">60dp</dimen>
     <dimen name="truco_action_bubble_elevation">50dp</dimen>
+
+    <!-- Impostor -->
+    <dimen name="game_task_image_size">120dp</dimen>
+
 </resources>

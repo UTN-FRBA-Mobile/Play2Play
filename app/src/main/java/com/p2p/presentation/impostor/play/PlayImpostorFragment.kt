@@ -2,7 +2,9 @@ package com.p2p.presentation.impostor.play
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.google.android.material.textfield.TextInputLayout
@@ -38,6 +40,7 @@ class PlayImpostorFragment : BaseGameFragment<
             observe(impostorData) { data ->
                 setWordToShow(data.isImpostor, data.keyWord)
                 setScreenDescription(data.isImpostor)
+                setScreenIcon(data.isImpostor)
             }
         }
     }
@@ -51,6 +54,11 @@ class PlayImpostorFragment : BaseGameFragment<
     private fun setWordToShow(isImpostor: Boolean, keyWord: String) {
         val wordToShow = if (isImpostor) resources.getString(R.string.im_simulate) else keyWord
         gameBinding.word.text = wordToShow
+    }
+
+    private fun setScreenIcon(isImpostor: Boolean) {
+        val resource = if (isImpostor) R.drawable.ic_impostor else R.drawable.ic_search_impostor
+        gameBinding.taskImage.setImageResource(resource)
     }
 
     companion object {
