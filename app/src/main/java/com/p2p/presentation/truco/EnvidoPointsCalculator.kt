@@ -3,7 +3,7 @@ package com.p2p.presentation.truco
 import com.p2p.model.truco.Card
 import com.p2p.model.truco.Suit
 
-object EnvidoCardsChallenger {
+object EnvidoPointsCalculator {
 
     private val zeroCards = listOf(10, 11, 12)
 

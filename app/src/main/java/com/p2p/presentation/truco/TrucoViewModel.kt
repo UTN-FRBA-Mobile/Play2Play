@@ -3,6 +3,7 @@ package com.p2p.presentation.truco
 import androidx.annotation.CallSuper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.p2p.R
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.loadingMessages.LoadingTextRepository
@@ -10,12 +11,13 @@ import com.p2p.data.userInfo.UserSession
 import com.p2p.model.base.message.Conversation
 import com.p2p.model.truco.Card
 import com.p2p.model.truco.PlayerTeam
-import com.p2p.model.truco.message.TrucoActionMessage
-import com.p2p.model.truco.message.TrucoPlayCardMessage
+import com.p2p.model.truco.PlayerWithCards
+import com.p2p.model.truco.message.*
 import com.p2p.presentation.basegame.ConnectionType
 import com.p2p.presentation.basegame.GameViewModel
 import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.home.games.Game
+import com.p2p.presentation.truco.actions.EnvidoGameAction
 import com.p2p.presentation.truco.actions.TrucoAction
 import com.p2p.presentation.truco.actions.TrucoAction.Envido
 import com.p2p.presentation.truco.actions.TrucoAction.EnvidoGoesFirst
@@ -56,6 +58,9 @@ abstract class TrucoViewModel(
     protected val _myCards = MutableLiveData<List<Card>>()
     val myCards: LiveData<List<Card>> = _myCards
 
+    /** Cards being used by each players in a hand  */
+    protected var cardsByPlayer = listOf<PlayerWithCards>()
+
     private val _ourScore = MutableLiveData<Int>()
     val ourScore: LiveData<Int> = _ourScore
 
@@ -81,9 +86,9 @@ abstract class TrucoViewModel(
     private lateinit var currentPlayerTurn: PlayerTeam
 
     private var currentActionPoints: Int = 1
-    private var previousActions: List<TrucoAction> = emptyList()
+    protected var previousActions: List<TrucoAction> = emptyList()
 
-    private val myPlayerTeam: PlayerTeam by lazy { playersTeams.first { it.player == userName } }
+    protected val myPlayerTeam: PlayerTeam by lazy { playersTeams.first { it.player == userName } }
     private val playedCards: MutableList<MutableList<PlayedCard>> = mutableListOf(mutableListOf())
     private val currentHandWinners: MutableList<PlayerTeam?> = mutableListOf()
 
@@ -109,7 +114,14 @@ abstract class TrucoViewModel(
             is TrucoActionMessage -> {
                 disableButtonsIfApplies(message.action, actionPerformer = false)
                 updateActionValues(message.action)
-                dispatchSingleTimeEvent(TrucoShowOpponentActionEvent(message.action))
+                val playerPosition =
+                    TrucoPlayerPosition.get(message.playerTeam, playersTeams, myPlayerTeam)
+                dispatchSingleTimeEvent(
+                    TrucoShowOpponentActionEvent(
+                        message.action,
+                        playerPosition
+                    )
+                )
                 onActionDone(message.action, message.playerTeam.team)
             }
             is TrucoPlayCardMessage -> onRivalCardPlayed(message.playedCard)
@@ -131,6 +143,17 @@ abstract class TrucoViewModel(
         updateActionValues(action)
         dispatchSingleTimeEvent(TrucoShowMyActionEvent(action))
         onActionDone(action, myPlayerTeam.team)
+    }
+
+    private fun onManyActions(actionByPlayer: Map<PlayerTeam, TrucoAction>) {
+        val actionByPosition = actionByPlayer.map { actionByPlayer ->
+            TrucoPlayerPosition.get(
+                actionByPlayer.key,
+                playersTeams,
+                myPlayerTeam
+            ) to actionByPlayer.value
+        }.toMap()
+        dispatchSingleTimeEvent(TrucoShowManyActionsEvent(actionByPosition))
     }
 
     fun performEnvido(isReply: Boolean = false) =
@@ -201,7 +224,7 @@ abstract class TrucoViewModel(
                 _trucoButtonEnabled.value = true
                 _envidoButtonEnabled.value = false
             }
-            is Envido, is RealEnvido, is FaltaEnvido, EnvidoGoesFirst ->
+            is EnvidoGameAction ->
                 _envidoButtonEnabled.value = false
             is YesIDo -> if (isAcceptingTruco()) _envidoButtonEnabled.value = false
             else -> Unit
@@ -281,7 +304,8 @@ abstract class TrucoViewModel(
     }
 
     private fun getRoundWinnerPlayerTeam(currentRoundPlayedCards: List<PlayedCard>): PlayerTeam? {
-        val winnerCards = TrucoCardsChallenger.getWinnerCards(currentRoundPlayedCards.map { it.card })
+        val winnerCards =
+            TrucoCardsChallenger.getWinnerCards(currentRoundPlayedCards.map { it.card })
         return currentRoundPlayedCards
             .filter { it.card in winnerCards }
             .takeIf { winners -> winners.all { it.playerTeam == winners.first().playerTeam } }
@@ -290,7 +314,7 @@ abstract class TrucoViewModel(
     }
 
     private fun getEnvidoPoints(): Int =
-        EnvidoCardsChallenger.getPoints(requireNotNull(_myCards.value))
+        EnvidoPointsCalculator.getPoints(requireNotNull(_myCards.value))
 
     private fun getCurrentHandAbsoluteWinner() = groupCurrentHandWinners()
         .firstOrNull { it.size >= WINNER_HAND_ROUNDS_THRESHOLD }
@@ -305,7 +329,8 @@ abstract class TrucoViewModel(
      */
     private fun getCurrentHandWinner(): PlayerTeam {
         if (currentHandWinners.all { it == null }) {
-            return playedCards.first().first().playerTeam // The first player that played a card is the hand
+            return playedCards.first()
+                .first().playerTeam // The first player that played a card is the hand
         }
 
         return getCurrentHandAbsoluteWinner() ?: currentHandWinners.filterNotNull().first()
@@ -332,13 +357,46 @@ abstract class TrucoViewModel(
         }
     }
 
-    private fun onActionDone(action: TrucoAction, performedByTeam: Int) {
+    open protected fun onActionDone(action: TrucoAction, performedByTeam: Int) {
         when (action) {
             is NoIDont -> onNoIDont(performedByTeam)
             is YesIDo -> {
+                if (previousActions.last() is EnvidoGameAction) {
+                    playEnvido()
+                }
                 //TODO mandar mensaje para jugar y sumar puntos
             }
         }
+    }
+
+    private fun playEnvido() {
+        val pointsByPlayer = cardsByPlayer.map {
+            val playerTeam = playersTeams.first { playerTeam -> playerTeam.player == it.player }
+            playerTeam to EnvidoPointsCalculator.getPoints(it.cards)
+        }
+
+        val winner = pointsByPlayer.maxByOrNull { it.second }!!
+        val maxValue = winner.second
+
+        //List of the players that have to say they points until the winner
+        val (playersThatShowEnvidoPoints, playersThatSayAreGood) = pointsByPlayer.partition { it.second == maxValue }
+        val actionsByPlayer: Map<TrucoPlayerPosition, TrucoAction> =
+            (playersThatShowEnvidoPoints.map { it.first to TrucoAction.ShowEnvido(it.second) } +
+                    playersThatSayAreGood.map { it.first to TrucoAction.ShowEnvido() }).map {
+                val playerPosition = TrucoPlayerPosition.get(it.first, playersTeams, myPlayerTeam)
+                playerPosition to it.second
+            }.toMap()
+
+        dispatchSingleTimeEvent(TrucoShowManyActionsEvent(actionsByPlayer))
+
+
+        onEnvidoPlayed(winner.first)
+    }
+
+
+    private fun onEnvidoPlayed(winner: PlayerTeam) {
+        val score = if (myPlayerTeam.team == winner.team) _ourScore else _theirScore
+        score.value = score.requireValue() + currentActionPoints
     }
 
     private fun onNoIDont(performedByTeam: Int) {

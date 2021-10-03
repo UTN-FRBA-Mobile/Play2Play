@@ -22,7 +22,8 @@ import com.p2p.presentation.truco.actions.TrucoAction.*
     JsonSubTypes.Type(value = YesIDo::class, name = "yes_i_do"),
     JsonSubTypes.Type(value = NoIDont::class, name = "no_i_dont"),
     JsonSubTypes.Type(value = GoToDeck::class, name = "go_to_deck"),
-    JsonSubTypes.Type(value = CustomFinalActionResponse::class, name = "truco_custom"),
+    JsonSubTypes.Type(value = ShowEnvido::class, name = "show_envido"),
+    JsonSubTypes.Type(value = CustomActionResponse::class, name = "truco_custom"),
 )
 abstract class TrucoAction(
     val hasReplication: Boolean,
@@ -78,7 +79,7 @@ abstract class TrucoAction(
         hasReplication = true,
         yesPoints = (previousActions.lastOrNull()?.yesPoints ?: 0) + 2,
         noPoints = previousActions.lastOrNull()?.yesPoints ?: 1
-    ) {
+    ), EnvidoGameAction {
 
         override fun message(context: Context) = context.getString(R.string.truco_ask_for_envido)
 
@@ -93,7 +94,7 @@ abstract class TrucoAction(
         hasReplication = true,
         yesPoints = (previousActions.lastOrNull()?.yesPoints ?: 0) + 3 ,
         noPoints = previousActions.lastOrNull()?.yesPoints ?: 1
-    ) {
+    ), EnvidoGameAction {
 
         override fun message(context: Context) = context.getString(R.string.truco_ask_for_real_envido)
 
@@ -105,7 +106,7 @@ abstract class TrucoAction(
         hasReplication = true,
         yesPoints = 30 - totalOpponentPoints,
         noPoints = previousActions.lastOrNull()?.yesPoints ?: 1
-    ) {
+    ), EnvidoGameAction {
 
         override fun message(context: Context) = context.getString(R.string.truco_ask_for_falta_envido)
     }
@@ -114,7 +115,7 @@ abstract class TrucoAction(
         hasReplication = true,
         yesPoints = 2,
         noPoints = 1
-    ) {
+    ), EnvidoGameAction {
         override fun message(context: Context): String = context.getString(R.string.truco_ask_for_envido_goes_first)
 
         override fun availableResponses() = TrucoActionAvailableResponses(
@@ -155,7 +156,17 @@ abstract class TrucoAction(
             TrucoActionAvailableResponses(iDo = false, iDont = false)
     }
 
-    class CustomFinalActionResponse(
+    data class ShowEnvido(val points: Int? = null) : TrucoAction(
+        hasReplication = false
+    ) {
+
+        override fun message(context: Context) = points?.toString() ?: context.getString(R.string.truco_answer_envido_are_good)
+
+        override fun availableResponses() =
+            TrucoActionAvailableResponses(iDo = false, iDont = false)
+    }
+
+    class CustomActionResponse(
         val message: String,
         hasReplication: Boolean = false
     ) : TrucoAction(

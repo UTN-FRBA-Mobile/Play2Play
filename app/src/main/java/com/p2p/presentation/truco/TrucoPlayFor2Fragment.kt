@@ -4,12 +4,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.activityViewModels
+import com.p2p.R
 import com.p2p.databinding.FragmentPlayTrucoFor2Binding
 import com.p2p.model.truco.Card
 import com.p2p.presentation.truco.cards.TrucoCardsHand
 import com.p2p.presentation.truco.cards.TrucoSingleOpponentMyCardsHand
 import com.p2p.presentation.truco.cards.TrucoSingleOpponentTheirCardsHand
+import org.w3c.dom.Text
 
 class TrucoPlayFor2Fragment : TrucoFragment<FragmentPlayTrucoFor2Binding>() {
 
@@ -51,8 +54,25 @@ class TrucoPlayFor2Fragment : TrucoFragment<FragmentPlayTrucoFor2Binding>() {
         else -> throw IllegalStateException("There's only myself and front player on truco for 2")
     }
 
+    override fun getPlayerBubbleWithTextView(playerPosition: TrucoPlayerPosition): Pair<View, TextView> = when (playerPosition) {
+        TrucoPlayerPosition.MY_SELF -> myActionBubble
+        TrucoPlayerPosition.FRONT -> {
+            val (bubble, text) = bubbleForPosition(TrucoPlayerPosition.FRONT)
+            requireView().findViewById<View>(bubble) to requireView().findViewById(text)
+        }
+        else -> throw IllegalStateException("There's only myself and front player on truco for 2")
+    }
+
+    override fun bubbleForPosition(playerPosition: TrucoPlayerPosition) = when (playerPosition) {
+        TrucoPlayerPosition.MY_SELF -> R.id.my_action_bubble to R.id.my_action_bubble_text
+        TrucoPlayerPosition.FRONT -> R.id.their_action_bubble to R.id.their_action_bubble_text
+        else -> throw IllegalStateException("There's only myself and front player on truco for 2")
+    }
+
+
     companion object {
 
         fun newInstance() = TrucoPlayFor2Fragment()
     }
+
 }
