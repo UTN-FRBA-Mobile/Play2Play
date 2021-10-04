@@ -289,13 +289,35 @@ abstract class TrucoViewModel(
 
     private fun hasRoundFinished(): Boolean {
         return playedCards.last().size == totalPlayers.requireValue() ||
-                hasRoundFinishedBecauseAceOfSwords()
+                hasRoundFinishedBecauseAceOfSwords() ||
+                hasRoundFinishedBecauseFullTeamLost()
     }
 
     private fun hasRoundFinishedBecauseAceOfSwords() = playedCards.last()
         .firstOrNull { it.card == TrucoCardsChallenger.aceOfSwords }
         ?.let { it.playerTeam in currentHandWinners || currentHandWinners.any { winner -> winner == null } }
         ?: false
+
+    private fun hasRoundFinishedBecauseFullTeamLost(): Boolean {
+        if (currentHandWinners.isEmpty()) {
+            return false // If there's no hand finished yet, skip this condition
+        }
+        val currentRoundPlayedCards = playedCards.last()
+        val teamWithRoundFinished = currentRoundPlayedCards
+            .groupBy { it.playerTeam.team }
+            .values
+            .firstOrNull { it.size == totalPlayers.requireValue() / 2 }
+            ?.first()
+            ?.playerTeam
+            ?.team
+            ?: return false // If there's no a full team that finished the round, skip this condition
+        val roundWinner = getRoundWinnerPlayerTeam(currentRoundPlayedCards)?.team
+        val hasLostCurrentRound = roundWinner != null && roundWinner != teamWithRoundFinished
+        val hasTieCurrentRound = roundWinner == null
+        val hasWonAnyRound = currentHandWinners.any { it?.team == teamWithRoundFinished }
+        val hasLostAnyRound = currentHandWinners.any { it != null && it.team != teamWithRoundFinished }
+        return (hasLostCurrentRound && !hasWonAnyRound) || (hasTieCurrentRound && hasLostAnyRound)
+    }
 
     private fun hasCurrentHandFinished(): Boolean {
         return currentHandWinners.size == MAX_HAND_ROUNDS ||
