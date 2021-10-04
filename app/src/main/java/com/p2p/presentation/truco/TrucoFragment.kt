@@ -38,7 +38,6 @@ abstract class TrucoFragment<VB : ViewBinding> :
     protected lateinit var headerBinding: ViewTrucoHeaderBinding
     protected lateinit var myCardsHand: TrucoCardsHand
 
-    protected val cardsImageCreator by lazy { CardImageCreator(requireContext()) }
     protected lateinit var roundViews: List<View>
 
     protected lateinit var myCardsViews: List<ImageView>
@@ -144,9 +143,7 @@ abstract class TrucoFragment<VB : ViewBinding> :
     }
 
     protected fun loadCardImages(cardViews: List<ImageView>, cards: List<Card?>) = cardViews.forEachIndexed { i, view ->
-        val (image, description) = cardsImageCreator.create(cards.getOrNull(i))
-        view.setImageBitmap(image)
-        view.contentDescription = description
+        CardImageCreator.loadCard(view, cards.getOrNull(i))
     }
 
     private fun showMyAction(action: TrucoAction) {
@@ -259,10 +256,9 @@ abstract class TrucoFragment<VB : ViewBinding> :
     }
 
     private fun onOtherPlayedCard(event: TrucoOtherPlayedCardEvent) {
-        val cardImage = cardsImageCreator.create(event.card)
         val roundAsIndex = event.round - 1
         val droppingPlace = getDroppingPlaces(event.playerPosition)[roundAsIndex]
-        getPlayerCardsHand(event.playerPosition).playCard(cardImage, droppingPlace, roundAsIndex)
+        getPlayerCardsHand(event.playerPosition).playCard(event.card, droppingPlace, roundAsIndex)
     }
 
     private fun finishRound(round: Int, result: TrucoRoundResult) {
