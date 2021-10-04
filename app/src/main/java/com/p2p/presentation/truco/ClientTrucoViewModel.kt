@@ -30,13 +30,14 @@ class ClientTrucoViewModel(
             is TrucoStartGameMessage -> {
                 // TODO: Set message attributes
                 playersTeams = message.playersTeams
+                _totalPlayers.value = playersTeams.size
                 startGame()
             }
             is TrucoCardsMessage -> onRecieveCards(message.cardsForPlayers)
         }
     }
 
-    override fun startGame() = goToPlay()
+    override fun startGame() = goToPlayTruco()
 
     private fun onRecieveCards(playersWithCards: List<PlayerWithCards>) {
         cardsByPlayer = playersWithCards

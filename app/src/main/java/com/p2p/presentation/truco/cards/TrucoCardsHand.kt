@@ -3,7 +3,6 @@ package com.p2p.presentation.truco.cards
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.content.Context
-import android.graphics.Bitmap
 import android.view.View
 import android.widget.ImageView
 import androidx.core.view.isVisible
@@ -38,7 +37,7 @@ abstract class TrucoCardsHand(
         droppingPlaces.firstOrNull { !it.isVisible }?.let { updateDroppingPlace(it) }
     }
 
-    fun playCard(cardImage: Pair<Bitmap, String>, droppingPlace: View, round: Int) {
+    fun playCard(card: Card, droppingPlace: View, round: Int) {
         val dragAndDropCardEntry = dragAndDropCards.toList()[round]
         val cardView = dragAndDropCardEntry.second.view
         val movingAnimation = cardView.animate()
@@ -64,8 +63,7 @@ abstract class TrucoCardsHand(
                         .setUpdateListener {
                             if (it.animatedFraction >= HALF_ANIMATION) {
                                 flipAnimation.setUpdateListener(null)
-                                cardView.setImageBitmap(cardImage.first)
-                                cardView.contentDescription = cardImage.second
+                                CardImageCreator.loadCard(cardView, card)
                             }
                         }
                         .start()

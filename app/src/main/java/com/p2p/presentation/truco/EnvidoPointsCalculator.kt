@@ -11,14 +11,12 @@ object EnvidoPointsCalculator {
         .groupBy { it.suit }
         .toList()
         .map { (_, cardsBySuite) ->
-            with(cardsBySuite.map { getCardValue(it) }) {
-                when (this.size) {
-                    1 -> this.first()
-                    else -> 20 + this.sorted().take(2).sum()
-                }
+            val cardsValues = cardsBySuite.map { getCardValue(it) }
+            when (cardsValues.size) {
+                1 -> cardsValues.first()
+                else -> 20 + cardsValues.sorted().take(2).sum()
             }
         }
-
         .maxOrNull()!!
 
     private fun getCardValue(card: Card): Int =

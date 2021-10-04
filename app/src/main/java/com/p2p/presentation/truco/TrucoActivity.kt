@@ -16,12 +16,6 @@ class TrucoActivity : GameActivity<TrucoSpecificGameEvent, TrucoViewModel>() {
 
     override fun goToCreate() = addFragment(CreateTrucoFragment.newInstance(), shouldAddToBackStack = false)
 
-    override fun goToPlay() {
-        viewModel.stopLoading()
-        //TODO it could be for 4
-        addFragment(TrucoPlayFor2Fragment.newInstance(), shouldAddToBackStack = false)
-    }
-
     override fun goToClientLobby() =
         addFragment(TrucoClientLobbyFragment.newInstance(), shouldAddToBackStack = false)
 
@@ -29,9 +23,17 @@ class TrucoActivity : GameActivity<TrucoSpecificGameEvent, TrucoViewModel>() {
         addFragment(ServerTrucoLobbyFragment.newInstance(), shouldAddToBackStack = false)
 
     override fun onGameEvent(event: TrucoSpecificGameEvent) {
-        super.onGameEvent(event)
         when (event) {
-            // TODO: Handle truco events
+            is TrucoGoToPlay -> goToPlay(event.playersQuantity)
+            else -> super.onGameEvent(event)
+        }
+    }
+
+    private fun goToPlay(playersQuantity: Int) {
+        viewModel.stopLoading()
+        when (playersQuantity) {
+            2 -> addFragment(TrucoPlayFor2Fragment.newInstance(), shouldAddToBackStack = false)
+            4 -> addFragment(TrucoPlayFor4Fragment.newInstance(), shouldAddToBackStack = false)
         }
     }
 
@@ -44,6 +46,11 @@ class TrucoActivity : GameActivity<TrucoSpecificGameEvent, TrucoViewModel>() {
         fun startJoin(activity: Activity, requestCode: Int, serverDevice: BluetoothDevice) {
             startJoin(TrucoActivity::class, activity, requestCode, serverDevice)
         }
+    }
+
+    // unused.
+    override fun goToPlay() {
+        Unit
     }
 
 }

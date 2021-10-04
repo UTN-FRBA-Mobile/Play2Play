@@ -3,7 +3,6 @@ package com.p2p.presentation.truco
 import androidx.annotation.CallSuper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.p2p.R
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.loadingMessages.LoadingTextRepository
@@ -19,15 +18,7 @@ import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.home.games.Game
 import com.p2p.presentation.truco.actions.EnvidoGameAction
 import com.p2p.presentation.truco.actions.TrucoAction
-import com.p2p.presentation.truco.actions.TrucoAction.Envido
-import com.p2p.presentation.truco.actions.TrucoAction.EnvidoGoesFirst
-import com.p2p.presentation.truco.actions.TrucoAction.FaltaEnvido
-import com.p2p.presentation.truco.actions.TrucoAction.NoIDont
-import com.p2p.presentation.truco.actions.TrucoAction.RealEnvido
-import com.p2p.presentation.truco.actions.TrucoAction.Retruco
-import com.p2p.presentation.truco.actions.TrucoAction.Truco
-import com.p2p.presentation.truco.actions.TrucoAction.ValeCuatro
-import com.p2p.presentation.truco.actions.TrucoAction.YesIDo
+import com.p2p.presentation.truco.actions.TrucoAction.*
 import com.p2p.presentation.truco.actions.TrucoActionAvailableResponses
 import com.p2p.presentation.truco.actions.TrucoGameAction
 
@@ -50,15 +41,14 @@ abstract class TrucoViewModel(
     protected lateinit var playersTeams: List<PlayerTeam>
 
     /** Set the quantity of players selected by the user when creating the game . */
-    //TODO this is a mock!!!!
-    private val _totalPlayers = MutableLiveData(2)
+    protected val _totalPlayers = MutableLiveData<Int>()
     val totalPlayers: LiveData<Int> = _totalPlayers
 
     /** Current cards for this player */
     protected val _myCards = MutableLiveData<List<Card>>()
     val myCards: LiveData<List<Card>> = _myCards
 
-    /** Cards being used by each players in a hand  */
+    /** Cards being used by each player in a hand  */
     protected var cardsByPlayer = listOf<PlayerWithCards>()
 
     private val _ourScore = MutableLiveData<Int>()
@@ -99,9 +89,9 @@ abstract class TrucoViewModel(
 
     abstract override fun startGame()
 
-    override fun goToPlay() {
+    fun goToPlayTruco() {
         gameAlreadyStarted = true
-        super.goToPlay()
+        dispatchSingleTimeEvent(TrucoGoToPlay(totalPlayers.requireValue()))
     }
 
     /** This will only be used by the server */
@@ -114,10 +104,8 @@ abstract class TrucoViewModel(
             is TrucoActionMessage -> {
                 disableButtonsIfApplies(message.action, actionPerformer = false)
                 updateActionValues(message.action)
-                val playerPosition =
-                    TrucoPlayerPosition.get(message.playerTeam, playersTeams, myPlayerTeam)
-                dispatchSingleTimeEvent(
-                    TrucoShowOpponentActionEvent(
+                val playerPosition = TrucoPlayerPosition.get(message.playerTeam, playersTeams, myPlayerTeam)
+                dispatchSingleTimeEvent(TrucoShowOpponentActionEvent(
                         message.action,
                         playerPosition
                     )
@@ -405,7 +393,7 @@ abstract class TrucoViewModel(
                 //TODO aca falta poner el mensaje dependiendo el turno de la ronda,
                 // dicen numeros los primeros, dsp el que gana dice numero, son mejores
                 // y dsp el resto son buenas
-                playerPosition to TrucoAction.CustomActionResponse(it.second.toString())
+                playerPosition to CustomActionResponse(it.second.toString())
             }.toMap()
 
         dispatchSingleTimeEvent(TrucoShowManyActionsEvent(actionsByPlayer))

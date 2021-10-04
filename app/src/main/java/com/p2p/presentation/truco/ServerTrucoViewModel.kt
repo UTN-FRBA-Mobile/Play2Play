@@ -14,8 +14,6 @@ import com.p2p.model.truco.Suit.SWORDS
 import com.p2p.model.truco.message.*
 import com.p2p.presentation.basegame.ConnectionType
 import com.p2p.presentation.extensions.requireValue
-import com.p2p.presentation.truco.actions.EnvidoGameAction
-import com.p2p.presentation.truco.actions.TrucoAction
 
 class ServerTrucoViewModel(
     connectionType: ConnectionType,
@@ -40,7 +38,7 @@ class ServerTrucoViewModel(
         )
         closeDiscovery()
         handOutCards()
-        goToPlay()
+        goToPlayTruco()
     }
 
     private fun setPlayersTeams(): List<PlayerTeam> {
@@ -53,10 +51,8 @@ class ServerTrucoViewModel(
     /** Sends all client players the cards for each one and picks self cards. */
     override fun handOutCards() {
         mixDeck()
-        cardsByPlayer = connectedPlayers
-            .map { player -> PlayerWithCards(player.second, cardsForPlayer()) }
-        val myCards = cardsByPlayer
-            .first { it.player == userName }
+        cardsByPlayer = connectedPlayers.map { player -> PlayerWithCards(player.second, cardsForPlayer()) }
+        val myCards = cardsByPlayer.first { it.player == userName }
         _myCards.value = myCards.cards
         connection.write(TrucoCardsMessage(cardsByPlayer))
     }

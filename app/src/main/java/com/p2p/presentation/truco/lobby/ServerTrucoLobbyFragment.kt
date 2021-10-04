@@ -27,12 +27,8 @@ class ServerTrucoLobbyFragment : BaseGameFragment<
     private lateinit var connectedPlayersTrucoAdapter: ConnectedPlayersTrucoAdapter
 
     override fun initValues() {
-        // TODO: Delete mock set total players from this observe and uncomment the other one
-        observe(gameViewModel.players) {
-            viewModel.setPlayers(it)
-            viewModel.setTotalPlayers(2)
-        }
-        // observe(gameViewModel.totalPlayers) { viewModel.setTotalPlayers(it) }
+        observe(gameViewModel.players) { viewModel.setPlayers(it) }
+        observe(gameViewModel.totalPlayers) { viewModel.setTotalPlayers(it) }
     }
 
     override fun initUI() {
@@ -42,9 +38,7 @@ class ServerTrucoLobbyFragment : BaseGameFragment<
         gameBinding.helpOrderPlayersDescription.text = resources
             .getString(R.string.tr_lobby_help_order_players)
             .fromHtml()
-        gameBinding.startGameButton.setOnClickListener {
-            gameViewModel.startGame()
-        }
+        gameBinding.startGameButton.setOnClickListener { gameViewModel.startGame() }
     }
 
     override fun setupObservers() {
@@ -70,9 +64,9 @@ class ServerTrucoLobbyFragment : BaseGameFragment<
     private fun setupPlayersGrid() = with(gameBinding.playersGrid) {
         adapter = activity?.let {
             ConnectedPlayersTrucoAdapter(it)
-                .also {
-                this@ServerTrucoLobbyFragment.connectedPlayersTrucoAdapter = it
-            }
+                .also { adapter ->
+                    this@ServerTrucoLobbyFragment.connectedPlayersTrucoAdapter = adapter
+                }
         }
     }
 

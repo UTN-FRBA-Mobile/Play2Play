@@ -5,23 +5,24 @@ import androidx.lifecycle.MutableLiveData
 import com.p2p.presentation.base.BaseViewModel
 
 class ServerTrucoLobbyViewModel: BaseViewModel<LobbyEvent>() {
+
     private val _isContinueButtonEnabled = MutableLiveData(false)
     val isContinueButtonEnabled: LiveData<Boolean> = _isContinueButtonEnabled
 
     private var players: List<String>? = null
     private var totalPlayers : Int? = null
 
-    fun setPlayers(setPlayers: List<String>) {
-        players = setPlayers
-        totalPlayers?.let { updatePlayers(setPlayers, it) }
+    fun setPlayers(players: List<String>) {
+        this.players = players
+        totalPlayers?.let { updateContinueButtonAvailability(players, it) }
     }
 
-    fun setTotalPlayers(setTotalPlayers: Int) {
-        totalPlayers = setTotalPlayers
-        players?.let { updatePlayers(it, setTotalPlayers) }
+    fun setTotalPlayers(totalPlayers: Int) {
+        this.totalPlayers = totalPlayers
+        players?.let { updateContinueButtonAvailability(it, totalPlayers) }
     }
 
-    private fun updatePlayers(players: List<String>, totalPlayers: Int) {
-        _isContinueButtonEnabled.value = players.size >= 2 && players.size % 2 == 0
+    private fun updateContinueButtonAvailability(players: List<String>, totalPlayers: Int) {
+        _isContinueButtonEnabled.value = players.size == totalPlayers
     }
 }
