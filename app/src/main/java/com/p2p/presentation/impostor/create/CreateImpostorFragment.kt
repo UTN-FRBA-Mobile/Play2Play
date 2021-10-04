@@ -61,7 +61,7 @@ class CreateImpostorFragment : BaseGameFragment<
         when (event) {
             is StartGame -> gameViewModel.createGame(event.keyWord)
             InvalidInput -> markErrorInput()
-            NoConnectedPlayers -> markErrorConnectedPlayers()
+            NotEnoughPlayers -> markErrorConnectedPlayers()
         }
 
     private fun markErrorInput() {
