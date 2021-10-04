@@ -16,7 +16,6 @@
         android:id="@+id/task_image"
         android:layout_width="@dimen/game_task_image_size"
         android:layout_height="@dimen/game_task_image_size"
-        android:layout_marginTop="@dimen/medium"
         android:gravity="center"
         app:tint="@color/colorPrimary"
         android:layout_marginBottom="@dimen/large_extra"
@@ -27,6 +26,7 @@
         style="@style/P2P_Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/large_extra"
         android:textAlignment="center"
         tools:text="@string/im_you_are_impostor"/>
 
@@ -35,7 +35,8 @@
         style="@style/P2P_Title_Extra"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/large"
+        android:layout_marginTop="@dimen/big"
+        android:textColor="@color/coral"
         tools:text="SIMULA" />
 
 

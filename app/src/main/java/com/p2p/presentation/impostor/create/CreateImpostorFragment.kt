@@ -26,6 +26,7 @@ class CreateImpostorFragment : BaseGameFragment<
     override fun initUI() {
         super.initUI()
         gameViewModel.startConnection()
+        gameBinding.startButton.alpha = DISABLED_BUTTON_ALPHA
         gameBinding.startButton.setOnClickListener {
             val keyWord = gameBinding.textField.value()
             viewModel.tryStartGame(keyWord)
@@ -40,6 +41,10 @@ class CreateImpostorFragment : BaseGameFragment<
                 updateConnectedPlayers(otherPlayers)
                 viewModel.updatePlayers(otherPlayers)
             }
+        }
+        observe(viewModel.startButtonEnabled) {
+            if (it) { gameBinding.startButton.alpha = ENABLED_BUTTON_ALPHA }
+            else { gameBinding.startButton.alpha = DISABLED_BUTTON_ALPHA }
         }
     }
 
@@ -78,5 +83,8 @@ class CreateImpostorFragment : BaseGameFragment<
 
         /** Create a new instance of the [CreateImpostorFragment]. */
         fun newInstance() = CreateImpostorFragment()
+
+        private const val DISABLED_BUTTON_ALPHA = 0.3F
+        private const val ENABLED_BUTTON_ALPHA = 1.0F
     }
 }
