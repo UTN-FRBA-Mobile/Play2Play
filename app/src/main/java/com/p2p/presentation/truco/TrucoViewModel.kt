@@ -58,7 +58,7 @@ abstract class TrucoViewModel(
     protected val _myCards = MutableLiveData<List<Card>>()
     val myCards: LiveData<List<Card>> = _myCards
 
-    /** Cards being used by each players in a hand  */
+    /** Cards being used by each player in a hand  */
     protected var cardsByPlayer = listOf<PlayerWithCards>()
 
     private val _ourScore = MutableLiveData<Int>()
