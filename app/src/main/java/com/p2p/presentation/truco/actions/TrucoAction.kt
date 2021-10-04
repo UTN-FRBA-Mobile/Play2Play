@@ -155,6 +155,20 @@ abstract class TrucoAction(
             TrucoActionAvailableResponses(iDo = false, iDont = false)
     }
 
+    class ShowEnvidoPoints(
+        val envidoPoints: Int,
+        val resourceId: Int? = null,
+        hasReplication: Boolean = false
+    ) : TrucoAction(
+        hasReplication = hasReplication
+    ) {
+
+        override fun message(context: Context) = resourceId?.let { context.getString(it, envidoPoints) } ?: envidoPoints.toString()
+
+        override fun availableResponses() =
+            TrucoActionAvailableResponses(iDo = false, iDont = false)
+    }
+
     class CustomActionResponse(
         val message: String,
         hasReplication: Boolean = false

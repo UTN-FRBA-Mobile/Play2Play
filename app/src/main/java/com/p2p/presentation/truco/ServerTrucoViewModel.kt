@@ -53,6 +53,7 @@ class ServerTrucoViewModel(
     /** Sends all client players the cards for each one and picks self cards. */
     override fun handOutCards() {
         mixDeck()
+        //TODO aca falta ordenarlos por turno cuando esten los turnos!
         cardsByPlayer = connectedPlayers
             .map { player -> PlayerWithCards(player.second, cardsForPlayer()) }
         val myCards = cardsByPlayer

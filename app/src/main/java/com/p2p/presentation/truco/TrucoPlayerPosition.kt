@@ -14,9 +14,9 @@ enum class TrucoPlayerPosition {
             2 -> if (player == mySelf) MY_SELF else FRONT
             4 -> when (getPlayersWithMyselfFirst(players, mySelf).indexOf(player)) {
                 0 -> MY_SELF
-                1 -> LEFT
+                1 -> RIGHT
                 2 -> FRONT
-                3 -> RIGHT
+                3 -> LEFT
                 else -> throw IllegalStateException("Invalid position on truco for 4")
             }
             else -> throw IllegalStateException("Truco for ${players.size} not implemented yet.")
