@@ -103,6 +103,6 @@
     <dimen name="truco_action_bubble_elevation">50dp</dimen>
 
     <!-- Impostor -->
-    <dimen name="game_task_image_size">120dp</dimen>
+    <dimen name="game_task_image_size">140dp</dimen>
 
 </resources>
