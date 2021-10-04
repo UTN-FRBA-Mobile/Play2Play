@@ -15,8 +15,7 @@ class CreateImpostorViewModel : BaseViewModel<ImpostorCreateEvents>() {
     fun tryStartGame(keyWord: String) {
         val event = when {
             keyWord.isBlank() -> InvalidInput
-            connectedPlayers?.isEmpty() ?: true  -> NotEnoughPlayers
-            !enoughPlayers() -> NotEnoughPlayers
+            connectedPlayers.isNullOrEmpty() || !enoughPlayers  -> NotEnoughPlayers
             else -> StartGame(keyWord)
         }
         dispatchSingleTimeEvent(event)
