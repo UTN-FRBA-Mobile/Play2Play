@@ -148,8 +148,6 @@ abstract class TrucoAction(
     object GoToDeck : TrucoAction(
         hasReplication = false
     ) {
-        const val points: Int = 1
-
         override fun message(context: Context) = context.getString(R.string.truco_go_to_deck_action)
 
         override fun availableResponses() =

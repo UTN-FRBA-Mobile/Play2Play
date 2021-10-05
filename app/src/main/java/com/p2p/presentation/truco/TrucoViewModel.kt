@@ -104,10 +104,7 @@ abstract class TrucoViewModel(
         super.receiveMessage(conversation)
         when (val message = conversation.lastMessage) {
             is TrucoActionMessage -> {
-                disableButtonsIfApplies(
-                    message.action,
-                    actionPerformer = myTeamDidAction(message.teamPlayer)
-                )
+                disableButtonsIfApplies(message.action, actionPerformer = myTeamDidAction(message.teamPlayer))
                 updateActionValues(message.action)
                 val playerPosition =
                     TrucoPlayerPosition.get(message.teamPlayer, teamPlayers, myTeamPlayer)

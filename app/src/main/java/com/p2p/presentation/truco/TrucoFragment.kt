@@ -169,11 +169,9 @@ abstract class TrucoFragment<VB : ViewBinding> :
             TrucoCardsHand.PlayingCard(cards[i], view)
         }
 
-    protected fun loadCardImages(cardViews: List<ImageView>, cards: List<Card?>) =
-        cardViews.forEachIndexed { i, view ->
+    protected fun loadCardImages(cardViews: List<ImageView>, cards: List<Card?>) = cardViews.forEachIndexed { i, view ->
             CardImageCreator.loadCard(view, cards.getOrNull(i))
-
-        }
+    }
 
     private fun showMyAction(action: TrucoAction) {
         val (bubbleBackground, bubbleText) = myActionBubble
