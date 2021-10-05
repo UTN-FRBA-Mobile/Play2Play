@@ -50,6 +50,10 @@ abstract class TrucoViewModel(
     private val _totalPlayers = MutableLiveData<Int>()
     val totalPlayers: LiveData<Int> = _totalPlayers
 
+    /** Set the quantity of points selected by the user when creating the game . */
+    private val _totalPoints = MutableLiveData<Int>()
+    val totalPoints: LiveData<Int> = _totalPoints
+
     /** Current cards for this player */
     protected val _myCards = MutableLiveData<List<Card>>()
     val myCards: LiveData<List<Card>> = _myCards
@@ -217,6 +221,10 @@ abstract class TrucoViewModel(
         _totalPlayers.value = players;
     }
 
+    fun setTotalPoints(points: Int) {
+        _totalPoints.value = points;
+    }
+
     private fun onRivalCardPlayed(playedCard: PlayedCard) {
         dispatchSingleTimeEvent(
             TrucoOtherPlayedCardEvent(
@@ -366,6 +374,7 @@ abstract class TrucoViewModel(
             }
         }
     }
+
 
     companion object {
 

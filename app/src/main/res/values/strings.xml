@@ -113,8 +113,11 @@
     <!-- Truco -->
     <!-- Create game -->
     <string name="truco_create_game_title">Crea tu partida de truco</string>
+    <string name="truco_create_game_subtitle">Selecciona la cantidad de jugadores</string>
     <string name="truco_create_game_two_player">2 jugadores</string>
     <string name="truco_create_game_four_player">4 jugadores</string>
+    <string name="truco_points">¿Hasta cuántos puntos van a jugar?</string>
+
 
     <!-- Play -->
     <string name="truco_card_dropping_place">Jugá tu carta</string>
