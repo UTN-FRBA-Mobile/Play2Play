@@ -1,7 +1,6 @@
-package com.p2p.presentation.truco
+package com.p2p.presentation.truco.envidoCalculator
 
 import com.p2p.model.truco.Card
-import com.p2p.model.truco.Suit
 
 object EnvidoPointsCalculator {
 

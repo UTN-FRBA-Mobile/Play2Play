@@ -65,4 +65,5 @@ dependencies {
     testImplementation testingLibraries.junit
     testImplementation testingLibraries.mockk
     testImplementation testingLibraries.robolectric
+    implementation "org.jetbrains.kotlin:kotlin-script-runtime:1.4.31"
 }
