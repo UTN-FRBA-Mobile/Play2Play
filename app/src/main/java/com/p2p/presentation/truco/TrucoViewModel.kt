@@ -375,6 +375,7 @@ abstract class TrucoViewModel(
             is YesIDo -> {
                 if (previousActions.last() is EnvidoGameAction) {
                     playEnvido()
+                    currentActionPoints = 1
                 }
             }
         }
@@ -439,6 +440,7 @@ abstract class TrucoViewModel(
             }
             is EnvidoGameAction -> {
                 updateScore(winner)
+                currentActionPoints = 1
             }
         }
     }
