@@ -358,8 +358,7 @@ abstract class TrucoViewModel(
                 //TODO mandar mensaje para jugar y sumar puntos
             }
             is TrucoAction.GoToDeck -> {
-                val winner = playersTeams.first { it.team != performedByTeam }.team
-                onHandFinished(winner)
+                looseRound(performedByTeam)
             }
         }
     }
@@ -367,10 +366,14 @@ abstract class TrucoViewModel(
     private fun onNoIDont(performedByTeam: Int) {
         when (previousActions.last()) {
             is Truco, is Retruco, is ValeCuatro -> {
-                val winner = playersTeams.first { it.team != performedByTeam }.team
-                onHandFinished(winner)
+                looseRound(performedByTeam)
             }
         }
+    }
+
+    private fun looseRound(performedByTeam: Int){
+        val winner = playersTeams.first { it.team != performedByTeam }.team
+        onHandFinished(winner)
     }
 
     companion object {
