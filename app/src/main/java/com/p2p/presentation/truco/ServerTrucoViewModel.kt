@@ -5,7 +5,7 @@ import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.loadingMessages.LoadingTextRepository
 import com.p2p.data.userInfo.UserSession
 import com.p2p.model.truco.Card
-import com.p2p.model.truco.PlayerTeam
+import com.p2p.model.truco.TeamPlayer
 import com.p2p.model.truco.PlayerWithCards
 import com.p2p.model.truco.Suit.CLUBS
 import com.p2p.model.truco.Suit.CUPS
@@ -32,25 +32,26 @@ class ServerTrucoViewModel(
     private var cards = listOf<Card>()
 
     override fun startGame() {
-        playersTeams = setPlayersTeams()
+        teamPlayers = setPlayersTeams()
         connection.write(
-            TrucoStartGameMessage(playersTeams)
+            TrucoStartGameMessage(teamPlayers)
         )
         closeDiscovery()
         handOutCards()
         goToPlayTruco()
     }
 
-    private fun setPlayersTeams(): List<PlayerTeam> {
+    private fun setPlayersTeams(): List<TeamPlayer> {
         return players.requireValue().take(totalPlayers.requireValue()).mapIndexed { index, element ->
             val teamNumber = index % PLAYERS_PER_TEAM + 1
-            PlayerTeam(element, teamNumber)
+            TeamPlayer(element, teamNumber)
         }
     }
 
     /** Sends all client players the cards for each one and picks self cards. */
     override fun handOutCards() {
         mixDeck()
+        //TODO aca falta ordenarlos por turno cuando esten los turnos!
         cardsByPlayer = connectedPlayers.map { player -> PlayerWithCards(player.second, cardsForPlayer()) }
         val myCards = cardsByPlayer.first { it.player == userName }
         _myCards.value = myCards.cards

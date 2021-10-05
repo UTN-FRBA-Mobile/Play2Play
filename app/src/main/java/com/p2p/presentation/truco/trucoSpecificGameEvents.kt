@@ -10,9 +10,14 @@ data class TrucoGoToPlay(val playersQuantity: Int) : TrucoSpecificGameEvent()
 
 data class TrucoShowMyActionEvent(val action: TrucoAction) : TrucoSpecificGameEvent()
 
-data class TrucoShowOpponentActionEvent(val action: TrucoAction, val playerPosition: TrucoPlayerPosition) : TrucoSpecificGameEvent()
+data class TrucoShowOpponentActionEvent(
+    val action: TrucoAction,
+    val playerPosition: TrucoPlayerPosition,
+    val canAnswer: Boolean
+) : TrucoSpecificGameEvent()
 
-data class TrucoShowManyActionsEvent(val actionByPlayer: Map<TrucoPlayerPosition, TrucoAction>) : TrucoSpecificGameEvent()
+data class TrucoShowManyActionsEvent(val actionByPlayer: Map<TrucoPlayerPosition, TrucoAction>) :
+    TrucoSpecificGameEvent()
 
 data class TrucoFinishRound(
     val round: Int,

@@ -29,8 +29,8 @@ class ClientTrucoViewModel(
         when (val message = conversation.lastMessage) {
             is TrucoStartGameMessage -> {
                 // TODO: Set message attributes
-                playersTeams = message.playersTeams
-                _totalPlayers.value = playersTeams.size
+                teamPlayers = message.teamPlayers
+                _totalPlayers.value = teamPlayers.size
                 startGame()
             }
             is TrucoCardsMessage -> onRecieveCards(message.cardsForPlayers)

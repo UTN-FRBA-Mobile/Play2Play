@@ -1,7 +1,6 @@
 package com.p2p.presentation.truco
 
 import com.p2p.model.truco.Card
-import com.p2p.model.truco.Suit
 
 object EnvidoPointsCalculator {
 
@@ -11,10 +10,10 @@ object EnvidoPointsCalculator {
         .groupBy { it.suit }
         .toList()
         .map { (_, cardsBySuite) ->
-            val cardsValues = cardsBySuite.map { getCardValue(it) }
-            when (cardsValues.size) {
-                1 -> cardsValues.first()
-                else -> 20 + cardsValues.sorted().take(2).sum()
+            val cardValues = cardsBySuite.map { getCardValue(it) }
+            when (cardValues.size) {
+                1 -> cardValues.first()
+                else -> 20 + cardValues.sorted().take(2).sum()
             }
         }
         .maxOrNull()!!
