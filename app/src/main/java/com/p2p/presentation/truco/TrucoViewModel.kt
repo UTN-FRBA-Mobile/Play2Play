@@ -357,6 +357,10 @@ abstract class TrucoViewModel(
             is YesIDo -> {
                 //TODO mandar mensaje para jugar y sumar puntos
             }
+            is TrucoAction.GoToDeck -> {
+                val winner = playersTeams.first { it.team != performedByTeam }.team
+                onHandFinished(winner)
+            }
         }
     }
 
