@@ -22,6 +22,6 @@ class ServerTrucoLobbyViewModel: BaseViewModel<LobbyEvent>() {
     }
 
     private fun updatePlayers(players: List<String>, totalPlayers: Int) {
-        _isContinueButtonEnabled.value = players.size >= 2 && players.size % 2 == 0
+        _isContinueButtonEnabled.value = players.size >= totalPlayers && players.size % 2 == 0
     }
 }
