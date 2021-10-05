@@ -34,7 +34,6 @@ import com.p2p.presentation.truco.actions.TrucoGameAction
 import com.p2p.presentation.truco.envidoCalculator.EnvidoMessageCalculator
 import com.p2p.presentation.truco.envidoCalculator.EnvidoPointsCalculator
 
-
 abstract class TrucoViewModel(
     connectionType: ConnectionType,
     userSession: UserSession,
@@ -53,8 +52,7 @@ abstract class TrucoViewModel(
     protected lateinit var playersTeams: List<PlayerTeam>
 
     /** Set the quantity of players selected by the user when creating the game . */
-    //TODO this is a mock!!!!
-    private val _totalPlayers = MutableLiveData(2)
+    private val _totalPlayers = MutableLiveData<Int>()
     val totalPlayers: LiveData<Int> = _totalPlayers
 
     /** Current cards for this player */
@@ -125,7 +123,7 @@ abstract class TrucoViewModel(
                         playerPosition
                     )
                 )
-                onAction(message.action, message.playerTeam.team)
+                onActionDone(message.action, message.playerTeam.team)
             }
             is TrucoPlayCardMessage -> onRivalCardPlayed(message.playedCard)
         }
@@ -145,7 +143,7 @@ abstract class TrucoViewModel(
         connection.write(TrucoActionMessage(action, myPlayerTeam))
         updateActionValues(action)
         dispatchSingleTimeEvent(TrucoShowMyActionEvent(action))
-        onAction(action, myPlayerTeam.team)
+        onActionDone(action, myPlayerTeam.team)
     }
 
     fun performEnvido(isReply: Boolean = false) =
@@ -373,7 +371,7 @@ abstract class TrucoViewModel(
         }
     }
 
-    open protected fun onAction(action: TrucoAction, performedByTeam: Int) {
+    open protected fun onActionDone(action: TrucoAction, performedByTeam: Int) {
         when (action) {
             is NoIDont -> onNoIDont(performedByTeam)
             is YesIDo -> {

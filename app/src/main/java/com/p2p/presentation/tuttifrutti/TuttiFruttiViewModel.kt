@@ -18,7 +18,7 @@ import com.p2p.presentation.basegame.KillGame
 import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.home.games.Game
 import com.p2p.presentation.tuttifrutti.create.categories.Category
-import com.p2p.presentation.tuttifrutti.finalscore.TuttiFruttiFinalScore
+import com.p2p.model.tuttifrutti.TuttiFruttiFinalScore
 
 abstract class TuttiFruttiViewModel(
     connectionType: ConnectionType,

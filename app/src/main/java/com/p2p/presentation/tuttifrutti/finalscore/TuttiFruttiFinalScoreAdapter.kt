@@ -7,6 +7,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.p2p.R
 import com.p2p.databinding.ViewTuttiFruttiFinalScoreItemBinding
+import com.p2p.model.tuttifrutti.TuttiFruttiFinalScore
 import com.p2p.utils.isEven
 
 class TuttiFruttiFinalScoreAdapter :
