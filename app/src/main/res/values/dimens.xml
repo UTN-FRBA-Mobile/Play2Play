@@ -104,6 +104,9 @@
     <dimen name="truco_action_bubble_padding">60dp</dimen>
     <dimen name="truco_action_bubble_elevation">50dp</dimen>
 
+    <!-- Impostor -->
+    <dimen name="game_task_image_size">140dp</dimen>
+
     <!-- Truco final score -->
     <dimen name="tr_final_score_image_size">120dp</dimen>
 </resources>
