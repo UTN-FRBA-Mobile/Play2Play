@@ -53,7 +53,7 @@ class ServerTrucoViewModel(
         mixDeck()
         //TODO aca falta ordenarlos por turno cuando esten los turnos!
         cardsByPlayer = connectedPlayers.map { player -> PlayerWithCards(player.second, cardsForPlayer()) }
-        val myCards = cardsByPlayer.first { it.player == userName }
+        val myCards = cardsByPlayer.first { it.name == userName }
         _myCards.value = myCards.cards
         connection.write(TrucoCardsMessage(cardsByPlayer))
     }

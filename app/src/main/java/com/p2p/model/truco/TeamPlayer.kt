@@ -1,6 +1,6 @@
 package com.p2p.model.truco
 
 data class TeamPlayer(
-    val player: String,
+    val name: String,
     val team: Int
 )

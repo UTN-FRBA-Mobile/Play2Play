@@ -10,9 +10,10 @@ import com.p2p.data.loadingMessages.LoadingTextRepository
 import com.p2p.data.userInfo.UserSession
 import com.p2p.model.base.message.Conversation
 import com.p2p.model.truco.Card
-import com.p2p.model.truco.TeamPlayer
 import com.p2p.model.truco.PlayerWithCards
-import com.p2p.model.truco.message.*
+import com.p2p.model.truco.TeamPlayer
+import com.p2p.model.truco.message.TrucoActionMessage
+import com.p2p.model.truco.message.TrucoPlayCardMessage
 import com.p2p.presentation.basegame.ConnectionType
 import com.p2p.presentation.basegame.GameViewModel
 import com.p2p.presentation.extensions.requireValue
@@ -79,7 +80,7 @@ abstract class TrucoViewModel(
     private var currentActionPoints: Int = 1
     protected var previousActions: List<TrucoAction> = emptyList()
 
-    protected val myTeamPlayer: TeamPlayer by lazy { teamPlayers.first { it.player == userName } }
+    protected val myTeamPlayer: TeamPlayer by lazy { teamPlayers.first { it.name == userName } }
     private val playedCards: MutableList<MutableList<PlayedCard>> = mutableListOf(mutableListOf())
     private val currentHandWinners: MutableList<TeamPlayer?> = mutableListOf()
 
@@ -103,7 +104,10 @@ abstract class TrucoViewModel(
         super.receiveMessage(conversation)
         when (val message = conversation.lastMessage) {
             is TrucoActionMessage -> {
-                disableButtonsIfApplies(message.action, actionPerformer = myTeamDidAction(message.teamPlayer))
+                disableButtonsIfApplies(
+                    message.action,
+                    actionPerformer = myTeamDidAction(message.teamPlayer)
+                )
                 updateActionValues(message.action)
                 val playerPosition =
                     TrucoPlayerPosition.get(message.teamPlayer, teamPlayers, myTeamPlayer)
@@ -179,7 +183,7 @@ abstract class TrucoViewModel(
     }
 
     private fun canAnswer(otherPlayer: TeamPlayer): Boolean =
-        teamPlayers.last { it.team != otherPlayer.team  } == myTeamPlayer
+        teamPlayers.last { it.team != otherPlayer.team } == myTeamPlayer
 
     private fun myTeamDidAction(otherPlayer: TeamPlayer): Boolean =
         otherPlayer.team == myTeamPlayer.team
@@ -377,24 +381,24 @@ abstract class TrucoViewModel(
 
     private fun playEnvido() {
         val pointsByPlayer = cardsByPlayer.map {
-            val playerTeam = teamPlayers.first { playerTeam -> playerTeam.player == it.player }
-            playerTeam to EnvidoPointsCalculator.getPoints(it.cards)
+            val teamPlayer = teamPlayers.first { teamPlayer -> teamPlayer.name == it.name }
+            teamPlayer to EnvidoPointsCalculator.getPoints(it.cards)
         }
 
         val winner = getWinner(pointsByPlayer)
-        val winnerTurn = cardsByPlayer.map { it.player }.indexOf(winner.first.player)
+        val winnerTurn = cardsByPlayer.map { it.name }.indexOf(winner.first.name)
 
         val actionsByPlayer: Map<TrucoPlayerPosition, TrucoAction> =
-            pointsByPlayer.map {
-                val playerPosition = TrucoPlayerPosition.get(it.first, teamPlayers, myTeamPlayer)
-                //The turn that the player has played
-                val playerTurn = cardsByPlayer.map { it.player }.indexOf(it.first.player)
+            pointsByPlayer.map { (teamPlayer, points) ->
+                val playerPosition = TrucoPlayerPosition.get(teamPlayer, teamPlayers, myTeamPlayer)
+                // The turn that the player has played
+                val playerTurn = cardsByPlayer.map { it.name }.indexOf(teamPlayer.name)
                 val action = if (playerTurn < winnerTurn || winnerTurn == 0) {
-                    ShowEnvidoPoints(it.second)
+                    ShowEnvidoPoints(points)
                 } else if (playerTurn == winnerTurn) {
-                    ShowEnvidoPoints(it.second, R.string.truco_answer_envido_are_better)
+                    ShowEnvidoPoints(points, R.string.truco_answer_envido_are_better)
                 } else {
-                    ShowEnvidoPoints(it.second, R.string.truco_answer_envido_are_good)
+                    ShowEnvidoPoints(points, R.string.truco_answer_envido_are_good)
                 }
                 playerPosition to action
             }.toMap()
@@ -409,10 +413,10 @@ abstract class TrucoViewModel(
 
         //TODO cardsByPlayer should be ordered by round turns
         val winnerName = cardsByPlayer.first { playerWithCards ->
-            playersWithMaxPoints.map { it.first.player }.contains(playerWithCards.player)
-        }.player
+            playersWithMaxPoints.map { it.first.name }.contains(playerWithCards.name)
+        }.name
 
-        return pointsByPlayer.first { it.first.player == winnerName }
+        return pointsByPlayer.first { it.first.name == winnerName }
     }
 
 

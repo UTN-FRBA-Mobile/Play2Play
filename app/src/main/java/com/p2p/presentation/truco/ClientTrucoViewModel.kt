@@ -44,7 +44,7 @@ class ClientTrucoViewModel(
         pickSelfCards(playersWithCards)
     }
     private fun pickSelfCards(playersWithCards: List<PlayerWithCards>) {
-        _myCards.value = playersWithCards.first { it.player == userName }.cards
+        _myCards.value = playersWithCards.first { it.name == userName }.cards
     }
 
 }
