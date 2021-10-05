@@ -100,10 +100,11 @@ abstract class TrucoAction(
         override fun availableResponses() = TrucoActionAvailableResponses(faltaEnvido = true)
     }
 
-    data class FaltaEnvido(val totalOpponentPoints: Int,
+    data class FaltaEnvido(val totalGamePoints: Int,
+                           val totalOpponentPoints: Int,
                            override val previousActions: List<TrucoAction>) : TrucoAction(
         hasReplication = true,
-        yesPoints = 30 - totalOpponentPoints,
+        yesPoints = totalGamePoints - totalOpponentPoints,
         noPoints = previousActions.lastOrNull()?.yesPoints ?: 1
     ) {
 

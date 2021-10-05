@@ -143,7 +143,7 @@ abstract class TrucoViewModel(
 
     // TODO: receive total opponent points
     fun performFaltaEnvido(isReply: Boolean = false) =
-        performOrReplyAction(isReply, FaltaEnvido(0, previousActions))
+        performOrReplyAction(isReply, FaltaEnvido(totalPoints.requireValue() , 0, previousActions))
 
     fun replyAction(action: TrucoAction) {
         _actionAvailableResponses.value = TrucoActionAvailableResponses.noActions()
