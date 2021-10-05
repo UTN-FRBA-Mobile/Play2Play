@@ -3,7 +3,6 @@ package com.p2p.presentation.truco
 import androidx.annotation.CallSuper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.p2p.R
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.loadingMessages.LoadingTextRepository
@@ -26,7 +25,6 @@ import com.p2p.presentation.truco.actions.TrucoAction.NoIDont
 import com.p2p.presentation.truco.actions.TrucoAction.RealEnvido
 import com.p2p.presentation.truco.actions.TrucoAction.Retruco
 import com.p2p.presentation.truco.actions.TrucoAction.Truco
-import com.p2p.presentation.truco.actions.TrucoAction.ShowEnvidoPoints
 import com.p2p.presentation.truco.actions.TrucoAction.ValeCuatro
 import com.p2p.presentation.truco.actions.TrucoAction.YesIDo
 import com.p2p.presentation.truco.actions.TrucoActionAvailableResponses

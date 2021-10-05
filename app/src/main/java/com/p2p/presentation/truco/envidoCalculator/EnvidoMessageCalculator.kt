@@ -3,6 +3,7 @@ package com.p2p.presentation.truco.envidoCalculator
 import com.p2p.R
 import com.p2p.model.truco.PlayerTeam
 import com.p2p.presentation.truco.actions.TrucoAction
+import com.p2p.presentation.truco.actions.TrucoAction.ShowEnvidoPoints
 
 object EnvidoMessageCalculator {
 
@@ -67,12 +68,12 @@ object EnvidoMessageCalculator {
         else showAreGood(playerScore)
 
     private fun showAreBetter(points: Int) =
-        TrucoAction.ShowEnvidoPoints(points, R.string.truco_answer_envido_are_better)
+        ShowEnvidoPoints(points, R.string.truco_answer_envido_are_better)
 
     private fun showAreGood(points: Int) =
-        TrucoAction.ShowEnvidoPoints(points, R.string.truco_answer_envido_are_good)
+        ShowEnvidoPoints(points, R.string.truco_answer_envido_are_good)
 
-    private fun showScore(points: Int) = TrucoAction.ShowEnvidoPoints(points)
+    private fun showScore(points: Int) = ShowEnvidoPoints(points)
     private fun showNothing() = null
 
 }
