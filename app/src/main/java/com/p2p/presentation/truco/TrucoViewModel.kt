@@ -29,7 +29,6 @@ import com.p2p.presentation.truco.actions.TrucoAction.YesIDo
 import com.p2p.presentation.truco.actions.TrucoActionAvailableResponses
 import com.p2p.presentation.truco.actions.TrucoGameAction
 
-
 abstract class TrucoViewModel(
     connectionType: ConnectionType,
     userSession: UserSession,
@@ -48,8 +47,7 @@ abstract class TrucoViewModel(
     protected lateinit var playersTeams: List<PlayerTeam>
 
     /** Set the quantity of players selected by the user when creating the game . */
-    //TODO this is a mock!!!!
-    private val _totalPlayers = MutableLiveData<Int>(2)
+    private val _totalPlayers = MutableLiveData<Int>()
     val totalPlayers: LiveData<Int> = _totalPlayers
 
     /** Current cards for this player */

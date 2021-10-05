@@ -8,9 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.p2p.R
 import com.p2p.databinding.FragmentTuttiFruttiFinalScoreBinding
 import com.p2p.presentation.basegame.BaseGameFragment
-import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.tuttifrutti.TuttiFruttiViewModel
-import com.p2p.utils.Logger
 
 class FinalScoreTuttiFruttiFragment : BaseGameFragment<
         FragmentTuttiFruttiFinalScoreBinding,
