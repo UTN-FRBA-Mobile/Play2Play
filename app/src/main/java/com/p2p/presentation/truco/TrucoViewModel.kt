@@ -391,7 +391,7 @@ abstract class TrucoViewModel(
 
         val winner = getWinner(pointsByPlayer, roundOrder)
 
-        val actionsByPlayer: Map<PlayerTeam, TrucoAction?> = if(requireNotNull(_totalPlayers.value) == 2){
+        val actionsByPlayer: Map<PlayerTeam, TrucoAction?> = if(roundOrder.size == 2){
             EnvidoMessageCalculator.envidoMessagesFor2(playersWithPoints)
         }else{
             EnvidoMessageCalculator.envidoMessagesFor4(playersWithPoints)
