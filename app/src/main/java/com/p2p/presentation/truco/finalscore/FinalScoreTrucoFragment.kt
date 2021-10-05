@@ -23,9 +23,6 @@ class FinalScoreTrucoFragment : BaseGameFragment<
     override val gameInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentTrucoFinalScoreBinding =
         FragmentTrucoFinalScoreBinding::inflate
 
-    private var resultOurScore : Int = 0
-    private var resultTheirScore : Int = 0
-
     override fun initUI() {
         super.initUI()
         setupObservers()
@@ -35,22 +32,25 @@ class FinalScoreTrucoFragment : BaseGameFragment<
         super.setupObservers()
         with(gameViewModel) {
             observe(ourScore) {
-                resultOurScore = ourScore.value!!
                 viewModel.setOurScore(it)
             }
             observe(theirScore) {
-                resultTheirScore = theirScore.value!!
                 viewModel.setTheirScore(it)
             }
         }
-        observe(viewModel.isWinner) {
-            gameBinding.resultText.text = getResultText(it)
-            gameBinding.resultText.setTextColor(ContextCompat.getColor(requireContext(), getResultColorText(it)))
-            gameBinding.resultIcon.setImageResource(getResultIcon(it))
-            gameBinding.resultBackground.setBackgroundColor(ContextCompat.getColor(requireContext(), getResultBackground(it)))
-            gameBinding.resultPoints.text = resources.getString(R.string.tr_points, resultOurScore)
-            gameBinding.resultPoints.setTextColor(ContextCompat.getColor(requireContext(), getResultPointsColorText(it)))
-            gameBinding.otherTeamPoints.text = resources.getString(R.string.tr_points, resultTheirScore)
+        observe(viewModel.finalResult) {
+            val isWinner = it.isWinner!!
+            gameBinding.resultText.text = getResultText(isWinner)
+            gameBinding.resultText.setTextColor(
+                ContextCompat.getColor(requireContext(), getResultColorText(isWinner))
+            )
+            gameBinding.resultIcon.setImageResource(getResultIcon(isWinner))
+            gameBinding.resultBackground.setBackgroundColor(
+                ContextCompat.getColor(requireContext(), getResultBackground(isWinner))
+            )
+            gameBinding.resultPoints.text = resources.getString(R.string.tr_points, it.ourScore)
+            gameBinding.resultPoints.setTextColor(ContextCompat.getColor(requireContext(), getResultPointsColorText(isWinner)))
+            gameBinding.otherTeamPoints.text = resources.getString(R.string.tr_points, it.theirScore)
         }
     }
 
