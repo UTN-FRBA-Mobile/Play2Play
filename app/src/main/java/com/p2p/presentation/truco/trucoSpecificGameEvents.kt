@@ -8,7 +8,9 @@ sealed class TrucoSpecificGameEvent : SpecificGameEvent()
 
 class TrucoShowMyActionEvent(val action: TrucoAction) : TrucoSpecificGameEvent()
 
-class TrucoShowOpponentActionEvent(val action: TrucoAction) : TrucoSpecificGameEvent()
+class TrucoShowOpponentActionEvent(val action: TrucoAction, val playerPosition: TrucoPlayerPosition) : TrucoSpecificGameEvent()
+
+class TrucoShowManyActionsEvent(val actionByPlayer: Map<TrucoPlayerPosition, TrucoAction>) : TrucoSpecificGameEvent()
 
 class TrucoFinishRound(
     val round: Int,
@@ -22,5 +24,6 @@ data class TrucoOtherPlayedCardEvent(
     val card: Card,
     val round: Int
 ) : TrucoSpecificGameEvent()
+
 
 object TrucoTakeTurnEvent : TrucoSpecificGameEvent()

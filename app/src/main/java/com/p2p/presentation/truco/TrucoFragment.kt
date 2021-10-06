@@ -43,8 +43,17 @@ abstract class TrucoFragment<VB : ViewBinding> :
     protected lateinit var myCardsViews: List<ImageView>
     protected lateinit var myDroppingPlacesViews: List<View>
 
-    private val shortDuration by lazy { resources.getInteger(android.R.integer.config_shortAnimTime).toLong() }
-    private val longDuration by lazy { resources.getInteger(android.R.integer.config_longAnimTime).toLong() }
+    private val shortDuration by lazy {
+        resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
+    }
+    private val longDuration by lazy {
+        resources.getInteger(android.R.integer.config_longAnimTime).toLong()
+    }
+
+    protected val myActionBubble: Pair<View, TextView> by lazy {
+        val (view, textView) = bubbleForPosition(TrucoPlayerPosition.MY_SELF)
+        requireView().findViewById<View>(view) to requireView().findViewById(textView)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -65,7 +74,8 @@ abstract class TrucoFragment<VB : ViewBinding> :
     override fun initUI() = with(requireView()) {
         super.initUI()
         headerBinding = ViewTrucoHeaderBinding.bind(gameBinding.root)
-        roundViews = listOf(headerBinding.firstRound, headerBinding.secondRound, headerBinding.thirdRound)
+        roundViews =
+            listOf(headerBinding.firstRound, headerBinding.secondRound, headerBinding.thirdRound)
         myCardsViews = listOf(
             findViewById(R.id.my_left_card),
             findViewById(R.id.my_middle_card),
@@ -110,6 +120,8 @@ abstract class TrucoFragment<VB : ViewBinding> :
 
     abstract fun getPlayerCardsHand(playerPosition: TrucoPlayerPosition): TrucoCardsHand
 
+    abstract fun getPlayerBubbleWithTextView(playerPosition: TrucoPlayerPosition): Pair<View, TextView>
+
     abstract fun getDroppingPlaces(playerPosition: TrucoPlayerPosition): List<View>
 
     abstract fun hideAllActions()
@@ -117,6 +129,11 @@ abstract class TrucoFragment<VB : ViewBinding> :
     @CallSuper
     protected open fun onGameEvent(event: GameEvent) = when (event) {
         is TrucoShowMyActionEvent -> showMyAction(event.action)
+        is TrucoShowOpponentActionEvent -> {
+            val (bubble, text) = getPlayerBubbleWithTextView(event.playerPosition)
+            showRivalAction(bubble, text, event.action)
+        }
+        is TrucoShowManyActionsEvent -> showManyActions(event.actionByPlayer)
         is TrucoFinishRound -> finishRound(event.round, event.result)
         is TrucoNewHand -> {
             // TODO: reorder the cards and give the new ones.
@@ -133,23 +150,37 @@ abstract class TrucoFragment<VB : ViewBinding> :
         hideBubbleView(bubbleTextView)
     }
 
-    protected fun showRivalAction(rivalActionBubble: View, rivalActionTextView: TextView, action: TrucoAction) {
+    abstract fun bubbleForPosition(playerPosition: TrucoPlayerPosition): Pair<Int, Int>
+
+    protected fun showRivalAction(
+        rivalActionBubble: View,
+        rivalActionTextView: TextView,
+        action: TrucoAction
+    ) {
         showAction(rivalActionBubble, rivalActionTextView, action)
         updateActionAvailableResponses(action.availableResponses())
     }
 
-    protected fun getPlayingCards(cardsViews: List<ImageView>, cards: List<Card>) = cardsViews.mapIndexed { i, view ->
-        TrucoCardsHand.PlayingCard(cards[i], view)
-    }
+    protected fun getPlayingCards(cardsViews: List<ImageView>, cards: List<Card>) =
+        cardsViews.mapIndexed { i, view ->
+            TrucoCardsHand.PlayingCard(cards[i], view)
+        }
 
     protected fun loadCardImages(cardViews: List<ImageView>, cards: List<Card?>) = cardViews.forEachIndexed { i, view ->
         CardImageCreator.loadCard(view, cards.getOrNull(i))
     }
 
     private fun showMyAction(action: TrucoAction) {
-        val bubbleBackground = requireView().findViewById<View>(R.id.my_action_bubble)
-        val bubbleText = requireView().findViewById<TextView>(R.id.my_action_bubble_text)
+        val (bubbleBackground, bubbleText) = myActionBubble
         showAction(bubbleBackground, bubbleText, action)
+    }
+
+
+    private fun showManyActions(actionsByPlayer: Map<TrucoPlayerPosition, TrucoAction>) {
+        actionsByPlayer.forEach { (player, action) ->
+            val (bubble, textView) = getPlayerBubbleWithTextView(player)
+            showRivalAction(bubble, textView, action)
+        }
     }
 
     private fun showAction(bubbleBackground: View, bubbleText: TextView, action: TrucoAction) {
@@ -193,7 +224,11 @@ abstract class TrucoFragment<VB : ViewBinding> :
         .setOnEndListener(onEndListener)
         .start()
 
-    private fun showActionAfterVisibilityCheck(bubbleBackground: View, bubbleText: TextView, action: TrucoAction) {
+    private fun showActionAfterVisibilityCheck(
+        bubbleBackground: View,
+        bubbleText: TextView,
+        action: TrucoAction
+    ) {
         (parentFragmentManager.findFragmentByTag(ACTIONS_BOTTOM_SHEET_TAG) as BottomSheetDialogFragment?)?.dismiss()
         bubbleText.text = action.message(requireContext())
         showBubbleView(bubbleBackground)
@@ -219,7 +254,9 @@ abstract class TrucoFragment<VB : ViewBinding> :
         hideAllActions()
         requireView().findViewById<View>(R.id.action_background).animate()
             .alpha(0f)
-            .setOnEndListener { requireView().findViewById<View>(R.id.action_background).isVisible = false }
+            .setOnEndListener {
+                requireView().findViewById<View>(R.id.action_background).isVisible = false
+            }
             .start()
         requireView().findViewById<View>(R.id.actions_responses).fadeOut()
     }

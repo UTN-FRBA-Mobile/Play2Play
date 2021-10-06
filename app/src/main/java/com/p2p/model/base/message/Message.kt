@@ -2,17 +2,14 @@ package com.p2p.model.base.message
 
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
-import com.p2p.model.truco.message.TrucoCardsMessage
 import com.p2p.model.impostor.message.ImpostorAssignWord
 import com.p2p.model.impostor.message.ImpostorEndGame
-import com.p2p.model.truco.message.TrucoActionMessage
-import com.p2p.model.truco.message.TrucoPlayCardMessage
+import com.p2p.model.truco.message.*
 import com.p2p.model.tuttifrutti.message.FinalScoreMessage
 import com.p2p.model.tuttifrutti.message.TuttiFruttiEnoughForMeEnoughForAllMessage
 import com.p2p.model.tuttifrutti.message.TuttiFruttiSendWordsMessage
 import com.p2p.model.tuttifrutti.message.TuttiFruttiStartGameMessage
 import com.p2p.model.tuttifrutti.message.TuttiFruttiStartRoundMessage
-import com.p2p.model.truco.message.TrucoStartGameMessage
 import java.io.Serializable
 
 @JsonTypeInfo(
