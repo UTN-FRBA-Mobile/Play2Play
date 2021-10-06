@@ -259,11 +259,11 @@ abstract class TrucoViewModel(
         val roundWinnerPlayerTeam = getRoundWinnerPlayerTeam(currentRoundPlayedCards)
         val roundResult = TrucoRoundResult.get(roundWinnerPlayerTeam, myPlayerTeam)
         currentHandWinners.add(roundWinnerPlayerTeam)
-        dispatchSingleTimeEvent(TrucoFinishRound(round, roundResult))
 
         if (hasCurrentHandFinished()) {
             onHandFinished()
         } else {
+            dispatchSingleTimeEvent(TrucoFinishRound(round, roundResult))
             nextTurn(roundWinnerPlayerTeam)
         }
     }

@@ -26,9 +26,6 @@ import com.p2p.presentation.truco.actions.TrucoActionAvailableResponses
 import com.p2p.presentation.truco.actions.TrucoActionsBottomSheetFragment
 import com.p2p.presentation.truco.cards.CardImageCreator
 import com.p2p.presentation.truco.cards.TrucoCardsHand
-import com.p2p.presentation.truco.create.points.CreateTrucoPointsFragment
-import com.p2p.presentation.truco.finalscore.FinalScoreTrucoFragment
-import com.p2p.presentation.tuttifrutti.lobby.TuttiFruttiServerLobbyFragment
 import com.p2p.utils.setOnEndListener
 
 abstract class TrucoFragment<VB : ViewBinding> :
