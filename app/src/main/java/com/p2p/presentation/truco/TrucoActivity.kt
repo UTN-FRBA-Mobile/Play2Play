@@ -6,7 +6,11 @@ import androidx.activity.viewModels
 import com.p2p.presentation.basegame.GameActivity
 import com.p2p.presentation.truco.lobby.ServerTrucoLobbyFragment
 import com.p2p.presentation.truco.create.CreateTrucoFragment
+import com.p2p.presentation.truco.finalscore.FinalScoreTrucoFragment
 import com.p2p.presentation.truco.lobby.TrucoClientLobbyFragment
+import com.p2p.presentation.tuttifrutti.GoToFinalScore
+import com.p2p.presentation.tuttifrutti.GoToReview
+import com.p2p.presentation.tuttifrutti.review.TuttiFruttiReviewFragment
 
 class TrucoActivity : GameActivity<TrucoSpecificGameEvent, TrucoViewModel>() {
 
@@ -31,7 +35,10 @@ class TrucoActivity : GameActivity<TrucoSpecificGameEvent, TrucoViewModel>() {
     override fun onGameEvent(event: TrucoSpecificGameEvent) {
         super.onGameEvent(event)
         when (event) {
-            // TODO: Handle truco events
+            is TrucoFinishGame -> addFragment(
+                FinalScoreTrucoFragment.newInstance(),
+                shouldAddToBackStack = false
+            )
         }
     }
 

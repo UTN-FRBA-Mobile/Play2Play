@@ -3,7 +3,6 @@ package com.p2p.presentation.truco.create.points
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.p2p.presentation.base.BaseViewModel
-import com.p2p.presentation.tuttifrutti.review.TuttiFruttiReviewRoundAdapter
 
 class CreateTrucoPointsViewModel : BaseViewModel<Unit>() {
 

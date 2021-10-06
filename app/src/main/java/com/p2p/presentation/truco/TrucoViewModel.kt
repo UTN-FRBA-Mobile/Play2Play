@@ -176,6 +176,10 @@ abstract class TrucoViewModel(
         _trucoButtonEnabled.value = true
     }
 
+    private fun finishGame() {
+        dispatchSingleTimeEvent(TrucoFinishGame)
+    }
+
     /**
      * Updates currentActionPoints and currentAction.
      * currentAction value only will be recorded if the action received is not yes or no, in order to keep the history.
@@ -218,11 +222,11 @@ abstract class TrucoViewModel(
     }
 
     fun setTotalPlayers(players: Int) {
-        _totalPlayers.value = players;
+        _totalPlayers.value = players
     }
 
     fun setTotalPoints(points: Int) {
-        _totalPoints.value = points;
+        _totalPoints.value = points
     }
 
     private fun onRivalCardPlayed(playedCard: PlayedCard) {
@@ -267,7 +271,7 @@ abstract class TrucoViewModel(
     private fun onHandFinished(handWinnerPlayerTeam: Int = getCurrentHandWinner().team) {
         val score = if (handWinnerPlayerTeam == myPlayerTeam.team) _ourScore else _theirScore
         score.value = score.requireValue() + currentActionPoints
-        newHand()
+        if (score.value!! >= _totalPoints.value!!) { finishGame() } else { newHand() }
     }
 
     private fun hasRoundFinished(): Boolean {
