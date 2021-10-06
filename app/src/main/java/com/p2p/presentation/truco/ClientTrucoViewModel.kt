@@ -30,6 +30,8 @@ class ClientTrucoViewModel(
             is TrucoStartGameMessage -> {
                 // TODO: Set message attributes
                 playersTeams = message.playersTeams
+                setTotalPlayers(message.totalPlayers)
+                setTotalPoints(message.totalPoints)
                 startGame()
             }
             is TrucoCardsMessage -> pickSelfCards(message.cardsForPlayers)
