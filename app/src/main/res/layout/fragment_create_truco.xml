@@ -14,24 +14,34 @@
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:text="@string/truco_create_game_title"
-        android:layout_marginTop="@dimen/medium"
+        android:layout_marginTop="@dimen/large"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintTop_toTopOf="@id/guideline_top" />
+
+    <TextView
+        android:id="@+id/create_truco_subtitle"
+        style="@style/P2P_Description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="@string/truco_create_game_subtitle"
+        android:layout_marginTop="@dimen/medium"
+        app:layout_constraintStart_toStartOf="@id/guideline_begin"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintTop_toBottomOf="@id/create_truco_title" />
 
     <RelativeLayout
         android:id="@+id/create_two_player"
         android:layout_width="@dimen/truco_create_game_card"
         android:layout_height="@dimen/truco_create_game_card"
-        android:layout_marginTop="@dimen/huge_extra"
-        app:layout_constraintTop_toBottomOf="@id/create_truco_title"
+        android:layout_marginTop="@dimen/largest_extra"
+        app:layout_constraintTop_toBottomOf="@id/create_truco_subtitle"
         app:layout_constraintBottom_toTopOf="@id/create_four_player"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         android:paddingBottom="@dimen/medium_extra"
-
-        android:background="@drawable/full_border"
-        >
+        android:background="@drawable/full_border" >
 
         <TextView
             android:id="@+id/two_player_text"
@@ -51,8 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/largest"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            />
+            android:layout_centerHorizontal="true" />
     </RelativeLayout>
 
 
@@ -62,7 +71,7 @@
         android:layout_height="@dimen/truco_create_game_card"
         app:layout_constraintTop_toBottomOf="@id/create_two_player"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
-        android:layout_marginTop="@dimen/big_extra"
+        android:layout_marginTop="@dimen/largest_extra"
         app:layout_constraintEnd_toStartOf="@id/guideline_end"
         android:background="@drawable/full_border" >
 
@@ -85,8 +94,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/medium_extra"
             android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            />
+            android:layout_centerHorizontal="true" />
 
     </RelativeLayout>
 

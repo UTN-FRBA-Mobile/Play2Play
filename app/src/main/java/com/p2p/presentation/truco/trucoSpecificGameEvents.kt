@@ -34,3 +34,5 @@ data class TrucoOtherPlayedCardEvent(
 
 
 object TrucoTakeTurnEvent : TrucoSpecificGameEvent()
+
+object TrucoFinishGame : TrucoSpecificGameEvent()

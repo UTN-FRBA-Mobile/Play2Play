@@ -100,8 +100,7 @@ abstract class TrucoAction(
         noPoints = previousActions.lastOrNull()?.yesPoints ?: 1
     ), EnvidoGameAction {
 
-        override fun message(context: Context) =
-            context.getString(R.string.truco_ask_for_real_envido)
+        override fun message(context: Context) = context.getString(R.string.truco_ask_for_real_envido)
 
         override fun availableResponses() = TrucoActionAvailableResponses(faltaEnvido = true)
     }
@@ -116,8 +115,7 @@ abstract class TrucoAction(
         noPoints = previousActions.lastOrNull()?.yesPoints ?: 1
     ), EnvidoGameAction {
 
-        override fun message(context: Context) =
-            context.getString(R.string.truco_ask_for_falta_envido)
+        override fun message(context: Context) = context.getString(R.string.truco_ask_for_falta_envido)
 
         companion object {
             fun calculatePoints(opponentPoints: Int, selfPoints: Int) =
@@ -133,8 +131,7 @@ abstract class TrucoAction(
         yesPoints = 2,
         noPoints = 1
     ), EnvidoGameAction {
-        override fun message(context: Context): String =
-            context.getString(R.string.truco_ask_for_envido_goes_first)
+        override fun message(context: Context): String = context.getString(R.string.truco_ask_for_envido_goes_first)
 
         override fun availableResponses() = TrucoActionAvailableResponses(
             envido = true,

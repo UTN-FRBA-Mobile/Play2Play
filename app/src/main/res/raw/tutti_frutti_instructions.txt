@@ -1,12 +1,12 @@
-Para iniciar el juego, el creador seleccionará al menos 5 categorías y la cantidad de rondas a jugar.
-Al iniciar la partida, a cada jugador le aparecerá una letra y las categorias previamente seleccionadas.
+Para iniciar el juego, lx creadorx seleccionará al menos 5 categorías y la cantidad de rondas a jugar.
+Al iniciar la partida, a cada jugadorx le aparecerá una letra y las categorias previamente seleccionadas.
 
 El juego consiste en completar las categorías con palabras que comiencen con la letra indicada por la ronda.
-Al finalizar, se presionará _"basta para mi, basta para todos"_, dando por terminada la ronda para todos los jugadores.
+Al finalizar, se presionará _"basta para mi, basta para todxs"_, dando por terminada la ronda para todxs los jugadores.
 
-Al final de cada ronda, al creador le aparecerán las palabras escritas por los participantes, y se procederá a debatir entre todos los jugadores los puntos a asignar. Los puntos sugeridos son:
+Al final de cada ronda, a lx creadorx le aparecerán las palabras escritas por lxs participantes, y se procederá a debatir entre todxs lxs jugadorxs los puntos a asignar. Los puntos sugeridos son:
   - 0 para palabras no completadas o con letra incorrecta.
   - 5 para palabras repetidas.
-  - 10 para palabras que ningún jugador haya puesto.
+  - 10 para palabras que ningúnx jugadorx haya puesto.
   
-Luego de realizar la puntuación, se procederá a la siguiente ronda de la misma forma, y al finalizar todas las rondas quien haya ganado más puntaje será el ganador!
+Luego de realizar la puntuación, se procederá a la siguiente ronda de la misma forma, ¡y al finalizar todas las rondas quien haya ganado más puntaje será quien gane!
