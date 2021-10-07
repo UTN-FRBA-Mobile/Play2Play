@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="@color/colorBackground">
+
+    <include layout="@layout/view_guidelines" />
+
+    <TextView
+        android:id="@+id/rounds_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/large"
+        android:layout_marginBottom="@dimen/big_extra"
+        android:text="@string/truco_points"
+        android:textColor="@color/green_black"
+        android:textAlignment="center"
+        android:textSize="@dimen/font_large"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toTopOf="@id/number"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintStart_toEndOf="@id/guideline_begin"
+        app:layout_constraintTop_toTopOf="@id/guideline_top" />
+
+    <ImageButton
+        android:id="@+id/arrow_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/medium_extra"
+        android:background="@null"
+        android:contentDescription="@string/decrease_number"
+        android:paddingTop="@dimen/small"
+        android:scaleType="center"
+        android:src="@drawable/ic_baseline_arrow_left"
+        android:tint="@color/button_points_color"
+        app:layout_constraintBottom_toTopOf="@id/create_button"
+        app:layout_constraintEnd_toStartOf="@id/number"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rounds_text" />
+
+    <TextView
+        android:id="@+id/number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textColor="@color/green_eden"
+        android:textSize="@dimen/font_huge"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/create_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rounds_text"
+        tools:text="5" />
+
+    <ImageButton
+        android:id="@+id/arrow_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/medium_extra"
+        android:background="@null"
+        android:contentDescription="@string/increase_number"
+        android:paddingStart="@dimen/small"
+        android:paddingTop="@dimen/small"
+        android:paddingEnd="@dimen/small"
+        android:src="@drawable/ic_baseline_arrow_right"
+        android:tint="@color/button_points_color"
+        app:layout_constraintBottom_toTopOf="@id/create_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/number"
+        app:layout_constraintTop_toBottomOf="@id/rounds_text" />
+
+    <Button
+        android:id="@+id/create_button"
+        style="@style/Widget.P2P.Button.SecondOptionButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/big_extra"
+        android:paddingStart="@dimen/big_extra"
+        android:paddingEnd="@dimen/big_extra"
+        android:text="@string/games_create"
+        android:textAlignment="center"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toBottomOf="@id/guideline_bottom"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintStart_toStartOf="@id/guideline_begin"
+        app:layout_constraintTop_toBottomOf="@id/number" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

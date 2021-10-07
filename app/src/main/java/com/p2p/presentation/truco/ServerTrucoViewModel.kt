@@ -11,10 +11,11 @@ import com.p2p.model.truco.Suit.CLUBS
 import com.p2p.model.truco.Suit.CUPS
 import com.p2p.model.truco.Suit.GOLDS
 import com.p2p.model.truco.Suit.SWORDS
-import com.p2p.model.truco.message.TrucoCardsMessage
-import com.p2p.model.truco.message.TrucoStartGameMessage
+import com.p2p.model.truco.message.*
 import com.p2p.presentation.basegame.ConnectionType
 import com.p2p.presentation.extensions.requireValue
+import com.p2p.presentation.truco.actions.EnvidoGameAction
+import com.p2p.presentation.truco.actions.TrucoAction
 
 class ServerTrucoViewModel(
     connectionType: ConnectionType,
@@ -35,7 +36,7 @@ class ServerTrucoViewModel(
     override fun startGame() {
         playersTeams = setPlayersTeams()
         connection.write(
-            TrucoStartGameMessage(playersTeams)
+            TrucoStartGameMessage(playersTeams, totalPlayers.requireValue(), totalPoints.requireValue())
         )
         closeDiscovery()
         handOutCards()
@@ -52,11 +53,13 @@ class ServerTrucoViewModel(
     /** Sends all client players the cards for each one and picks self cards. */
     override fun handOutCards() {
         mixDeck()
-        val playersWithCards = connectedPlayers
-            .filterNot { it.first == MYSELF_PEER_ID }
+        //TODO aca falta poner quien es la mano
+        cardsByPlayer = connectedPlayers
             .map { player -> PlayerWithCards(player.second, cardsForPlayer()) }
-        _myCards.value = cardsForPlayer()
-        connection.write(TrucoCardsMessage(playersWithCards))
+        val myCards = cardsByPlayer
+            .first { it.player == userName }
+        _myCards.value = myCards.cards
+        connection.write(TrucoCardsMessage(cardsByPlayer))
     }
 
     private fun cardsForPlayer(): List<Card> {

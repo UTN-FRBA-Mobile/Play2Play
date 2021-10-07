@@ -6,7 +6,7 @@ import com.p2p.model.truco.PlayerTeam
 
 // TODO: Add the rest of the needed attributes to the start game message
 @JsonTypeName(value = TrucoStartGameMessage.TYPE)
-data class TrucoStartGameMessage(val playersTeams: List<PlayerTeam>) :
+data class TrucoStartGameMessage(val playersTeams: List<PlayerTeam>, val totalPlayers: Int, val totalPoints: Int) :
     Message(TYPE) {
 
     companion object {

@@ -25,6 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/medium"
+        android:textColor="@color/coral"
         tools:text="BALLENA" />
 
 
@@ -33,7 +34,7 @@
         style="@style/P2P_Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/large_extra"
+        android:layout_marginTop="@dimen/largest"
         android:text="@string/im_impostor_is" />
 
     <TextView
@@ -42,13 +43,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/medium"
+        android:textColor="@color/colorPrimary"
         tools:text="DARDO" />
 
     <Button
         android:id="@+id/finish_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/large_extra"
+        android:layout_marginTop="@dimen/largest"
         android:text="@string/finish_game"/>
 
 </LinearLayout>

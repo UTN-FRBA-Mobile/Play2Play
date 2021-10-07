@@ -88,7 +88,7 @@
     <!-- Impostor create game -->
     <string name="im_write_key_word">Ingrese la palabra clave</string>
     <string name="im_validation_error_input">¡Debes ingresar la palabra para poder arrancar!</string>
-    <string name="im_validation_error_players">¡Se debe unir al menos un jugador!</string>
+    <string name="im_validation_error_players">¡Se deben unir al menos dos jugadores!</string>
 
     <!-- Impostor play info -->
     <string name="im_key_word_is">La palabra clave es</string>
@@ -97,7 +97,7 @@
     <!-- Impostor play -->
     <string name="im_you_are_impostor">Sos el impostor, no sabes la palabra clave</string>
     <string name="im_you_are_not_impostor">No sos el impostor, la palabra clave es</string>
-    <string name="im_simulate">Simula</string>
+    <string name="im_simulate">Simulá</string>
 
 
     <!-- Error screen -->
@@ -113,8 +113,11 @@
     <!-- Truco -->
     <!-- Create game -->
     <string name="truco_create_game_title">Crea tu partida de truco</string>
+    <string name="truco_create_game_subtitle">Selecciona la cantidad de jugadores</string>
     <string name="truco_create_game_two_player">2 jugadores</string>
     <string name="truco_create_game_four_player">4 jugadores</string>
+    <string name="truco_points">¿Hasta cuántos puntos van a jugar?</string>
+
 
     <!-- Play -->
     <string name="truco_card_dropping_place">Jugá tu carta</string>
@@ -133,6 +136,15 @@
     <string name="truco_ask_for_retruco">Quiero\nretruco</string>
     <string name="truco_ask_for_vale_cuatro">Quiero\nvale cuatro</string>
     <string name="truco_ask_for_envido_goes_first">Envido\nva primero</string>
+    <string name="truco_answer_envido_are_good">Son buenas</string>
+    <string name="truco_answer_envido_are_better">%d, son mejores</string>
     <string name="truco_go_to_deck">Me voy al mazo</string>
     <string name="truco_go_to_deck_action">Me voy\nal mazo</string>
+
+    <!-- Truco final score -->
+    <string name="tr_final_score_other_team">Ellos</string>
+    <string name="tr_winner">¡Ganamos!</string>
+    <string name="tr_loser">Perdimos...</string>
+    <string name="tr_points">%d pts</string>
+
 </resources>

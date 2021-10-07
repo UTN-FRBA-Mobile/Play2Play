@@ -45,6 +45,7 @@ class TuttiFruttiActivity : GameActivity<TuttiFruttiSpecificGameEvent, TuttiFrut
                 TuttiFruttiReviewFragment.newInstance(),
                 shouldAddToBackStack = false
             )
+            else -> Unit
         }
     }
 
