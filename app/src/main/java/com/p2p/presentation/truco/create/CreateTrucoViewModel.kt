@@ -7,7 +7,7 @@ import com.p2p.presentation.base.BaseViewModel
 class CreateTrucoViewModel:
     BaseViewModel<CreateTrucoEvents>() {
 
-    private val _totalPlayers = MutableLiveData<Int>()
+    private val _totalPlayers = MutableLiveData<Int>(2)
     val totalPlayers: LiveData<Int> = _totalPlayers
 
 

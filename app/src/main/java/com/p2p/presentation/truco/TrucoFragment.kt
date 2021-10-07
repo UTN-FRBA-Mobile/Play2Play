@@ -126,6 +126,8 @@ abstract class TrucoFragment<VB : ViewBinding> :
 
     abstract fun hideAllActions()
 
+    abstract fun clearPlayedCards()
+
     @CallSuper
     protected open fun onGameEvent(event: GameEvent) = when (event) {
         is TrucoShowMyActionEvent -> showMyAction(event.action)
@@ -135,14 +137,17 @@ abstract class TrucoFragment<VB : ViewBinding> :
         }
         is TrucoShowManyActionsEvent -> showManyActions(event.actionByPlayer)
         is TrucoFinishRound -> finishRound(event.round, event.result)
-        is TrucoNewHand -> {
-            // TODO: reorder the cards and give the new ones.
-            requireView().postDelayed({ activity?.finish() }, 10_000)
-            Unit
-        }
+        is TrucoNewHand -> newHand()
         is TrucoOtherPlayedCardEvent -> onOtherPlayedCard(event)
-        TrucoTakeTurnEvent -> myCardsHand.takeTurn()
+        is TrucoTakeTurnEvent -> myCardsHand.takeTurn()
         else -> super.onEvent(event)
+    }
+
+    private fun newHand() {
+        this.clearPlayedCards()
+        this.clearRoundWinners()
+        this.gameViewModel.resetCurrentRound()
+        this.gameViewModel.handOutCards()
     }
 
     protected fun hideActionBubble(bubbleView: View, bubbleTextView: TextView) {
@@ -306,6 +311,16 @@ abstract class TrucoFragment<VB : ViewBinding> :
                 ContextCompat.getColor(requireContext(), R.color.colorPrimary)
             )
             roundViews.getOrNull(round)?.backgroundTintList = colorPrimary
+        }
+    }
+
+
+    private fun clearRoundWinners() {
+        roundViews[0].animateBackgroundTint(
+            ContextCompat.getColor(requireContext(), R.color.colorPrimary)
+        ) {
+            roundViews.getOrNull(1)?.backgroundTintList = null
+            roundViews.getOrNull(2)?.backgroundTintList = null
         }
     }
 

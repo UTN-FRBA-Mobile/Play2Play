@@ -49,8 +49,12 @@ abstract class TrucoViewModel(
     /** List with the teams of players */
     protected lateinit var playersTeams: List<PlayerTeam>
 
+    /** First player to play a card in a hand */
+    protected val _firstHandPlayer = MutableLiveData<PlayerTeam>()
+    val firstHandPlayer: LiveData<PlayerTeam> = _firstHandPlayer
+
     /** Set the quantity of players selected by the user when creating the game . */
-    private val _totalPlayers = MutableLiveData<Int>()
+    private val _totalPlayers = MutableLiveData<Int>(2)
     val totalPlayers: LiveData<Int> = _totalPlayers
 
     /** Current cards for this player */
@@ -104,7 +108,7 @@ abstract class TrucoViewModel(
     }
 
     /** This will only be used by the server */
-    protected open fun handOutCards() {}
+    open fun handOutCards() {}
 
     @CallSuper
     override fun receiveMessage(conversation: Conversation) {
@@ -160,7 +164,7 @@ abstract class TrucoViewModel(
     }
 
     fun onGameStarted() {
-        nextTurn(playersTeams.first())
+        nextTurn(firstHandPlayer.requireValue())
     }
 
     private fun performOrReplyAction(isReply: Boolean, action: TrucoAction) {
@@ -271,6 +275,8 @@ abstract class TrucoViewModel(
 
     private fun onHandFinished(handWinnerPlayerTeam: Int = getCurrentHandWinner().team) {
         updateScore(handWinnerPlayerTeam)
+        _firstHandPlayer.value = playersTeams[(playersTeams.indexOf(firstHandPlayer.requireValue()) + 1)
+                % totalPlayers.requireValue()]
         newHand()
     }
 
@@ -421,8 +427,7 @@ abstract class TrucoViewModel(
     }
 
     private fun getRoundOrder(): List<PlayerTeam> {
-        //TODO falta poner la mano cuando lo haga juan :)
-        val handIndex = 0
+        val handIndex = playersTeams.indexOf(firstHandPlayer)
         return playersTeams.drop(handIndex) + playersTeams.take(handIndex)
     }
 
@@ -443,6 +448,10 @@ abstract class TrucoViewModel(
                 currentActionPoints = 1
             }
         }
+    }
+
+    fun resetCurrentRound() {
+        this._currentRound.value = 1
     }
 
     companion object {

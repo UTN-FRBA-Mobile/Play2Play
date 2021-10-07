@@ -30,18 +30,20 @@ class ClientTrucoViewModel(
             is TrucoStartGameMessage -> {
                 // TODO: Set message attributes
                 playersTeams = message.playersTeams
+                _firstHandPlayer.value = message.playersTeams[0]
                 startGame()
             }
-            is TrucoCardsMessage -> onRecieveCards(message.cardsForPlayers)
+            is TrucoCardsMessage -> onReceiveCards(message.cardsForPlayers)
         }
     }
 
     override fun startGame() = goToPlay()
 
-    private fun onRecieveCards(playersWithCards: List<PlayerWithCards>) {
+    private fun onReceiveCards(playersWithCards: List<PlayerWithCards>) {
         cardsByPlayer = playersWithCards
         pickSelfCards(playersWithCards)
     }
+
     private fun pickSelfCards(playersWithCards: List<PlayerWithCards>) {
         _myCards.value = playersWithCards.first { it.player == userName }.cards
     }
