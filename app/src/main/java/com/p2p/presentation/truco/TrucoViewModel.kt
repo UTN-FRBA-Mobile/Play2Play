@@ -398,8 +398,7 @@ abstract class TrucoViewModel(
     }
 
 
-    private fun looseRound(performedByTeam: Int){
-        val winner = playersTeams.first { it.team != performedByTeam }.team
+    private fun looseRound(performedByTeam: Int, winner: Int = playersTeams.first { it.team != performedByTeam }.team){
         onHandFinished(winner)
     }
 
@@ -458,7 +457,7 @@ abstract class TrucoViewModel(
         val winner = playersTeams.first { it.team != performedByTeam }.team
         when (previousActions.last()) {
             is Truco, is Retruco, is ValeCuatro -> {
-                looseRound(performedByTeam)
+                looseRound(performedByTeam, winner)
             }
             is EnvidoGameAction -> {
                 updateScore(winner)
