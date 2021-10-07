@@ -21,15 +21,15 @@
 
     <ImageView
         android:id="@+id/big_crown"
-        android:layout_width="@dimen/final_score_image_size"
-        android:layout_height="@dimen/final_score_image_size"
+        android:layout_width="@dimen/tf_final_score_image_size"
+        android:layout_height="@dimen/tf_final_score_image_size"
         android:layout_marginTop="@dimen/medium"
         android:gravity="center"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:contentDescription="@string/tf_winner"
-        app:tint="@color/persimmon"
+        app:tint="@color/coral"
         android:src="@drawable/ic_crown"/>
 
     <TextView
@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         style="@style/P2P_Title"
         android:background="@color/colorSecondaryVariant"
-        android:textColor="@color/persimmon"
+        android:textColor="@color/coral"
         android:layout_marginTop="@dimen/small"
         android:paddingBottom="@dimen/medium"
         app:layout_constraintTop_toBottomOf="@id/big_crown"

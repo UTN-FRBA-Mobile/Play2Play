@@ -88,7 +88,7 @@
     <!-- Impostor create game -->
     <string name="im_write_key_word">Ingrese la palabra clave</string>
     <string name="im_validation_error_input">¡Debés ingresar la palabra para poder comenzar!</string>
-    <string name="im_validation_error_players">¡Se debe unir al menos unx jugadorx!</string>
+    <string name="im_validation_error_players">¡Se deben unir al menos dos jugadorxs!</string>
 
     <!-- Impostor play info -->
     <string name="im_key_word_is">La palabra clave es</string>
@@ -134,7 +134,14 @@
     <string name="truco_ask_for_vale_cuatro">Quiero\nvale cuatro</string>
     <string name="truco_ask_for_envido_goes_first">Envido\nva primero</string>
     <string name="truco_answer_envido_are_good">Son buenas</string>
-    <string name="truco_answer_envido_are_better">%d, son mejores</string>
+    <string name="truco_answer_envido_are_better">%d son mejores</string>
     <string name="truco_go_to_deck">Me voy al mazo</string>
     <string name="truco_go_to_deck_action">Me voy\nal mazo</string>
+
+    <!-- Truco final score -->
+    <string name="tr_final_score_other_team">Ellxs</string>
+    <string name="tr_winner">¡Ganamos!</string>
+    <string name="tr_loser">Perdimos…</string>
+    <string name="tr_points">%d pts</string>
+
 </resources>

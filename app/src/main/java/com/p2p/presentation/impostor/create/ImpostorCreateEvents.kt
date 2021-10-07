@@ -7,4 +7,4 @@ data class StartGame(val keyWord: String) : ImpostorCreateEvents()
 
 object InvalidInput : ImpostorCreateEvents()
 
-object NoConnectedPlayers : ImpostorCreateEvents()
+object NotEnoughPlayers : ImpostorCreateEvents()

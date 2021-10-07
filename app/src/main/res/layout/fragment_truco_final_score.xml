@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground">
+
+    <include layout="@layout/view_guidelines" />
+
+    <View
+        android:id="@+id/result_background"
+        android:background="@color/colorSecondaryVariant"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@id/result_points"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/result_icon"
+        android:layout_width="@dimen/tr_final_score_image_size"
+        android:layout_height="@dimen/tr_final_score_image_size"
+        android:layout_marginTop="@dimen/largest"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:src="@drawable/ic_crown"/>
+
+    <TextView
+        android:id="@+id/result_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/P2P_Title"
+        android:textSize="@dimen/big_extra"
+        android:textColor="@color/coral"
+        android:layout_marginTop="@dimen/medium"
+        app:layout_constraintTop_toBottomOf="@id/result_icon"
+        app:layout_constraintStart_toStartOf="@id/result_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="¡Ganamos!" />
+
+    <TextView
+        android:id="@+id/result_points"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/P2P_Title"
+        android:textSize="@dimen/largest"
+        android:textColor="@color/colorSecondary"
+        android:layout_marginTop="@dimen/medium"
+        android:paddingBottom="@dimen/largest"
+        app:layout_constraintTop_toBottomOf="@id/result_text"
+        app:layout_constraintStart_toStartOf="@id/result_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="75 pts" />
+
+    <View
+        android:id="@+id/other_team_background"
+        android:background="@color/white_alpha_100"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/large"
+        app:layout_constraintBottom_toTopOf="@id/exit_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/result_points" />
+
+    <TextView
+        android:id="@+id/other_team_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/green_black"
+        android:textSize="@dimen/font_huge"
+        android:textStyle="bold"
+        android:paddingTop="@dimen/medium_extra"
+        app:layout_constraintTop_toBottomOf="@id/result_background"
+        app:layout_constraintStart_toStartOf="@id/guideline_begin"
+        android:text="@string/tr_final_score_other_team" />
+
+    <TextView
+        android:id="@+id/other_team_points"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/P2P_Description"
+        android:textColor="@color/green_black"
+        android:textSize="@dimen/font_huge"
+        android:paddingTop="@dimen/medium_extra"
+        app:layout_constraintTop_toBottomOf="@id/result_background"
+        app:layout_constraintEnd_toStartOf="@id/guideline_end"
+        tools:text="15 pts" />
+
+    <View
+        android:id="@+id/exit_button_background"
+        android:background="@color/colorPrimary"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/other_team_background" />
+
+    <Button
+        android:id="@+id/exit_button"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/largest_extra"
+        android:text="@string/tf_exit"
+        android:layout_marginHorizontal="@dimen/large"
+        android:layout_marginVertical="@dimen/large"
+        app:layout_constraintBottom_toBottomOf="parent"
+        style="@style/Widget.P2P.Button" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

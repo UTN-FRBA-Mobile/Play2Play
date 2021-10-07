@@ -24,7 +24,7 @@
         style="@style/P2P_Description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/small"
+        android:paddingTop="@dimen/medium"
         app:layout_constraintBottom_toTopOf="@id/key_word_text"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
@@ -35,7 +35,7 @@
         style="@style/P2P_Title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/medium_extra"
+        android:paddingTop="@dimen/largest"
         android:text="@string/im_write_key_word"
         app:layout_constraintBottom_toTopOf="@id/textField"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
@@ -46,18 +46,21 @@
         android:theme="@style/P2P.SecondEditTextTheme"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/medium"
+        android:gravity="center"
+        android:inputType="textCapSentences"
+        app:layout_constraintTop_toBottomOf="@id/key_word_text"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
-        app:layout_constraintBottom_toTopOf="@id/start_button"
         android:maxLines="1" />
 
     <Button
         android:id="@+id/start_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/medium"
         android:text="@string/start"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="@dimen/largest"
+        app:layout_constraintTop_toBottomOf="@id/textField"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"/>
 
