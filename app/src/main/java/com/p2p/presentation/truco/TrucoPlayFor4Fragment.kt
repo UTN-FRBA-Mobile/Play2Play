@@ -4,7 +4,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.activityViewModels
+import com.p2p.R
 import com.p2p.databinding.FragmentPlayTrucoFor4Binding
 import com.p2p.presentation.truco.cards.TrucoCardsHand
 import com.p2p.presentation.truco.cards.TrucoFor4FrontPlayerCardsHand
@@ -71,6 +73,19 @@ class TrucoPlayFor4Fragment : TrucoFragment<FragmentPlayTrucoFor4Binding>() {
         TrucoPlayerPosition.RIGHT -> rightPlayerDroppingPlacesViews
         TrucoPlayerPosition.MY_SELF -> myDroppingPlacesViews
     }
+
+    override fun getPlayerBubbleWithTextView(playerPosition: TrucoPlayerPosition): Pair<View, TextView>{
+        val (bubble, text) = bubbleForPosition(playerPosition)
+        return requireView().findViewById<View>(bubble) to requireView().findViewById<TextView>(text)
+    }
+
+    override fun bubbleForPosition(playerPosition: TrucoPlayerPosition) = when (playerPosition) {
+        TrucoPlayerPosition.FRONT -> R.id.front_player_action_bubble to R.id.front_player_action_bubble_text
+        TrucoPlayerPosition.LEFT -> R.id.left_player_action_bubble to R.id.left_player_action_bubble_text
+        TrucoPlayerPosition.RIGHT -> R.id.right_player_action_bubble to R.id.right_player_action_bubble_text
+        TrucoPlayerPosition.MY_SELF -> R.id.my_action_bubble to R.id.my_action_bubble_text
+    }
+
 
     companion object {
 
