@@ -22,18 +22,12 @@ class CreateTrucoPointsViewModel : BaseViewModel<Unit>() {
 
     fun increase() {
         _pointsNumber.value = pointsNumber.value?.plus(15)
-        _enableIncrease.value = true
-        if (pointsNumber.value == MAXIMUM_POINTS_NUMBER) {
-            _enableIncrease.value = false
-        }
+        _enableIncrease.value = pointsNumber.value != MAXIMUM_POINTS_NUMBER
     }
 
     fun decrease() {
         _pointsNumber.value = pointsNumber.value?.minus(15)
-        _enableDecrease.value = true
-        if (pointsNumber.value == MINIMUM_POINTS_NUMBER) {
-            _enableDecrease.value = false
-        }
+        _enableDecrease.value = pointsNumber.value != MINIMUM_POINTS_NUMBER
     }
 
     companion object {

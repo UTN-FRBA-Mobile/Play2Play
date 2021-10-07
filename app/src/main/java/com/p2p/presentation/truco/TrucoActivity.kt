@@ -3,6 +3,7 @@ package com.p2p.presentation.truco
 import android.app.Activity
 import android.bluetooth.BluetoothDevice
 import androidx.activity.viewModels
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.p2p.presentation.basegame.GameActivity
 import com.p2p.presentation.truco.lobby.ServerTrucoLobbyFragment
 import com.p2p.presentation.truco.create.CreateTrucoFragment
@@ -33,6 +34,8 @@ class TrucoActivity : GameActivity<TrucoSpecificGameEvent, TrucoViewModel>() {
         super.onGameEvent(event)
         when (event) {
             is TrucoFinishGame -> {
+                // We delete the bottom sheet fragment from the truco game
+                (supportFragmentManager.findFragmentByTag(TrucoFragment.ACTIONS_BOTTOM_SHEET_TAG) as BottomSheetDialogFragment?)?.dismiss()
                 addFragment(FinalScoreTrucoFragment.newInstance(), shouldAddToBackStack = false)
             }
             else -> Unit
