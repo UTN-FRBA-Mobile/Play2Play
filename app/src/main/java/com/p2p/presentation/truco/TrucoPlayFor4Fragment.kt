@@ -98,12 +98,6 @@ class TrucoPlayFor4Fragment : TrucoFragment<FragmentPlayTrucoFor4Binding>() {
         TrucoPlayerPosition.MY_SELF -> R.id.my_action_bubble to R.id.my_action_bubble_text
     }
 
-    override fun clearPlayedCards() {
-        loadCardImages(rightPlayerCardViews, emptyList())
-        loadCardImages(leftPlayerCardViews, emptyList())
-        loadCardImages(frontPlayerCardViews, emptyList())
-    }
-
     companion object {
         fun newInstance() = TrucoPlayFor4Fragment()
     }

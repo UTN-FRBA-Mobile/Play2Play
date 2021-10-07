@@ -130,8 +130,6 @@ abstract class TrucoFragment<VB : ViewBinding> :
 
     abstract fun hideAllActions()
 
-    abstract fun clearPlayedCards()
-
     @CallSuper
     protected open fun onGameEvent(event: GameEvent) = when (event) {
         is TrucoShowMyActionEvent -> showMyAction(event.action)
@@ -143,12 +141,11 @@ abstract class TrucoFragment<VB : ViewBinding> :
         is TrucoFinishRound -> finishRound(event.round, event.result)
         is TrucoNewHand -> newHand()
         is TrucoOtherPlayedCardEvent -> onOtherPlayedCard(event)
-        is TrucoTakeTurnEvent -> myCardsHand.takeTurn()
+        TrucoTakeTurnEvent -> myCardsHand.takeTurn()
         else -> super.onEvent(event)
     }
 
     private fun newHand() {
-        clearPlayedCards()
         clearRoundWinners()
         myDroppingPlacesViews.forEach { it.isInvisible = true }
         initializeRivalHands(isFirstHand = false)
@@ -320,12 +317,11 @@ abstract class TrucoFragment<VB : ViewBinding> :
 
 
     private fun clearRoundWinners() {
-        roundViews[0].animateBackgroundTint(
+        roundViews[0].backgroundTintList = ColorStateList.valueOf(
             ContextCompat.getColor(requireContext(), R.color.colorPrimary)
-        ) {
-            roundViews.getOrNull(1)?.backgroundTintList = null
-            roundViews.getOrNull(2)?.backgroundTintList = null
-        }
+        )
+        roundViews[1].backgroundTintList = null
+        roundViews[2].backgroundTintList = null
     }
 
     companion object {

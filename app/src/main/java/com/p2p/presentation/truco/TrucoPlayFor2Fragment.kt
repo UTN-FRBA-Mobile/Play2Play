@@ -73,10 +73,6 @@ class TrucoPlayFor2Fragment : TrucoFragment<FragmentPlayTrucoFor2Binding>() {
         else -> throw IllegalStateException("There's only myself and front player on truco for 2")
     }
 
-    override fun clearPlayedCards() {
-        loadCardImages(theirCardsViews, emptyList())
-    }
-
     companion object {
 
         fun newInstance() = TrucoPlayFor2Fragment()

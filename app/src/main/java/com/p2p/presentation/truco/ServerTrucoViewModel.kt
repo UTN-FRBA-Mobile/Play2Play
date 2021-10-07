@@ -52,7 +52,6 @@ class ServerTrucoViewModel(
     /** Sends all client players the cards for each one and picks self cards. */
     override fun handOutCards() {
         mixDeck()
-        //TODO aca falta poner quien es la mano <- lo puse en onHandFinished
         cardsByPlayer = connectedPlayers
             .map { player -> PlayerWithCards(player.second, cardsForPlayer()) }
         val myCards = cardsByPlayer
