@@ -3,9 +3,11 @@ package com.p2p.presentation.truco
 import android.app.Activity
 import android.bluetooth.BluetoothDevice
 import androidx.activity.viewModels
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.p2p.presentation.basegame.GameActivity
 import com.p2p.presentation.truco.lobby.ServerTrucoLobbyFragment
 import com.p2p.presentation.truco.create.CreateTrucoFragment
+import com.p2p.presentation.truco.finalscore.FinalScoreTrucoFragment
 import com.p2p.presentation.truco.lobby.TrucoClientLobbyFragment
 
 class TrucoActivity : GameActivity<TrucoSpecificGameEvent, TrucoViewModel>() {
@@ -31,7 +33,12 @@ class TrucoActivity : GameActivity<TrucoSpecificGameEvent, TrucoViewModel>() {
     override fun onGameEvent(event: TrucoSpecificGameEvent) {
         super.onGameEvent(event)
         when (event) {
-            // TODO: Handle truco events
+            is TrucoFinishGame -> {
+                // We delete the bottom sheet fragment from the truco game
+                (supportFragmentManager.findFragmentByTag(TrucoFragment.ACTIONS_BOTTOM_SHEET_TAG) as BottomSheetDialogFragment?)?.dismiss()
+                addFragment(FinalScoreTrucoFragment.newInstance(), shouldAddToBackStack = false)
+            }
+            else -> Unit
         }
     }
 

@@ -328,7 +328,7 @@ abstract class TrucoFragment<VB : ViewBinding> :
 
         private const val SCORE_ZOOM_ANIMATION = 1.2f
         private const val MIN_ACTION_BUBBLE_VISIBLE_SCALING = 0.9f
-        private const val ACTIONS_BOTTOM_SHEET_TAG = "TRUCO_ACTIONS_BOTTOM_SHEET"
+        const val ACTIONS_BOTTOM_SHEET_TAG = "TRUCO_ACTIONS_BOTTOM_SHEET"
         private const val ACTION_BACKGROUND_FINAL_ALPHA = 0.5f
         private const val HIDE_ACTION_BUBBLES_DELAY = 3_000L
     }

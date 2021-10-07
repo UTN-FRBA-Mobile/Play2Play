@@ -35,7 +35,7 @@ class ServerTrucoViewModel(
         playersTeams = setPlayersTeams()
         _firstHandPlayer.value = playersTeams[0]
         connection.write(
-            TrucoStartGameMessage(playersTeams)
+            TrucoStartGameMessage(playersTeams, totalPlayers.requireValue(), totalPoints.requireValue())
         )
         closeDiscovery()
         handOutCards()
