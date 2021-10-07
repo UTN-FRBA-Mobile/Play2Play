@@ -12,8 +12,8 @@ class TrucoDragAndDropCard(
 
     var droppingView: View? = null
 
-    private lateinit var initialPosition: Pair<Float, Float>
-    private lateinit var initialCoordinates: Pair<Float, Float>
+    private var initialPosition: Pair<Float, Float>? = null
+    private var initialCoordinates: Pair<Float, Float>? = null
     private var initialRotation: Float = 0f
 
     init {
@@ -32,6 +32,8 @@ class TrucoDragAndDropCard(
                     true
                 }
                 event.actionMasked == MotionEvent.ACTION_MOVE -> {
+                    val initialCoordinates = initialCoordinates ?: return@setOnTouchListener false
+                    val initialPosition = initialPosition ?: return@setOnTouchListener false
                     view.x = initialCoordinates.first + event.rawX - initialPosition.first
                     view.y = initialCoordinates.second + event.rawY - initialPosition.second
                     val initialDistance = currentDroppingView.y - initialCoordinates.second
@@ -52,6 +54,8 @@ class TrucoDragAndDropCard(
                     true
                 }
                 event.actionMasked == MotionEvent.ACTION_UP -> {
+                    initialCoordinates = null
+                    initialPosition = null
                     val isInDroppingView = currentDroppingView.x <= event.rawX &&
                             event.rawX <= currentDroppingView.x + currentDroppingView.width &&
                             currentDroppingView.y <= event.rawY &&

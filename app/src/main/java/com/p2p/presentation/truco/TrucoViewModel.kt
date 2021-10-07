@@ -295,20 +295,24 @@ abstract class TrucoViewModel(
     }
 
     private fun onHandFinished(handWinnerPlayerTeam: Int = getCurrentHandWinner().team) {
-        val score = updateScore(handWinnerPlayerTeam)
-        if (score >= _totalPoints.requireValue()) {
-            finishGame()
-        } else {
+        val hasFinished = updateScore(handWinnerPlayerTeam)
+        if (!hasFinished) {
             _firstHandPlayer.value = playersTeams[(playersTeams.indexOf(firstHandPlayer.requireValue()) + 1)
                     % totalPlayers.requireValue()]
             newHand()
+            nextTurn(_firstHandPlayer.requireValue())
         }
     }
 
-    private fun updateScore(winnerTeam: Int): Int {
+    private fun updateScore(winnerTeam: Int): Boolean {
         val score = if (winnerTeam == myPlayerTeam.team) _ourScore else _theirScore
         score.value = score.requireValue() + currentActionPoints
-        return score.requireValue()
+        return if (score.requireValue() >= _totalPoints.requireValue()) {
+            finishGame()
+            true
+        } else {
+            false
+        }
     }
 
     private fun hasRoundFinished(): Boolean {
