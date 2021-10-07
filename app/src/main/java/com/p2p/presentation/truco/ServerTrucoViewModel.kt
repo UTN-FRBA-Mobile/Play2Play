@@ -35,7 +35,7 @@ class ServerTrucoViewModel(
     override fun startGame() {
         playersTeams = setPlayersTeams()
         connection.write(
-            TrucoStartGameMessage(playersTeams, totalPlayers.value!!, totalPoints.value!!)
+            TrucoStartGameMessage(playersTeams, totalPlayers.requireValue(), totalPoints.requireValue())
         )
         closeDiscovery()
         handOutCards()
