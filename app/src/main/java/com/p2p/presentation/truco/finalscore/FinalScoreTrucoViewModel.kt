@@ -6,24 +6,24 @@ import com.p2p.model.truco.FinalResult
 import com.p2p.presentation.base.BaseViewModel
 
 class FinalScoreTrucoViewModel: BaseViewModel<TrucoFinalScoreEvent>() {
-    private val _finalResult = MutableLiveData(FinalResult(null, null, null))
+    private val _finalResult = MutableLiveData<FinalResult>()
     val finalResult: LiveData<FinalResult> = _finalResult
 
-    private var ourScore: Int? = null
-    private var theirScore : Int? = null
+    private var setFinalResult : FinalResult = FinalResult(null, null, null)
 
     fun setOurScore(score: Int) {
-        _finalResult.value?.ourScore = score
-        theirScore?.let { isWinner(score, it) }
+        setFinalResult.ourScore = score
+        setFinalResult.theirScore?.let { isWinner(score, it) }
     }
 
     fun setTheirScore(score: Int) {
-        _finalResult.value?.theirScore = score
-        ourScore?.let { isWinner(it, score) }
+        setFinalResult.theirScore = score
+        setFinalResult.ourScore?.let { isWinner(it, score) }
     }
 
     fun isWinner(ourScore: Int, theirScore: Int) {
-        _finalResult.value?.isWinner = ourScore > theirScore
+        setFinalResult.isWinner = ourScore > theirScore
+        _finalResult.value = setFinalResult
     }
 
     fun exit() {

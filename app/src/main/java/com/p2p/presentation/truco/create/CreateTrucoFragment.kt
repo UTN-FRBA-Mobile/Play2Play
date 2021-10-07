@@ -7,6 +7,9 @@ import androidx.fragment.app.viewModels
 import com.p2p.databinding.FragmentCreateTrucoBinding
 import com.p2p.presentation.basegame.BaseGameFragment
 import com.p2p.presentation.truco.TrucoViewModel
+import com.p2p.presentation.truco.create.points.CreateTrucoPointsFragment
+import com.p2p.presentation.tuttifrutti.create.categories.GoToSelectRounds
+import com.p2p.presentation.tuttifrutti.create.rounds.TuttiFruttiRoundsNumberFragment
 
 class CreateTrucoFragment : BaseGameFragment<
         FragmentCreateTrucoBinding,
@@ -23,17 +26,17 @@ class CreateTrucoFragment : BaseGameFragment<
     override fun initUI() {
         super.initUI()
         gameBinding.createTwoPlayer.setOnClickListener {
-            viewModel.createLobby(2)
+            viewModel.continueToNextScreen(2)
         }
         gameBinding.createFourPlayer.setOnClickListener {
-            viewModel.createLobby(4)
+            viewModel.continueToNextScreen(4)
         }
     }
 
     override fun onEvent(event: CreateTrucoEvents) = when(event) {
-        is CreateTrucoLobbyEvent -> {
+        is GoToSelectPoints -> {
             gameViewModel.setTotalPlayers(event.numberOfPlayers)
-            gameViewModel.goToLobby()
+            CreateTrucoPointsFragment.newInstance().show(childFragmentManager, "TrucoPointsDialog")
         }
     }
 

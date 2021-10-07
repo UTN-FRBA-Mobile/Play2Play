@@ -25,6 +25,7 @@ class FinalScoreTrucoFragment : BaseGameFragment<
 
     override fun initUI() {
         super.initUI()
+        gameBinding.exitButton.setOnClickListener { viewModel.exit() }
         setupObservers()
     }
 

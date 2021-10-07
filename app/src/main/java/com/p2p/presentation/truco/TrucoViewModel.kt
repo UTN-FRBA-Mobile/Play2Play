@@ -53,6 +53,10 @@ abstract class TrucoViewModel(
     private val _totalPlayers = MutableLiveData<Int>()
     val totalPlayers: LiveData<Int> = _totalPlayers
 
+    /** Set the quantity of points selected by the user when creating the game . */
+    private val _totalPoints = MutableLiveData<Int>()
+    val totalPoints: LiveData<Int> = _totalPoints
+
     /** Current cards for this player */
     protected val _myCards = MutableLiveData<List<Card>>()
     val myCards: LiveData<List<Card>> = _myCards
@@ -152,7 +156,7 @@ abstract class TrucoViewModel(
 
     // TODO: receive total opponent points
     fun performFaltaEnvido(isReply: Boolean = false) =
-        performOrReplyAction(isReply, FaltaEnvido(0, previousActions))
+        performOrReplyAction(isReply, FaltaEnvido(totalPoints.requireValue() , 0, previousActions))
 
     fun replyAction(action: TrucoAction) {
         _actionAvailableResponses.value = TrucoActionAvailableResponses.noActions()
@@ -183,6 +187,10 @@ abstract class TrucoViewModel(
         _lastTrucoAction.value = null
         _envidoButtonEnabled.value = true
         _trucoButtonEnabled.value = true
+    }
+
+    private fun finishGame() {
+        dispatchSingleTimeEvent(TrucoFinishGame)
     }
 
     /**
@@ -227,7 +235,11 @@ abstract class TrucoViewModel(
     }
 
     fun setTotalPlayers(players: Int) {
-        _totalPlayers.value = players;
+        _totalPlayers.value = players
+    }
+
+    fun setTotalPoints(points: Int) {
+        _totalPoints.value = points
     }
 
     private fun onRivalCardPlayed(playedCard: PlayedCard) {
@@ -260,18 +272,19 @@ abstract class TrucoViewModel(
         val roundWinnerPlayerTeam = getRoundWinnerPlayerTeam(currentRoundPlayedCards)
         val roundResult = TrucoRoundResult.get(roundWinnerPlayerTeam, myPlayerTeam)
         currentHandWinners.add(roundWinnerPlayerTeam)
-        dispatchSingleTimeEvent(TrucoFinishRound(round, roundResult))
 
         if (hasCurrentHandFinished()) {
             onHandFinished()
         } else {
+            dispatchSingleTimeEvent(TrucoFinishRound(round, roundResult))
             nextTurn(roundWinnerPlayerTeam)
         }
     }
 
     private fun onHandFinished(handWinnerPlayerTeam: Int = getCurrentHandWinner().team) {
-        updateScore(handWinnerPlayerTeam)
-        newHand()
+        val score = if (handWinnerPlayerTeam == myPlayerTeam.team) _ourScore else _theirScore
+        score.value = score.requireValue() + currentActionPoints
+        if (score.requireValue() >= _totalPoints.requireValue()) { finishGame() } else { newHand() }
     }
 
     private fun updateScore(winnerTeam: Int) {
@@ -444,6 +457,7 @@ abstract class TrucoViewModel(
             }
         }
     }
+
 
     companion object {
 
