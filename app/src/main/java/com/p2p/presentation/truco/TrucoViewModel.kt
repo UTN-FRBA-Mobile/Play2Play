@@ -271,7 +271,7 @@ abstract class TrucoViewModel(
     private fun onHandFinished(handWinnerPlayerTeam: Int = getCurrentHandWinner().team) {
         val score = if (handWinnerPlayerTeam == myPlayerTeam.team) _ourScore else _theirScore
         score.value = score.requireValue() + currentActionPoints
-        if (score.value!! >= _totalPoints.value!!) { finishGame() } else { newHand() }
+        if (score.requireValue() >= _totalPoints.requireValue()) { finishGame() } else { newHand() }
     }
 
     private fun hasRoundFinished(): Boolean {
