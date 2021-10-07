@@ -27,6 +27,7 @@ abstract class TrucoCardsHand(
     private val trucoCardFinalRotation by lazy {
         context.resources.getInteger(R.integer.truco_card_final_rotation).toFloat()
     }
+    protected open val initialRotationY: Float = 0f
 
     init {
         cards.first().view.post { updateCardsHandUI() }
@@ -114,6 +115,10 @@ abstract class TrucoCardsHand(
                 .x(getCardX(cardView, index))
                 .y(getCardY(cardView, playingCardsSize, index))
                 .rotation(cardsRotation[index])
+                .rotationX(0f)
+                .rotationY(initialRotationY)
+                .scaleX(1f)
+                .scaleY(1f)
                 .start()
         }
     }

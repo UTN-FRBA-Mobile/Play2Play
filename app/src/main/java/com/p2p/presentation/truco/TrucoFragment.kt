@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.CallSuper
 import androidx.core.content.ContextCompat
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.viewbinding.ViewBinding
@@ -73,6 +74,7 @@ abstract class TrucoFragment<VB : ViewBinding> :
 
     override fun initUI() = with(requireView()) {
         super.initUI()
+        initializeRivalHands(isFirstHand = true)
         headerBinding = ViewTrucoHeaderBinding.bind(gameBinding.root)
         roundViews =
             listOf(headerBinding.firstRound, headerBinding.secondRound, headerBinding.thirdRound)
@@ -116,6 +118,8 @@ abstract class TrucoFragment<VB : ViewBinding> :
         gameViewModel.playCard(playingCard.card)
     }
 
+    abstract fun initializeRivalHands(isFirstHand: Boolean)
+
     abstract fun createMyCardsHand(myPlayingCards: List<TrucoCardsHand.PlayingCard>): TrucoCardsHand
 
     abstract fun getPlayerCardsHand(playerPosition: TrucoPlayerPosition): TrucoCardsHand
@@ -144,10 +148,10 @@ abstract class TrucoFragment<VB : ViewBinding> :
     }
 
     private fun newHand() {
-        this.clearPlayedCards()
-        this.clearRoundWinners()
-        this.gameViewModel.resetCurrentRound()
-        this.gameViewModel.handOutCards()
+        clearPlayedCards()
+        clearRoundWinners()
+        myDroppingPlacesViews.forEach { it.isInvisible = true }
+        initializeRivalHands(isFirstHand = false)
     }
 
     protected fun hideActionBubble(bubbleView: View, bubbleTextView: TextView) {

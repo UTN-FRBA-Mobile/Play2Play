@@ -3,6 +3,7 @@ package com.p2p.presentation.truco
 import androidx.annotation.CallSuper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.loadingMessages.LoadingTextRepository
@@ -31,6 +32,10 @@ import com.p2p.presentation.truco.actions.TrucoActionAvailableResponses
 import com.p2p.presentation.truco.actions.TrucoGameAction
 import com.p2p.presentation.truco.envidoCalculator.EnvidoMessageCalculator
 import com.p2p.presentation.truco.envidoCalculator.EnvidoPointsCalculator
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 abstract class TrucoViewModel(
     connectionType: ConnectionType,
@@ -180,13 +185,16 @@ abstract class TrucoViewModel(
         onCardPlayed(playedCard)
     }
 
-    private fun newHand() {
+    private fun newHand() = viewModelScope.launch(Dispatchers.Main) {
+        withContext(Dispatchers.Default) { delay(NEW_HAND_DELAY_TIME_MS) }
         dispatchSingleTimeEvent(TrucoNewHand)
         cleanActionValues()
         currentHandWinners.clear()
         _lastTrucoAction.value = null
         _envidoButtonEnabled.value = true
         _trucoButtonEnabled.value = true
+        _currentRound.value = 1
+        handOutCards()
     }
 
     /**
@@ -231,7 +239,7 @@ abstract class TrucoViewModel(
     }
 
     fun setTotalPlayers(players: Int) {
-        _totalPlayers.value = players;
+        _totalPlayers.value = players
     }
 
     private fun onRivalCardPlayed(playedCard: PlayedCard) {
@@ -427,7 +435,7 @@ abstract class TrucoViewModel(
     }
 
     private fun getRoundOrder(): List<PlayerTeam> {
-        val handIndex = playersTeams.indexOf(firstHandPlayer)
+        val handIndex = playersTeams.indexOf(firstHandPlayer.requireValue())
         return playersTeams.drop(handIndex) + playersTeams.take(handIndex)
     }
 
@@ -450,13 +458,10 @@ abstract class TrucoViewModel(
         }
     }
 
-    fun resetCurrentRound() {
-        this._currentRound.value = 1
-    }
-
     companion object {
 
         private const val MAX_HAND_ROUNDS = 3
         private const val WINNER_HAND_ROUNDS_THRESHOLD = 2
+        private const val NEW_HAND_DELAY_TIME_MS = 2_000L
     }
 }
