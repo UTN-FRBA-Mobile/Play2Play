@@ -47,10 +47,13 @@ class ConnectedPlayersTrucoAdapter(
 
         playerName.text = player
 
-        if (position == 0) {
-            val imageView = connectedUserView.findViewById<ImageView>(R.id.avatar)
-            imageView.setImageResource(R.drawable.ic_baseline_account_circle_white)
-            connectedUserView.setBackgroundResource(R.drawable.grid_view_item_hand_player)
+        val imageView = connectedUserView.findViewById<ImageView>(R.id.avatar)
+        imageView.setImageResource(R.drawable.ic_baseline_account_circle_white)
+
+        when(position) {
+            0 -> connectedUserView.setBackgroundResource(R.drawable.grid_view_item_hand_player)
+            1, 2 -> connectedUserView.setBackgroundResource(R.drawable.grid_view_item_second_team_player)
+            3 -> connectedUserView.setBackgroundResource(R.drawable.grid_view_item_first_team_player)
         }
 
         connectedUserView.setOnTouchListener { view, event ->
@@ -69,12 +72,15 @@ class ConnectedPlayersTrucoAdapter(
                         view.startDrag(dragData, View.DragShadowBuilder(view), null, 0)
                     }
 
-                    if (position != 0) {
-                        view.background = ContextCompat.getDrawable(context, R.drawable.dotted_border)
-                    } else {
-                        view.background = ContextCompat.getDrawable(context, R.drawable.dotted_border)
-                        view.findViewById<ImageView>(R.id.avatar)
-                            .setImageResource(R.drawable.ic_baseline_account_circle_yellow)
+                    when(position) {
+                        0, 3 -> {
+                            view.background = ContextCompat.getDrawable(context, R.drawable.dotted_border_yellow)
+                            view.findViewById<ImageView>(R.id.avatar).setImageResource(R.drawable.ic_baseline_account_circle_yellow)
+                        }
+                        1, 2 -> {
+                            view.background = ContextCompat.getDrawable(context, R.drawable.dotted_border_blue)
+                            view.findViewById<ImageView>(R.id.avatar).setImageResource(R.drawable.ic_baseline_account_circle_blue)
+                        }
                     }
                 }
                 MotionEvent.ACTION_UP -> view.performClick()
@@ -86,3 +92,4 @@ class ConnectedPlayersTrucoAdapter(
         return connectedUserView
     }
 }
+
