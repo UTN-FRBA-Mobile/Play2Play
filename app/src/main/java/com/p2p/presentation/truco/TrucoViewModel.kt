@@ -9,6 +9,7 @@ import com.p2p.data.loadingMessages.LoadingTextRepository
 import com.p2p.data.userInfo.UserSession
 import com.p2p.model.base.message.Conversation
 import com.p2p.model.truco.Card
+import com.p2p.model.truco.EmptyCard
 import com.p2p.model.truco.PlayerTeam
 import com.p2p.model.truco.PlayerWithCards
 import com.p2p.model.truco.message.*
@@ -22,6 +23,7 @@ import com.p2p.presentation.truco.actions.TrucoAction.Envido
 import com.p2p.presentation.truco.actions.TrucoAction.EnvidoGoesFirst
 import com.p2p.presentation.truco.actions.TrucoAction.FaltaEnvido
 import com.p2p.presentation.truco.actions.TrucoAction.NoIDont
+import com.p2p.presentation.truco.actions.TrucoAction.GoToDeck
 import com.p2p.presentation.truco.actions.TrucoAction.RealEnvido
 import com.p2p.presentation.truco.actions.TrucoAction.Retruco
 import com.p2p.presentation.truco.actions.TrucoAction.Truco
@@ -95,6 +97,10 @@ abstract class TrucoViewModel(
     private val playedCards: MutableList<MutableList<PlayedCard>> = mutableListOf(mutableListOf())
     private val currentHandWinners: MutableList<PlayerTeam?> = mutableListOf()
 
+
+    //Cards for when player goes to deck
+    val emptyCards by lazy { listOf(EmptyCard, EmptyCard, EmptyCard) }
+
     init {
         _ourScore.value = 0
         _theirScore.value = 0
@@ -148,6 +154,21 @@ abstract class TrucoViewModel(
         onActionDone(action, myPlayerTeam.team)
     }
 
+
+    fun goToDeck() = {
+        performAction(GoToDeck(myPlayerTeam.player))
+        _myCards.value = emptyCards
+    }
+
+
+    fun playerGoToDeck(player: String) {
+        cardsByPlayer = cardsByPlayer.map {
+            if (it.player == player)
+                PlayerWithCards(player, emptyCards)
+            else it
+        }
+    }
+
     fun performEnvido(isReply: Boolean = false) =
         performOrReplyAction(isReply, Envido(previousActions))
 
@@ -156,7 +177,7 @@ abstract class TrucoViewModel(
 
     // TODO: receive total opponent points
     fun performFaltaEnvido(isReply: Boolean = false) =
-        performOrReplyAction(isReply, FaltaEnvido(totalPoints.requireValue() , 0, previousActions))
+        performOrReplyAction(isReply, FaltaEnvido(totalPoints.requireValue(), 0, previousActions))
 
     fun replyAction(action: TrucoAction) {
         _actionAvailableResponses.value = TrucoActionAvailableResponses.noActions()
@@ -284,7 +305,11 @@ abstract class TrucoViewModel(
     private fun onHandFinished(handWinnerPlayerTeam: Int = getCurrentHandWinner().team) {
         val score = if (handWinnerPlayerTeam == myPlayerTeam.team) _ourScore else _theirScore
         score.value = score.requireValue() + currentActionPoints
-        if (score.requireValue() >= _totalPoints.requireValue()) { finishGame() } else { newHand() }
+        if (score.requireValue() >= _totalPoints.requireValue()) {
+            finishGame()
+        } else {
+            newHand()
+        }
     }
 
     private fun updateScore(winnerTeam: Int) {
@@ -370,9 +395,14 @@ abstract class TrucoViewModel(
         setCurrentPlayerTurn(forceNextTurnPlayer ?: getNextPlayerTurn())
     }
 
-    private fun getNextPlayerTurn(): PlayerTeam {
-        val nextIndex = playersTeams.indexOf(currentPlayerTurn) + 1
-        return playersTeams[nextIndex % playersTeams.size]
+    private fun getNextPlayerTurn(): PlayerTeam = getNextPlayerThatPlays(playersTeams.indexOf(currentPlayerTurn) + 1)
+
+    //Next player skipping players that have gone to deck
+    private fun getNextPlayerThatPlays(nextIndex: Int): PlayerTeam {
+        val nextPlayerTurn = playersTeams[nextIndex % playersTeams.size]
+        return if (cardsByPlayer.first { it.player == nextPlayerTurn.player }.cards == emptyCards)
+            getNextPlayerThatPlays(nextIndex + 1)
+        else nextPlayerTurn
     }
 
     private fun setCurrentPlayerTurn(player: PlayerTeam) {
@@ -391,17 +421,30 @@ abstract class TrucoViewModel(
                     currentActionPoints = 1
                 }
             }
-            is TrucoAction.GoToDeck -> {
-                looseRound(performedByTeam)
+            is GoToDeck -> {
+                if (allPlayersHaveGoneToDeck(performedByTeam))
+                    looseRound(performedByTeam)
+                else playerGoToDeck(action.player)
             }
         }
     }
 
+    private fun allPlayersHaveGoneToDeck(performedByTeam: Int): Boolean {
+        val myTeam = playersTeams.filter { it.team == performedByTeam }.map { it.player }
+        val myTeamInRound = cardsByPlayer.filter {
+            myTeam.contains(it.player) && it.cards.sumBy { it.number } != 0
+        }.size
+        return myTeamInRound - 1 > 0
+    }
 
-    private fun looseRound(performedByTeam: Int, winner: Int = playersTeams.first { it.team != performedByTeam }.team){
+    private fun looseRound(
+        performedByTeam: Int,
+        winner: Int = playersTeams.first { it.team != performedByTeam }.team
+    ) {
         onHandFinished(winner)
     }
 
+    private fun playersThatHaveGoneToDeck() = cardsByPlayer.filterNot { it.cards == emptyCards } .map { it.player }
 
     private fun playEnvido() {
         val pointsByPlayer = cardsByPlayer.map {
@@ -409,18 +452,22 @@ abstract class TrucoViewModel(
             playerTeam to EnvidoPointsCalculator.getPoints(it.cards)
         }
         val roundOrder = getRoundOrder()
-        val playersWithPoints = roundOrder.map { player -> pointsByPlayer.first { it.first ==  player} }
+        val playersWithPoints =
+            roundOrder.map { player -> pointsByPlayer.first { it.first == player } }
 
         val winner = getWinner(pointsByPlayer, roundOrder)
 
-        val actionsByPlayer: Map<PlayerTeam, TrucoAction?> = if(roundOrder.size == 2){
+        val actionsByPlayer: Map<PlayerTeam, TrucoAction?> = if (roundOrder.size == 2) {
             EnvidoMessageCalculator.envidoMessagesFor2(playersWithPoints)
-        }else{
+        } else {
             EnvidoMessageCalculator.envidoMessagesFor4(playersWithPoints)
         }
 
-        val actionsByPosition = actionsByPlayer.filter { it.value != null }.map { actionByPlayer ->
-            val playerPosition = TrucoPlayerPosition.get(actionByPlayer.key, playersTeams, myPlayerTeam)
+        val actionsByPosition = actionsByPlayer.filter {
+            it.value != null && !playersThatHaveGoneToDeck().contains(it.key.player)
+        }.map { actionByPlayer ->
+            val playerPosition =
+                TrucoPlayerPosition.get(actionByPlayer.key, playersTeams, myPlayerTeam)
             playerPosition to actionByPlayer.value!!
         }.toMap()
 

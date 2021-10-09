@@ -22,11 +22,11 @@ object EnvidoMessageCalculator {
      * Logic is like this:
      * 1 -> muestra su puntaje
     // 2 -> Si supera dice su puntaje (a) || o "Son buenas" (b)
-    //      (a) 3 -> Si supera dice su puntaje (cDONE) || o "Son buenas" (d)
+    //      (a) 3 -> Si supera dice su puntaje (c) || o "Son buenas" (d)
     //          (c) 4 -> Si supera dice su puntaje (e) || o "Son buenas" (f)
     //          (d) 4 -> No dice nada (g)
     //      (b) 4 -> Si supera dice su puntaje (h) || o "Son buenas" (i)
-    //          (h) 3 -> Si supera dice su puntaje (eDONE) || o "Son buenas" (f)
+    //          (h) 3 -> Si supera dice su puntaje (e) || o "Son buenas" (f)
     //      (i) 3 -> No dice nada (g)
      */
     fun envidoMessagesFor4(playersWithPoints: List<Pair<PlayerTeam, Int>>): Map<PlayerTeam, TrucoAction?> {

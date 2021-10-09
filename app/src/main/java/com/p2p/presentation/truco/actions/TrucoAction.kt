@@ -146,7 +146,7 @@ abstract class TrucoAction(
             TrucoActionAvailableResponses(iDo = false, iDont = false)
     }
 
-    object GoToDeck : TrucoAction(
+    data class GoToDeck(val player: String) : TrucoAction(
         hasReplication = false
     ) {
 
