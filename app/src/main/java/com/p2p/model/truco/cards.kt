@@ -11,4 +11,4 @@ open class Card(val number: Int, val suit: Suit) {
 }
 
 
-object EmptyCard: Card(0, Suit.NONE)
+object EmptyCard: Card(0, Suit.CLUBS)

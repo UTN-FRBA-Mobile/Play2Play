@@ -155,7 +155,7 @@ abstract class TrucoViewModel(
     }
 
 
-    fun goToDeck() = {
+    fun goToDeck() {
         performAction(GoToDeck(myPlayerTeam.player))
         _myCards.value = emptyCards
     }
@@ -434,7 +434,7 @@ abstract class TrucoViewModel(
         val myTeamInRound = cardsByPlayer.filter {
             myTeam.contains(it.player) && it.cards.sumBy { it.number } != 0
         }.size
-        return myTeamInRound - 1 > 0
+        return myTeamInRound - 1 == 0
     }
 
     private fun looseRound(
