@@ -161,6 +161,9 @@ abstract class TrucoViewModel(
     fun goToDeck() {
         performAction(GoToDeck(myPlayerTeam.player))
         _myCards.value = emptyCards
+        _goToDeckButtonEnabled.value = false
+        _envidoButtonEnabled.value = false
+        _trucoButtonEnabled.value = false
     }
 
 
@@ -248,10 +251,6 @@ abstract class TrucoViewModel(
             is EnvidoGameAction ->
                 _envidoButtonEnabled.value = false
             is YesIDo -> if (isAcceptingTruco()) _envidoButtonEnabled.value = false
-            is GoToDeck -> {
-                _goToDeckButtonEnabled.value = false
-                _envidoButtonEnabled.value = false
-            }
             else -> Unit
         }
     }
