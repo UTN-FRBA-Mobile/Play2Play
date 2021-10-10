@@ -82,6 +82,9 @@ abstract class TrucoViewModel(
     private val _trucoButtonEnabled = MutableLiveData(true)
     val trucoButtonEnabled: LiveData<Boolean> = _trucoButtonEnabled
 
+    private val _goToDeckButtonEnabled = MutableLiveData(true)
+    val goToDeckButtonEnabled: LiveData<Boolean> = _goToDeckButtonEnabled
+
     private val _envidoButtonEnabled = MutableLiveData(true)
     val envidoButtonEnabled: LiveData<Boolean> = _envidoButtonEnabled
 
@@ -208,6 +211,7 @@ abstract class TrucoViewModel(
         _lastTrucoAction.value = null
         _envidoButtonEnabled.value = true
         _trucoButtonEnabled.value = true
+        _goToDeckButtonEnabled.value = true
     }
 
     private fun finishGame() {
@@ -244,6 +248,10 @@ abstract class TrucoViewModel(
             is EnvidoGameAction ->
                 _envidoButtonEnabled.value = false
             is YesIDo -> if (isAcceptingTruco()) _envidoButtonEnabled.value = false
+            is GoToDeck -> {
+                _goToDeckButtonEnabled.value = false
+                _envidoButtonEnabled.value = false
+            }
             else -> Unit
         }
     }

@@ -112,6 +112,9 @@ class TrucoActionsBottomSheetFragment :
         observe(viewModel.trucoButtonEnabled) {
             updateTrucoVisibility(it)
         }
+        observe(viewModel.goToDeckButtonEnabled) {
+            updateGoToDeckVisibility(it)
+        }
         observe(viewModel.lastTrucoAction) {
             updateTrucoText(it?.nextAction()?.message(requireContext()))
         }
@@ -127,6 +130,10 @@ class TrucoActionsBottomSheetFragment :
 
     private fun updateTrucoVisibility(visible: Boolean) {
         binding.trucoButton.isEnabled = visible
+    }
+
+    private fun updateGoToDeckVisibility(visible: Boolean) {
+        binding.goToDeckButton.isEnabled = visible
     }
 
     private fun updateTrucoText(text: String?) {
