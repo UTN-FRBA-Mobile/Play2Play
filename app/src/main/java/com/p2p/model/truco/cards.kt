@@ -1,6 +1,6 @@
 package com.p2p.model.truco
 
-data class PlayerWithCards(val player: String, val cards: List<Card>)
+data class PlayerWithCards(val name: String, val cards: List<Card>)
 
 open class Card(val number: Int, val suit: Suit) {
 

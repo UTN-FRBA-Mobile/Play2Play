@@ -4,7 +4,7 @@ import android.widget.ImageView
 import com.p2p.R
 import com.p2p.model.truco.Card
 import com.p2p.model.truco.Suit
-import java.util.Locale
+import java.util.*
 
 
 object CardImageCreator {

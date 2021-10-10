@@ -1,13 +1,13 @@
 package com.p2p.presentation.truco.envidoCalculator
 
 import com.p2p.R
-import com.p2p.model.truco.PlayerTeam
+import com.p2p.model.truco.TeamPlayer
 import com.p2p.presentation.truco.actions.TrucoAction
 import com.p2p.presentation.truco.actions.TrucoAction.ShowEnvidoPoints
 
 object EnvidoMessageCalculator {
 
-    fun envidoMessagesFor2(playersWithPoints: List<Pair<PlayerTeam, Int>>): Map<PlayerTeam, TrucoAction?> {
+    fun envidoMessagesFor2(playersWithPoints: List<Pair<TeamPlayer, Int>>): Map<TeamPlayer, TrucoAction?> {
         val (firstPlayer, firstPlayerScore) = playersWithPoints.first()
         val (secondPlayer, secondPlayerScore) = playersWithPoints.last()
         return mapOf(
@@ -19,7 +19,7 @@ object EnvidoMessageCalculator {
     }
 
     /***
-     * Logic is like this:
+     * La lógica es:
      * 1 -> muestra su puntaje
     // 2 -> Si supera dice su puntaje (a) || o "Son buenas" (b)
     //      (a) 3 -> Si supera dice su puntaje (c) || o "Son buenas" (d)
@@ -29,7 +29,7 @@ object EnvidoMessageCalculator {
     //          (h) 3 -> Si supera dice su puntaje (e) || o "Son buenas" (f)
     //      (i) 3 -> No dice nada (g)
      */
-    fun envidoMessagesFor4(playersWithPoints: List<Pair<PlayerTeam, Int>>): Map<PlayerTeam, TrucoAction?> {
+    fun envidoMessagesFor4(playersWithPoints: List<Pair<TeamPlayer, Int>>): Map<TeamPlayer, TrucoAction?> {
         val (firstPlayer, firstPlayerScore) = playersWithPoints.first()
         val (secondPlayer, secondPlayerScore) = playersWithPoints[1]
         val (thirdPlayer, thirdPlayerScore) = playersWithPoints[2]

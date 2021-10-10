@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.p2p.R
 import com.p2p.presentation.truco.actions.TrucoAction.*
+import kotlin.math.max
 
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
@@ -44,7 +45,10 @@ abstract class TrucoAction(
         override fun message(context: Context) = context.getString(R.string.truco_ask_for_truco)
 
         override fun availableResponses() =
-            TrucoActionAvailableResponses(retruco = true, envidoGoesFirst = round == 1 && !envidoAlreadyAsked)
+            TrucoActionAvailableResponses(
+                retruco = true,
+                envidoGoesFirst = round == 1 && !envidoAlreadyAsked
+            )
 
         override fun nextAction(): TrucoAction = Retruco
     }
@@ -67,7 +71,8 @@ abstract class TrucoAction(
         noPoints = 3
     ), TrucoGameAction {
 
-        override fun message(context: Context) = context.getString(R.string.truco_ask_for_vale_cuatro)
+        override fun message(context: Context) =
+            context.getString(R.string.truco_ask_for_vale_cuatro)
 
         override fun nextAction(): TrucoAction? = null
     }
@@ -91,7 +96,7 @@ abstract class TrucoAction(
 
     data class RealEnvido(override val previousActions: List<TrucoAction>) : TrucoAction(
         hasReplication = true,
-        yesPoints = (previousActions.lastOrNull()?.yesPoints ?: 0) + 3 ,
+        yesPoints = (previousActions.lastOrNull()?.yesPoints ?: 0) + 3,
         noPoints = previousActions.lastOrNull()?.yesPoints ?: 1
     ), EnvidoGameAction {
 
@@ -100,15 +105,25 @@ abstract class TrucoAction(
         override fun availableResponses() = TrucoActionAvailableResponses(faltaEnvido = true)
     }
 
-    data class FaltaEnvido(val totalGamePoints: Int,
-                           val totalOpponentPoints: Int,
-                           override val previousActions: List<TrucoAction>) : TrucoAction(
+    data class FaltaEnvido(
+        val totalOpponentPoints: Int,
+        val totalSelfPoints: Int,
+        override val previousActions: List<TrucoAction>
+    ) : TrucoAction(
         hasReplication = true,
-        yesPoints = totalGamePoints - totalOpponentPoints,
+        yesPoints = calculatePoints(totalOpponentPoints, totalSelfPoints),
         noPoints = previousActions.lastOrNull()?.yesPoints ?: 1
     ), EnvidoGameAction {
 
         override fun message(context: Context) = context.getString(R.string.truco_ask_for_falta_envido)
+
+        companion object {
+            fun calculatePoints(opponentPoints: Int, selfPoints: Int) =
+                if (opponentPoints < 15 && selfPoints < 15)
+                    15 - max(opponentPoints, selfPoints)
+                else
+                    30 - max(opponentPoints, selfPoints)
+        }
     }
 
     object EnvidoGoesFirst : TrucoAction(
@@ -149,7 +164,6 @@ abstract class TrucoAction(
     data class GoToDeck(val player: String) : TrucoAction(
         hasReplication = false
     ) {
-
         override fun message(context: Context) = context.getString(R.string.truco_go_to_deck_action)
 
         override fun availableResponses() =
@@ -164,7 +178,8 @@ abstract class TrucoAction(
         hasReplication = hasReplication
     ) {
 
-        override fun message(context: Context) = resourceId?.let { context.getString(it, envidoPoints) } ?: envidoPoints.toString()
+        override fun message(context: Context) =
+            resourceId?.let { context.getString(it, envidoPoints) } ?: envidoPoints.toString()
 
         override fun availableResponses() =
             TrucoActionAvailableResponses(iDo = false, iDont = false)

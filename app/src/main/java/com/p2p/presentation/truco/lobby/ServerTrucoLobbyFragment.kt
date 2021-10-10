@@ -38,9 +38,7 @@ class ServerTrucoLobbyFragment : BaseGameFragment<
         gameBinding.helpOrderPlayersDescription.text = resources
             .getString(R.string.tr_lobby_help_order_players)
             .fromHtml()
-        gameBinding.startGameButton.setOnClickListener {
-            gameViewModel.startGame()
-        }
+        gameBinding.startGameButton.setOnClickListener { gameViewModel.startGame() }
     }
 
     override fun setupObservers() {
@@ -66,9 +64,9 @@ class ServerTrucoLobbyFragment : BaseGameFragment<
     private fun setupPlayersGrid() = with(gameBinding.playersGrid) {
         adapter = activity?.let {
             ConnectedPlayersTrucoAdapter(it)
-                .also {
-                this@ServerTrucoLobbyFragment.connectedPlayersTrucoAdapter = it
-            }
+                .also { adapter ->
+                    this@ServerTrucoLobbyFragment.connectedPlayersTrucoAdapter = adapter
+                }
         }
     }
 
