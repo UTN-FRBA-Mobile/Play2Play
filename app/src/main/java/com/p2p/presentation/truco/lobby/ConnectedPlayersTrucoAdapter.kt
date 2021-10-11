@@ -44,6 +44,7 @@ class ConnectedPlayersTrucoAdapter(
         val connectedUserView: View = layoutInflater.inflate(R.layout.view_truco_connected_user, parent, false)
         val player: String = players[position]
         val playerName = connectedUserView.findViewById<View>(R.id.name) as TextView
+        var itemBackground = 0
 
         playerName.text = player
 
@@ -51,10 +52,12 @@ class ConnectedPlayersTrucoAdapter(
         imageView.setImageResource(R.drawable.ic_baseline_account_circle_white)
 
         when(position) {
-            0 -> connectedUserView.setBackgroundResource(R.drawable.grid_view_item_hand_player)
-            1, 2 -> connectedUserView.setBackgroundResource(R.drawable.grid_view_item_second_team_player)
-            3 -> connectedUserView.setBackgroundResource(R.drawable.grid_view_item_first_team_player)
+            0 -> itemBackground = R.drawable.grid_view_item_hand_player
+            1, 2 -> itemBackground = R.drawable.grid_view_item_second_team_player
+            3 -> itemBackground = R.drawable.grid_view_item_first_team_player
         }
+
+        connectedUserView.setBackgroundResource(itemBackground)
 
         connectedUserView.setOnTouchListener { view, event ->
             when (event.action) {
@@ -65,6 +68,8 @@ class ConnectedPlayersTrucoAdapter(
                         arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN),
                         item
                     )
+                    var dottedBackground = 0
+                    var imageAvatar = 0
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         view.startDragAndDrop(dragData, View.DragShadowBuilder(view), null, 0)
@@ -74,14 +79,18 @@ class ConnectedPlayersTrucoAdapter(
 
                     when(position) {
                         0, 3 -> {
-                            view.background = ContextCompat.getDrawable(context, R.drawable.dotted_border_yellow)
-                            view.findViewById<ImageView>(R.id.avatar).setImageResource(R.drawable.ic_baseline_account_circle_yellow)
+                            dottedBackground = R.drawable.dotted_border_yellow
+                            imageAvatar = R.drawable.ic_baseline_account_circle_yellow
                         }
                         1, 2 -> {
-                            view.background = ContextCompat.getDrawable(context, R.drawable.dotted_border_blue)
-                            view.findViewById<ImageView>(R.id.avatar).setImageResource(R.drawable.ic_baseline_account_circle_blue)
+                            dottedBackground = R.drawable.dotted_border_blue
+                            imageAvatar = R.drawable.ic_baseline_account_circle_blue
                         }
                     }
+
+                    view.background = ContextCompat.getDrawable(context, dottedBackground)
+                    view.findViewById<ImageView>(R.id.avatar).setImageResource(imageAvatar)
+
                 }
                 MotionEvent.ACTION_UP -> view.performClick()
             }
