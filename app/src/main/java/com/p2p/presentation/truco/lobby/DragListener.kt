@@ -54,15 +54,13 @@ class DragListener : View.OnDragListener {
                 val adapter = getViewAdapter(view)
                 val player = getViewPlayerName(view)
                 val players: List<String> = adapter.players
-                val playerIndex = getPlayerIndex(player, players)
 
-                if (playerIndex != 0) {
-                    view.background = ContextCompat.getDrawable(view.context, R.drawable.grid_view_item_general_player)
-                } else {
-                    view.background = ContextCompat.getDrawable(view.context, R.drawable.grid_view_item_hand_player)
-                    view.findViewById<ImageView>(R.id.avatar)
-                        .setImageResource(R.drawable.ic_baseline_account_circle_white)
+                view.findViewById<ImageView>(R.id.avatar).setImageResource(R.drawable.ic_baseline_account_circle_white)
 
+                when(getPlayerIndex(player, players)) {
+                    0 -> view.background = ContextCompat.getDrawable(view.context, R.drawable.grid_view_item_hand_player)
+                    1, 2 -> view.background = ContextCompat.getDrawable(view.context, R.drawable.grid_view_item_second_team_player)
+                    3 -> view.background = ContextCompat.getDrawable(view.context, R.drawable.grid_view_item_first_team_player)
                 }
 
                 return true
