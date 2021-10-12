@@ -27,7 +27,7 @@ class TuttiFruttiClientReviewRoundAdapter :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder {
         if (viewType == TITLE_TYPE) {
-            return ReviewCategoryViewHolder(
+            return ClientReviewCategoryViewHolder(
                 ViewClientReviewCategoryItemBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
@@ -35,7 +35,7 @@ class TuttiFruttiClientReviewRoundAdapter :
                 )
             )
         }
-        return ReviewWordViewHolder(
+        return ClientReviewWordViewHolder(
             ViewClientReviewWordItemBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
@@ -78,19 +78,19 @@ class TuttiFruttiClientReviewRoundAdapter :
     private fun getBackgroundColor(index: Int) =
         if (index.isEven()) R.color.colorBackground else R.color.wild_sand
 
-    inner class ReviewCategoryViewHolder(private val binding: ViewClientReviewCategoryItemBinding) : RecyclerViewHolder(binding) {
+    inner class ClientReviewCategoryViewHolder(private val binding: ViewClientReviewCategoryItemBinding) : RecyclerViewHolder(binding) {
         /** Show the given [category] into the view. */
         override fun bind(viewHolderParams: RecyclerViewHolderParameters, position: Int) = with(binding) {
             categoryTitle.text = viewHolderParams.category
         }
     }
 
-    inner class ReviewWordViewHolder(private val binding: ViewClientReviewWordItemBinding) : RecyclerViewHolder(binding) {
+    inner class ClientReviewWordViewHolder(private val binding: ViewClientReviewWordItemBinding) : RecyclerViewHolder(binding) {
         /** Show the given [review] into the view. */
         override fun bind(viewHolderParams: RecyclerViewHolderParameters, position: Int) = with(binding) {
             playerName.text = viewHolderParams.player
             playerWord.text = viewHolderParams.word
-            reviewWordContainer.setBackgroundColor(
+            clientReviewWordContainer.setBackgroundColor(
                 ContextCompat.getColor(
                     itemView.context,
                     getBackgroundColor(position)

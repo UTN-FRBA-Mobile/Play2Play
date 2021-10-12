@@ -6,15 +6,14 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.p2p.R
-import com.p2p.databinding.FragmentReviewTuttiFruttiBinding
-import com.p2p.presentation.base.BaseViewModel
+import com.p2p.databinding.FragmentClientReviewTuttiFruttiBinding
 import com.p2p.presentation.base.NoViewModel
 import com.p2p.presentation.basegame.BaseGameFragment
 import com.p2p.presentation.tuttifrutti.TuttiFruttiViewModel
 import com.p2p.utils.fromHtml
 
 class TuttiFruttiClientReviewFragment : BaseGameFragment<
-        FragmentReviewTuttiFruttiBinding,
+        FragmentClientReviewTuttiFruttiBinding,
         Any,
         NoViewModel,
         TuttiFruttiViewModel>() {
@@ -23,18 +22,18 @@ class TuttiFruttiClientReviewFragment : BaseGameFragment<
 
     override val viewModel by viewModels<NoViewModel>()
 
-    override val gameInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentReviewTuttiFruttiBinding =
-        FragmentReviewTuttiFruttiBinding::inflate
+    override val gameInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentClientReviewTuttiFruttiBinding =
+        FragmentClientReviewTuttiFruttiBinding::inflate
 
     private lateinit var tuttiFruttiClientReviewRoundAdapter: TuttiFruttiClientReviewRoundAdapter
 
     override fun initUI() {
         super.initUI()
         gameViewModel.stopLoading()
-        setupReviewCategoriesRecycler()
+        setupClientReviewCategoriesRecycler()
     }
 
-    private fun setupReviewCategoriesRecycler() = with(gameBinding.reviewCategoriesRecycler) {
+    private fun setupClientReviewCategoriesRecycler() = with(gameBinding.clientReviewCategoriesRecycler) {
         layoutManager = LinearLayoutManager(context)
         adapter = TuttiFruttiClientReviewRoundAdapter().also {
             this@TuttiFruttiClientReviewFragment.tuttiFruttiClientReviewRoundAdapter = it

@@ -75,7 +75,7 @@
     <string name="tf_enough_player"><![CDATA[¡<b>%s</b> dijo basta!]]></string>
 
     <!-- Tutti Frutti - Loading screen -->
-    <string name="tf_wait_for_review">¡Discutan los puntajes con quien creó el juego !</string>
+    <string name="tf_wait_for_review">¡Discutan los puntajes con quien creó el juego!</string>
     <string name="tf_wait_for_words">Esperando las palabras del resto de les jugadores</string>
 
     <!-- Tutti Frutti - Final Score -->
