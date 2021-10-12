@@ -10,7 +10,7 @@ object TrucoCardsChallenger {
     private val sevenOfSwords = Card(7, Suit.SWORDS)
     private val sevenOfGolds = Card(7, Suit.GOLDS)
     private val specialCards = listOf(aceOfSwords, aceOfClubs, sevenOfSwords, sevenOfGolds)
-    private val cardNumberOrder = listOf(3, 2, 1, 12, 11, 10, 7, 6, 5, 4)
+    private val cardNumberOrder = listOf(3, 2, 1, 12, 11, 10, 7, 6, 5, 4, 0)
 
     fun getWinnerCards(cards: List<Card>) = cards
         .groupBy { getCardScore(it) }
