@@ -8,4 +8,6 @@ object ObtainWords : TuttiFruttiSpecificGameEvent()
 
 object GoToReview : TuttiFruttiSpecificGameEvent()
 
+object GoToClientReview : TuttiFruttiSpecificGameEvent()
+
 object GoToFinalScore : TuttiFruttiSpecificGameEvent()
