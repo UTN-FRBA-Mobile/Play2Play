@@ -9,24 +9,17 @@ import com.p2p.data.loadingMessages.LoadingTextRepository
 import com.p2p.data.userInfo.UserSession
 import com.p2p.model.base.message.Conversation
 import com.p2p.model.truco.Card
-import com.p2p.model.truco.PlayerTeam
 import com.p2p.model.truco.PlayerWithCards
-import com.p2p.model.truco.message.*
+import com.p2p.model.truco.TeamPlayer
+import com.p2p.model.truco.message.TrucoActionMessage
+import com.p2p.model.truco.message.TrucoPlayCardMessage
 import com.p2p.presentation.basegame.ConnectionType
 import com.p2p.presentation.basegame.GameViewModel
 import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.home.games.Game
 import com.p2p.presentation.truco.actions.EnvidoGameAction
 import com.p2p.presentation.truco.actions.TrucoAction
-import com.p2p.presentation.truco.actions.TrucoAction.Envido
-import com.p2p.presentation.truco.actions.TrucoAction.EnvidoGoesFirst
-import com.p2p.presentation.truco.actions.TrucoAction.FaltaEnvido
-import com.p2p.presentation.truco.actions.TrucoAction.NoIDont
-import com.p2p.presentation.truco.actions.TrucoAction.RealEnvido
-import com.p2p.presentation.truco.actions.TrucoAction.Retruco
-import com.p2p.presentation.truco.actions.TrucoAction.Truco
-import com.p2p.presentation.truco.actions.TrucoAction.ValeCuatro
-import com.p2p.presentation.truco.actions.TrucoAction.YesIDo
+import com.p2p.presentation.truco.actions.TrucoAction.*
 import com.p2p.presentation.truco.actions.TrucoActionAvailableResponses
 import com.p2p.presentation.truco.actions.TrucoGameAction
 import com.p2p.presentation.truco.envidoCalculator.EnvidoMessageCalculator
@@ -47,10 +40,10 @@ abstract class TrucoViewModel(
     Game.TRUCO
 ) {
     /** List with the teams of players */
-    protected lateinit var playersTeams: List<PlayerTeam>
+    protected lateinit var teamPlayers: List<TeamPlayer>
 
     /** Set the quantity of players selected by the user when creating the game . */
-    private val _totalPlayers = MutableLiveData<Int>()
+    protected val _totalPlayers = MutableLiveData<Int>()
     val totalPlayers: LiveData<Int> = _totalPlayers
 
     /** Set the quantity of points selected by the user when creating the game . */
@@ -86,14 +79,14 @@ abstract class TrucoViewModel(
     private val _currentRound = MutableLiveData(1)
     val currentRound: LiveData<Int> = _currentRound
 
-    private lateinit var currentPlayerTurn: PlayerTeam
+    private lateinit var currentTurnPlayer: TeamPlayer
 
     private var currentActionPoints: Int = 1
     protected var previousActions: List<TrucoAction> = emptyList()
 
-    protected val myPlayerTeam: PlayerTeam by lazy { playersTeams.first { it.player == userName } }
+    protected val myTeamPlayer: TeamPlayer by lazy { teamPlayers.first { it.name == userName } }
     private val playedCards: MutableList<MutableList<PlayedCard>> = mutableListOf(mutableListOf())
-    private val currentHandWinners: MutableList<PlayerTeam?> = mutableListOf()
+    private val currentHandWinners: MutableList<TeamPlayer?> = mutableListOf()
 
     init {
         _ourScore.value = 0
@@ -102,9 +95,9 @@ abstract class TrucoViewModel(
 
     abstract override fun startGame()
 
-    override fun goToPlay() {
+    fun goToPlayTruco() {
         gameAlreadyStarted = true
-        super.goToPlay()
+        dispatchSingleTimeEvent(TrucoGoToPlay(totalPlayers.requireValue()))
     }
 
     /** This will only be used by the server */
@@ -115,17 +108,21 @@ abstract class TrucoViewModel(
         super.receiveMessage(conversation)
         when (val message = conversation.lastMessage) {
             is TrucoActionMessage -> {
-                disableButtonsIfApplies(message.action, actionPerformer = false)
+                disableButtonsIfApplies(
+                    message.action,
+                    actionPerformer = actionWasMadeByMyTeam(message.teamPlayer)
+                )
                 updateActionValues(message.action)
                 val playerPosition =
-                    TrucoPlayerPosition.get(message.playerTeam, playersTeams, myPlayerTeam)
+                    TrucoPlayerPosition.get(message.teamPlayer, teamPlayers, myTeamPlayer)
                 dispatchSingleTimeEvent(
                     TrucoShowOpponentActionEvent(
                         message.action,
-                        playerPosition
+                        playerPosition,
+                        canAnswer(message.teamPlayer)
                     )
                 )
-                onActionDone(message.action, message.playerTeam.team)
+                onActionDone(message.action, message.teamPlayer.team)
             }
             is TrucoPlayCardMessage -> onRivalCardPlayed(message.playedCard)
         }
@@ -142,10 +139,10 @@ abstract class TrucoViewModel(
 
     fun performAction(action: TrucoAction) {
         disableButtonsIfApplies(action, actionPerformer = true)
-        connection.write(TrucoActionMessage(action, myPlayerTeam))
+        connection.write(TrucoActionMessage(action, myTeamPlayer))
         updateActionValues(action)
         dispatchSingleTimeEvent(TrucoShowMyActionEvent(action))
-        onActionDone(action, myPlayerTeam.team)
+        onActionDone(action, myTeamPlayer.team)
     }
 
     fun performEnvido(isReply: Boolean = false) =
@@ -156,7 +153,7 @@ abstract class TrucoViewModel(
 
     // TODO: receive total opponent points
     fun performFaltaEnvido(isReply: Boolean = false) =
-        performOrReplyAction(isReply, FaltaEnvido(totalPoints.requireValue() , 0, previousActions))
+        performOrReplyAction(isReply, FaltaEnvido(theirScore.requireValue(), ourScore.requireValue(), previousActions))
 
     fun replyAction(action: TrucoAction) {
         _actionAvailableResponses.value = TrucoActionAvailableResponses.noActions()
@@ -164,7 +161,7 @@ abstract class TrucoViewModel(
     }
 
     fun onGameStarted() {
-        nextTurn(playersTeams.first())
+        nextTurn(teamPlayers.first())
     }
 
     private fun performOrReplyAction(isReply: Boolean, action: TrucoAction) {
@@ -175,7 +172,7 @@ abstract class TrucoViewModel(
     }
 
     fun playCard(card: Card) {
-        val playedCard = PlayedCard(myPlayerTeam, card)
+        val playedCard = PlayedCard(myTeamPlayer, card)
         connection.write(TrucoPlayCardMessage(playedCard))
         onCardPlayed(playedCard)
     }
@@ -188,6 +185,12 @@ abstract class TrucoViewModel(
         _envidoButtonEnabled.value = true
         _trucoButtonEnabled.value = true
     }
+
+    private fun canAnswer(otherPlayer: TeamPlayer): Boolean =
+        teamPlayers.last { it.team != otherPlayer.team } == myTeamPlayer
+
+    private fun actionWasMadeByMyTeam(otherPlayer: TeamPlayer): Boolean =
+        otherPlayer.team == myTeamPlayer.team
 
     private fun finishGame() {
         dispatchSingleTimeEvent(TrucoFinishGame)
@@ -212,7 +215,6 @@ abstract class TrucoViewModel(
 
     private fun disableButtonsIfApplies(action: TrucoAction, actionPerformer: Boolean) {
         when (action) {
-            // Envido can be asked after truco on the first round, so it is not fully asked until is answered with yes or no
             is ValeCuatro -> updateTrucoValues(action, buttonEnabled = false)
             is TrucoGameAction -> updateTrucoValues(action, buttonEnabled = !actionPerformer)
             is EnvidoGoesFirst -> {
@@ -245,7 +247,7 @@ abstract class TrucoViewModel(
     private fun onRivalCardPlayed(playedCard: PlayedCard) {
         dispatchSingleTimeEvent(
             TrucoOtherPlayedCardEvent(
-                TrucoPlayerPosition.get(playedCard.playerTeam, playersTeams, myPlayerTeam),
+                TrucoPlayerPosition.get(playedCard.teamPlayer, teamPlayers, myTeamPlayer),
                 playedCard.card,
                 currentRound.requireValue()
             )
@@ -269,38 +271,37 @@ abstract class TrucoViewModel(
         _currentRound.value = round + 1
         playedCards.add(mutableListOf())
 
-        val roundWinnerPlayerTeam = getRoundWinnerPlayerTeam(currentRoundPlayedCards)
-        val roundResult = TrucoRoundResult.get(roundWinnerPlayerTeam, myPlayerTeam)
-        currentHandWinners.add(roundWinnerPlayerTeam)
+        val roundWinnerTeamPlayer = getRoundWinnerTeamPlayer(currentRoundPlayedCards)
+        val roundResult = TrucoRoundResult.get(roundWinnerTeamPlayer, myTeamPlayer)
+        currentHandWinners.add(roundWinnerTeamPlayer)
 
         if (hasCurrentHandFinished()) {
             onHandFinished()
         } else {
             dispatchSingleTimeEvent(TrucoFinishRound(round, roundResult))
-            nextTurn(roundWinnerPlayerTeam)
+            nextTurn(roundWinnerTeamPlayer)
         }
     }
 
     private fun onHandFinished(handWinnerPlayerTeam: Int = getCurrentHandWinner().team) {
-        val score = if (handWinnerPlayerTeam == myPlayerTeam.team) _ourScore else _theirScore
+        val score = if (handWinnerPlayerTeam == myTeamPlayer.team) _ourScore else _theirScore
         score.value = score.requireValue() + currentActionPoints
         if (score.requireValue() >= _totalPoints.requireValue()) { finishGame() } else { newHand() }
     }
 
     private fun updateScore(winnerTeam: Int) {
-        val score = if (winnerTeam == myPlayerTeam.team) _ourScore else _theirScore
+        val score = if (winnerTeam == myTeamPlayer.team) _ourScore else _theirScore
         score.value = score.requireValue() + currentActionPoints
     }
 
-    private fun hasRoundFinished(): Boolean {
-        return playedCards.last().size == totalPlayers.requireValue() ||
+    private fun hasRoundFinished(): Boolean =
+        playedCards.last().size == totalPlayers.requireValue() ||
                 hasRoundFinishedBecauseAceOfSwords() ||
                 hasRoundFinishedBecauseFullTeamLost()
-    }
 
     private fun hasRoundFinishedBecauseAceOfSwords() = playedCards.last()
         .firstOrNull { it.card == TrucoCardsChallenger.aceOfSwords }
-        ?.let { it.playerTeam in currentHandWinners || currentHandWinners.any { winner -> winner == null } }
+        ?.let { it.teamPlayer in currentHandWinners || currentHandWinners.any { winner -> winner == null } }
         ?: false
 
     private fun hasRoundFinishedBecauseFullTeamLost(): Boolean {
@@ -309,14 +310,14 @@ abstract class TrucoViewModel(
         }
         val currentRoundPlayedCards = playedCards.last()
         val teamWithRoundFinished = currentRoundPlayedCards
-            .groupBy { it.playerTeam.team }
+            .groupBy { it.teamPlayer.team }
             .values
             .firstOrNull { it.size == totalPlayers.requireValue() / 2 }
             ?.first()
-            ?.playerTeam
+            ?.teamPlayer
             ?.team
             ?: return false // If there's no a full team that finished the round, skip this condition
-        val roundWinner = getRoundWinnerPlayerTeam(currentRoundPlayedCards)?.team
+        val roundWinner = getRoundWinnerTeamPlayer(currentRoundPlayedCards)?.team
         val hasLostCurrentRound = roundWinner != null && roundWinner != teamWithRoundFinished
         val hasTieCurrentRound = roundWinner == null
         val hasWonAnyRound = currentHandWinners.any { it?.team == teamWithRoundFinished }
@@ -331,14 +332,14 @@ abstract class TrucoViewModel(
                 (currentHandWinners.any { it == null } && currentHandWinners.any { it != null })
     }
 
-    private fun getRoundWinnerPlayerTeam(currentRoundPlayedCards: List<PlayedCard>): PlayerTeam? {
+    private fun getRoundWinnerTeamPlayer(currentRoundPlayedCards: List<PlayedCard>): TeamPlayer? {
         val winnerCards =
             TrucoCardsChallenger.getWinnerCards(currentRoundPlayedCards.map { it.card })
         return currentRoundPlayedCards
             .filter { it.card in winnerCards }
-            .takeIf { winners -> winners.all { it.playerTeam == winners.first().playerTeam } }
+            .takeIf { winners -> winners.all { it.teamPlayer == winners.first().teamPlayer } }
             ?.first()
-            ?.playerTeam
+            ?.teamPlayer
     }
 
     private fun getCurrentHandAbsoluteWinner() = groupCurrentHandWinners()
@@ -352,32 +353,30 @@ abstract class TrucoViewModel(
      * - Tie the first (and maybe the second) and wining the next round.
      * - Tie all the rounds and be the hand.
      */
-    private fun getCurrentHandWinner(): PlayerTeam {
-        if (currentHandWinners.all { it == null }) {
-            return playedCards.first()
-                .first().playerTeam // The first player that played a card is the hand
-        }
-
-        return getCurrentHandAbsoluteWinner() ?: currentHandWinners.filterNotNull().first()
-    }
+    private fun getCurrentHandWinner(): TeamPlayer =
+        if (currentHandWinners.all { it == null })
+            playedCards.first()
+                .first().teamPlayer // The first player that played a card is the hand
+        else
+            getCurrentHandAbsoluteWinner() ?: currentHandWinners.filterNotNull().first()
 
     private fun groupCurrentHandWinners() = currentHandWinners
         .groupBy { it?.team }
         .filterKeys { it != null }
         .values
 
-    private fun nextTurn(forceNextTurnPlayer: PlayerTeam? = null) {
+    private fun nextTurn(forceNextTurnPlayer: TeamPlayer? = null) {
         setCurrentPlayerTurn(forceNextTurnPlayer ?: getNextPlayerTurn())
     }
 
-    private fun getNextPlayerTurn(): PlayerTeam {
-        val nextIndex = playersTeams.indexOf(currentPlayerTurn) + 1
-        return playersTeams[nextIndex % playersTeams.size]
+    private fun getNextPlayerTurn(): TeamPlayer {
+        val nextIndex = teamPlayers.indexOf(currentTurnPlayer) + 1
+        return teamPlayers[nextIndex % teamPlayers.size]
     }
 
-    private fun setCurrentPlayerTurn(player: PlayerTeam) {
-        currentPlayerTurn = player
-        if (player == myPlayerTeam) {
+    private fun setCurrentPlayerTurn(player: TeamPlayer) {
+        currentTurnPlayer = player
+        if (player == myTeamPlayer) {
             dispatchSingleTimeEvent(TrucoTakeTurnEvent)
         }
     }
@@ -385,11 +384,9 @@ abstract class TrucoViewModel(
     open protected fun onActionDone(action: TrucoAction, performedByTeam: Int) {
         when (action) {
             is NoIDont -> onNoIDont(performedByTeam)
-            is YesIDo -> {
-                if (previousActions.last() is EnvidoGameAction) {
-                    playEnvido()
-                    currentActionPoints = 1
-                }
+            is YesIDo -> if (previousActions.last() is EnvidoGameAction) {
+                playEnvido()
+                currentActionPoints = 1
             }
         }
     }
@@ -397,60 +394,53 @@ abstract class TrucoViewModel(
 
     private fun playEnvido() {
         val pointsByPlayer = cardsByPlayer.map {
-            val playerTeam = playersTeams.first { playerTeam -> playerTeam.player == it.player }
-            playerTeam to EnvidoPointsCalculator.getPoints(it.cards)
+            val teamPlayer = teamPlayers.first { teamPlayer -> teamPlayer.name == it.name }
+            teamPlayer to EnvidoPointsCalculator.getPoints(it.cards)
         }
         val roundOrder = getRoundOrder()
-        val playersWithPoints = roundOrder.map { player -> pointsByPlayer.first { it.first ==  player} }
+        val playersWithPoints = roundOrder.map { player -> pointsByPlayer.first { it.first == player } }
 
         val winner = getWinner(pointsByPlayer, roundOrder)
 
-        val actionsByPlayer: Map<PlayerTeam, TrucoAction?> = if(roundOrder.size == 2){
-            EnvidoMessageCalculator.envidoMessagesFor2(playersWithPoints)
-        }else{
-            EnvidoMessageCalculator.envidoMessagesFor4(playersWithPoints)
-        }
+        val actionsByPlayer: Map<TeamPlayer, TrucoAction?> =
+            if (roundOrder.size == 2)
+                EnvidoMessageCalculator.envidoMessagesFor2(playersWithPoints)
+            else
+                EnvidoMessageCalculator.envidoMessagesFor4(playersWithPoints)
 
         val actionsByPosition = actionsByPlayer.filter { it.value != null }.map { actionByPlayer ->
-            val playerPosition = TrucoPlayerPosition.get(actionByPlayer.key, playersTeams, myPlayerTeam)
+            val playerPosition = TrucoPlayerPosition.get(actionByPlayer.key, teamPlayers, myTeamPlayer)
             playerPosition to actionByPlayer.value!!
         }.toMap()
 
         dispatchSingleTimeEvent(TrucoShowManyActionsEvent(actionsByPosition))
-        onEnvidoPlayed(winner.first)
+        updateScore(winner.first.team)
     }
 
     private fun getWinner(
-        pointsByPlayer: List<Pair<PlayerTeam, Int>>,
-        roundOrder: List<PlayerTeam>
-    ): Pair<PlayerTeam, Int> {
+        pointsByPlayer: List<Pair<TeamPlayer, Int>>,
+        roundOrder: List<TeamPlayer>
+    ): Pair<TeamPlayer, Int> {
         val winnerPoints = pointsByPlayer.maxByOrNull { it.second }!!.second
         val playersWithMaxPoints = pointsByPlayer.filter { it.second == winnerPoints }
-        val winnerName = roundOrder.first {
-            playersWithMaxPoints.map { it.first.player }.contains(it.player)
-        }.player
+        val winnerName = roundOrder.first { playerWithCards ->
+            playersWithMaxPoints.map { it.first.name }.contains(playerWithCards.name)
+        }.name
 
-        return pointsByPlayer.first { it.first.player == winnerName }
+        return pointsByPlayer.first { it.first.name == winnerName }
     }
 
-    private fun getRoundOrder(): List<PlayerTeam> {
+    private fun getRoundOrder(): List<TeamPlayer> {
         //TODO falta poner la mano cuando lo haga juan :)
         val handIndex = 0
-        return playersTeams.drop(handIndex) + playersTeams.take(handIndex)
-    }
-
-
-    private fun onEnvidoPlayed(winner: PlayerTeam) {
-        val score = if (myPlayerTeam.team == winner.team) _ourScore else _theirScore
-        score.value = score.requireValue() + currentActionPoints
+        return teamPlayers.drop(handIndex) + teamPlayers.take(handIndex)
     }
 
     private fun onNoIDont(performedByTeam: Int) {
-        val winner = playersTeams.first { it.team != performedByTeam }.team
+        val winner = teamPlayers.first { it.team != performedByTeam }.team
         when (previousActions.last()) {
-            is Truco, is Retruco, is ValeCuatro -> {
+            is Truco, is Retruco, is ValeCuatro ->
                 onHandFinished(winner)
-            }
             is EnvidoGameAction -> {
                 updateScore(winner)
                 currentActionPoints = 1

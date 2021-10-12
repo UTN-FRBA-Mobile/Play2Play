@@ -41,7 +41,7 @@
     <!-- Tutti Frutti - Categories -->
     <string name="tf_categories_custom">Ingresá una categoría personalizada</string>
     <string name="tf_categories_selected_categories">Categorías seleccionadas</string>
-    <string name="tf_categories_count_error">¡Debes seleccionar al menos 5!</string>
+    <string name="tf_categories_count_error">¡Debés seleccionar al menos 5!</string>
 
     <!-- Turn on Bluetooth screen -->
     <string name="turn_on_bluetooth_title">¡Necesitamos que enciendas el bluetooth!</string>
@@ -60,23 +60,23 @@
     <string name="tf_letter"><![CDATA[Letra: <font color=#FF8550>%s</font>]]></string>
     <string name="tf_round"><![CDATA[Ronda: <font color=#FF8550>%d</font>/%d]]></string>
     <string name="tf_validation_error">¡Falta completar!</string>
-    <string name="tf_finish_round">¡Basta para mi, basta para todes!</string>
+    <string name="tf_finish_round">¡Basta para mí, basta para todxs!</string>
 
     <!-- Lobby -->
-    <string name="lobby_give_help_players_title">Pedile al resto que se sumen</string>
+    <string name="lobby_give_help_players_title">Pedile al resto que se sume</string>
     <string name="lobby_give_help_players_decription"><![CDATA[Para sumarse a la partida se tienen que unir al celular con el nombre <b>%s</b>]]></string>
-    <string name="lobby_connected_players">Jugadores listos</string>
-    <string name="lobby_no_players_yet">Aun no hay jugadores...</string>
-    <string name="lobby_waiting_players">Esperando jugadores</string>
+    <string name="lobby_connected_players">Jugadorxs listxs</string>
+    <string name="lobby_no_players_yet">Aún no hay jugadorxs…</string>
+    <string name="lobby_waiting_players">Esperando jugadorxs</string>
     <string name="lobby_start_game">Comenzar juego</string>
-    <string name="tr_lobby_help_order_players"><![CDATA[Arrastrá los jugadores según la posición que vayan a ocupar en la mesa. El jugador en la posición <font color=#FFB349><b>marcada</b></font> será la mano.]]></string>
+    <string name="tr_lobby_help_order_players"><![CDATA[Arrastrá lxs jugadorxs según la posición que vayan a ocupar en la mesa. Lx jugadorx en la posición <font color=#FFB349><b>marcada</b></font> será la mano.]]></string>
 
     <!-- Tutti Frutti - Review screen -->
     <string name="tf_enough_player"><![CDATA[¡<b>%s</b> dijo basta!]]></string>
 
     <!-- Tutti Frutti - Loading screen -->
     <string name="tf_wait_for_review">¡Discutan los puntajes con quien creó el juego!</string>
-    <string name="tf_wait_for_words">Esperando las palabras del resto de les jugadores</string>
+    <string name="tf_wait_for_words">Esperando las palabras del resto de lxs jugadorxs</string>
 
     <!-- Tutti Frutti - Final Score -->
     <string name="tf_winner">Ganó %s</string>
@@ -87,37 +87,36 @@
 
     <!-- Impostor create game -->
     <string name="im_write_key_word">Ingrese la palabra clave</string>
-    <string name="im_validation_error_input">¡Debes ingresar la palabra para poder arrancar!</string>
-    <string name="im_validation_error_players">¡Se deben unir al menos dos jugadores!</string>
+    <string name="im_validation_error_input">¡Debés ingresar la palabra para poder comenzar!</string>
+    <string name="im_validation_error_players">¡Se deben unir al menos dos jugadorxs!</string>
 
     <!-- Impostor play info -->
     <string name="im_key_word_is">La palabra clave es</string>
     <string name="im_impostor_is">El impostor es</string>
 
     <!-- Impostor play -->
-    <string name="im_you_are_impostor">Sos el impostor, no sabes la palabra clave</string>
-    <string name="im_you_are_not_impostor">No sos el impostor, la palabra clave es</string>
+    <string name="im_you_are_impostor">Sos lx impostorx, no sabés la palabra clave</string>
+    <string name="im_you_are_not_impostor">No sos lx impostorx, la palabra clave es</string>
     <string name="im_simulate">Simulá</string>
 
 
     <!-- Error screen -->
     <string name="error_bluetooth_off">Se apagó el bluetooth. Para poder jugar tenés que mantenerlo encendido.</string>
     <string name="error_screen_retry_button">Quiero volver a intentarlo</string>
-    <string name="error_client_connection_failure">Hubo un error al intentar conectarse al dispositivo del otro jugador.</string>
+    <string name="error_client_connection_failure">Hubo un error al intentar conectarse al dispositivo de lx otrx jugadorx.</string>
     <string name="error_server_connection_failure">Se perdió la conexión con la sala.</string>
-    <string name="error_name_in_use">El nombre que elegiste ya está siendo usado por otro jugador. Elegí otro así se pueden diferenciar.</string>
+    <string name="error_name_in_use">El nombre que elegiste ya está siendo usado por otrx jugadorx. Elegí otro así se pueden diferenciar.</string>
     <string name="error_client_connection_lost">Se perdió la conexión con %s.</string>
     <string name="error_connection_write_failure">Se perdió la conexión con la sala de juego, lo sentimos mucho.</string>
-    <string name="tf_error_single_player">El resto de los jugadores abandonaron el juego… ¡felicitaciones ganador!</string>
+    <string name="tf_error_single_player">El resto de lxs jugadorxs abandonaron el juego… ¡felicitaciones ganadorx!</string>
 
     <!-- Truco -->
     <!-- Create game -->
-    <string name="truco_create_game_title">Crea tu partida de truco</string>
+    <string name="truco_create_game_title">Creá tu partida de truco</string>
     <string name="truco_create_game_subtitle">Selecciona la cantidad de jugadores</string>
-    <string name="truco_create_game_two_player">2 jugadores</string>
-    <string name="truco_create_game_four_player">4 jugadores</string>
+    <string name="truco_create_game_two_player">2 jugadorxs</string>
+    <string name="truco_create_game_four_player">4 jugadorxs</string>
     <string name="truco_points">¿Hasta cuántos puntos van a jugar?</string>
-
 
     <!-- Play -->
     <string name="truco_card_dropping_place">Jugá tu carta</string>
@@ -137,14 +136,14 @@
     <string name="truco_ask_for_vale_cuatro">Quiero\nvale cuatro</string>
     <string name="truco_ask_for_envido_goes_first">Envido\nva primero</string>
     <string name="truco_answer_envido_are_good">Son buenas</string>
-    <string name="truco_answer_envido_are_better">%d, son mejores</string>
+    <string name="truco_answer_envido_are_better">%d son mejores</string>
     <string name="truco_go_to_deck">Me voy al mazo</string>
     <string name="truco_go_to_deck_action">Me voy\nal mazo</string>
 
     <!-- Truco final score -->
-    <string name="tr_final_score_other_team">Ellos</string>
+    <string name="tr_final_score_other_team">Ellxs</string>
     <string name="tr_winner">¡Ganamos!</string>
-    <string name="tr_loser">Perdimos...</string>
+    <string name="tr_loser">Perdimos…</string>
     <string name="tr_points">%d pts</string>
 
 </resources>

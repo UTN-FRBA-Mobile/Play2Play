@@ -15,7 +15,8 @@ object EnvidoPointsCalculator {
                 1 -> cardValues.first()
                 else -> 20 + cardValues.sorted().take(2).sum()
             }
-        }.maxOrNull()!!
+        }
+        .maxOrNull()!!
 
     private fun getCardValue(card: Card): Int =
         if (zeroCards.contains(card.number)) 0 else card.number

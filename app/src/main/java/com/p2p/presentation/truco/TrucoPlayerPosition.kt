@@ -1,6 +1,6 @@
 package com.p2p.presentation.truco
 
-import com.p2p.model.truco.PlayerTeam
+import com.p2p.model.truco.TeamPlayer
 
 enum class TrucoPlayerPosition {
     FRONT,
@@ -10,7 +10,7 @@ enum class TrucoPlayerPosition {
 
     companion object {
 
-        fun get(player: PlayerTeam, players: List<PlayerTeam>, mySelf: PlayerTeam) = when (players.size) {
+        fun get(player: TeamPlayer, players: List<TeamPlayer>, mySelf: TeamPlayer) = when (players.size) {
             2 -> if (player == mySelf) MY_SELF else FRONT
             4 -> when (getPlayersWithMyselfFirst(players, mySelf).indexOf(player)) {
                 0 -> MY_SELF
@@ -22,7 +22,7 @@ enum class TrucoPlayerPosition {
             else -> throw IllegalStateException("Truco for ${players.size} not implemented yet.")
         }
 
-        private tailrec fun getPlayersWithMyselfFirst(players: List<PlayerTeam>, mySelf: PlayerTeam): List<PlayerTeam> {
+        private tailrec fun getPlayersWithMyselfFirst(players: List<TeamPlayer>, mySelf: TeamPlayer): List<TeamPlayer> {
             return if (players.first() == mySelf) {
                 players
             } else {

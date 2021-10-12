@@ -6,7 +6,7 @@
     android:layout_width="@dimen/tr_grid_card_size"
     android:layout_height="@dimen/tr_grid_card_size"
     android:orientation="vertical"
-    android:background="@drawable/grid_view_item_general_player">
+    android:background="@drawable/grid_view_item_first_team_player">
 
     <include layout="@layout/view_guidelines" />
 

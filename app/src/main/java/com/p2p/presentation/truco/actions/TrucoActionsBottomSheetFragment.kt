@@ -108,6 +108,9 @@ class TrucoActionsBottomSheetFragment :
             changeEnvidoButtonAvailability(it)
             envidoDisabledForHand = !it
         }
+        observe(viewModel.currentRound) {
+            envidoDisabledForHand = it > 1 || envidoDisabledForHand
+        }
         observe(viewModel.singleTimeEvent) { onGameEvent(it) }
         observe(viewModel.trucoButtonEnabled) {
             updateTrucoVisibility(it)
