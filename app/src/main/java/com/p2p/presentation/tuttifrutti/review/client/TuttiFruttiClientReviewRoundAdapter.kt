@@ -76,7 +76,7 @@ class TuttiFruttiClientReviewRoundAdapter :
     private fun getCategoryIndex(actualPosition: Int) = actualPosition / (finishedRoundInfo.count() + 1)
 
     private fun getBackgroundColor(index: Int) =
-        if (index.isEven()) R.color.colorBackground else R.color.wild_sand
+        if (index.isEven()) R.color.wild_sand else R.color.colorBackground
 
     inner class ClientReviewCategoryViewHolder(private val binding: ViewClientReviewCategoryItemBinding) : RecyclerViewHolder(binding) {
         /** Show the given [category] into the view. */
@@ -88,12 +88,13 @@ class TuttiFruttiClientReviewRoundAdapter :
     inner class ClientReviewWordViewHolder(private val binding: ViewClientReviewWordItemBinding) : RecyclerViewHolder(binding) {
         /** Show the given [review] into the view. */
         override fun bind(viewHolderParams: RecyclerViewHolderParameters, position: Int) = with(binding) {
+            val playerPosition = finishedRoundInfo.indexOfFirst { it.player == viewHolderParams.player  }
             playerName.text = viewHolderParams.player
             playerWord.text = viewHolderParams.word
             clientReviewWordContainer.setBackgroundColor(
                 ContextCompat.getColor(
                     itemView.context,
-                    getBackgroundColor(position)
+                    getBackgroundColor(playerPosition)
                 )
             )
         }
