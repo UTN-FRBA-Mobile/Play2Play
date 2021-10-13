@@ -10,16 +10,16 @@
 
     <ImageView
         android:id="@+id/first_avatar"
-        android:layout_width="@dimen/huge"
-        android:layout_height="@dimen/huge"
+        android:layout_width="@dimen/big"
+        android:layout_height="@dimen/big"
         android:src="@drawable/ic_baseline_account_circle_yellow"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/second_avatar"
-        android:layout_width="@dimen/huge"
-        android:layout_height="@dimen/huge"
+        android:layout_width="@dimen/big"
+        android:layout_height="@dimen/big"
         android:src="@drawable/ic_baseline_account_circle_yellow"
         android:layout_marginStart="@dimen/medium"
         app:layout_constraintStart_toEndOf="@id/first_avatar"
