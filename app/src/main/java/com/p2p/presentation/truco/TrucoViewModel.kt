@@ -70,11 +70,14 @@ abstract class TrucoViewModel(
     private val _lastTrucoAction = MutableLiveData<TrucoGameAction?>(null)
     val lastTrucoAction: LiveData<TrucoGameAction?> = _lastTrucoAction
 
-    private val _trucoButtonEnabled = MutableLiveData(true)
+    private val _trucoButtonEnabled = MutableLiveData<Boolean>()
     val trucoButtonEnabled: LiveData<Boolean> = _trucoButtonEnabled
 
-    private val _envidoButtonEnabled = MutableLiveData(true)
+    private val _envidoButtonEnabled = MutableLiveData<Boolean>()
     val envidoButtonEnabled: LiveData<Boolean> = _envidoButtonEnabled
+
+    private val _isMyTurn = MutableLiveData(false)
+    val isMyTurn: LiveData<Boolean> = _isMyTurn
 
     private val _currentRound = MutableLiveData(1)
     val currentRound: LiveData<Int> = _currentRound
@@ -82,9 +85,9 @@ abstract class TrucoViewModel(
     private lateinit var currentTurnPlayer: TeamPlayer
 
     private var currentActionPoints: Int = 1
-    protected var previousActions: List<TrucoAction> = emptyList()
+    private var previousActions: List<TrucoAction> = emptyList()
 
-    protected val myTeamPlayer: TeamPlayer by lazy { teamPlayers.first { it.name == userName } }
+    private val myTeamPlayer: TeamPlayer by lazy { teamPlayers.first { it.name == userName } }
     private val playedCards: MutableList<MutableList<PlayedCard>> = mutableListOf(mutableListOf())
     private val currentHandWinners: MutableList<TeamPlayer?> = mutableListOf()
 
@@ -153,7 +156,10 @@ abstract class TrucoViewModel(
 
     // TODO: receive total opponent points
     fun performFaltaEnvido(isReply: Boolean = false) =
-        performOrReplyAction(isReply, FaltaEnvido(theirScore.requireValue(), ourScore.requireValue(), previousActions))
+        performOrReplyAction(
+            isReply,
+            FaltaEnvido(theirScore.requireValue(), ourScore.requireValue(), previousActions)
+        )
 
     fun replyAction(action: TrucoAction) {
         _actionAvailableResponses.value = TrucoActionAvailableResponses.noActions()
@@ -222,8 +228,7 @@ abstract class TrucoViewModel(
                 _trucoButtonEnabled.value = true
                 _envidoButtonEnabled.value = false
             }
-            is EnvidoGameAction ->
-                _envidoButtonEnabled.value = false
+            is EnvidoGameAction -> _envidoButtonEnabled.value = false
             is YesIDo -> if (isAcceptingTruco()) _envidoButtonEnabled.value = false
             else -> Unit
         }
@@ -286,7 +291,7 @@ abstract class TrucoViewModel(
     private fun onHandFinished(handWinnerPlayerTeam: Int = getCurrentHandWinner().team) {
         val score = if (handWinnerPlayerTeam == myTeamPlayer.team) _ourScore else _theirScore
         score.value = score.requireValue() + currentActionPoints
-        if (score.requireValue() >= _totalPoints.requireValue()) { finishGame() } else { newHand() }
+        if (score.requireValue() >= _totalPoints.requireValue()) finishGame() else newHand()
     }
 
     private fun updateScore(winnerTeam: Int) {
@@ -376,8 +381,10 @@ abstract class TrucoViewModel(
 
     private fun setCurrentPlayerTurn(player: TeamPlayer) {
         currentTurnPlayer = player
-        if (player == myTeamPlayer) {
+        _isMyTurn.value = player == myTeamPlayer
+        if (isMyTurn.requireValue()) {
             dispatchSingleTimeEvent(TrucoTakeTurnEvent)
+            _envidoButtonEnabled.value = teamPlayers.last { it.team == myTeamPlayer.team } == myTeamPlayer
         }
     }
 
