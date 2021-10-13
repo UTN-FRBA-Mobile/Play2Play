@@ -33,6 +33,8 @@ class TrucoActionsBottomSheetFragment :
     /** Once envido is asked in a hand, it can't be asked again. */
     private var envidoDisabledForHand = false
 
+    private var trucoAnswersDisabled = false
+
     private val bottomSheetCallback = object : BottomSheetBehavior.BottomSheetCallback() {
 
         override fun onStateChanged(bottomSheet: View, newState: Int) {
@@ -105,31 +107,38 @@ class TrucoActionsBottomSheetFragment :
     override fun setupObservers() {
         super.setupObservers()
         observe(viewModel.envidoButtonEnabled) {
-            changeEnvidoButtonAvailability(it)
-            envidoDisabledForHand = !it
+            changeEnvidoButtonAvailability(it && !envidoDisabledForHand)
+            envidoDisabledForHand = !it || envidoDisabledForHand
         }
         observe(viewModel.currentRound) {
             envidoDisabledForHand = it > 1 || envidoDisabledForHand
+            changeEnvidoButtonAvailability(!envidoDisabledForHand)
         }
         observe(viewModel.singleTimeEvent) { onGameEvent(it) }
         observe(viewModel.trucoButtonEnabled) {
             updateTrucoVisibility(it)
+            trucoAnswersDisabled = !it
         }
         observe(viewModel.lastTrucoAction) {
             updateTrucoText(it?.nextAction()?.message(requireContext()))
+        }
+        observe(viewModel.isMyTurn) {
+            changeEnvidoButtonAvailability(!envidoDisabledForHand && it)
+            updateTrucoVisibility(!trucoAnswersDisabled && it)
+            changeGoToDeckButtonAvailability(it)
         }
     }
 
     private fun onGameEvent(event: GameEvent) = when (event) {
         is TrucoNewHand -> {
             envidoDisabledForHand = false
-            changeEnvidoButtonAvailability(true)
+            trucoAnswersDisabled = false
         }
         else -> super.onEvent(event)
     }
 
     private fun updateTrucoVisibility(visible: Boolean) {
-        binding.trucoButton.isEnabled = visible
+       binding.trucoButton.isEnabled = visible
     }
 
     private fun updateTrucoText(text: String?) {
@@ -151,16 +160,18 @@ class TrucoActionsBottomSheetFragment :
 
     private fun onCollapsed() {
         binding.openButtonIcon.animateRotation(0f)
-        changeEnvidoButtonAvailability(false)
     }
 
     private fun onExpanded() {
         binding.openButtonIcon.animateRotation(180f)
-        changeEnvidoButtonAvailability(!envidoDisabledForHand)
     }
 
     private fun changeEnvidoButtonAvailability(enabled: Boolean) {
         binding.envidoOptionsButton.isEnabled = enabled
+    }
+
+    private fun changeGoToDeckButtonAvailability(enabled: Boolean) {
+        binding.goToDeckButton.isEnabled = enabled
     }
 
     private fun Dialog.getBottomSheet(): FrameLayout =
