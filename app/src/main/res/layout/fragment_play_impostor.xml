@@ -19,7 +19,8 @@
         android:gravity="center"
         app:tint="@color/colorPrimary"
         android:layout_marginBottom="@dimen/large_extra"
-        android:src="@drawable/ic_emulate_impostor" />
+        android:src="@drawable/ic_emulate_impostor"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/screen_description"

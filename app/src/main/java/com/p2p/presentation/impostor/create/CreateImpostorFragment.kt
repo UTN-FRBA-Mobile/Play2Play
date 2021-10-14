@@ -68,10 +68,12 @@ class CreateImpostorFragment : BaseGameFragment<
 
     private fun markErrorKeyWordInput() {
         gameBinding.keyWordField.error = resources.getString(R.string.im_validation_error_key_word_input)
+        gameBinding.keyWordField.requestFocus()
     }
 
     private fun markErrorKeyWordThemeInput() {
         gameBinding.keyWordThemeField.error = resources.getString(R.string.im_validation_error_key_word_theme_input)
+        gameBinding.keyWordThemeField.requestFocus()
     }
 
     private fun markErrorConnectedPlayers() {
