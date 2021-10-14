@@ -2,7 +2,7 @@ package com.p2p.presentation.truco
 
 import androidx.annotation.ColorRes
 import com.p2p.R
-import com.p2p.model.truco.PlayerTeam
+import com.p2p.model.truco.TeamPlayer
 
 enum class TrucoRoundResult(@ColorRes val color: Int) {
     WIN(R.color.colorSuccess),
@@ -11,7 +11,7 @@ enum class TrucoRoundResult(@ColorRes val color: Int) {
 
     companion object {
 
-        fun get(winner: PlayerTeam?, mySelf: PlayerTeam) = when (winner?.team) {
+        fun get(winner: TeamPlayer?, mySelf: TeamPlayer) = when (winner?.team) {
             null -> TIE
             mySelf.team -> WIN
             else -> DEFEAT

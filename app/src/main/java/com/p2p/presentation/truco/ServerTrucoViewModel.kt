@@ -5,7 +5,7 @@ import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.loadingMessages.LoadingTextRepository
 import com.p2p.data.userInfo.UserSession
 import com.p2p.model.truco.Card
-import com.p2p.model.truco.PlayerTeam
+import com.p2p.model.truco.TeamPlayer
 import com.p2p.model.truco.PlayerWithCards
 import com.p2p.model.truco.Suit.CLUBS
 import com.p2p.model.truco.Suit.CUPS
@@ -32,20 +32,20 @@ class ServerTrucoViewModel(
     private var cards = listOf<Card>()
 
     override fun startGame() {
-        playersTeams = setPlayersTeams()
-        _firstHandPlayer.value = playersTeams[0]
+        teamPlayers = setPlayersTeams()
+        _firstHandPlayer.value = teamPlayers[0]
         connection.write(
-            TrucoStartGameMessage(playersTeams, totalPlayers.requireValue(), totalPoints.requireValue())
+            TrucoStartGameMessage(teamPlayers, totalPlayers.requireValue(), totalPoints.requireValue())
         )
         closeDiscovery()
         handOutCards()
-        goToPlay()
+        goToPlayTruco()
     }
 
-    private fun setPlayersTeams(): List<PlayerTeam> {
+    private fun setPlayersTeams(): List<TeamPlayer> {
         return players.requireValue().take(totalPlayers.requireValue()).mapIndexed { index, element ->
             val teamNumber = index % PLAYERS_PER_TEAM + 1
-            PlayerTeam(element, teamNumber)
+            TeamPlayer(element, teamNumber)
         }
     }
 
@@ -55,7 +55,7 @@ class ServerTrucoViewModel(
         cardsByPlayer = connectedPlayers
             .map { player -> PlayerWithCards(player.second, cardsForPlayer()) }
         val myCards = cardsByPlayer
-            .first { it.player == userName }
+            .first { it.name == userName }
         _myCards.value = myCards.cards
         connection.write(TrucoCardsMessage(cardsByPlayer))
     }

@@ -28,17 +28,17 @@ class ClientTrucoViewModel(
         super.receiveMessage(conversation)
         when (val message = conversation.lastMessage) {
             is TrucoStartGameMessage -> {
-                playersTeams = message.playersTeams
+                teamPlayers = message.teamPlayers
                 setTotalPlayers(message.totalPlayers)
                 setTotalPoints(message.totalPoints)
-                _firstHandPlayer.value = message.playersTeams[0]
+                _firstHandPlayer.value = message.teamPlayers[0]
                 startGame()
             }
             is TrucoCardsMessage -> onReceiveCards(message.cardsForPlayers)
         }
     }
 
-    override fun startGame() = goToPlay()
+    override fun startGame() = goToPlayTruco()
 
     private fun onReceiveCards(playersWithCards: List<PlayerWithCards>) {
         cardsByPlayer = playersWithCards
@@ -46,7 +46,7 @@ class ClientTrucoViewModel(
     }
 
     private fun pickSelfCards(playersWithCards: List<PlayerWithCards>) {
-        _myCards.value = playersWithCards.first { it.player == userName }.cards
+        _myCards.value = playersWithCards.first { it.name == userName }.cards
     }
 
 }
