@@ -12,11 +12,12 @@ class CreateImpostorViewModel : BaseViewModel<ImpostorCreateEvents>() {
     private val _startButtonEnabled = MutableLiveData<Boolean>()
     val startButtonEnabled: LiveData<Boolean> = _startButtonEnabled
 
-    fun tryStartGame(keyWord: String) {
+    fun tryStartGame(keyWord: String, keyWordTheme: String) {
         val event = when {
-            keyWord.isBlank() -> InvalidInput
+            keyWord.isBlank() -> InvalidKeyWordInput
+            keyWordTheme.isBlank() -> InvalidKeyWordThemeInput
             connectedPlayers.isNullOrEmpty() || !enoughPlayers() -> NotEnoughPlayers
-            else -> StartGame(keyWord)
+            else -> StartGame(keyWord, keyWordTheme)
         }
         dispatchSingleTimeEvent(event)
     }

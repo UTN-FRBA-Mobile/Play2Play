@@ -37,12 +37,12 @@
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/largest"
         android:text="@string/im_write_key_word"
-        app:layout_constraintBottom_toTopOf="@id/textField"
+        app:layout_constraintBottom_toTopOf="@id/key_word_field"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"/>
 
     <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/textField"
+        android:id="@+id/key_word_field"
         android:theme="@style/P2P.SecondEditTextTheme"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
@@ -54,13 +54,38 @@
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         android:maxLines="1" />
 
+    <TextView
+        android:id="@+id/key_word_theme_text"
+        style="@style/P2P_Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/big"
+        android:text="@string/im_write_key_word_theme"
+        android:textAlignment="center"
+        app:layout_constraintTop_toBottomOf="@id/key_word_field"
+        app:layout_constraintStart_toStartOf="@id/guideline_begin"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"/>
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/key_word_theme_field"
+        android:theme="@style/P2P.SecondEditTextTheme"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/medium"
+        android:gravity="center"
+        android:inputType="textCapSentences"
+        app:layout_constraintTop_toBottomOf="@id/key_word_theme_text"
+        app:layout_constraintStart_toStartOf="@id/guideline_begin"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        android:maxLines="1" />
+
     <Button
         android:id="@+id/start_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/start"
         android:layout_marginTop="@dimen/largest"
-        app:layout_constraintTop_toBottomOf="@id/textField"
+        app:layout_constraintTop_toBottomOf="@id/key_word_theme_field"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"/>
 

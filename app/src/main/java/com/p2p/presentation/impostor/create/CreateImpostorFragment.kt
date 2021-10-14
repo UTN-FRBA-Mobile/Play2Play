@@ -28,8 +28,9 @@ class CreateImpostorFragment : BaseGameFragment<
         gameViewModel.startConnection()
         gameBinding.startButton.alpha = DISABLED_BUTTON_ALPHA
         gameBinding.startButton.setOnClickListener {
-            val keyWord = gameBinding.textField.value()
-            viewModel.tryStartGame(keyWord)
+            val keyWordTheme = gameBinding.keyWordThemeField.value()
+            val keyWord = gameBinding.keyWordField.value()
+            viewModel.tryStartGame(keyWord, keyWordTheme)
         }
     }
 
@@ -59,15 +60,19 @@ class CreateImpostorFragment : BaseGameFragment<
 
     override fun onEvent(event: ImpostorCreateEvents) =
         when (event) {
-            is StartGame -> gameViewModel.createGame(event.keyWord)
-            InvalidInput -> markErrorInput()
+            is StartGame -> gameViewModel.createGame(event.keyWord, event.keyWordTheme)
+            InvalidKeyWordInput -> markErrorKeyWordInput()
+            InvalidKeyWordThemeInput -> markErrorKeyWordThemeInput()
             NotEnoughPlayers -> markErrorConnectedPlayers()
         }
 
-    private fun markErrorInput() {
-        gameBinding.textField.error = resources.getString(R.string.im_validation_error_input)
+    private fun markErrorKeyWordInput() {
+        gameBinding.keyWordField.error = resources.getString(R.string.im_validation_error_key_word_input)
     }
 
+    private fun markErrorKeyWordThemeInput() {
+        gameBinding.keyWordThemeField.error = resources.getString(R.string.im_validation_error_key_word_theme_input)
+    }
 
     private fun markErrorConnectedPlayers() {
         MaterialAlertDialogBuilder(requireContext())
