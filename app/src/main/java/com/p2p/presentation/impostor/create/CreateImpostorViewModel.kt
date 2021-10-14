@@ -28,7 +28,11 @@ class CreateImpostorViewModel : BaseViewModel<ImpostorCreateEvents>() {
     }
 
     private fun enoughPlayers(): Boolean {
-        return connectedPlayers!!.size > 2
+        return connectedPlayers!!.size > MIN_PLAYERS
+    }
+
+    companion object {
+        const val MIN_PLAYERS = 2
     }
 
 }
