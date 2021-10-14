@@ -94,6 +94,7 @@
 
     <!-- Impostor play info -->
     <string name="im_key_word_is">La palabra clave es</string>
+    <string name="im_key_word_theme_is">La temática es</string>
     <string name="im_impostor_is">El impostor es</string>
 
     <!-- Impostor play -->

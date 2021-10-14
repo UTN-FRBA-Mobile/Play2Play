@@ -39,5 +39,23 @@
         android:textColor="@color/coral"
         tools:text="SIMULA" />
 
+    <TextView
+        android:id="@+id/key_word_theme_title"
+        style="@style/P2P_Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/large_extra"
+        android:textAlignment="center"
+        tools:text="@string/im_key_word_theme_is"/>
+
+    <TextView
+        android:id="@+id/key_word_theme"
+        style="@style/P2P_Title_Extra"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/big"
+        android:textColor="@color/colorSecondary"
+        tools:text="ANIMALES" />
+
 
 </LinearLayout>
