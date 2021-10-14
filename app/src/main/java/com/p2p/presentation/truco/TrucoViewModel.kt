@@ -60,7 +60,7 @@ abstract class TrucoViewModel(
     val firstHandPlayer: LiveData<PlayerTeam> = _firstHandPlayer
 
     /** Set the quantity of players selected by the user when creating the game . */
-    private val _totalPlayers = MutableLiveData<Int>(2)
+    private val _totalPlayers = MutableLiveData<Int>()
     val totalPlayers: LiveData<Int> = _totalPlayers
 
     /** Set the quantity of points selected by the user when creating the game . */
