@@ -23,6 +23,8 @@ class FinalScoreTrucoFragment : BaseGameFragment<
     override val gameInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentTrucoFinalScoreBinding =
         FragmentTrucoFinalScoreBinding::inflate
 
+    override val isHeaderVisible = false
+
     override fun initUI() {
         super.initUI()
         gameBinding.exitButton.setOnClickListener { viewModel.exit() }
