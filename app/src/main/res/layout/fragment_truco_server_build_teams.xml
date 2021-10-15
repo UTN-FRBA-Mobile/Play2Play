@@ -40,7 +40,7 @@
         android:gravity="center"
         android:horizontalSpacing="@dimen/tiny"
         android:numColumns="2"
-        android:verticalSpacing="@dimen/tiny"
+        android:verticalSpacing="@dimen/big"
         app:layout_constraintBottom_toTopOf="@id/arrow_left"
         app:layout_constraintTop_toBottomOf="@id/arrow_right"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
