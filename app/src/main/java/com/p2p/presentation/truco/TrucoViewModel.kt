@@ -322,13 +322,11 @@ abstract class TrucoViewModel(
         val isMyTeamWinner = winnerTeam == myTeamPlayer.team
         val score = if (isMyTeamWinner) _ourScore else _theirScore
         score.value = score.requireValue() + currentActionPoints
-        dispatchSingleTimeEvent(TrucoShowEarnedPoints(isMyTeamWinner, currentActionPoints))
-        return if (score.requireValue() >= _totalPoints.requireValue()) {
-            finishGame()
-            true
-        } else {
-            false
-        }
+        val hasFinished = score.requireValue() >= _totalPoints.requireValue()
+        dispatchSingleTimeEvent(TrucoShowEarnedPoints(isMyTeamWinner, currentActionPoints) {
+            if (hasFinished) finishGame()
+        })
+        return hasFinished
     }
 
     private fun hasRoundFinished(): Boolean =
@@ -491,8 +489,8 @@ abstract class TrucoViewModel(
 
     companion object {
 
-        const val NEW_HAND_DELAY_TIME_MS = 4_000L
         private const val MAX_HAND_ROUNDS = 3
         private const val WINNER_HAND_ROUNDS_THRESHOLD = 2
+        private const val NEW_HAND_DELAY_TIME_MS = 2_000L
     }
 }

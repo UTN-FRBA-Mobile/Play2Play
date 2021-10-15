@@ -144,7 +144,7 @@ abstract class TrucoFragment<VB : ViewBinding> :
         is TrucoFinishRound -> finishRound(event.round, event.result)
         is TrucoNewHand -> newHand()
         is TrucoOtherPlayedCardEvent -> onOtherPlayedCard(event)
-        is TrucoShowEarnedPoints -> showEarnedPoints(event.isMyTeam, event.earnedPoints)
+        is TrucoShowEarnedPoints -> showEarnedPoints(event.isMyTeam, event.earnedPoints, event.onComplete)
         TrucoTakeTurnEvent -> myCardsHand.takeTurn()
         else -> super.onEvent(event)
     }
@@ -266,7 +266,8 @@ abstract class TrucoFragment<VB : ViewBinding> :
                     hideActions()
                     onComplete()
                 },
-                HIDE_ACTION_BUBBLES_DELAY)
+                HIDE_ACTION_BUBBLES_DELAY
+            )
         }
     }
 
@@ -343,12 +344,22 @@ abstract class TrucoFragment<VB : ViewBinding> :
         roundViews[2].backgroundTintList = null
     }
 
-    private fun showEarnedPoints(isMyTeam: Boolean, earnedPoints: Int) = with(earnedPointsBinding) {
+    private fun showEarnedPoints(
+        isMyTeam: Boolean,
+        earnedPoints: Int,
+        onComplete: () -> Unit
+    ) = with(earnedPointsBinding) {
         title.setText(if (isMyTeam) R.string.truco_our_score_label else R.string.truco_their_score_label)
         @SuppressLint("SetTextI18n")
         subtitle.text = "+$earnedPoints"
         container.fadeIn()
-        container.postDelayed({ container.fadeOut() }, TrucoViewModel.NEW_HAND_DELAY_TIME_MS)
+        container.postDelayed(
+            {
+                container.fadeOut()
+                onComplete()
+            },
+            EARNED_POINTS_DELAY_MS
+        )
         Unit
     }
 
@@ -359,5 +370,6 @@ abstract class TrucoFragment<VB : ViewBinding> :
         const val ACTIONS_BOTTOM_SHEET_TAG = "TRUCO_ACTIONS_BOTTOM_SHEET"
         private const val ACTION_BACKGROUND_FINAL_ALPHA = 0.5f
         private const val HIDE_ACTION_BUBBLES_DELAY = 3_000L
+        private const val EARNED_POINTS_DELAY_MS = 3_000L
     }
 }

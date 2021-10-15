@@ -45,5 +45,6 @@ object TrucoFinishGame : TrucoSpecificGameEvent()
 
 data class TrucoShowEarnedPoints(
     val isMyTeam: Boolean,
-    val earnedPoints: Int
+    val earnedPoints: Int,
+    val onComplete: () -> Unit
 ) : TrucoSpecificGameEvent()
