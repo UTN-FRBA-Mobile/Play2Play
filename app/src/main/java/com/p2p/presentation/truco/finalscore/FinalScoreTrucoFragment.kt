@@ -40,18 +40,19 @@ class FinalScoreTrucoFragment : BaseGameFragment<
             }
         }
         observe(viewModel.finalResult) {
-            val isWinner = it.isWinner!!
+            val isWinner = it.isWinner
             gameBinding.resultText.text = getResultText(isWinner)
             gameBinding.resultText.setTextColor(
                 ContextCompat.getColor(requireContext(), getResultColorText(isWinner))
             )
             gameBinding.resultIcon.setImageResource(getResultIcon(isWinner))
-            gameBinding.resultBackground.setBackgroundColor(
+            gameBinding.container.setBackgroundColor(
                 ContextCompat.getColor(requireContext(), getResultBackground(isWinner))
             )
-            gameBinding.resultPoints.text = resources.getString(R.string.tr_points, it.ourScore)
-            gameBinding.resultPoints.setTextColor(ContextCompat.getColor(requireContext(), getResultPointsColorText(isWinner)))
-            gameBinding.otherTeamPoints.text = resources.getString(R.string.tr_points, it.theirScore)
+            gameBinding.resultPoints.text = resources.getString(R.string.tr_points, it.ourScore, it.theirScore)
+            gameBinding.resultPoints.setTextColor(
+                ContextCompat.getColor(requireContext(), getResultPointsColorText(isWinner))
+            )
         }
     }
 

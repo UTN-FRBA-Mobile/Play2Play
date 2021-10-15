@@ -144,6 +144,6 @@
     <string name="tr_final_score_other_team">Ellxs</string>
     <string name="tr_winner">¡Ganamos!</string>
     <string name="tr_loser">Perdimos…</string>
-    <string name="tr_points">%d pts</string>
+    <string name="tr_points">%d - %d</string>
 
 </resources>
