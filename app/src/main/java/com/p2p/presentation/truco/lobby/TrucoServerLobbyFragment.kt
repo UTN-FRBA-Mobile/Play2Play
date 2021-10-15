@@ -15,11 +15,11 @@ class TrucoServerLobbyFragment : ServerLobbyFragment<TrucoViewModel>() {
 
     override val continueText: String by lazy { resources.getString(R.string.lobby_build_teams) }
 
-    override val onConnectedPlayers: (List<String>) -> Unit = { players ->
+    override fun onConnectedPlayers(players: List<String>){
         totalPlayers?.run { viewModel.updatePlayers(players, this) }
     }
 
-    override val continueAction = {
+    override fun continueAction(){
         gameViewModel.goToBuildTeams()
     }
 

@@ -13,8 +13,8 @@ class TuttiFruttiServerLobbyFragment : ServerLobbyFragment<TuttiFruttiViewModel>
     override val viewModel: DefaultServerLobbyViewModel by viewModels()
 
     override val continueText: String by lazy { resources.getString(R.string.lobby_start_game) }
-    override val continueAction = { gameViewModel.startGame() }
-    override val onConnectedPlayers = { players: List<String> ->
+    override fun continueAction() { gameViewModel.startGame() }
+    override fun onConnectedPlayers(players: List<String>){
         viewModel.updatePlayers(players)
     }
 
