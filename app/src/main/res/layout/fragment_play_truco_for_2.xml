@@ -296,4 +296,6 @@
             layout="@layout/view_truco_actions_responses" />
     </FrameLayout>
 
+    <include layout="@layout/view_truco_earned_points"  />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

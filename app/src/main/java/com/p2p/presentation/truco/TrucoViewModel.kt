@@ -20,7 +20,15 @@ import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.home.games.Game
 import com.p2p.presentation.truco.actions.EnvidoGameAction
 import com.p2p.presentation.truco.actions.TrucoAction
-import com.p2p.presentation.truco.actions.TrucoAction.*
+import com.p2p.presentation.truco.actions.TrucoAction.Envido
+import com.p2p.presentation.truco.actions.TrucoAction.EnvidoGoesFirst
+import com.p2p.presentation.truco.actions.TrucoAction.FaltaEnvido
+import com.p2p.presentation.truco.actions.TrucoAction.NoIDont
+import com.p2p.presentation.truco.actions.TrucoAction.RealEnvido
+import com.p2p.presentation.truco.actions.TrucoAction.Retruco
+import com.p2p.presentation.truco.actions.TrucoAction.Truco
+import com.p2p.presentation.truco.actions.TrucoAction.ValeCuatro
+import com.p2p.presentation.truco.actions.TrucoAction.YesIDo
 import com.p2p.presentation.truco.actions.TrucoActionAvailableResponses
 import com.p2p.presentation.truco.actions.TrucoGameAction
 import com.p2p.presentation.truco.envidoCalculator.EnvidoMessageCalculator
@@ -128,7 +136,7 @@ abstract class TrucoViewModel(
                 val playerPosition =
                     TrucoPlayerPosition.get(message.teamPlayer, teamPlayers, myTeamPlayer)
                 dispatchSingleTimeEvent(
-                    TrucoShowOpponentActionEvent(
+                    TrucoShowActionEvent(
                         message.action,
                         playerPosition,
                         canAnswer(message.teamPlayer)
@@ -311,8 +319,10 @@ abstract class TrucoViewModel(
     }
 
     private fun updateScore(winnerTeam: Int): Boolean {
-        val score = if (winnerTeam == myTeamPlayer.team) _ourScore else _theirScore
+        val isMyTeamWinner = winnerTeam == myTeamPlayer.team
+        val score = if (isMyTeamWinner) _ourScore else _theirScore
         score.value = score.requireValue() + currentActionPoints
+        dispatchSingleTimeEvent(TrucoShowEarnedPoints(isMyTeamWinner, currentActionPoints))
         return if (score.requireValue() >= _totalPoints.requireValue()) {
             finishGame()
             true
@@ -410,12 +420,11 @@ abstract class TrucoViewModel(
         }
     }
 
-    open protected fun onActionDone(action: TrucoAction, performedByTeam: Int) {
+    protected open fun onActionDone(action: TrucoAction, performedByTeam: Int) {
         when (action) {
             is NoIDont -> onNoIDont(performedByTeam)
             is YesIDo -> if (previousActions.last() is EnvidoGameAction) {
                 playEnvido()
-                currentActionPoints = 1
             }
         }
     }
@@ -442,8 +451,10 @@ abstract class TrucoViewModel(
             playerPosition to actionByPlayer.value!!
         }.toMap()
 
-        dispatchSingleTimeEvent(TrucoShowManyActionsEvent(actionsByPosition))
-        updateScore(winner.first.team)
+        dispatchSingleTimeEvent(TrucoShowManyActionsEvent(actionsByPosition) {
+            updateScore(winner.first.team)
+            currentActionPoints = 1
+        })
     }
 
     private fun getWinner(
@@ -465,11 +476,6 @@ abstract class TrucoViewModel(
     }
 
 
-    private fun onEnvidoPlayed(winner: TeamPlayer) {
-        val score = if (myTeamPlayer.team == winner.team) _ourScore else _theirScore
-        score.value = score.requireValue() + currentActionPoints
-    }
-
     private fun onNoIDont(performedByTeam: Int) {
         val winner = teamPlayers.first { it.team != performedByTeam }.team
         when (previousActions.last()) {
@@ -485,8 +491,8 @@ abstract class TrucoViewModel(
 
     companion object {
 
+        const val NEW_HAND_DELAY_TIME_MS = 4_000L
         private const val MAX_HAND_ROUNDS = 3
         private const val WINNER_HAND_ROUNDS_THRESHOLD = 2
-        private const val NEW_HAND_DELAY_TIME_MS = 2_000L
     }
 }
