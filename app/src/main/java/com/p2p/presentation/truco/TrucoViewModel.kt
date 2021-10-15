@@ -39,6 +39,10 @@ abstract class TrucoViewModel(
     loadingTextRepository,
     Game.TRUCO
 ) {
+
+    override val maxPlayersOnRoom: Int
+        get() = totalPlayers.requireValue()
+
     /** List with the teams of players */
     protected lateinit var teamPlayers: List<TeamPlayer>
 

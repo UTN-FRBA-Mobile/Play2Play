@@ -21,6 +21,7 @@ import java.io.Serializable
     JsonSubTypes.Type(value = ClientHandshakeMessage::class),
     JsonSubTypes.Type(value = ServerHandshakeMessage::class),
     JsonSubTypes.Type(value = NameInUseMessage::class),
+    JsonSubTypes.Type(value = RoomIsAlreadyFullMessage::class),
     JsonSubTypes.Type(value = GoodbyePlayerMessage::class),
     JsonSubTypes.Type(value = TuttiFruttiStartGameMessage::class),
     JsonSubTypes.Type(value = TuttiFruttiEnoughForMeEnoughForAllMessage::class),

@@ -106,6 +106,7 @@
     <string name="error_client_connection_failure">Hubo un error al intentar conectarse al dispositivo de lx otrx jugadorx.</string>
     <string name="error_server_connection_failure">Se perdió la conexión con la sala.</string>
     <string name="error_name_in_use">El nombre que elegiste ya está siendo usado por otrx jugadorx. Elegí otro así se pueden diferenciar.</string>
+    <string name="error_room_already_full">La sala del juego ya está llena.</string>
     <string name="error_client_connection_lost">Se perdió la conexión con %s.</string>
     <string name="error_connection_write_failure">Se perdió la conexión con la sala de juego, lo sentimos mucho.</string>
     <string name="tf_error_single_player">El resto de lxs jugadorxs abandonaron el juego… ¡felicitaciones ganadorx!</string>

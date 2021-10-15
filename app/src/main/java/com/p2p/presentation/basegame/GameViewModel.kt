@@ -14,7 +14,13 @@ import com.p2p.data.userInfo.UserSession
 import com.p2p.model.HiddenLoadingScreen
 import com.p2p.model.LoadingScreen
 import com.p2p.model.VisibleLoadingScreen
-import com.p2p.model.base.message.*
+import com.p2p.model.base.message.ClientHandshakeMessage
+import com.p2p.model.base.message.Conversation
+import com.p2p.model.base.message.GoodbyePlayerMessage
+import com.p2p.model.base.message.Message
+import com.p2p.model.base.message.NameInUseMessage
+import com.p2p.model.base.message.RoomIsAlreadyFullMessage
+import com.p2p.model.base.message.ServerHandshakeMessage
 import com.p2p.presentation.base.BaseViewModel
 import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.home.games.Game
@@ -31,6 +37,8 @@ abstract class GameViewModel(
     protected val loadingTextRepository: LoadingTextRepository,
     theGame: Game
 ) : BaseViewModel<GameEvent>() {
+
+    protected open val maxPlayersOnRoom: Int = Int.MAX_VALUE
 
     protected var gameAlreadyStarted = false
     protected var gameAlreadyFinished = false
@@ -86,28 +94,15 @@ abstract class GameViewModel(
     @CallSuper
     open fun receiveMessage(conversation: Conversation) {
         when (val message = conversation.lastMessage) {
-            is ClientHandshakeMessage -> {
-                val isNameInUse = connectedPlayers.any { it.second == message.name }
-                if (isServer()) {
-                    if (isNameInUse) {
-                        connection.talk(conversation, NameInUseMessage())
-                    } else {
-                        connection.talk(
-                            conversation,
-                            ServerHandshakeMessage(connectedPlayers.map { it.second })
-                        )
-                    }
-                }
-                if (!isNameInUse) {
-                    connectedPlayers = connectedPlayers + (conversation.peer to message.name)
-                }
-            }
+            is ClientHandshakeMessage -> onClientHandshake(message, conversation)
             is NameInUseMessage -> dispatchErrorScreen(NameInUseError {
                 dispatchSingleTimeEvent(KillGame)
             })
+            is RoomIsAlreadyFullMessage -> dispatchErrorScreen(RoomIsAlreadyFullError {
+                dispatchSingleTimeEvent(KillGame)
+            })
             is ServerHandshakeMessage -> {
-                connectedPlayers =
-                    connectedPlayers + message.players.map { conversation.peer to it }
+                connectedPlayers = message.players.map { conversation.peer to it }
             }
             is GoodbyePlayerMessage -> {
                 connectedPlayers.firstOrNull { it.second == message.name }?.let { removePlayer(it) }
@@ -240,6 +235,21 @@ abstract class GameViewModel(
             type = MessageData.Type.ERROR,
             formatArgs = arrayOf(playerLost.second),
         )
+    }
+
+    private fun onClientHandshake(message: ClientHandshakeMessage, conversation: Conversation) {
+        if (isServer()) {
+            when {
+                connectedPlayers.any { it.second == message.name } ->
+                    connection.talk(conversation, NameInUseMessage())
+                connectedPlayers.size >= maxPlayersOnRoom ->
+                    connection.talk(conversation, RoomIsAlreadyFullMessage())
+                else -> {
+                    connectedPlayers = connectedPlayers + (conversation.peer to message.name)
+                    connection.write(ServerHandshakeMessage(connectedPlayers.map { it.second }))
+                }
+            }
+        }
     }
 
     companion object {
