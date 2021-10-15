@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.CallSuper
 import androidx.core.content.ContextCompat
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.viewbinding.ViewBinding
@@ -75,6 +76,7 @@ abstract class TrucoFragment<VB : ViewBinding> :
 
     override fun initUI() = with(requireView()) {
         super.initUI()
+        initializeRivalHands(isFirstHand = true)
         headerBinding = ViewTrucoHeaderBinding.bind(gameBinding.root)
         roundViews =
             listOf(headerBinding.firstRound, headerBinding.secondRound, headerBinding.thirdRound)
@@ -118,6 +120,8 @@ abstract class TrucoFragment<VB : ViewBinding> :
         gameViewModel.playCard(playingCard.card)
     }
 
+    abstract fun initializeRivalHands(isFirstHand: Boolean)
+
     abstract fun createMyCardsHand(myPlayingCards: List<TrucoCardsHand.PlayingCard>): TrucoCardsHand
 
     abstract fun getPlayerCardsHand(playerPosition: TrucoPlayerPosition): TrucoCardsHand
@@ -137,14 +141,16 @@ abstract class TrucoFragment<VB : ViewBinding> :
         }
         is TrucoShowManyActionsEvent -> showManyActions(event.actionByPlayer)
         is TrucoFinishRound -> finishRound(event.round, event.result)
-        is TrucoNewHand -> {
-            // TODO: reorder the cards and give the new ones.
-            requireView().postDelayed({ activity?.finish() }, 10_000)
-            Unit
-        }
+        is TrucoNewHand -> newHand()
         is TrucoOtherPlayedCardEvent -> onOtherPlayedCard(event)
         TrucoTakeTurnEvent -> myCardsHand.takeTurn()
         else -> super.onEvent(event)
+    }
+
+    private fun newHand() {
+        clearRoundWinners()
+        myDroppingPlacesViews.forEach { it.isInvisible = true }
+        initializeRivalHands(isFirstHand = false)
     }
 
     protected fun hideActionBubble(bubbleView: View, bubbleTextView: TextView) {
@@ -316,6 +322,15 @@ abstract class TrucoFragment<VB : ViewBinding> :
             )
             roundViews.getOrNull(round)?.backgroundTintList = colorPrimary
         }
+    }
+
+
+    private fun clearRoundWinners() {
+        roundViews[0].backgroundTintList = ColorStateList.valueOf(
+            ContextCompat.getColor(requireContext(), R.color.colorPrimary)
+        )
+        roundViews[1].backgroundTintList = null
+        roundViews[2].backgroundTintList = null
     }
 
     companion object {

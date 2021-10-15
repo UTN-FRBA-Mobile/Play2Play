@@ -482,7 +482,7 @@
         android:layout_height="0dp"
         android:background="@drawable/dialog_bubble"
         android:elevation="@dimen/truco_action_bubble_elevation"
-        android:rotationY="180"
+        android:rotationY="@integer/flip_rotation"
         android:scaleX="0"
         android:scaleY="0"
         app:layout_constraintBottom_toBottomOf="@id/right_player_action_bubble_text"

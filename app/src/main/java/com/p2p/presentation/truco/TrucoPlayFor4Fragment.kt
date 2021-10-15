@@ -20,9 +20,9 @@ class TrucoPlayFor4Fragment : TrucoFragment<FragmentPlayTrucoFor4Binding>() {
     override val gameInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentPlayTrucoFor4Binding =
         FragmentPlayTrucoFor4Binding::inflate
 
-    private lateinit var frontPlayerCardsHand: TrucoCardsHand
-    private lateinit var leftPlayerCardsHand: TrucoCardsHand
-    private lateinit var rightPlayerCardsHand: TrucoCardsHand
+    private lateinit var frontPlayerCardsHand: TrucoFor4FrontPlayerCardsHand
+    private lateinit var leftPlayerCardsHand: TrucoFor4LeftPlayerCardsHand
+    private lateinit var rightPlayerCardsHand: TrucoFor4RightPlayerCardsHand
 
     private lateinit var frontPlayerCardViews: List<ImageView>
     private lateinit var frontPlayerDroppingPlacesViews: List<View>
@@ -32,21 +32,33 @@ class TrucoPlayFor4Fragment : TrucoFragment<FragmentPlayTrucoFor4Binding>() {
     private lateinit var rightPlayerDroppingPlacesViews: List<View>
 
     override fun initUI() = with(gameBinding) {
-        super.initUI()
         frontPlayerCardViews = listOf(frontPlayerLeftCard, frontPlayerMiddleCard, frontPlayerRightCard)
         frontPlayerDroppingPlacesViews =
             listOf(dropFrontPlayerFirstCard, dropFrontPlayerSecondCard, dropFrontPlayerThirdCard)
-        frontPlayerCardsHand = TrucoFor4FrontPlayerCardsHand(frontPlayerCardViews)
-        loadCardImages(frontPlayerCardViews, emptyList())
         leftPlayerCardViews = listOf(leftPlayerLeftCard, leftPlayerMiddleCard, leftPlayerRightCard)
         leftPlayerDroppingPlacesViews =
             listOf(dropLeftPlayerFirstCard, dropLeftPlayerSecondCard, dropLeftPlayerThirdCard)
-        leftPlayerCardsHand = TrucoFor4LeftPlayerCardsHand(leftPlayerCardViews)
-        loadCardImages(leftPlayerCardViews, emptyList())
         rightPlayerCardViews = listOf(rightPlayerLeftCard, rightPlayerMiddleCard, rightPlayerRightCard)
         rightPlayerDroppingPlacesViews =
             listOf(dropRightPlayerFirstCard, dropRightPlayerSecondCard, dropRightPlayerThirdCard)
-        rightPlayerCardsHand = TrucoFor4RightPlayerCardsHand(rightPlayerCardViews)
+        super.initUI()
+    }
+
+    override fun initializeRivalHands(isFirstHand: Boolean) = with(gameBinding) {
+        frontPlayerCardsHand = TrucoFor4FrontPlayerCardsHand(
+            previousCardsHand = if (isFirstHand) null else frontPlayerCardsHand,
+            cardViews = frontPlayerCardViews
+        )
+        loadCardImages(frontPlayerCardViews, emptyList())
+        leftPlayerCardsHand = TrucoFor4LeftPlayerCardsHand(
+            previousCardsHand = if (isFirstHand) null else leftPlayerCardsHand,
+            cardViews = leftPlayerCardViews
+        )
+        loadCardImages(leftPlayerCardViews, emptyList())
+        rightPlayerCardsHand = TrucoFor4RightPlayerCardsHand(
+            previousCardsHand = if (isFirstHand) null else rightPlayerCardsHand,
+            cardViews = rightPlayerCardViews
+        )
         loadCardImages(rightPlayerCardViews, emptyList())
     }
 
@@ -74,7 +86,7 @@ class TrucoPlayFor4Fragment : TrucoFragment<FragmentPlayTrucoFor4Binding>() {
         TrucoPlayerPosition.MY_SELF -> myDroppingPlacesViews
     }
 
-    override fun getPlayerBubbleWithTextView(playerPosition: TrucoPlayerPosition): Pair<View, TextView>{
+    override fun getPlayerBubbleWithTextView(playerPosition: TrucoPlayerPosition): Pair<View, TextView> {
         val (bubble, text) = bubbleForPosition(playerPosition)
         return requireView().findViewById<View>(bubble) to requireView().findViewById<TextView>(text)
     }
@@ -86,9 +98,7 @@ class TrucoPlayFor4Fragment : TrucoFragment<FragmentPlayTrucoFor4Binding>() {
         TrucoPlayerPosition.MY_SELF -> R.id.my_action_bubble to R.id.my_action_bubble_text
     }
 
-
     companion object {
-
         fun newInstance() = TrucoPlayFor4Fragment()
     }
 }

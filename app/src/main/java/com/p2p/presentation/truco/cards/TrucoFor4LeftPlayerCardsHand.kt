@@ -4,8 +4,9 @@ import android.view.View
 import android.widget.ImageView
 
 class TrucoFor4LeftPlayerCardsHand(
+    previousCardsHand: TrucoFor4OtherPlayerCardsHand?,
     cardViews: List<ImageView>
-) : TrucoFor4OtherPlayerCardsHand(*cardViews.toTypedArray()) {
+) : TrucoFor4OtherPlayerCardsHand(previousCardsHand, *cardViews.toTypedArray()) {
 
     override val cardsRotationForHand = mapOf(
         COMPLETE_HAND to listOf(50f, 30f, 10f),

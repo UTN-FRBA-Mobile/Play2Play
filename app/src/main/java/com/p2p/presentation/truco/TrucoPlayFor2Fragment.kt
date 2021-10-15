@@ -19,17 +19,21 @@ class TrucoPlayFor2Fragment : TrucoFragment<FragmentPlayTrucoFor2Binding>() {
     override val gameInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentPlayTrucoFor2Binding =
         FragmentPlayTrucoFor2Binding::inflate
 
-    private lateinit var theirCardsHand: TrucoCardsHand
+    private lateinit var theirCardsHand: TrucoSingleOpponentTheirCardsHand
     private lateinit var theirCardsViews: List<ImageView>
     private lateinit var theirDroppingPlacesViews: List<View>
 
     override fun initUI() = with(gameBinding) {
-        super.initUI()
         theirCardsViews = listOf(theirLeftCard, theirMiddleCard, theirRightCard)
         theirDroppingPlacesViews = listOf(dropTheirFirstCard, dropTheirSecondCard, dropTheirThirdCard)
-        theirCardsHand = TrucoSingleOpponentTheirCardsHand(theirCardsViews.map {
-            TrucoCardsHand.PlayingCard(Card.unknown(), it)
-        })
+        super.initUI()
+    }
+
+    override fun initializeRivalHands(isFirstHand: Boolean) = with(gameBinding) {
+        theirCardsHand = TrucoSingleOpponentTheirCardsHand(
+            previousCardsHand = if (isFirstHand) null else theirCardsHand,
+            cards = theirCardsViews.map { TrucoCardsHand.PlayingCard(Card.unknown(), it) }
+        )
         loadCardImages(theirCardsViews, emptyList())
     }
 
@@ -53,21 +57,21 @@ class TrucoPlayFor2Fragment : TrucoFragment<FragmentPlayTrucoFor2Binding>() {
         else -> throw IllegalStateException("There's only myself and front player on truco for 2")
     }
 
-    override fun getPlayerBubbleWithTextView(playerPosition: TrucoPlayerPosition): Pair<View, TextView> = when (playerPosition) {
-        TrucoPlayerPosition.MY_SELF -> myActionBubble
-        TrucoPlayerPosition.FRONT -> {
-            val (bubble, text) = bubbleForPosition(TrucoPlayerPosition.FRONT)
-            requireView().findViewById<View>(bubble) to requireView().findViewById(text)
+    override fun getPlayerBubbleWithTextView(playerPosition: TrucoPlayerPosition): Pair<View, TextView> =
+        when (playerPosition) {
+            TrucoPlayerPosition.MY_SELF -> myActionBubble
+            TrucoPlayerPosition.FRONT -> {
+                val (bubble, text) = bubbleForPosition(TrucoPlayerPosition.FRONT)
+                requireView().findViewById<View>(bubble) to requireView().findViewById(text)
+            }
+            else -> throw IllegalStateException("There's only myself and front player on truco for 2")
         }
-        else -> throw IllegalStateException("There's only myself and front player on truco for 2")
-    }
 
     override fun bubbleForPosition(playerPosition: TrucoPlayerPosition) = when (playerPosition) {
         TrucoPlayerPosition.MY_SELF -> R.id.my_action_bubble to R.id.my_action_bubble_text
         TrucoPlayerPosition.FRONT -> R.id.their_action_bubble to R.id.their_action_bubble_text
         else -> throw IllegalStateException("There's only myself and front player on truco for 2")
     }
-
 
     companion object {
 

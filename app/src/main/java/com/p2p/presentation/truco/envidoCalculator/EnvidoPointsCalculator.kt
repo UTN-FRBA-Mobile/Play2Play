@@ -13,7 +13,7 @@ object EnvidoPointsCalculator {
             val cardValues = cardsBySuite.map { getCardValue(it) }
             when (cardValues.size) {
                 1 -> cardValues.first()
-                else -> 20 + cardValues.sorted().take(2).sum()
+                else -> 20 + cardValues.sortedDescending().take(2).sum()
             }
         }
         .maxOrNull()!!
