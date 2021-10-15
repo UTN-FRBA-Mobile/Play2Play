@@ -417,9 +417,12 @@ abstract class TrucoViewModel(
                 playEnvido()
                 currentActionPoints = 1
             }
+            is GoToDeck -> {
+                val winner = teamPlayers.first { it.team != performedByTeam }.team
+                onHandFinished(winner)
+            }
         }
     }
-
 
     private fun playEnvido() {
         val pointsByPlayer = cardsByPlayer.map {
@@ -481,7 +484,6 @@ abstract class TrucoViewModel(
             }
         }
     }
-
 
     companion object {
 
