@@ -1,9 +1,7 @@
 package com.p2p.presentation.lobby
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.p2p.R
 import com.p2p.databinding.FragmentServerLobbyBinding
