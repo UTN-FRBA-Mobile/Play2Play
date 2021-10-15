@@ -21,8 +21,8 @@ abstract class ServerLobbyFragment<GVM : GameViewModel> : BaseGameFragment<
     private lateinit var connectedPlayersAdapter: ConnectedPlayersAdapter
 
     protected abstract val continueText: String
-    protected abstract val continueAction: () -> Unit
-    protected open val onConnectedPlayers: (List<String>) -> Unit = { _ -> }
+    protected abstract fun continueAction()
+    protected open fun onConnectedPlayers(players: List<String>) {}
 
     override fun initUI() {
         super.initUI()
