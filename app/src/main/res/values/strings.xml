@@ -87,11 +87,14 @@
 
     <!-- Impostor create game -->
     <string name="im_write_key_word">Ingrese la palabra clave</string>
-    <string name="im_validation_error_input">¡Debés ingresar la palabra para poder comenzar!</string>
+    <string name="im_write_key_word_theme">Ingrese la temática de la palabra clave</string>
+    <string name="im_validation_error_key_word_input">¡Debés ingresar la palabra para poder comenzar!</string>
+    <string name="im_validation_error_key_word_theme_input">¡Debés ingresar la temática para poder comenzar!</string>
     <string name="im_validation_error_players">¡Se deben unir al menos dos jugadorxs!</string>
 
     <!-- Impostor play info -->
     <string name="im_key_word_is">La palabra clave es</string>
+    <string name="im_key_word_theme_is">La temática es</string>
     <string name="im_impostor_is">El impostor es</string>
 
     <!-- Impostor play -->

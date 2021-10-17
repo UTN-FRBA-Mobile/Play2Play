@@ -34,6 +34,7 @@ class PlayInfoImpostorFragment : BaseGameFragment<
         with(gameViewModel) {
             observe(impostorData) { data ->
                 gameBinding.keyWord.text = data.keyWord
+                gameBinding.keyWordTheme.text = data.keyWordTheme
                 gameBinding.impostor.text = data.impostor
             }
         }
