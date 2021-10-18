@@ -33,13 +33,14 @@ abstract class ImpostorViewModel(
     protected val _impostorData = MutableLiveData<ImpostorData>()
     val impostorData: LiveData<ImpostorData> = _impostorData
 
-    fun createGame(word: String) {
+    fun createGame(word: String, wordTheme: String) {
         val impostor = selectImpostor()
-        //Creator is never impostor
-        _impostorData.value = ImpostorData(impostor, word, isImpostor = false)
+        // Creator is never the impostor. TODO: DO check this if we set default words/themes.
+        _impostorData.value = ImpostorData(impostor, word, wordTheme, isImpostor = false)
         connection.write(
             ImpostorAssignWord(
                 word,
+                wordTheme,
                 impostor
             )
         )

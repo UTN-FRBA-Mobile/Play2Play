@@ -52,6 +52,10 @@ abstract class TrucoViewModel(
     loadingTextRepository,
     Game.TRUCO
 ) {
+
+    override val maxPlayersOnRoom: Int
+        get() = totalPlayers.requireValue()
+
     /** List with the teams of players */
     protected lateinit var teamPlayers: List<TeamPlayer>
 
@@ -219,6 +223,7 @@ abstract class TrucoViewModel(
         otherPlayer.team == myTeamPlayer.team
 
     private fun finishGame() {
+        gameAlreadyFinished = true
         dispatchSingleTimeEvent(TrucoFinishGame)
     }
 
@@ -424,9 +429,12 @@ abstract class TrucoViewModel(
             is YesIDo -> if (previousActions.last() is EnvidoGameAction) {
                 playEnvido()
             }
+            is GoToDeck -> {
+                val winner = teamPlayers.first { it.team != performedByTeam }.team
+                onHandFinished(winner)
+            }
         }
     }
-
 
     private fun playEnvido() {
         val pointsByPlayer = cardsByPlayer.map {
@@ -485,7 +493,6 @@ abstract class TrucoViewModel(
             }
         }
     }
-
 
     companion object {
 

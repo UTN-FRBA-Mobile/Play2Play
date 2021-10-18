@@ -29,6 +29,7 @@ class PlayImpostorFragment : BaseGameFragment<
                 setWordToShow(data.isImpostor, data.keyWord)
                 setScreenDescription(data.isImpostor)
                 setScreenIcon(data.isImpostor)
+                gameBinding.keyWordTheme.text = data.keyWordTheme
             }
         }
     }

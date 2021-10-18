@@ -58,7 +58,7 @@
     <dimen name="countdown_number_height">200dp</dimen>
 
     <!-- Truco create -->
-    <dimen name="truco_create_game_card">180dp</dimen>
+    <dimen name="truco_create_game_card">150dp</dimen>
 
     <!-- Truco lobby -->
     <dimen name="tr_grid_card_size">100dp</dimen>
@@ -105,6 +105,8 @@
     <dimen name="truco_action_bubble_elevation">50dp</dimen>
     <dimen name="truco_earned_points_title_size">80sp</dimen>
     <dimen name="truco_earned_points_subtitle_size">64sp</dimen>
+    <dimen name="truco_result_title_size">40sp</dimen>
+    <dimen name="truco_result_subtitle_size">60sp</dimen>
 
     <!-- Impostor -->
     <dimen name="game_task_image_size">140dp</dimen>
