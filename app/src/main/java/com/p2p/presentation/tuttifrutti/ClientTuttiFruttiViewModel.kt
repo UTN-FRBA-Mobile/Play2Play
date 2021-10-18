@@ -61,7 +61,7 @@ class ClientTuttiFruttiViewModel(
 
     override fun onReceiveEnoughForAll(conversation: Conversation) {
         enoughForAllConversation = conversation
-         startLoading(loadingTextRepository.getText(LoadingMessageType.TF_WAITING_FOR_REVIEW))
+        startLoading(loadingTextRepository.getText(LoadingMessageType.TF_WAITING_FOR_REVIEW))
         super.onReceiveEnoughForAll(conversation)
     }
 
