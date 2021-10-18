@@ -1,5 +1,6 @@
 package com.p2p.presentation.truco
 
+import android.util.Log
 import androidx.annotation.CallSuper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -191,9 +192,7 @@ abstract class TrucoViewModel(
         performAction(action)
     }
 
-    fun onGameStarted() {
-        nextTurn(firstHandPlayer)
-    }
+    fun onMyCardsLoad() = nextTurn(firstHandPlayer)
 
     private fun performOrReplyAction(isReply: Boolean, action: TrucoAction) {
         if (isReply)
@@ -325,7 +324,6 @@ abstract class TrucoViewModel(
             val nextHandIndex = (teamPlayers.indexOf(firstHandPlayer) + 1)
             firstHandPlayer = teamPlayers[nextHandIndex % totalPlayers.requireValue()]
             newHand()
-            nextTurn(firstHandPlayer)
         }
     }
 
@@ -423,6 +421,7 @@ abstract class TrucoViewModel(
     private fun setCurrentPlayerTurn(player: TeamPlayer) {
         currentTurnPlayer = player
         _isMyTurn.value = player == myTeamPlayer
+        Log.d("DylanLog", "Player turno: $player --> My turn: ${isMyTurn.requireValue()}")
         if (isMyTurn.requireValue()) {
             dispatchSingleTimeEvent(TrucoTakeTurnEvent)
             _envidoButtonEnabled.value = teamPlayers.last { it.team == myTeamPlayer.team } == myTeamPlayer
