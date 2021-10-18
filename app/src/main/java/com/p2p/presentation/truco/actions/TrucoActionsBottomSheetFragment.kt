@@ -123,9 +123,8 @@ class TrucoActionsBottomSheetFragment :
             updateTrucoText(it?.nextAction()?.message(requireContext()))
         }
         observe(viewModel.isMyTurn) {
-            changeEnvidoButtonAvailability(!envidoDisabledForHand && it)
-            updateTrucoVisibility(!trucoAnswersDisabled && it)
-            changeGoToDeckButtonAvailability(it)
+            changeEnvidoButtonAvailability(!envidoDisabledForHand)
+            updateTrucoVisibility(!trucoAnswersDisabled)
         }
     }
 
@@ -168,10 +167,6 @@ class TrucoActionsBottomSheetFragment :
 
     private fun changeEnvidoButtonAvailability(enabled: Boolean) {
         binding.envidoOptionsButton.isEnabled = enabled
-    }
-
-    private fun changeGoToDeckButtonAvailability(enabled: Boolean) {
-        binding.goToDeckButton.isEnabled = enabled
     }
 
     private fun Dialog.getBottomSheet(): FrameLayout =

@@ -42,9 +42,9 @@ abstract class TrucoFragment<VB : ViewBinding> :
     private lateinit var earnedPointsBinding: ViewTrucoEarnedPointsBinding
     protected lateinit var myCardsHand: TrucoCardsHand
 
-    protected lateinit var roundViews: List<View>
+    private lateinit var roundViews: List<View>
 
-    protected lateinit var myCardsViews: List<ImageView>
+    private lateinit var myCardsViews: List<ImageView>
     protected lateinit var myDroppingPlacesViews: List<View>
 
     private var activeBottomSheet = false
@@ -75,6 +75,13 @@ abstract class TrucoFragment<VB : ViewBinding> :
         observe(gameViewModel.actionAvailableResponses) { updateActionAvailableResponses(it) }
         observe(gameViewModel.ourScore) { updateScore(headerBinding.ourScore, it) }
         observe(gameViewModel.theirScore) { updateScore(headerBinding.theirScore, it) }
+        observe(gameViewModel.isMyTurn) {
+            if(it) {
+                addActionsBottomSheet()
+            } else {
+                deleteTrucoActionsBottomSheet()
+            }
+        }
     }
 
     override fun initUI() = with(requireView()) {
@@ -120,7 +127,7 @@ abstract class TrucoFragment<VB : ViewBinding> :
         }
     }
 
-    override final fun onCardPlayed(playingCard: TrucoCardsHand.PlayingCard) {
+    final override fun onCardPlayed(playingCard: TrucoCardsHand.PlayingCard) {
         gameViewModel.playCard(playingCard.card)
     }
 
@@ -248,8 +255,7 @@ abstract class TrucoFragment<VB : ViewBinding> :
         action: TrucoAction,
         onComplete: () -> Unit
     ) {
-        (parentFragmentManager.findFragmentByTag(ACTIONS_BOTTOM_SHEET_TAG) as BottomSheetDialogFragment?)?.dismiss()
-        activeBottomSheet = false
+        deleteTrucoActionsBottomSheet()
         bubbleText.text = action.message(requireContext())
         showBubbleView(bubbleBackground)
         showBubbleView(bubbleText)
@@ -269,6 +275,11 @@ abstract class TrucoFragment<VB : ViewBinding> :
                 HIDE_ACTION_BUBBLES_DELAY
             )
         }
+    }
+
+    private fun deleteTrucoActionsBottomSheet() {
+        (parentFragmentManager.findFragmentByTag(ACTIONS_BOTTOM_SHEET_TAG) as BottomSheetDialogFragment?)?.dismiss()
+        activeBottomSheet = false
     }
 
     private fun hideActions() {
