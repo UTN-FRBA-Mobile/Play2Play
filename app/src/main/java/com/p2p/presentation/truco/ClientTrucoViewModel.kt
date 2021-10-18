@@ -31,7 +31,7 @@ class ClientTrucoViewModel(
                 teamPlayers = message.teamPlayers
                 setTotalPlayers(message.totalPlayers)
                 setTotalPoints(message.totalPoints)
-                _firstHandPlayer.value = message.teamPlayers[0]
+                firstHandPlayer = message.teamPlayers[0]
                 startGame()
             }
             is TrucoCardsMessage -> onReceiveCards(message.cardsForPlayers)
