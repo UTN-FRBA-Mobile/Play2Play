@@ -22,7 +22,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-
 abstract class GameViewModel(
     private val connectionType: ConnectionType,
     private val userSession: UserSession,
@@ -31,6 +30,8 @@ abstract class GameViewModel(
     protected val loadingTextRepository: LoadingTextRepository,
     theGame: Game
 ) : BaseViewModel<GameEvent>() {
+
+    protected open val maxPlayersOnRoom: Int = Int.MAX_VALUE
 
     protected var gameAlreadyStarted = false
     protected var gameAlreadyFinished = false
@@ -86,28 +87,15 @@ abstract class GameViewModel(
     @CallSuper
     open fun receiveMessage(conversation: Conversation) {
         when (val message = conversation.lastMessage) {
-            is ClientHandshakeMessage -> {
-                val isNameInUse = connectedPlayers.any { it.second == message.name }
-                if (isServer()) {
-                    if (isNameInUse) {
-                        connection.talk(conversation, NameInUseMessage())
-                    } else {
-                        connection.talk(
-                            conversation,
-                            ServerHandshakeMessage(connectedPlayers.map { it.second })
-                        )
-                    }
-                }
-                if (!isNameInUse) {
-                    connectedPlayers = connectedPlayers + (conversation.peer to message.name)
-                }
-            }
+            is ClientHandshakeMessage -> onClientHandshake(message, conversation)
             is NameInUseMessage -> dispatchErrorScreen(NameInUseError {
                 dispatchSingleTimeEvent(KillGame)
             })
+            is RoomIsAlreadyFullMessage -> dispatchErrorScreen(RoomIsAlreadyFullError {
+                dispatchSingleTimeEvent(KillGame)
+            })
             is ServerHandshakeMessage -> {
-                connectedPlayers =
-                    connectedPlayers + message.players.map { conversation.peer to it }
+                connectedPlayers = message.players.map { conversation.peer to it }
             }
             is GoodbyePlayerMessage -> {
                 connectedPlayers.firstOrNull { it.second == message.name }?.let { removePlayer(it) }
@@ -240,6 +228,21 @@ abstract class GameViewModel(
             type = MessageData.Type.ERROR,
             formatArgs = arrayOf(playerLost.second),
         )
+    }
+
+    private fun onClientHandshake(message: ClientHandshakeMessage, conversation: Conversation) {
+        if (isServer()) {
+            when {
+                connectedPlayers.any { it.second == message.name } ->
+                    connection.talk(conversation, NameInUseMessage())
+                connectedPlayers.size >= maxPlayersOnRoom ->
+                    connection.talk(conversation, RoomIsAlreadyFullMessage())
+                else -> {
+                    connectedPlayers = connectedPlayers + (conversation.peer to message.name)
+                    connection.write(ServerHandshakeMessage(connectedPlayers.map { it.second }))
+                }
+            }
+        }
     }
 
     companion object {

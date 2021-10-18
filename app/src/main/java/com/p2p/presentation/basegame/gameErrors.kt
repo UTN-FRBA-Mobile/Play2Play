@@ -25,6 +25,13 @@ class NameInUseError(onOkClicked: () -> Unit) : GameError(
     onOkClicked
 )
 
+class RoomIsAlreadyFullError(onOkClicked: () -> Unit) : GameError(
+    R.drawable.ic_info,
+    R.string.error_room_already_full,
+    android.R.string.ok,
+    onOkClicked
+)
+
 class ServerConnectionLostError(onOkClicked: () -> Unit) : GameError(
     R.drawable.ic_no_cell,
     R.string.error_server_connection_failure,
