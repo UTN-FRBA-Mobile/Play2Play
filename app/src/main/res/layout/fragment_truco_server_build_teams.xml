@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,46 +10,13 @@
     <include layout="@layout/view_guidelines" />
 
     <TextView
-        android:id="@+id/help_players_title"
-        style="@style/P2P_Title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/lobby_give_help_players_title"
-        app:layout_constraintEnd_toEndOf="@id/guideline_end"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toStartOf="@id/guideline_begin"
-        app:layout_constraintTop_toTopOf="@id/guideline_top" />
-
-    <TextView
-        android:id="@+id/help_players_description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/medium"
-        app:layout_constraintEnd_toEndOf="@id/guideline_end"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toStartOf="@id/guideline_begin"
-        app:layout_constraintTop_toBottomOf="@id/help_players_title"
-        tools:text="@string/lobby_give_help_players_decription" />
-
-    <TextView
-        android:id="@+id/connected_players"
-        style="@style/P2P_Title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/large"
-        android:text="@string/lobby_connected_players"
-        app:layout_constraintStart_toStartOf="@id/guideline_begin"
-        app:layout_constraintTop_toBottomOf="@id/help_players_description" />
-
-    <TextView
         android:id="@+id/help_order_players_description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/medium"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
-        app:layout_constraintTop_toBottomOf="@id/connected_players"
+        app:layout_constraintTop_toBottomOf="@id/guideline_top"
         android:text="@string/tr_lobby_help_order_players" />
 
     <ImageView
@@ -67,17 +36,14 @@
         android:id="@+id/players_grid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/medium"
-        android:padding="@dimen/medium"
         android:clipToPadding="false"
-        android:layout_marginEnd="@dimen/medium"
-        android:numColumns="2"
-        android:horizontalSpacing="@dimen/medium_more"
-        android:verticalSpacing="@dimen/largest_extra"
         android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/arrow_right"
-        app:layout_constraintStart_toStartOf="@id/guideline_begin"
+        android:numColumns="2"
+        android:verticalSpacing="@dimen/huge_extra"
         app:layout_constraintBottom_toTopOf="@id/arrow_left"
+        app:layout_constraintTop_toBottomOf="@id/arrow_right"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintStart_toStartOf="@id/guideline_begin"
         tools:listitem="@layout/view_truco_connected_user" />
 
     <ImageView
@@ -90,7 +56,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/players_grid"
-        app:layout_constraintBottom_toTopOf="@id/start_game_button"
+        app:layout_constraintBottom_toTopOf="@id/next_screen_button"
         app:layout_constraintHorizontal_bias="0.5" />
 
     <Button

@@ -122,6 +122,11 @@ abstract class TrucoViewModel(
         dispatchSingleTimeEvent(TrucoGoToPlay(totalPlayers.requireValue()))
     }
 
+    fun goToBuildTeams(){
+        dispatchSingleTimeEvent(TrucoGoToBuildTeams)
+    }
+
+
     /** This will only be used by the server */
     open fun handOutCards() {}
 
