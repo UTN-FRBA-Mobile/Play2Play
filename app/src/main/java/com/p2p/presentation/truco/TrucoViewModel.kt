@@ -60,12 +60,8 @@ abstract class TrucoViewModel(
     /** List with the teams of players */
     protected lateinit var teamPlayers: List<TeamPlayer>
 
-    /** First player to play a card in a hand */
-    protected val _firstHandPlayer = MutableLiveData<TeamPlayer>()
-    val firstHandPlayer: LiveData<TeamPlayer> = _firstHandPlayer
-
     /** Set the quantity of players selected by the user when creating the game . */
-    protected val _totalPlayers = MutableLiveData<Int>()
+    private val _totalPlayers = MutableLiveData<Int>()
     val totalPlayers: LiveData<Int> = _totalPlayers
 
     /** Set the quantity of points selected by the user when creating the game . */
@@ -104,6 +100,7 @@ abstract class TrucoViewModel(
     private val _currentRound = MutableLiveData(1)
     val currentRound: LiveData<Int> = _currentRound
 
+    protected lateinit var firstHandPlayer: TeamPlayer
     private lateinit var currentTurnPlayer: TeamPlayer
 
     private var currentActionPoints: Int = 1
@@ -145,9 +142,10 @@ abstract class TrucoViewModel(
                         message.action,
                         playerPosition,
                         canAnswer(message.teamPlayer)
-                    )
+                    ) {
+                        onActionDone(message.action, message.teamPlayer.team)
+                    }
                 )
-                onActionDone(message.action, message.teamPlayer.team)
             }
             is TrucoPlayCardMessage -> onRivalCardPlayed(message.playedCard)
         }
@@ -166,8 +164,9 @@ abstract class TrucoViewModel(
         disableButtonsIfApplies(action, actionPerformer = true)
         connection.write(TrucoActionMessage(action, myTeamPlayer))
         updateActionValues(action)
-        dispatchSingleTimeEvent(TrucoShowMyActionEvent(action))
-        onActionDone(action, myTeamPlayer.team)
+        dispatchSingleTimeEvent(TrucoShowMyActionEvent(action) {
+            onActionDone(action, myTeamPlayer.team)
+        })
     }
 
     fun performEnvido(isReply: Boolean = false) =
@@ -176,7 +175,6 @@ abstract class TrucoViewModel(
     fun performRealEnvido(isReply: Boolean = false) =
         performOrReplyAction(isReply, RealEnvido(previousActions))
 
-    // TODO: receive total opponent points
     fun performFaltaEnvido(isReply: Boolean = false) =
         performOrReplyAction(
             isReply,
@@ -189,7 +187,7 @@ abstract class TrucoViewModel(
     }
 
     fun onGameStarted() {
-        nextTurn(firstHandPlayer.requireValue())
+        nextTurn(firstHandPlayer)
     }
 
     private fun performOrReplyAction(isReply: Boolean, action: TrucoAction) {
@@ -210,6 +208,8 @@ abstract class TrucoViewModel(
         dispatchSingleTimeEvent(TrucoNewHand)
         cleanActionValues()
         currentHandWinners.clear()
+        playedCards.clear()
+        playedCards.add(mutableListOf())
         _lastTrucoAction.value = null
         _envidoButtonEnabled.value = true
         _trucoButtonEnabled.value = true
@@ -317,10 +317,10 @@ abstract class TrucoViewModel(
     private fun onHandFinished(handWinnerPlayerTeam: Int = getCurrentHandWinner().team) {
         val hasFinished = updateScore(handWinnerPlayerTeam)
         if (!hasFinished) {
-            _firstHandPlayer.value = teamPlayers[(teamPlayers.indexOf(firstHandPlayer.requireValue()) + 1)
-                    % totalPlayers.requireValue()]
+            val nextHandIndex = (teamPlayers.indexOf(firstHandPlayer) + 1)
+            firstHandPlayer = teamPlayers[nextHandIndex % totalPlayers.requireValue()]
             newHand()
-            nextTurn(_firstHandPlayer.requireValue())
+            nextTurn(firstHandPlayer)
         }
     }
 
@@ -478,7 +478,7 @@ abstract class TrucoViewModel(
     }
 
     private fun getRoundOrder(): List<TeamPlayer> {
-        val handIndex = teamPlayers.indexOf(firstHandPlayer.requireValue())
+        val handIndex = teamPlayers.indexOf(firstHandPlayer)
         return teamPlayers.drop(handIndex) + teamPlayers.take(handIndex)
     }
 

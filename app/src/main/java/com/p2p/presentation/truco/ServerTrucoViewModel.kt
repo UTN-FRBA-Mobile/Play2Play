@@ -33,7 +33,7 @@ class ServerTrucoViewModel(
 
     override fun startGame() {
         teamPlayers = setPlayersTeams()
-        _firstHandPlayer.value = teamPlayers[0]
+        firstHandPlayer = teamPlayers[0]
         connection.write(
             TrucoStartGameMessage(teamPlayers, totalPlayers.requireValue(), totalPoints.requireValue())
         )
