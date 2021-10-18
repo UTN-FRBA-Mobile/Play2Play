@@ -215,6 +215,7 @@ abstract class TrucoViewModel(
         otherPlayer.team == myTeamPlayer.team
 
     private fun finishGame() {
+        gameAlreadyFinished = true
         dispatchSingleTimeEvent(TrucoFinishGame)
     }
 

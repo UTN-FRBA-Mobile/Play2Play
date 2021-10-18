@@ -5,25 +5,30 @@ import androidx.lifecycle.MutableLiveData
 import com.p2p.model.truco.FinalResult
 import com.p2p.presentation.base.BaseViewModel
 
-class FinalScoreTrucoViewModel: BaseViewModel<TrucoFinalScoreEvent>() {
+class FinalScoreTrucoViewModel : BaseViewModel<TrucoFinalScoreEvent>() {
+
     private val _finalResult = MutableLiveData<FinalResult>()
     val finalResult: LiveData<FinalResult> = _finalResult
 
-    private var setFinalResult : FinalResult = FinalResult(null, null, null)
+    private var ourScore: Int? = null
+    private var theirScore: Int? = null
 
     fun setOurScore(score: Int) {
-        setFinalResult.ourScore = score
-        setFinalResult.theirScore?.let { isWinner(score, it) }
+        ourScore = score
+        theirScore?.let { isWinner(score, it) }
     }
 
     fun setTheirScore(score: Int) {
-        setFinalResult.theirScore = score
-        setFinalResult.ourScore?.let { isWinner(it, score) }
+        theirScore = score
+        ourScore?.let { isWinner(it, score) }
     }
 
-    fun isWinner(ourScore: Int, theirScore: Int) {
-        setFinalResult.isWinner = ourScore > theirScore
-        _finalResult.value = setFinalResult
+    private fun isWinner(ourScore: Int, theirScore: Int) {
+        _finalResult.value = FinalResult(
+            isWinner = ourScore > theirScore,
+            ourScore = ourScore,
+            theirScore = theirScore
+        )
     }
 
     fun exit() {
