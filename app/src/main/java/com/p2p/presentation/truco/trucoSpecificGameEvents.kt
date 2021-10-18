@@ -8,16 +8,22 @@ sealed class TrucoSpecificGameEvent : SpecificGameEvent()
 
 data class TrucoGoToPlay(val playersQuantity: Int) : TrucoSpecificGameEvent()
 
-data class TrucoShowMyActionEvent(val action: TrucoAction) : TrucoSpecificGameEvent()
+class TrucoShowMyActionEvent(
+    action: TrucoAction,
+    onComplete: () -> Unit = {}
+) : TrucoShowActionEvent(action, TrucoPlayerPosition.MY_SELF, false, onComplete)
 
-data class TrucoShowOpponentActionEvent(
+open class TrucoShowActionEvent(
     val action: TrucoAction,
     val playerPosition: TrucoPlayerPosition,
-    val canAnswer: Boolean
+    val canAnswer: Boolean,
+    val onComplete: () -> Unit = {}
 ) : TrucoSpecificGameEvent()
 
-data class TrucoShowManyActionsEvent(val actionByPlayer: Map<TrucoPlayerPosition, TrucoAction>) :
-    TrucoSpecificGameEvent()
+data class TrucoShowManyActionsEvent(
+    val actionByPlayer: Map<TrucoPlayerPosition, TrucoAction>,
+    val onComplete: () -> Unit
+) : TrucoSpecificGameEvent()
 
 data class TrucoFinishRound(
     val round: Int,
@@ -36,3 +42,9 @@ data class TrucoOtherPlayedCardEvent(
 object TrucoTakeTurnEvent : TrucoSpecificGameEvent()
 
 object TrucoFinishGame : TrucoSpecificGameEvent()
+
+data class TrucoShowEarnedPoints(
+    val isMyTeam: Boolean,
+    val earnedPoints: Int,
+    val onComplete: () -> Unit
+) : TrucoSpecificGameEvent()

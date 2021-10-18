@@ -88,7 +88,7 @@ class TrucoPlayFor4Fragment : TrucoFragment<FragmentPlayTrucoFor4Binding>() {
 
     override fun getPlayerBubbleWithTextView(playerPosition: TrucoPlayerPosition): Pair<View, TextView> {
         val (bubble, text) = bubbleForPosition(playerPosition)
-        return requireView().findViewById<View>(bubble) to requireView().findViewById<TextView>(text)
+        return requireView().findViewById<View>(bubble) to requireView().findViewById(text)
     }
 
     override fun bubbleForPosition(playerPosition: TrucoPlayerPosition) = when (playerPosition) {

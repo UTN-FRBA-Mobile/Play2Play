@@ -1,5 +1,6 @@
 package com.p2p.presentation.truco
 
+import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
@@ -14,6 +15,7 @@ import androidx.fragment.app.viewModels
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.p2p.R
+import com.p2p.databinding.ViewTrucoEarnedPointsBinding
 import com.p2p.databinding.ViewTrucoHeaderBinding
 import com.p2p.model.truco.Card
 import com.p2p.presentation.base.NoViewModel
@@ -36,7 +38,8 @@ abstract class TrucoFragment<VB : ViewBinding> :
     override val viewModel by viewModels<NoViewModel>()
     override val isHeaderVisible: Boolean = false
 
-    protected lateinit var headerBinding: ViewTrucoHeaderBinding
+    private lateinit var headerBinding: ViewTrucoHeaderBinding
+    private lateinit var earnedPointsBinding: ViewTrucoEarnedPointsBinding
     protected lateinit var myCardsHand: TrucoCardsHand
 
     protected lateinit var roundViews: List<View>
@@ -78,6 +81,7 @@ abstract class TrucoFragment<VB : ViewBinding> :
         super.initUI()
         initializeRivalHands(isFirstHand = true)
         headerBinding = ViewTrucoHeaderBinding.bind(gameBinding.root)
+        earnedPointsBinding = ViewTrucoEarnedPointsBinding.bind(gameBinding.root)
         roundViews =
             listOf(headerBinding.firstRound, headerBinding.secondRound, headerBinding.thirdRound)
         myCardsViews = listOf(
@@ -134,15 +138,13 @@ abstract class TrucoFragment<VB : ViewBinding> :
 
     @CallSuper
     protected open fun onGameEvent(event: GameEvent) = when (event) {
-        is TrucoShowMyActionEvent -> showMyAction(event.action)
-        is TrucoShowOpponentActionEvent -> {
-            val (bubble, text) = getPlayerBubbleWithTextView(event.playerPosition)
-            showRivalAction(bubble, text, event.action, event.canAnswer)
-        }
-        is TrucoShowManyActionsEvent -> showManyActions(event.actionByPlayer)
+        is TrucoShowActionEvent ->
+            showPlayerAction(event.playerPosition, event.action, event.canAnswer, event.onComplete)
+        is TrucoShowManyActionsEvent -> showManyActions(event.actionByPlayer, event.onComplete)
         is TrucoFinishRound -> finishRound(event.round, event.result)
         is TrucoNewHand -> newHand()
         is TrucoOtherPlayedCardEvent -> onOtherPlayedCard(event)
+        is TrucoShowEarnedPoints -> showEarnedPoints(event.isMyTeam, event.earnedPoints, event.onComplete)
         TrucoTakeTurnEvent -> myCardsHand.takeTurn()
         else -> super.onEvent(event)
     }
@@ -160,47 +162,49 @@ abstract class TrucoFragment<VB : ViewBinding> :
 
     abstract fun bubbleForPosition(playerPosition: TrucoPlayerPosition): Pair<Int, Int>
 
-    protected fun showRivalAction(
-        rivalActionBubble: View,
-        rivalActionTextView: TextView,
-        action: TrucoAction,
-        canAnswer: Boolean
-    ) {
-        showAction(rivalActionBubble, rivalActionTextView, action)
-        if (canAnswer) updateActionAvailableResponses(action.availableResponses())
-    }
-
     protected fun getPlayingCards(cardsViews: List<ImageView>, cards: List<Card>) =
         cardsViews.mapIndexed { i, view ->
             TrucoCardsHand.PlayingCard(cards[i], view)
         }
 
     protected fun loadCardImages(cardViews: List<ImageView>, cards: List<Card?>) = cardViews.forEachIndexed { i, view ->
-            CardImageCreator.loadCard(view, cards.getOrNull(i))
+        CardImageCreator.loadCard(view, cards.getOrNull(i))
     }
 
-    private fun showMyAction(action: TrucoAction) {
-        val (bubbleBackground, bubbleText) = myActionBubble
-        showAction(bubbleBackground, bubbleText, action)
-    }
-
-
-    private fun showManyActions(actionsByPlayer: Map<TrucoPlayerPosition, TrucoAction>) {
-        actionsByPlayer.forEach { (player, action) ->
-            val (bubble, textView) = getPlayerBubbleWithTextView(player)
-            showRivalAction(bubble, textView, action, canAnswer = false)
+    private fun showPlayerAction(
+        position: TrucoPlayerPosition,
+        action: TrucoAction,
+        canAnswer: Boolean,
+        onComplete: () -> Unit
+    ) {
+        val (bubble, text) = getPlayerBubbleWithTextView(position)
+        showAction(bubble, text, action, onComplete)
+        if (canAnswer) {
+            updateActionAvailableResponses(action.availableResponses())
         }
     }
 
-    private fun showAction(bubbleBackground: View, bubbleText: TextView, action: TrucoAction) {
+    private fun showManyActions(actionsByPlayer: Map<TrucoPlayerPosition, TrucoAction>, onComplete: () -> Unit) {
+        val actionsList = actionsByPlayer.toList()
+        actionsList.forEachIndexed { index, (position, action) ->
+            showPlayerAction(
+                position,
+                action,
+                canAnswer = false,
+                onComplete = onComplete.takeIf { index == actionsList.lastIndex } ?: {}
+            )
+        }
+    }
+
+    private fun showAction(bubbleBackground: View, bubbleText: TextView, action: TrucoAction, onComplete: () -> Unit) {
         if (bubbleBackground.scaleX >= MIN_ACTION_BUBBLE_VISIBLE_SCALING) {
             hideBubbleView(bubbleBackground)
             hideBubbleView(bubbleText) {
-                showActionAfterVisibilityCheck(bubbleBackground, bubbleText, action)
+                showActionAfterVisibilityCheck(bubbleBackground, bubbleText, action, onComplete)
                 bubbleText.animate().setListener(null)
             }
         } else {
-            showActionAfterVisibilityCheck(bubbleBackground, bubbleText, action)
+            showActionAfterVisibilityCheck(bubbleBackground, bubbleText, action, onComplete)
         }
     }
 
@@ -241,7 +245,8 @@ abstract class TrucoFragment<VB : ViewBinding> :
     private fun showActionAfterVisibilityCheck(
         bubbleBackground: View,
         bubbleText: TextView,
-        action: TrucoAction
+        action: TrucoAction,
+        onComplete: () -> Unit
     ) {
         (parentFragmentManager.findFragmentByTag(ACTIONS_BOTTOM_SHEET_TAG) as BottomSheetDialogFragment?)?.dismiss()
         activeBottomSheet = false
@@ -256,7 +261,13 @@ abstract class TrucoFragment<VB : ViewBinding> :
             .alpha(ACTION_BACKGROUND_FINAL_ALPHA)
             .start()
         if (!action.hasReplication) {
-            bubbleBackground.postDelayed({ hideActions() }, HIDE_ACTION_BUBBLES_DELAY)
+            bubbleBackground.postDelayed(
+                {
+                    hideActions()
+                    onComplete()
+                },
+                HIDE_ACTION_BUBBLES_DELAY
+            )
         }
     }
 
@@ -333,6 +344,25 @@ abstract class TrucoFragment<VB : ViewBinding> :
         roundViews[2].backgroundTintList = null
     }
 
+    private fun showEarnedPoints(
+        isMyTeam: Boolean,
+        earnedPoints: Int,
+        onComplete: () -> Unit
+    ) = with(earnedPointsBinding) {
+        title.setText(if (isMyTeam) R.string.truco_our_score_label else R.string.truco_their_score_label)
+        @SuppressLint("SetTextI18n")
+        subtitle.text = "+$earnedPoints"
+        container.fadeIn()
+        container.postDelayed(
+            {
+                container.fadeOut()
+                onComplete()
+            },
+            EARNED_POINTS_DELAY_MS
+        )
+        Unit
+    }
+
     companion object {
 
         private const val SCORE_ZOOM_ANIMATION = 1.2f
@@ -340,5 +370,6 @@ abstract class TrucoFragment<VB : ViewBinding> :
         const val ACTIONS_BOTTOM_SHEET_TAG = "TRUCO_ACTIONS_BOTTOM_SHEET"
         private const val ACTION_BACKGROUND_FINAL_ALPHA = 0.5f
         private const val HIDE_ACTION_BUBBLES_DELAY = 3_000L
+        private const val EARNED_POINTS_DELAY_MS = 3_000L
     }
 }
