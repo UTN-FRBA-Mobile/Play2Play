@@ -10,6 +10,7 @@ import com.p2p.presentation.tuttifrutti.finalscore.FinalScoreTuttiFruttiFragment
 import com.p2p.presentation.tuttifrutti.lobby.TuttiFruttiClientLobbyFragment
 import com.p2p.presentation.tuttifrutti.lobby.TuttiFruttiServerLobbyFragment
 import com.p2p.presentation.tuttifrutti.review.TuttiFruttiReviewFragment
+import com.p2p.presentation.tuttifrutti.review.client.TuttiFruttiClientReviewFragment
 
 class TuttiFruttiActivity : GameActivity<TuttiFruttiSpecificGameEvent, TuttiFruttiViewModel>() {
 
@@ -38,10 +39,13 @@ class TuttiFruttiActivity : GameActivity<TuttiFruttiSpecificGameEvent, TuttiFrut
                 FinalScoreTuttiFruttiFragment.newInstance(),
                 shouldAddToBackStack = false
             )
-            GoToReview -> addFragment(
-                TuttiFruttiReviewFragment.newInstance(),
-                shouldAddToBackStack = false
-            )
+            GoToReview -> {
+                viewModel.sendClientReview()
+                addFragment(TuttiFruttiReviewFragment.newInstance(), shouldAddToBackStack = false)
+            }
+            GoToClientReview -> {
+                addFragment(TuttiFruttiClientReviewFragment.newInstance(), shouldAddToBackStack = false)
+            }
             else -> Unit
         }
     }
