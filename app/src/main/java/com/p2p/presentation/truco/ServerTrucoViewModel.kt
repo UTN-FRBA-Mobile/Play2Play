@@ -31,7 +31,8 @@ class ServerTrucoViewModel(
     /** Deck of cards being used by all players in a hand  */
     private var cards = listOf<Card>()
 
-    override fun startGame() {
+    override fun startGame(players: List<String>) {
+        _players.value = players
         teamPlayers = setPlayersTeams()
         firstHandPlayer = teamPlayers[0]
         connection.write(
@@ -43,9 +44,9 @@ class ServerTrucoViewModel(
     }
 
     private fun setPlayersTeams(): List<TeamPlayer> {
-        return players.requireValue().take(totalPlayers.requireValue()).mapIndexed { index, element ->
+        return players.requireValue().take(totalPlayers.requireValue()).mapIndexed { index, playerName ->
             val teamNumber = index % PLAYERS_PER_TEAM + 1
-            TeamPlayer(element, teamNumber)
+            TeamPlayer(playerName, teamNumber)
         }
     }
 

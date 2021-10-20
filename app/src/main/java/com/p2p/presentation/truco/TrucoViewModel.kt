@@ -34,6 +34,7 @@ import com.p2p.presentation.truco.actions.TrucoActionAvailableResponses
 import com.p2p.presentation.truco.actions.TrucoGameAction
 import com.p2p.presentation.truco.envidoCalculator.EnvidoMessageCalculator
 import com.p2p.presentation.truco.envidoCalculator.EnvidoPointsCalculator
+import com.p2p.utils.Logger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -115,7 +116,7 @@ abstract class TrucoViewModel(
         _theirScore.value = 0
     }
 
-    abstract override fun startGame()
+    abstract fun startGame(players: List<String>)
 
     fun goToPlayTruco() {
         gameAlreadyStarted = true
@@ -152,10 +153,13 @@ abstract class TrucoViewModel(
     }
 
     fun performTruco() {
+        val isEnvidoAction = { action: TrucoAction ->
+            action is Envido || action is RealEnvido || action is FaltaEnvido || action is EnvidoGoesFirst
+        }
         val nextTrucoAction = _lastTrucoAction.value?.nextAction()
             ?: Truco(
                 currentRound.requireValue(),
-                !envidoButtonEnabled.requireValue()
+                previousActions.any { isEnvidoAction(it) }
             )
         performAction(nextTrucoAction)
     }
@@ -289,6 +293,7 @@ abstract class TrucoViewModel(
     private fun onCardPlayed(playedCard: PlayedCard) {
         val currentRoundPlayedCards = playedCards.last()
         currentRoundPlayedCards.add(playedCard)
+        Logger.d("P2P_", "currentRoundPlayedCards: $currentRoundPlayedCards")
 
         if (hasRoundFinished()) {
             onRoundFinished(currentRoundPlayedCards)
@@ -300,7 +305,9 @@ abstract class TrucoViewModel(
     private fun onRoundFinished(currentRoundPlayedCards: List<PlayedCard>) {
         val round = _currentRound.requireValue()
         _currentRound.value = round + 1
+        Logger.d("P2P_", "Adding emptyList")
         playedCards.add(mutableListOf())
+        Logger.d("P2P_", "lastPlayed: ${playedCards.last()}")
 
         val roundWinnerTeamPlayer = getRoundWinnerTeamPlayer(currentRoundPlayedCards)
         val roundResult = TrucoRoundResult.get(roundWinnerTeamPlayer, myTeamPlayer)
@@ -420,7 +427,10 @@ abstract class TrucoViewModel(
         _isMyTurn.value = player == myTeamPlayer
         if (isMyTurn.requireValue()) {
             dispatchSingleTimeEvent(TrucoTakeTurnEvent)
-            _envidoButtonEnabled.value = teamPlayers.last { it.team == myTeamPlayer.team } == myTeamPlayer
+            _envidoButtonEnabled.value =
+                playedCards.last().any { it.teamPlayer.team == myTeamPlayer.team } || totalPlayers.requireValue() == 2
+            Logger.d("P2P_", "envidoButtonEnabled: ${envidoButtonEnabled.requireValue()}" )
+            Logger.d("P2P_", "playedCards: ${playedCards.last()}")
         }
     }
 
@@ -493,6 +503,11 @@ abstract class TrucoViewModel(
                 currentActionPoints = 1
             }
         }
+    }
+
+    // unused
+    override fun startGame() {
+
     }
 
     companion object {

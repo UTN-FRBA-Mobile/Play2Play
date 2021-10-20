@@ -62,7 +62,7 @@ abstract class GameViewModel(
     private val _game = MutableLiveData<Game>()
     val game: LiveData<Game> = _game
 
-    private val _players = MutableLiveData(emptyList<String>())
+    protected val _players = MutableLiveData(emptyList<String>())
     val players: LiveData<List<String>> = _players
 
     //Loading value for loading screen, being first if isLoading and second the text to show

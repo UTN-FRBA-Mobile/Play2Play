@@ -5,9 +5,9 @@ import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.loadingMessages.LoadingTextRepository
 import com.p2p.data.userInfo.UserSession
 import com.p2p.model.base.message.Conversation
-import com.p2p.model.truco.message.TrucoStartGameMessage
 import com.p2p.model.truco.PlayerWithCards
 import com.p2p.model.truco.message.TrucoCardsMessage
+import com.p2p.model.truco.message.TrucoStartGameMessage
 import com.p2p.presentation.basegame.ConnectionType
 
 class ClientTrucoViewModel(
@@ -32,13 +32,15 @@ class ClientTrucoViewModel(
                 setTotalPlayers(message.totalPlayers)
                 setTotalPoints(message.totalPoints)
                 firstHandPlayer = message.teamPlayers[0]
-                startGame()
+                startGame(emptyList())
             }
             is TrucoCardsMessage -> onReceiveCards(message.cardsForPlayers)
         }
     }
 
-    override fun startGame() = goToPlayTruco()
+    override fun startGame(players: List<String>) {
+        goToPlayTruco()
+    }
 
     private fun onReceiveCards(playersWithCards: List<PlayerWithCards>) {
         cardsByPlayer = playersWithCards

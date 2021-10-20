@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import com.p2p.R
 import com.p2p.presentation.truco.actions.TrucoAction.*
+import com.p2p.utils.Logger
 import kotlin.math.max
 
 @JsonTypeInfo(
@@ -44,11 +45,13 @@ abstract class TrucoAction(
 
         override fun message(context: Context) = context.getString(R.string.truco_ask_for_truco)
 
-        override fun availableResponses() =
-            TrucoActionAvailableResponses(
+        override fun availableResponses(): TrucoActionAvailableResponses {
+            Logger.d("P2P_", "envidoAlreadyAsked: $envidoAlreadyAsked. round: $round")
+         return   TrucoActionAvailableResponses(
                 retruco = true,
                 envidoGoesFirst = round == 1 && !envidoAlreadyAsked
             )
+        }
 
         override fun nextAction(): TrucoAction = Retruco
     }
