@@ -326,7 +326,7 @@ abstract class TrucoFragment<VB : ViewBinding> :
         val myPlayingCards = getPlayingCards(myCardsViews, myCards)
         myCardsHand = createMyCardsHand(myPlayingCards)
         loadCardImages(myCardsViews, myCards)
-        gameViewModel.onGameStarted()
+        gameViewModel.onMyCardsLoad()
     }
 
     private fun onOtherPlayedCard(event: TrucoOtherPlayedCardEvent) {
