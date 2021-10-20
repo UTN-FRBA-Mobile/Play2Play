@@ -5,14 +5,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.p2p.R
-import com.p2p.databinding.FragmentTrucoServerLobbyBinding
+import com.p2p.databinding.FragmentTrucoServerBuildTeamsBinding
 import com.p2p.presentation.basegame.BaseGameFragment
 import com.p2p.presentation.truco.TrucoViewModel
 import com.p2p.utils.fromHtml
 
-
-class ServerTrucoLobbyFragment : BaseGameFragment<
-        FragmentTrucoServerLobbyBinding,
+class TrucoBuildTeamsFragment : BaseGameFragment<
+        FragmentTrucoServerBuildTeamsBinding,
         LobbyEvent,
         ServerTrucoLobbyViewModel,
         TrucoViewModel>() {
@@ -21,8 +20,8 @@ class ServerTrucoLobbyFragment : BaseGameFragment<
 
     override val viewModel: ServerTrucoLobbyViewModel by viewModels()
 
-    override val gameInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentTrucoServerLobbyBinding =
-        FragmentTrucoServerLobbyBinding::inflate
+    override val gameInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentTrucoServerBuildTeamsBinding =
+        FragmentTrucoServerBuildTeamsBinding::inflate
 
     private lateinit var connectedPlayersTrucoAdapter: ConnectedPlayersTrucoAdapter
 
@@ -33,7 +32,6 @@ class ServerTrucoLobbyFragment : BaseGameFragment<
 
     override fun initUI() {
         super.initUI()
-        gameViewModel.startConnection()
         setupPlayersGrid()
         gameBinding.helpOrderPlayersDescription.text = resources
             .getString(R.string.tr_lobby_help_order_players)
@@ -44,11 +42,6 @@ class ServerTrucoLobbyFragment : BaseGameFragment<
     override fun setupObservers() {
         super.setupObservers()
         with(gameViewModel) {
-            observe(myDeviceName) {
-                gameBinding.helpPlayersDescription.text = resources
-                    .getString(R.string.lobby_give_help_players_decription, it)
-                    .fromHtml()
-            }
             observe(players) {
                 connectedPlayersTrucoAdapter.players = it.toMutableList()
                 viewModel.setPlayers(it)
@@ -65,7 +58,7 @@ class ServerTrucoLobbyFragment : BaseGameFragment<
         adapter = activity?.let {
             ConnectedPlayersTrucoAdapter(it)
                 .also { adapter ->
-                    this@ServerTrucoLobbyFragment.connectedPlayersTrucoAdapter = adapter
+                    this@TrucoBuildTeamsFragment.connectedPlayersTrucoAdapter = adapter
                 }
         }
     }
@@ -77,6 +70,6 @@ class ServerTrucoLobbyFragment : BaseGameFragment<
     }
 
     companion object {
-        fun newInstance() = ServerTrucoLobbyFragment()
+        fun newInstance() = TrucoBuildTeamsFragment()
     }
 }

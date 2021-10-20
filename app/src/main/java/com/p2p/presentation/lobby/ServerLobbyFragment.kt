@@ -2,7 +2,6 @@ package com.p2p.presentation.lobby
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.p2p.R
 import com.p2p.databinding.FragmentServerLobbyBinding
@@ -16,21 +15,23 @@ abstract class ServerLobbyFragment<GVM : GameViewModel> : BaseGameFragment<
         ServerLobbyViewModel,
         GVM>() {
 
-
-    override val viewModel: ServerLobbyViewModel by viewModels()
-
     override val gameInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentServerLobbyBinding =
         FragmentServerLobbyBinding::inflate
 
     private lateinit var connectedPlayersAdapter: ConnectedPlayersAdapter
 
+    protected abstract val continueText: String
+    protected abstract fun continueAction()
+    protected open fun onConnectedPlayers(players: List<String>) {}
+
     override fun initUI() {
         super.initUI()
         gameViewModel.startConnection()
         setupPlayersRecycler()
-        gameBinding.startGameButton.setOnClickListener {
-            gameViewModel.startGame()
+        gameBinding.nextScreenButton.setOnClickListener {
+            continueAction()
         }
+        gameBinding.nextScreenButton.text = continueText
     }
 
     override fun setupObservers() {
@@ -43,10 +44,10 @@ abstract class ServerLobbyFragment<GVM : GameViewModel> : BaseGameFragment<
             }
             observe(players) {
                 connectedPlayersAdapter.players = it
-                viewModel.updatePlayers(it)
+                onConnectedPlayers(it)
             }
         }
-        observe(viewModel.isContinueButtonEnabled) { gameBinding.startGameButton.isEnabled = it }
+        observe(viewModel.isContinueButtonEnabled) { gameBinding.nextScreenButton.isEnabled = it }
     }
 
     private fun setupPlayersRecycler() = with(gameBinding.playersRecycler) {

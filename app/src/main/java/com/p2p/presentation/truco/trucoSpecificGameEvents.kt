@@ -6,6 +6,8 @@ import com.p2p.presentation.truco.actions.TrucoAction
 
 sealed class TrucoSpecificGameEvent : SpecificGameEvent()
 
+object TrucoGoToBuildTeams : TrucoSpecificGameEvent()
+
 data class TrucoGoToPlay(val playersQuantity: Int) : TrucoSpecificGameEvent()
 
 class TrucoShowMyActionEvent(

@@ -5,10 +5,11 @@ import android.bluetooth.BluetoothDevice
 import androidx.activity.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.p2p.presentation.basegame.GameActivity
-import com.p2p.presentation.truco.lobby.ServerTrucoLobbyFragment
+import com.p2p.presentation.truco.lobby.TrucoBuildTeamsFragment
 import com.p2p.presentation.truco.create.CreateTrucoFragment
 import com.p2p.presentation.truco.finalscore.FinalScoreTrucoFragment
 import com.p2p.presentation.truco.lobby.TrucoClientLobbyFragment
+import com.p2p.presentation.truco.lobby.TrucoServerLobbyFragment
 
 class TrucoActivity : GameActivity<TrucoSpecificGameEvent, TrucoViewModel>() {
 
@@ -22,7 +23,10 @@ class TrucoActivity : GameActivity<TrucoSpecificGameEvent, TrucoViewModel>() {
         addFragment(TrucoClientLobbyFragment.newInstance(), shouldAddToBackStack = false)
 
     override fun goToServerLobby() =
-        addFragment(ServerTrucoLobbyFragment.newInstance(), shouldAddToBackStack = false)
+        addFragment(TrucoServerLobbyFragment.newInstance(), shouldAddToBackStack = false)
+
+    fun goToBuildTeams() =
+        addFragment(TrucoBuildTeamsFragment.newInstance(), shouldAddToBackStack = false)
 
     override fun onGameEvent(event: TrucoSpecificGameEvent) {
         when (event) {
@@ -32,6 +36,7 @@ class TrucoActivity : GameActivity<TrucoSpecificGameEvent, TrucoViewModel>() {
                 addFragment(FinalScoreTrucoFragment.newInstance(), shouldAddToBackStack = false)
             }
             is TrucoGoToPlay -> goToPlay(event.playersQuantity)
+            is TrucoGoToBuildTeams -> goToBuildTeams()
             else -> super.onGameEvent(event)
         }
     }
