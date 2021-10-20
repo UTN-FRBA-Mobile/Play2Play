@@ -100,6 +100,9 @@ abstract class TrucoViewModel(
     private val _currentRound = MutableLiveData(1)
     val currentRound: LiveData<Int> = _currentRound
 
+    private val _playersPositions = MutableLiveData<List<Pair<TrucoPlayerPosition, String>>>()
+    val playersPositions: LiveData<List<Pair<TrucoPlayerPosition, String>>> = _playersPositions
+
     protected lateinit var firstHandPlayer: TeamPlayer
     private lateinit var currentTurnPlayer: TeamPlayer
 
@@ -122,7 +125,7 @@ abstract class TrucoViewModel(
         dispatchSingleTimeEvent(TrucoGoToPlay(totalPlayers.requireValue()))
     }
 
-    fun goToBuildTeams(){
+    fun goToBuildTeams() {
         dispatchSingleTimeEvent(TrucoGoToBuildTeams)
     }
 
@@ -204,6 +207,13 @@ abstract class TrucoViewModel(
         val playedCard = PlayedCard(myTeamPlayer, card)
         connection.write(TrucoPlayCardMessage(playedCard))
         onCardPlayed(playedCard)
+    }
+
+    protected fun setPlayers(teamPlayers: List<TeamPlayer>) {
+        this.teamPlayers = teamPlayers
+        _playersPositions.value = teamPlayers.map {
+            TrucoPlayerPosition.get(it, teamPlayers, myTeamPlayer) to it.name
+        }
     }
 
     private fun newHand() = viewModelScope.launch(Dispatchers.Main) {

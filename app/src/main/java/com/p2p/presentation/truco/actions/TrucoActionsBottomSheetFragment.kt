@@ -21,6 +21,7 @@ import com.p2p.presentation.basegame.GameEvent
 import com.p2p.presentation.extensions.animateRotation
 import com.p2p.presentation.extensions.fadeIn
 import com.p2p.presentation.truco.TrucoNewHand
+import com.p2p.presentation.truco.TrucoPlayerPosition
 import com.p2p.presentation.truco.TrucoViewModel
 
 class TrucoActionsBottomSheetFragment :
@@ -122,9 +123,11 @@ class TrucoActionsBottomSheetFragment :
         observe(viewModel.lastTrucoAction) {
             updateTrucoText(it?.nextAction()?.message(requireContext()))
         }
-        observe(viewModel.isMyTurn) {
-            changeEnvidoButtonAvailability(!envidoDisabledForHand)
-            updateTrucoVisibility(!trucoAnswersDisabled)
+        observe(viewModel.currentTurnPlayerPosition) {
+            if (it == TrucoPlayerPosition.MY_SELF) {
+                changeEnvidoButtonAvailability(!envidoDisabledForHand)
+                updateTrucoVisibility(!trucoAnswersDisabled)
+            }
         }
     }
 
