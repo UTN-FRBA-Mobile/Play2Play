@@ -3,6 +3,7 @@ package com.p2p.presentation.truco
 import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.view.HapticFeedbackConstants
 import android.view.View
 import android.view.animation.BounceInterpolator
 import android.widget.ImageView
@@ -75,13 +76,7 @@ abstract class TrucoFragment<VB : ViewBinding> :
         observe(gameViewModel.actionAvailableResponses) { updateActionAvailableResponses(it) }
         observe(gameViewModel.ourScore) { updateScore(headerBinding.ourScore, it) }
         observe(gameViewModel.theirScore) { updateScore(headerBinding.theirScore, it) }
-        observe(gameViewModel.isMyTurn) {
-            if(it) {
-                addActionsBottomSheet()
-            } else {
-                deleteTrucoActionsBottomSheet()
-            }
-        }
+        observe(gameViewModel.currentTurnPlayerPosition) { updateCurrentTurn(it) }
     }
 
     override fun initUI() = with(requireView()) {
@@ -152,7 +147,7 @@ abstract class TrucoFragment<VB : ViewBinding> :
         is TrucoNewHand -> newHand()
         is TrucoOtherPlayedCardEvent -> onOtherPlayedCard(event)
         is TrucoShowEarnedPoints -> showEarnedPoints(event.isMyTeam, event.earnedPoints, event.onComplete)
-        TrucoTakeTurnEvent -> myCardsHand.takeTurn()
+        TrucoTakeTurnEvent -> takeTurn()
         else -> super.onEvent(event)
     }
 
@@ -176,6 +171,20 @@ abstract class TrucoFragment<VB : ViewBinding> :
 
     protected fun loadCardImages(cardViews: List<ImageView>, cards: List<Card?>) = cardViews.forEachIndexed { i, view ->
         CardImageCreator.loadCard(view, cards.getOrNull(i))
+    }
+
+    @CallSuper
+    protected open fun updateCurrentTurn(playerPosition: TrucoPlayerPosition) {
+        if (playerPosition == TrucoPlayerPosition.MY_SELF) {
+            addActionsBottomSheet()
+        } else {
+            deleteTrucoActionsBottomSheet()
+        }
+    }
+
+    private fun takeTurn() {
+        myCardsHand.takeTurn()
+        view?.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
     }
 
     private fun showPlayerAction(

@@ -30,6 +30,7 @@ class TrucoPlayFor4Fragment : TrucoFragment<FragmentPlayTrucoFor4Binding>() {
     private lateinit var leftPlayerDroppingPlacesViews: List<View>
     private lateinit var rightPlayerCardViews: List<ImageView>
     private lateinit var rightPlayerDroppingPlacesViews: List<View>
+    private lateinit var playerNames: Map<TrucoPlayerPosition, TextView>
 
     override fun initUI() = with(gameBinding) {
         frontPlayerCardViews = listOf(frontPlayerLeftCard, frontPlayerMiddleCard, frontPlayerRightCard)
@@ -41,6 +42,8 @@ class TrucoPlayFor4Fragment : TrucoFragment<FragmentPlayTrucoFor4Binding>() {
         rightPlayerCardViews = listOf(rightPlayerLeftCard, rightPlayerMiddleCard, rightPlayerRightCard)
         rightPlayerDroppingPlacesViews =
             listOf(dropRightPlayerFirstCard, dropRightPlayerSecondCard, dropRightPlayerThirdCard)
+        playerNames = mapOf(
+            TrucoPlayerPosition.LEFT to leftPlayer)
         super.initUI()
     }
 
@@ -96,6 +99,10 @@ class TrucoPlayFor4Fragment : TrucoFragment<FragmentPlayTrucoFor4Binding>() {
         TrucoPlayerPosition.LEFT -> R.id.left_player_action_bubble to R.id.left_player_action_bubble_text
         TrucoPlayerPosition.RIGHT -> R.id.right_player_action_bubble to R.id.right_player_action_bubble_text
         TrucoPlayerPosition.MY_SELF -> R.id.my_action_bubble to R.id.my_action_bubble_text
+    }
+
+    override fun updateCurrentTurn(playerPosition: TrucoPlayerPosition) {
+        val name
     }
 
     companion object {
