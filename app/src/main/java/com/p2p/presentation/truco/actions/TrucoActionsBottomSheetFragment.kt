@@ -30,8 +30,7 @@ class TrucoActionsBottomSheetFragment :
 
     override val viewModel: TrucoViewModel by activityViewModels()
 
-    private lateinit var behaviour: BottomSheetBehavior<View>
-
+    private var behaviour: BottomSheetBehavior<View>? = null
     private var isExpanded = false
 
     /** Once envido is asked in a hand, it can't be asked again. */
@@ -75,9 +74,10 @@ class TrucoActionsBottomSheetFragment :
             setOnShowListener {
                 val dialog = it as BottomSheetDialog
                 val bottomSheet = dialog.getBottomSheet()
-                behaviour = BottomSheetBehavior.from(bottomSheet)
-                behaviour.peekHeight = resources.getDimensionPixelSize(R.dimen.big_extra)
-                behaviour.addBottomSheetCallback(bottomSheetCallback)
+                behaviour = BottomSheetBehavior.from<View>(bottomSheet).apply {
+                    peekHeight = resources.getDimensionPixelSize(R.dimen.huge)
+                    addBottomSheetCallback(bottomSheetCallback)
+                }
                 dialog.findViewById<View>(R.id.touch_outside)?.apply {
                     setOnTouchListener { view, event ->
                         event.setLocation(event.rawX - view.x, event.rawY - view.y)
@@ -138,7 +138,7 @@ class TrucoActionsBottomSheetFragment :
             view?.fadeIn()
         } else {
             view?.fadeOut()
-            behaviour.state = STATE_COLLAPSED
+            behaviour?.state = STATE_COLLAPSED
             toggleEnvidoOptionsState(false)
         }
     }
