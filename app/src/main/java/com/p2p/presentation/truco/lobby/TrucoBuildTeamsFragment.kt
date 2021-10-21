@@ -36,14 +36,14 @@ class TrucoBuildTeamsFragment : BaseGameFragment<
         gameBinding.helpOrderPlayersDescription.text = resources
             .getString(R.string.tr_lobby_help_order_players)
             .fromHtml()
-        gameBinding.startGameButton.setOnClickListener { gameViewModel.startGame() }
+        gameBinding.startGameButton.setOnClickListener { gameViewModel.startGame(connectedPlayersTrucoAdapter.sortedPlayers()) }
     }
 
     override fun setupObservers() {
         super.setupObservers()
         with(gameViewModel) {
             observe(players) {
-                connectedPlayersTrucoAdapter.players = it
+                connectedPlayersTrucoAdapter.players = it.toMutableList()
                 viewModel.setPlayers(it)
             }
             observe(totalPlayers) {

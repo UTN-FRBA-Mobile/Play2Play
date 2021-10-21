@@ -20,16 +20,7 @@ import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.home.games.Game
 import com.p2p.presentation.truco.actions.EnvidoGameAction
 import com.p2p.presentation.truco.actions.TrucoAction
-import com.p2p.presentation.truco.actions.TrucoAction.Envido
-import com.p2p.presentation.truco.actions.TrucoAction.EnvidoGoesFirst
-import com.p2p.presentation.truco.actions.TrucoAction.FaltaEnvido
-import com.p2p.presentation.truco.actions.TrucoAction.GoToDeck
-import com.p2p.presentation.truco.actions.TrucoAction.NoIDont
-import com.p2p.presentation.truco.actions.TrucoAction.RealEnvido
-import com.p2p.presentation.truco.actions.TrucoAction.Retruco
-import com.p2p.presentation.truco.actions.TrucoAction.Truco
-import com.p2p.presentation.truco.actions.TrucoAction.ValeCuatro
-import com.p2p.presentation.truco.actions.TrucoAction.YesIDo
+import com.p2p.presentation.truco.actions.TrucoAction.*
 import com.p2p.presentation.truco.actions.TrucoActionAvailableResponses
 import com.p2p.presentation.truco.actions.TrucoGameAction
 import com.p2p.presentation.truco.envidoCalculator.EnvidoMessageCalculator
@@ -118,7 +109,7 @@ abstract class TrucoViewModel(
         _theirScore.value = 0
     }
 
-    abstract override fun startGame()
+    abstract fun startGame(players: List<String>)
 
     fun goToPlayTruco() {
         gameAlreadyStarted = true
@@ -162,8 +153,8 @@ abstract class TrucoViewModel(
     fun performTruco() {
         val nextTrucoAction = _lastTrucoAction.value?.nextAction()
             ?: Truco(
-                currentRound.requireValue(),
-                !envidoButtonEnabled.requireValue()
+                envidoGoesFirstAllowed = currentRound.requireValue() == 1 &&
+                previousActions.none { it is EnvidoGameAction }
             )
         performAction(nextTrucoAction)
     }
@@ -216,7 +207,7 @@ abstract class TrucoViewModel(
         }
     }
 
-    private fun newHand() = viewModelScope.launch(Dispatchers.Main) {
+    protected fun newHand(myCards: List<Card>) = viewModelScope.launch(Dispatchers.Main) {
         withContext(Dispatchers.Default) { delay(NEW_HAND_DELAY_TIME_MS) }
         dispatchSingleTimeEvent(TrucoNewHand)
         cleanActionValues()
@@ -227,7 +218,7 @@ abstract class TrucoViewModel(
         _envidoButtonEnabled.value = true
         _trucoButtonEnabled.value = true
         _currentRound.value = 1
-        handOutCards()
+        _myCards.value = myCards
     }
 
     private fun canAnswer(otherPlayer: TeamPlayer): Boolean =
@@ -302,7 +293,6 @@ abstract class TrucoViewModel(
     private fun onCardPlayed(playedCard: PlayedCard) {
         val currentRoundPlayedCards = playedCards.last()
         currentRoundPlayedCards.add(playedCard)
-
         if (hasRoundFinished()) {
             onRoundFinished(currentRoundPlayedCards)
         } else {
@@ -314,7 +304,6 @@ abstract class TrucoViewModel(
         val round = _currentRound.requireValue()
         _currentRound.value = round + 1
         playedCards.add(mutableListOf())
-
         val roundWinnerTeamPlayer = getRoundWinnerTeamPlayer(currentRoundPlayedCards)
         val roundResult = TrucoRoundResult.get(roundWinnerTeamPlayer, myTeamPlayer)
         currentHandWinners.add(roundWinnerTeamPlayer)
@@ -332,7 +321,7 @@ abstract class TrucoViewModel(
         if (!hasFinished) {
             val nextHandIndex = (teamPlayers.indexOf(firstHandPlayer) + 1)
             firstHandPlayer = teamPlayers[nextHandIndex % totalPlayers.requireValue()]
-            newHand()
+            handOutCards()
         }
     }
 
@@ -432,7 +421,8 @@ abstract class TrucoViewModel(
         _currentTurnPlayerPosition.value = TrucoPlayerPosition.get(player, teamPlayers, myTeamPlayer)
         if (player == myTeamPlayer) {
             dispatchSingleTimeEvent(TrucoTakeTurnEvent)
-            _envidoButtonEnabled.value = teamPlayers.last { it.team == myTeamPlayer.team } == myTeamPlayer
+            _envidoButtonEnabled.value =
+                playedCards.last().any { it.teamPlayer.team == myTeamPlayer.team } || totalPlayers.requireValue() == 2
         }
     }
 
@@ -455,7 +445,8 @@ abstract class TrucoViewModel(
             teamPlayer to EnvidoPointsCalculator.getPoints(it.cards)
         }
         val roundOrder = getRoundOrder()
-        val playersWithPoints = roundOrder.map { player -> pointsByPlayer.first { it.first == player } }
+        val playersWithPoints =
+            roundOrder.map { player -> pointsByPlayer.first { it.first == player } }
 
         val winner = getWinner(pointsByPlayer, roundOrder)
 
@@ -466,7 +457,8 @@ abstract class TrucoViewModel(
                 EnvidoMessageCalculator.envidoMessagesFor4(playersWithPoints)
 
         val actionsByPosition = actionsByPlayer.filter { it.value != null }.map { actionByPlayer ->
-            val playerPosition = TrucoPlayerPosition.get(actionByPlayer.key, teamPlayers, myTeamPlayer)
+            val playerPosition =
+                TrucoPlayerPosition.get(actionByPlayer.key, teamPlayers, myTeamPlayer)
             playerPosition to actionByPlayer.value!!
         }.toMap()
 
@@ -505,6 +497,11 @@ abstract class TrucoViewModel(
                 currentActionPoints = 1
             }
         }
+    }
+
+    // unused
+    override fun startGame() {
+
     }
 
     companion object {

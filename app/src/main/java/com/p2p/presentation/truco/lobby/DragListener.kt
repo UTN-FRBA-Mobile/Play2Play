@@ -31,7 +31,7 @@ class DragListener : View.OnDragListener {
             DragEvent.ACTION_DROP -> {
                 val adapter = getViewAdapter(view)
                 val droppedPlayer = getViewPlayerName(view)
-                val players: List<String> = adapter.players
+                val players: MutableList<String> = adapter.players
 
                 val replacedItem: ClipData.Item = event.clipData.getItemAt(0)
                 val replacedPlayer = replacedItem.text

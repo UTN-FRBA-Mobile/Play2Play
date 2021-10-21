@@ -13,21 +13,27 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.p2p.R
+import java.util.*
 
 class ConnectedPlayersTrucoAdapter(
     private val context: Context
-) :BaseAdapter() {
+) : BaseAdapter() {
 
-    var players = listOf<String>()
+    var players = mutableListOf<String>()
         set(value) {
             field = value
             notifyDataSetChanged()
         }
-    var totalPlayers : Int = 2
+    var totalPlayers: Int = 2
         set(value) {
             field = value
             notifyDataSetChanged()
         }
+
+    fun sortedPlayers(): List<String> = if (totalPlayers == 4)
+        listOf(players[0], players[2], players[3], players[1])
+    else
+        players.toList()
 
     override fun getItem(position: Int): Any {
         return players[position]
@@ -40,8 +46,10 @@ class ConnectedPlayersTrucoAdapter(
     override fun getCount(): Int = players.count().coerceAtMost(totalPlayers)
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val connectedUserView: View = layoutInflater.inflate(R.layout.view_truco_connected_user, parent, false)
+        val layoutInflater =
+            context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val connectedUserView: View =
+            layoutInflater.inflate(R.layout.view_truco_connected_user, parent, false)
         val player: String = players[position]
         val playerName = connectedUserView.findViewById<View>(R.id.name) as TextView
         var itemBackground = 0
@@ -51,7 +59,7 @@ class ConnectedPlayersTrucoAdapter(
         val imageView = connectedUserView.findViewById<ImageView>(R.id.avatar)
         imageView.setImageResource(R.drawable.ic_baseline_account_circle_white)
 
-        when(position) {
+        when (position) {
             0 -> itemBackground = R.drawable.grid_view_item_hand_player
             1, 2 -> itemBackground = R.drawable.grid_view_item_second_team_player
             3 -> itemBackground = R.drawable.grid_view_item_first_team_player
@@ -77,7 +85,7 @@ class ConnectedPlayersTrucoAdapter(
                         view.startDrag(dragData, View.DragShadowBuilder(view), null, 0)
                     }
 
-                    when(position) {
+                    when (position) {
                         0, 3 -> {
                             dottedBackground = R.drawable.dotted_border_yellow
                             imageAvatar = R.drawable.ic_baseline_account_circle_yellow

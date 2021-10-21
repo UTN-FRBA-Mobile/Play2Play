@@ -31,7 +31,8 @@ class ServerTrucoViewModel(
     /** Deck of cards being used by all players in a hand  */
     private var cards = listOf<Card>()
 
-    override fun startGame() {
+    override fun startGame(players: List<String>) {
+        _players.value = players
         setPlayers(createPlayersTeams())
         firstHandPlayer = teamPlayers[0]
         connection.write(
@@ -43,20 +44,17 @@ class ServerTrucoViewModel(
     }
 
     private fun createPlayersTeams(): List<TeamPlayer> {
-        return players.requireValue().take(totalPlayers.requireValue()).mapIndexed { index, element ->
+        return players.requireValue().take(totalPlayers.requireValue()).mapIndexed { index, playerName ->
             val teamNumber = index % PLAYERS_PER_TEAM + 1
-            TeamPlayer(element, teamNumber)
+            TeamPlayer(playerName, teamNumber)
         }
     }
 
     /** Sends all client players the cards for each one and picks self cards. */
     override fun handOutCards() {
         mixDeck()
-        cardsByPlayer = connectedPlayers
-            .map { player -> PlayerWithCards(player.second, cardsForPlayer()) }
-        val myCards = cardsByPlayer
-            .first { it.name == userName }
-        _myCards.value = myCards.cards
+        cardsByPlayer = connectedPlayers.map { player -> PlayerWithCards(player.second, cardsForPlayer()) }
+        newHand(cardsByPlayer.first { it.name == userName }.cards)
         connection.write(TrucoCardsMessage(cardsByPlayer))
     }
 

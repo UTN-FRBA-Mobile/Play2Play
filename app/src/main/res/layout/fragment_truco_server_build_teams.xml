@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -13,24 +12,25 @@
         android:id="@+id/help_order_players_description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:text="@string/tr_lobby_help_order_players"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
-        app:layout_constraintTop_toBottomOf="@id/guideline_top"
-        android:text="@string/tr_lobby_help_order_players" />
+        app:layout_constraintTop_toBottomOf="@id/guideline_top" />
 
     <ImageView
-        android:id="@+id/arrow_right"
+        android:id="@+id/arrow_left"
         android:layout_width="@dimen/huge_extra"
         android:layout_height="@dimen/huge_extra"
         android:layout_marginTop="@dimen/medium"
         android:layout_marginBottom="@dimen/medium"
-        android:src="@drawable/ic_curved_arrow_right"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/help_order_players_description"
+        android:rotationX="180"
+        android:src="@drawable/ic_curved_arrow_left"
         app:layout_constraintBottom_toTopOf="@id/players_grid"
-        app:layout_constraintHorizontal_bias="0.5" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/help_order_players_description" />
 
     <GridView
         android:id="@+id/players_grid"
@@ -40,24 +40,25 @@
         android:gravity="center"
         android:numColumns="2"
         android:verticalSpacing="@dimen/huge_extra"
-        app:layout_constraintBottom_toTopOf="@id/arrow_left"
-        app:layout_constraintTop_toBottomOf="@id/arrow_right"
+        app:layout_constraintBottom_toTopOf="@id/arrow_right"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
+        app:layout_constraintTop_toBottomOf="@id/arrow_left"
         tools:listitem="@layout/view_truco_connected_user" />
 
     <ImageView
-        android:id="@+id/arrow_left"
+        android:id="@+id/arrow_right"
         android:layout_width="@dimen/huge_extra"
         android:layout_height="@dimen/huge_extra"
         android:layout_marginTop="@dimen/medium"
         android:layout_marginBottom="@dimen/medium"
-        android:src="@drawable/ic_curved_arrow_left"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/players_grid"
+        android:rotationX="180"
+        android:src="@drawable/ic_curved_arrow_right"
         app:layout_constraintBottom_toTopOf="@id/next_screen_button"
-        app:layout_constraintHorizontal_bias="0.5" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/players_grid" />
 
     <Button
         android:id="@+id/start_game_button"
