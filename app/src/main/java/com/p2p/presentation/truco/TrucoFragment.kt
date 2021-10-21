@@ -2,7 +2,6 @@ package com.p2p.presentation.truco
 
 import android.annotation.SuppressLint
 import android.content.res.ColorStateList
-import android.os.Bundle
 import android.view.HapticFeedbackConstants
 import android.view.View
 import android.view.animation.BounceInterpolator
@@ -14,6 +13,7 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.viewbinding.ViewBinding
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.p2p.R
 import com.p2p.databinding.ViewTrucoEarnedPointsBinding
@@ -60,13 +60,6 @@ abstract class TrucoFragment<VB : ViewBinding> :
     protected val myActionBubble: Pair<View, TextView> by lazy {
         val (view, textView) = bubbleForPosition(TrucoPlayerPosition.MY_SELF)
         requireView().findViewById<View>(view) to requireView().findViewById(textView)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        if (savedInstanceState == null) {
-            addActionsBottomSheet()
-        }
     }
 
     override fun setupObservers() {
@@ -264,7 +257,7 @@ abstract class TrucoFragment<VB : ViewBinding> :
         action: TrucoAction,
         onComplete: () -> Unit
     ) {
-        deleteTrucoActionsBottomSheet()
+        hideTrucoActionsBottomSheet()
         bubbleText.text = action.message(requireContext())
         showBubbleView(bubbleBackground)
         showBubbleView(bubbleText)
@@ -291,8 +284,20 @@ abstract class TrucoFragment<VB : ViewBinding> :
         activeBottomSheet = false
     }
 
+    private fun hideTrucoActionsBottomSheet() {
+        (parentFragmentManager
+            .findFragmentByTag(ACTIONS_BOTTOM_SHEET_TAG) as TrucoActionsBottomSheetFragment?)
+            ?.isVisible(false)
+    }
+
+    private fun showTrucoActionsBottomSheet() {
+        (parentFragmentManager
+            .findFragmentByTag(ACTIONS_BOTTOM_SHEET_TAG) as TrucoActionsBottomSheetFragment?)
+            ?.isVisible(true)
+    }
+
     private fun hideActions() {
-        addActionsBottomSheet()
+        showTrucoActionsBottomSheet()
         hideActionBubble(
             requireView().findViewById(R.id.my_action_bubble),
             requireView().findViewById(R.id.my_action_bubble_text)

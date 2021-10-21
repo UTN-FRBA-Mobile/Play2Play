@@ -20,6 +20,7 @@ import com.p2p.presentation.base.BaseMVVMBottomSheetDialogFragment
 import com.p2p.presentation.basegame.GameEvent
 import com.p2p.presentation.extensions.animateRotation
 import com.p2p.presentation.extensions.fadeIn
+import com.p2p.presentation.extensions.fadeOut
 import com.p2p.presentation.truco.TrucoNewHand
 import com.p2p.presentation.truco.TrucoPlayerPosition
 import com.p2p.presentation.truco.TrucoViewModel
@@ -28,6 +29,8 @@ class TrucoActionsBottomSheetFragment :
     BaseMVVMBottomSheetDialogFragment<ViewTrucoActionsBinding, GameEvent, TrucoViewModel>() {
 
     override val viewModel: TrucoViewModel by activityViewModels()
+
+    private lateinit var behaviour: BottomSheetBehavior<View>
 
     private var isExpanded = false
 
@@ -72,10 +75,9 @@ class TrucoActionsBottomSheetFragment :
             setOnShowListener {
                 val dialog = it as BottomSheetDialog
                 val bottomSheet = dialog.getBottomSheet()
-                val maxHeight = requireActivity().resources.displayMetrics.heightPixels * 0.07
-                val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
-                bottomSheetBehavior.peekHeight = maxHeight.toInt()
-                bottomSheetBehavior.addBottomSheetCallback(bottomSheetCallback)
+                behaviour = BottomSheetBehavior.from(bottomSheet)
+                behaviour.peekHeight = resources.getDimensionPixelSize(R.dimen.big_extra)
+                behaviour.addBottomSheetCallback(bottomSheetCallback)
                 dialog.findViewById<View>(R.id.touch_outside)?.apply {
                     setOnTouchListener { view, event ->
                         event.setLocation(event.rawX - view.x, event.rawY - view.y)
@@ -131,6 +133,16 @@ class TrucoActionsBottomSheetFragment :
         }
     }
 
+    fun isVisible(isVisible: Boolean) {
+        if (isVisible) {
+            view?.fadeIn()
+        } else {
+            view?.fadeOut()
+            behaviour.state = STATE_COLLAPSED
+            toggleEnvidoOptionsState(false)
+        }
+    }
+
     private fun onGameEvent(event: GameEvent) = when (event) {
         is TrucoNewHand -> {
             envidoDisabledForHand = false
@@ -140,7 +152,7 @@ class TrucoActionsBottomSheetFragment :
     }
 
     private fun updateTrucoVisibility(visible: Boolean) {
-       binding.trucoButton.isEnabled = visible
+        binding.trucoButton.isEnabled = visible
     }
 
     private fun updateTrucoText(text: String?) {
@@ -154,9 +166,9 @@ class TrucoActionsBottomSheetFragment :
             ?.state = if (isExpanded) STATE_COLLAPSED else STATE_EXPANDED
     }
 
-    private fun toggleEnvidoOptionsState() {
+    private fun toggleEnvidoOptionsState(isOpen: Boolean = !binding.envidoContainer.isVisible) {
         TransitionManager.beginDelayedTransition(binding.envidoContainer)
-        binding.envidoContainer.isVisible = !binding.envidoContainer.isVisible
+        binding.envidoContainer.isVisible = isOpen
         binding.envidoButtonArrow.animateRotation(if (binding.envidoContainer.isVisible) 0f else 180f)
     }
 
