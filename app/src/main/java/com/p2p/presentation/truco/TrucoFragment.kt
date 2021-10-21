@@ -13,7 +13,6 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.viewbinding.ViewBinding
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.p2p.R
 import com.p2p.databinding.ViewTrucoEarnedPointsBinding
@@ -177,7 +176,10 @@ abstract class TrucoFragment<VB : ViewBinding> :
 
     private fun takeTurn() {
         myCardsHand.takeTurn()
-        view?.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+        view?.performHapticFeedback(
+            HapticFeedbackConstants.VIRTUAL_KEY,
+            HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING
+        )
     }
 
     private fun showPlayerAction(
