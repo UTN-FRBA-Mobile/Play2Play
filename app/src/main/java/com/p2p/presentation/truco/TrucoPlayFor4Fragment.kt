@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import com.p2p.R
 import com.p2p.databinding.FragmentPlayTrucoFor4Binding
@@ -42,6 +43,13 @@ class TrucoPlayFor4Fragment : TrucoFragment<FragmentPlayTrucoFor4Binding>() {
         rightPlayerDroppingPlacesViews =
             listOf(dropRightPlayerFirstCard, dropRightPlayerSecondCard, dropRightPlayerThirdCard)
         super.initUI()
+    }
+
+    override fun setupObservers() {
+        super.setupObservers()
+        observe(gameViewModel.playersPositions) {
+            it.forEach { (position, name) -> getPlayerNameTextView(position)?.text = name }
+        }
     }
 
     override fun initializeRivalHands(isFirstHand: Boolean) = with(gameBinding) {
@@ -96,6 +104,21 @@ class TrucoPlayFor4Fragment : TrucoFragment<FragmentPlayTrucoFor4Binding>() {
         TrucoPlayerPosition.LEFT -> R.id.left_player_action_bubble to R.id.left_player_action_bubble_text
         TrucoPlayerPosition.RIGHT -> R.id.right_player_action_bubble to R.id.right_player_action_bubble_text
         TrucoPlayerPosition.MY_SELF -> R.id.my_action_bubble to R.id.my_action_bubble_text
+    }
+
+    private fun getPlayerNameTextView(position: TrucoPlayerPosition) = when (position) {
+        TrucoPlayerPosition.FRONT -> gameBinding.frontPlayerName
+        TrucoPlayerPosition.LEFT -> gameBinding.leftPlayerName
+        TrucoPlayerPosition.RIGHT -> gameBinding.rightPlayerName
+        TrucoPlayerPosition.MY_SELF -> null
+    }
+
+    override fun updateCurrentTurn(playerPosition: TrucoPlayerPosition) {
+        super.updateCurrentTurn(playerPosition)
+        TrucoPlayerPosition.values().forEach {
+            val color = if (it == playerPosition) R.color.colorPrimary else R.color.colorText
+            getPlayerNameTextView(it)?.setTextColor(ContextCompat.getColor(requireContext(), color))
+        }
     }
 
     companion object {

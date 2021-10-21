@@ -28,7 +28,7 @@ class ClientTrucoViewModel(
         super.receiveMessage(conversation)
         when (val message = conversation.lastMessage) {
             is TrucoStartGameMessage -> {
-                teamPlayers = message.teamPlayers
+                setPlayers(message.teamPlayers)
                 setTotalPlayers(message.totalPlayers)
                 setTotalPoints(message.totalPoints)
                 firstHandPlayer = message.teamPlayers[0]

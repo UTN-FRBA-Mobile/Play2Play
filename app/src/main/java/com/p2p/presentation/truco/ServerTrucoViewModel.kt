@@ -33,7 +33,7 @@ class ServerTrucoViewModel(
 
     override fun startGame(players: List<String>) {
         _players.value = players
-        teamPlayers = setPlayersTeams()
+        setPlayers(createPlayersTeams())
         firstHandPlayer = teamPlayers[0]
         connection.write(
             TrucoStartGameMessage(teamPlayers, totalPlayers.requireValue(), totalPoints.requireValue())
@@ -43,7 +43,7 @@ class ServerTrucoViewModel(
         goToPlayTruco()
     }
 
-    private fun setPlayersTeams(): List<TeamPlayer> {
+    private fun createPlayersTeams(): List<TeamPlayer> {
         return players.requireValue().take(totalPlayers.requireValue()).mapIndexed { index, playerName ->
             val teamNumber = index % PLAYERS_PER_TEAM + 1
             TeamPlayer(playerName, teamNumber)

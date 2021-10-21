@@ -85,11 +85,14 @@ abstract class TrucoViewModel(
     private val _envidoButtonEnabled = MutableLiveData<Boolean>()
     val envidoButtonEnabled: LiveData<Boolean> = _envidoButtonEnabled
 
-    private val _isMyTurn = MutableLiveData(false)
-    val isMyTurn: LiveData<Boolean> = _isMyTurn
+    private val _currentTurnPlayerPosition = MutableLiveData<TrucoPlayerPosition>()
+    val currentTurnPlayerPosition: LiveData<TrucoPlayerPosition> = _currentTurnPlayerPosition
 
     private val _currentRound = MutableLiveData(1)
     val currentRound: LiveData<Int> = _currentRound
+
+    private val _playersPositions = MutableLiveData<List<Pair<TrucoPlayerPosition, String>>>()
+    val playersPositions: LiveData<List<Pair<TrucoPlayerPosition, String>>> = _playersPositions
 
     protected lateinit var firstHandPlayer: TeamPlayer
     private lateinit var currentTurnPlayer: TeamPlayer
@@ -195,6 +198,13 @@ abstract class TrucoViewModel(
         val playedCard = PlayedCard(myTeamPlayer, card)
         connection.write(TrucoPlayCardMessage(playedCard))
         onCardPlayed(playedCard)
+    }
+
+    protected fun setPlayers(teamPlayers: List<TeamPlayer>) {
+        this.teamPlayers = teamPlayers
+        _playersPositions.value = teamPlayers.map {
+            TrucoPlayerPosition.get(it, teamPlayers, myTeamPlayer) to it.name
+        }
     }
 
     protected fun newHand(myCards: List<Card>) = viewModelScope.launch(Dispatchers.Main) {
@@ -408,8 +418,8 @@ abstract class TrucoViewModel(
 
     private fun setCurrentPlayerTurn(player: TeamPlayer) {
         currentTurnPlayer = player
-        _isMyTurn.value = player == myTeamPlayer
-        if (isMyTurn.requireValue()) {
+        _currentTurnPlayerPosition.value = TrucoPlayerPosition.get(player, teamPlayers, myTeamPlayer)
+        if (player == myTeamPlayer) {
             dispatchSingleTimeEvent(TrucoTakeTurnEvent)
             _envidoButtonEnabled.value =
                 playedCards.last().any { it.teamPlayer.team == myTeamPlayer.team } || totalPlayers.requireValue() == 2
