@@ -22,6 +22,7 @@ import com.p2p.presentation.extensions.animateRotation
 import com.p2p.presentation.extensions.fadeIn
 import com.p2p.presentation.truco.TrucoNewHand
 import com.p2p.presentation.truco.TrucoViewModel
+import com.p2p.utils.Logger
 
 class TrucoActionsBottomSheetFragment :
     BaseMVVMBottomSheetDialogFragment<ViewTrucoActionsBinding, GameEvent, TrucoViewModel>() {
@@ -112,7 +113,6 @@ class TrucoActionsBottomSheetFragment :
         }
         observe(viewModel.currentRound) {
             envidoDisabledForHand = it > 1 || envidoDisabledForHand
-            changeEnvidoButtonAvailability(!envidoDisabledForHand)
         }
         observe(viewModel.singleTimeEvent) { onGameEvent(it) }
         observe(viewModel.trucoButtonEnabled) {

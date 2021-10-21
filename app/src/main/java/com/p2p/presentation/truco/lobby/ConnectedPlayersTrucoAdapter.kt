@@ -30,11 +30,10 @@ class ConnectedPlayersTrucoAdapter(
             notifyDataSetChanged()
         }
 
-    fun sortedPlayers(): List<String> = if (totalPlayers == 4) {
-        Collections.swap(players, 2, 3)
-        players
-    } else
-        players
+    fun sortedPlayers(): List<String> = if (totalPlayers == 4)
+        listOf(players[0], players[2], players[3], players[1])
+    else
+        players.toList()
 
     override fun getItem(position: Int): Any {
         return players[position]

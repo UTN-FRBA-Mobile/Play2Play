@@ -9,6 +9,7 @@ import com.p2p.model.truco.PlayerWithCards
 import com.p2p.model.truco.message.TrucoCardsMessage
 import com.p2p.model.truco.message.TrucoStartGameMessage
 import com.p2p.presentation.basegame.ConnectionType
+import com.p2p.utils.Logger
 
 class ClientTrucoViewModel(
     connectionType: ConnectionType,
@@ -44,6 +45,7 @@ class ClientTrucoViewModel(
 
     private fun onReceiveCards(playersWithCards: List<PlayerWithCards>) {
         cardsByPlayer = playersWithCards
+        newHand(playersWithCards.first { it.name == userName }.cards)
         pickSelfCards(playersWithCards)
     }
 
