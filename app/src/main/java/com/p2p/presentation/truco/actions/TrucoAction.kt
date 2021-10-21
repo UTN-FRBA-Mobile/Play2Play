@@ -37,7 +37,7 @@ abstract class TrucoAction(
 
     open fun availableResponses() = TrucoActionAvailableResponses()
 
-    data class Truco(val round: Int, val envidoAlreadyAsked: Boolean = false) : TrucoAction(
+    data class Truco(val envidoGoesFirstAllowed: Boolean = false) : TrucoAction(
         hasReplication = true,
         yesPoints = 2,
         noPoints = 1
@@ -48,7 +48,7 @@ abstract class TrucoAction(
         override fun availableResponses(): TrucoActionAvailableResponses =
             TrucoActionAvailableResponses(
                 retruco = true,
-                envidoGoesFirst = round == 1 && !envidoAlreadyAsked
+                envidoGoesFirst = envidoGoesFirstAllowed
             )
 
         override fun nextAction(): TrucoAction = Retruco

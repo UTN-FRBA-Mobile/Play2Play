@@ -150,8 +150,8 @@ abstract class TrucoViewModel(
     fun performTruco() {
         val nextTrucoAction = _lastTrucoAction.value?.nextAction()
             ?: Truco(
-                currentRound.requireValue(),
-                previousActions.any { it is EnvidoGameAction }
+                envidoGoesFirstAllowed = currentRound.requireValue() == 1 &&
+                previousActions.none { it is EnvidoGameAction }
             )
         performAction(nextTrucoAction)
     }
@@ -412,8 +412,7 @@ abstract class TrucoViewModel(
         if (isMyTurn.requireValue()) {
             dispatchSingleTimeEvent(TrucoTakeTurnEvent)
             _envidoButtonEnabled.value =
-                playedCards.last()
-                    .any { it.teamPlayer.team == myTeamPlayer.team } || totalPlayers.requireValue() == 2
+                playedCards.last().any { it.teamPlayer.team == myTeamPlayer.team } || totalPlayers.requireValue() == 2
         }
     }
 

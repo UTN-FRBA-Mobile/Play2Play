@@ -9,7 +9,6 @@ import com.p2p.model.truco.PlayerWithCards
 import com.p2p.model.truco.message.TrucoCardsMessage
 import com.p2p.model.truco.message.TrucoStartGameMessage
 import com.p2p.presentation.basegame.ConnectionType
-import com.p2p.utils.Logger
 
 class ClientTrucoViewModel(
     connectionType: ConnectionType,
