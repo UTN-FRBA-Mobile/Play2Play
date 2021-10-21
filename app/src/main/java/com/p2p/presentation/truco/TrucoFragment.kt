@@ -2,7 +2,7 @@ package com.p2p.presentation.truco
 
 import android.annotation.SuppressLint
 import android.content.res.ColorStateList
-import android.os.Bundle
+import android.view.HapticFeedbackConstants
 import android.view.View
 import android.view.animation.BounceInterpolator
 import android.widget.ImageView
@@ -61,13 +61,6 @@ abstract class TrucoFragment<VB : ViewBinding> :
         requireView().findViewById<View>(view) to requireView().findViewById(textView)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        if (savedInstanceState == null) {
-            addActionsBottomSheet()
-        }
-    }
-
     override fun setupObservers() {
         super.setupObservers()
         observe(gameViewModel.myCards) { initMyCardsHand(it) }
@@ -75,13 +68,7 @@ abstract class TrucoFragment<VB : ViewBinding> :
         observe(gameViewModel.actionAvailableResponses) { updateActionAvailableResponses(it) }
         observe(gameViewModel.ourScore) { updateScore(headerBinding.ourScore, it) }
         observe(gameViewModel.theirScore) { updateScore(headerBinding.theirScore, it) }
-        observe(gameViewModel.isMyTurn) {
-            if(it) {
-                addActionsBottomSheet()
-            } else {
-                deleteTrucoActionsBottomSheet()
-            }
-        }
+        observe(gameViewModel.currentTurnPlayerPosition) { updateCurrentTurn(it) }
     }
 
     override fun initUI() = with(requireView()) {
@@ -152,7 +139,7 @@ abstract class TrucoFragment<VB : ViewBinding> :
         is TrucoNewHand -> newHand()
         is TrucoOtherPlayedCardEvent -> onOtherPlayedCard(event)
         is TrucoShowEarnedPoints -> showEarnedPoints(event.isMyTeam, event.earnedPoints, event.onComplete)
-        TrucoTakeTurnEvent -> myCardsHand.takeTurn()
+        TrucoTakeTurnEvent -> takeTurn()
         else -> super.onEvent(event)
     }
 
@@ -176,6 +163,23 @@ abstract class TrucoFragment<VB : ViewBinding> :
 
     protected fun loadCardImages(cardViews: List<ImageView>, cards: List<Card?>) = cardViews.forEachIndexed { i, view ->
         CardImageCreator.loadCard(view, cards.getOrNull(i))
+    }
+
+    @CallSuper
+    protected open fun updateCurrentTurn(playerPosition: TrucoPlayerPosition) {
+        if (playerPosition == TrucoPlayerPosition.MY_SELF) {
+            addActionsBottomSheet()
+        } else {
+            deleteTrucoActionsBottomSheet()
+        }
+    }
+
+    private fun takeTurn() {
+        myCardsHand.takeTurn()
+        view?.performHapticFeedback(
+            HapticFeedbackConstants.VIRTUAL_KEY,
+            HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING
+        )
     }
 
     private fun showPlayerAction(
@@ -255,7 +259,7 @@ abstract class TrucoFragment<VB : ViewBinding> :
         action: TrucoAction,
         onComplete: () -> Unit
     ) {
-        deleteTrucoActionsBottomSheet()
+        hideTrucoActionsBottomSheet()
         bubbleText.text = action.message(requireContext())
         showBubbleView(bubbleBackground)
         showBubbleView(bubbleText)
@@ -282,8 +286,20 @@ abstract class TrucoFragment<VB : ViewBinding> :
         activeBottomSheet = false
     }
 
+    private fun hideTrucoActionsBottomSheet() {
+        (parentFragmentManager
+            .findFragmentByTag(ACTIONS_BOTTOM_SHEET_TAG) as TrucoActionsBottomSheetFragment?)
+            ?.isVisible(false)
+    }
+
+    private fun showTrucoActionsBottomSheet() {
+        (parentFragmentManager
+            .findFragmentByTag(ACTIONS_BOTTOM_SHEET_TAG) as TrucoActionsBottomSheetFragment?)
+            ?.isVisible(true)
+    }
+
     private fun hideActions() {
-        addActionsBottomSheet()
+        showTrucoActionsBottomSheet()
         hideActionBubble(
             requireView().findViewById(R.id.my_action_bubble),
             requireView().findViewById(R.id.my_action_bubble_text)

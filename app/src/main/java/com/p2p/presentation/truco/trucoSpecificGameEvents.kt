@@ -40,7 +40,6 @@ data class TrucoOtherPlayedCardEvent(
     val round: Int
 ) : TrucoSpecificGameEvent()
 
-
 object TrucoTakeTurnEvent : TrucoSpecificGameEvent()
 
 object TrucoFinishGame : TrucoSpecificGameEvent()

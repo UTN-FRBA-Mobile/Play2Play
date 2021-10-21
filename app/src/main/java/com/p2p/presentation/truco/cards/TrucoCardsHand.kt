@@ -42,6 +42,10 @@ abstract class TrucoCardsHand(
         val dragAndDropCardEntry = dragAndDropCards.toList()[round]
         val cardView = dragAndDropCardEntry.second.view
         val movingAnimation = cardView.animate()
+        val initialPivotX = cardView.pivotX
+        val deltaPivotX = cardView.measuredWidth.toFloat() / 2f - initialPivotX
+        val initialPivotY = cardView.pivotY
+        val deltaPivotY = cardView.measuredHeight.toFloat() / 2f - initialPivotY
         movingAnimation
             .x(droppingPlace.x)
             .y(droppingPlace.y)
@@ -49,6 +53,10 @@ abstract class TrucoCardsHand(
             .scaleY(droppingPlace.scaleY)
             .rotation(0f)
             .rotationX(droppingPlace.rotationX)
+            .setUpdateListener {
+                cardView.pivotX = initialPivotX + deltaPivotX * it.animatedFraction
+                cardView.pivotY = initialPivotY + deltaPivotY * it.animatedFraction
+            }
             .setListener(object : AnimatorListenerAdapter() {
 
                 override fun onAnimationStart(animation: Animator?) {
@@ -59,6 +67,8 @@ abstract class TrucoCardsHand(
                 override fun onAnimationEnd(animator: Animator?) {
                     movingAnimation.setListener(null)
                     val flipAnimation = cardView.animate()
+                    cardView.pivotX = initialPivotX + deltaPivotX
+                    cardView.pivotY = initialPivotY + deltaPivotY
                     flipAnimation
                         .rotationY(0f)
                         .setUpdateListener {
@@ -111,14 +121,16 @@ abstract class TrucoCardsHand(
         dragAndDropCardsInHand.forEachIndexed { index, dragAndDropCard ->
             val cardView = dragAndDropCard.cardView
             cardView.elevation = if (shouldSetCardInitialElevation()) index.toFloat() else 0f
+            cardView.pivotX = getPivotX() * cardView.measuredWidth.toFloat()
+            cardView.pivotY = getPivotY() * cardView.measuredHeight.toFloat()
             cardView.animate()
                 .x(getCardX(cardView, index))
                 .y(getCardY(cardView, playingCardsSize, index))
                 .rotation(cardsRotation[index])
                 .rotationX(0f)
                 .rotationY(initialRotationY)
-                .scaleX(1f)
-                .scaleY(1f)
+                .scaleX(getInitialScale())
+                .scaleY(getInitialScale())
                 .start()
         }
     }
@@ -130,6 +142,12 @@ abstract class TrucoCardsHand(
     protected abstract fun getCardY(cardView: View, playingCards: Int, cardIndex: Int): Float
 
     protected abstract fun shouldSetCardInitialElevation(): Boolean
+
+    protected open fun getInitialScale() = 1f
+
+    protected open fun getPivotX() = 0.5f
+
+    protected open fun getPivotY() = 0.5f
 
     private fun updateUIAfterHandChange(dragAndDropCard: TrucoDragAndDropCard, isInTheHand: Boolean) {
         val wasInTheHand = dragAndDropCard in dragAndDropCardsInHand
@@ -162,7 +180,6 @@ abstract class TrucoCardsHand(
         const val COMPLETE_HAND = 3
         const val TWO_CARDS = 2
         const val SINGLE_CARD = 1
-        const val FIRST_CARD = 0
         const val SECOND_CARD = 1
         private const val HALF_ANIMATION = 0.5
         private const val THREE_QUARTERS = 0.75
