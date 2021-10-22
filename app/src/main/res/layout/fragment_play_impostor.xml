@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
@@ -15,10 +15,10 @@
         android:id="@+id/task_image"
         android:layout_width="@dimen/game_task_image_size"
         android:layout_height="@dimen/game_task_image_size"
-        android:gravity="center"
-        app:tint="@color/colorPrimary"
         android:layout_marginBottom="@dimen/large_extra"
+        android:gravity="center"
         android:src="@drawable/ic_emulate_impostor"
+        app:tint="@color/colorPrimary"
         tools:ignore="ContentDescription" />
 
     <TextView
@@ -28,16 +28,18 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/large_extra"
         android:textAlignment="center"
-        tools:text="@string/im_you_are_impostor"/>
+        tools:text="@string/im_you_are_impostor" />
 
     <TextView
         android:id="@+id/word"
         style="@style/P2P_Title_Extra"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginTop="@dimen/big"
+        android:gravity="center"
         android:textColor="@color/coral"
-        tools:text="SIMULA" />
+        tools:text="Esta es una palabra re contra larga" />
 
     <TextView
         android:id="@+id/key_word_theme_title"
@@ -45,16 +47,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/large_extra"
-        android:textAlignment="center"
-        android:text="@string/im_key_word_theme_is"/>
+        android:text="@string/im_key_word_theme_is"
+        android:textAlignment="center" />
 
     <TextView
         android:id="@+id/key_word_theme"
         style="@style/P2P_Title_Extra"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginTop="@dimen/big"
+        android:gravity="center"
         android:textColor="@color/colorSecondary"
-        tools:text="ANIMALES" />
+        tools:text="Esta es una temática re contra super larga" />
 
 </LinearLayout>

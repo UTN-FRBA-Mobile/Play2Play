@@ -33,6 +33,6 @@ class CreateTrucoPointsViewModel : BaseViewModel<Unit>() {
     companion object {
         const val MAXIMUM_POINTS_NUMBER = 30
         const val MINIMUM_POINTS_NUMBER = 15
-        const val DEFAULT_POINTS_NUMBER = 15
+        const val DEFAULT_POINTS_NUMBER = MAXIMUM_POINTS_NUMBER
     }
 }

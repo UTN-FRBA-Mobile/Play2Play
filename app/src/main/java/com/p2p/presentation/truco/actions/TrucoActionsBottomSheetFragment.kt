@@ -24,7 +24,6 @@ import com.p2p.presentation.extensions.fadeOut
 import com.p2p.presentation.truco.TrucoNewHand
 import com.p2p.presentation.truco.TrucoPlayerPosition
 import com.p2p.presentation.truco.TrucoViewModel
-import com.p2p.utils.Logger
 
 class TrucoActionsBottomSheetFragment :
     BaseMVVMBottomSheetDialogFragment<ViewTrucoActionsBinding, GameEvent, TrucoViewModel>() {
@@ -76,7 +75,7 @@ class TrucoActionsBottomSheetFragment :
                 val dialog = it as BottomSheetDialog
                 val bottomSheet = dialog.getBottomSheet()
                 behaviour = BottomSheetBehavior.from<View>(bottomSheet).apply {
-                    peekHeight = resources.getDimensionPixelSize(R.dimen.huge)
+                    peekHeight = resources.getDimensionPixelSize(R.dimen.largest)
                     addBottomSheetCallback(bottomSheetCallback)
                 }
                 dialog.findViewById<View>(R.id.touch_outside)?.apply {
@@ -111,11 +110,7 @@ class TrucoActionsBottomSheetFragment :
     override fun setupObservers() {
         super.setupObservers()
         observe(viewModel.envidoButtonEnabled) {
-            changeEnvidoButtonAvailability(it && !envidoDisabledForHand)
-            envidoDisabledForHand = !it || envidoDisabledForHand
-        }
-        observe(viewModel.currentRound) {
-            envidoDisabledForHand = it > 1 || envidoDisabledForHand
+            changeEnvidoButtonAvailability(it)
         }
         observe(viewModel.singleTimeEvent) { onGameEvent(it) }
         observe(viewModel.trucoButtonEnabled) {
@@ -127,7 +122,6 @@ class TrucoActionsBottomSheetFragment :
         }
         observe(viewModel.currentTurnPlayerPosition) {
             if (it == TrucoPlayerPosition.MY_SELF) {
-                changeEnvidoButtonAvailability(!envidoDisabledForHand)
                 updateTrucoVisibility(!trucoAnswersDisabled)
             }
         }

@@ -47,7 +47,9 @@ abstract class TrucoFragment<VB : ViewBinding> :
     private lateinit var myCardsViews: List<ImageView>
     protected lateinit var myDroppingPlacesViews: List<View>
 
-    private var activeBottomSheet = false
+    private val bottomSheet by lazy { TrucoActionsBottomSheetFragment.newInstance() }
+
+    private var isBottomSheetAdded = false
 
     private val shortDuration by lazy {
         resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
@@ -138,7 +140,11 @@ abstract class TrucoFragment<VB : ViewBinding> :
         is TrucoFinishRound -> finishRound(event.round, event.result)
         is TrucoNewHand -> newHand()
         is TrucoOtherPlayedCardEvent -> onOtherPlayedCard(event)
-        is TrucoShowEarnedPoints -> showEarnedPoints(event.isMyTeam, event.earnedPoints, event.onComplete)
+        is TrucoShowEarnedPoints -> showEarnedPoints(
+            event.isMyTeam,
+            event.earnedPoints,
+            event.onComplete
+        )
         TrucoTakeTurnEvent -> takeTurn()
         else -> super.onEvent(event)
     }
@@ -161,9 +167,10 @@ abstract class TrucoFragment<VB : ViewBinding> :
             TrucoCardsHand.PlayingCard(cards[i], view)
         }
 
-    protected fun loadCardImages(cardViews: List<ImageView>, cards: List<Card?>) = cardViews.forEachIndexed { i, view ->
-        CardImageCreator.loadCard(view, cards.getOrNull(i))
-    }
+    protected fun loadCardImages(cardViews: List<ImageView>, cards: List<Card?>) =
+        cardViews.forEachIndexed { i, view ->
+            CardImageCreator.loadCard(view, cards.getOrNull(i))
+        }
 
     @CallSuper
     protected open fun updateCurrentTurn(playerPosition: TrucoPlayerPosition) {
@@ -195,7 +202,10 @@ abstract class TrucoFragment<VB : ViewBinding> :
         }
     }
 
-    private fun showManyActions(actionsByPlayer: Map<TrucoPlayerPosition, TrucoAction>, onComplete: () -> Unit) {
+    private fun showManyActions(
+        actionsByPlayer: Map<TrucoPlayerPosition, TrucoAction>,
+        onComplete: () -> Unit
+    ) {
         val actionsList = actionsByPlayer.toList()
         actionsList.forEachIndexed { index, (position, action) ->
             showPlayerAction(
@@ -207,7 +217,12 @@ abstract class TrucoFragment<VB : ViewBinding> :
         }
     }
 
-    private fun showAction(bubbleBackground: View, bubbleText: TextView, action: TrucoAction, onComplete: () -> Unit) {
+    private fun showAction(
+        bubbleBackground: View,
+        bubbleText: TextView,
+        action: TrucoAction,
+        onComplete: () -> Unit
+    ) {
         if (bubbleBackground.scaleX >= MIN_ACTION_BUBBLE_VISIBLE_SCALING) {
             hideBubbleView(bubbleBackground)
             hideBubbleView(bubbleText) {
@@ -220,12 +235,8 @@ abstract class TrucoFragment<VB : ViewBinding> :
     }
 
     private fun addActionsBottomSheet() {
-        if (!activeBottomSheet) {
-            TrucoActionsBottomSheetFragment
-                .newInstance()
-                .show(parentFragmentManager, ACTIONS_BOTTOM_SHEET_TAG)
-            activeBottomSheet = true
-        }
+        if (activity == null) return
+        bottomSheet.show(parentFragmentManager, ACTIONS_BOTTOM_SHEET_TAG)
     }
 
     private fun updateScore(textView: TextView, score: Int) = when (score) {
@@ -283,7 +294,6 @@ abstract class TrucoFragment<VB : ViewBinding> :
 
     private fun deleteTrucoActionsBottomSheet() {
         (parentFragmentManager.findFragmentByTag(ACTIONS_BOTTOM_SHEET_TAG) as BottomSheetDialogFragment?)?.dismiss()
-        activeBottomSheet = false
     }
 
     private fun hideTrucoActionsBottomSheet() {

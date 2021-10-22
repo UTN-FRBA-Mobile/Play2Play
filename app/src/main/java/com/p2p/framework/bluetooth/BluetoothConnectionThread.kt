@@ -71,6 +71,7 @@ class BluetoothConnectionThread(
             val finalBytes = isConversation.toByteArray() + packagesByteArray + bytes
             val finalBytesLength = length + EXTRA_INFO_SIZE
             for (i in 0 until packages) {
+                sleep(300)
                 val offset = i * MAX_BUFFER_SIZE
                 val messageLength = (finalBytesLength - offset).coerceAtMost(MAX_BUFFER_SIZE)
                 Logger.d(TAG, "Writing ${i + 1}/$packages message...")
