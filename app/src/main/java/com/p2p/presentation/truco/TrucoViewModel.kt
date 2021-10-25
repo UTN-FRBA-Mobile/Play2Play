@@ -240,6 +240,7 @@ abstract class TrucoViewModel(
         when (action) {
             is YesIDo -> currentActionPoints = previousActions.last().yesPoints
             is NoIDont -> currentActionPoints = previousActions.last().noPoints
+            is GoToDeck -> currentActionPoints = if(previousActions.isEmpty()) 2 else currentActionPoints
             else -> previousActions = previousActions + action
         }
     }
