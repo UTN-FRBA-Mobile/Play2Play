@@ -21,20 +21,20 @@
         android:id="@+id/category_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:paddingEnd="@dimen/largest_extra"
+        android:paddingTop="@dimen/large"
+        android:paddingBottom="@dimen/medium_extra"
         android:text="Category"
-        android:textColor="@color/green_eden"
+        android:textColor="@color/colorPrimary"
         android:textSize="18dp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
-        app:layout_constraintTop_toTopOf="@id/guideline_top" />
+        app:layout_constraintTop_toBottomOf="@id/divider_line" />
 
     <LinearLayout
         android:id="@+id/review_words_list"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
-        android:layout_marginTop="@dimen/medium_more"
         android:layout_marginBottom="@dimen/large"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
