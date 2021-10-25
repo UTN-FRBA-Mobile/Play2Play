@@ -106,6 +106,9 @@ abstract class TrucoViewModel(
     private val playedCards: MutableList<MutableList<PlayedCard>> = mutableListOf(mutableListOf())
     private val currentHandWinners: MutableList<TeamPlayer?> = mutableListOf()
 
+    private var isAbleToReadMessages = true
+    private var pendingMessagesReceived: List<Conversation> = emptyList()
+
     init {
         _ourScore.value = 0
         _theirScore.value = 0
@@ -129,6 +132,14 @@ abstract class TrucoViewModel(
     @CallSuper
     override fun receiveMessage(conversation: Conversation) {
         super.receiveMessage(conversation)
+        receiveMessage(conversation, isAbleToReadMessages)
+    }
+
+    private fun receiveMessage(conversation: Conversation, isAbleToReadMessages: Boolean) {
+        if (!isAbleToReadMessages) {
+            pendingMessagesReceived = pendingMessagesReceived + conversation
+            return
+        }
         when (val message = conversation.lastMessage) {
             is TrucoActionMessage -> {
                 disableButtonsIfApplies(
@@ -187,7 +198,12 @@ abstract class TrucoViewModel(
         performAction(action)
     }
 
-    fun onMyCardsLoad() = nextTurn(firstHandPlayer)
+    fun onMyCardsLoad() {
+        nextTurn(firstHandPlayer)
+        pendingMessagesReceived.forEach { receiveMessage(it) }
+        pendingMessagesReceived = emptyList()
+        isAbleToReadMessages = true
+    }
 
     private fun performOrReplyAction(isReply: Boolean, action: TrucoAction) {
         if (isReply)
@@ -209,19 +225,22 @@ abstract class TrucoViewModel(
         }
     }
 
-    protected fun newHand(myCards: List<Card>) = viewModelScope.launch(Dispatchers.Main) {
-        withContext(Dispatchers.Default) { delay(NEW_HAND_DELAY_TIME_MS) }
-        dispatchSingleTimeEvent(TrucoNewHand)
-        cleanActionValues()
-        currentHandWinners.clear()
-        playedCards.clear()
-        playedCards.add(mutableListOf())
-        _lastTrucoAction.value = null
-        _envidoButtonEnabled.value = true
-        _trucoButtonEnabled.value = true
-        _currentRound.value = 1
-        envidoDisabledForHand = false
-        _myCards.value = myCards
+    protected fun newHand(myCards: List<Card>) {
+        isAbleToReadMessages = false
+        viewModelScope.launch(Dispatchers.Main) {
+            withContext(Dispatchers.Default) { delay(NEW_HAND_DELAY_TIME_MS) }
+            dispatchSingleTimeEvent(TrucoNewHand)
+            cleanActionValues()
+            currentHandWinners.clear()
+            playedCards.clear()
+            playedCards.add(mutableListOf())
+            _lastTrucoAction.value = null
+            _envidoButtonEnabled.value = true
+            _trucoButtonEnabled.value = true
+            _currentRound.value = 1
+            envidoDisabledForHand = false
+            _myCards.value = myCards
+        }
     }
 
     private fun canAnswer(otherPlayer: TeamPlayer): Boolean =
