@@ -235,7 +235,7 @@ abstract class TrucoFragment<VB : ViewBinding> :
     }
 
     private fun addActionsBottomSheet() {
-        if (activity == null) return
+        if (activity == null || bottomSheet.isAdded) return
         bottomSheet.show(parentFragmentManager, ACTIONS_BOTTOM_SHEET_TAG)
     }
 
