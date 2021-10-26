@@ -101,7 +101,7 @@
     <dimen name="truco_table_margin_top">4dp</dimen>
     <dimen name="truco_table_margin_horizontal">2dp</dimen>
     <dimen name="truco_table_border_bottom_height">30dp</dimen>
-    <dimen name="truco_action_bubble_padding">60dp</dimen>
+    <dimen name="truco_action_bubble_padding">50dp</dimen>
     <dimen name="truco_action_bubble_elevation">50dp</dimen>
     <dimen name="truco_earned_points_title_size">80sp</dimen>
     <dimen name="truco_earned_points_subtitle_size">64sp</dimen>
