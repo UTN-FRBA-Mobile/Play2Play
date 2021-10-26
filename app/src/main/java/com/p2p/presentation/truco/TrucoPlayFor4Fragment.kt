@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import com.p2p.R
 import com.p2p.databinding.FragmentPlayTrucoFor4Binding
+import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.truco.cards.TrucoCardsHand
 import com.p2p.presentation.truco.cards.TrucoFor4FrontPlayerCardsHand
 import com.p2p.presentation.truco.cards.TrucoFor4LeftPlayerCardsHand
@@ -49,6 +50,9 @@ class TrucoPlayFor4Fragment : TrucoFragment<FragmentPlayTrucoFor4Binding>() {
         super.setupObservers()
         observe(gameViewModel.playersPositions) {
             it.forEach { (position, name) -> getPlayerNameTextView(position)?.text = name }
+        }
+        observe(gameViewModel.firstHandPlayer) {
+            // TODO: Check hand player position and set player hand icon visible
         }
     }
 

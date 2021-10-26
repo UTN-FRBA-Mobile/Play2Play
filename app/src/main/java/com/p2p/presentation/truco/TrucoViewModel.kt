@@ -94,7 +94,9 @@ abstract class TrucoViewModel(
     private val _playersPositions = MutableLiveData<List<Pair<TrucoPlayerPosition, String>>>()
     val playersPositions: LiveData<List<Pair<TrucoPlayerPosition, String>>> = _playersPositions
 
-    protected lateinit var firstHandPlayer: TeamPlayer
+    protected val _firstHandPlayer = MutableLiveData<TeamPlayer>()
+    val firstHandPlayer: LiveData<TeamPlayer> = _firstHandPlayer
+
     private lateinit var currentTurnPlayer: TeamPlayer
 
     private var currentActionPoints: Int = 1
@@ -185,7 +187,7 @@ abstract class TrucoViewModel(
         performAction(action)
     }
 
-    fun onMyCardsLoad() = nextTurn(firstHandPlayer)
+    fun onMyCardsLoad() = nextTurn(firstHandPlayer.requireValue())
 
     private fun performOrReplyAction(isReply: Boolean, action: TrucoAction) {
         if (isReply)
@@ -319,8 +321,8 @@ abstract class TrucoViewModel(
     private fun onHandFinished(handWinnerPlayerTeam: Int = getCurrentHandWinner().team) {
         val hasFinished = updateScore(handWinnerPlayerTeam)
         if (!hasFinished) {
-            val nextHandIndex = (teamPlayers.indexOf(firstHandPlayer) + 1)
-            firstHandPlayer = teamPlayers[nextHandIndex % totalPlayers.requireValue()]
+            val nextHandIndex = (teamPlayers.indexOf(firstHandPlayer.requireValue()) + 1)
+            _firstHandPlayer.value = teamPlayers[nextHandIndex % totalPlayers.requireValue()]
             handOutCards()
         }
     }
@@ -482,7 +484,7 @@ abstract class TrucoViewModel(
     }
 
     private fun getRoundOrder(): List<TeamPlayer> {
-        val handIndex = teamPlayers.indexOf(firstHandPlayer)
+        val handIndex = teamPlayers.indexOf(firstHandPlayer.requireValue())
         return teamPlayers.drop(handIndex) + teamPlayers.take(handIndex)
     }
 
