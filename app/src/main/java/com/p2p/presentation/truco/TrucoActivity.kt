@@ -2,14 +2,12 @@ package com.p2p.presentation.truco
 
 import android.app.Activity
 import android.bluetooth.BluetoothDevice
-import android.os.Bundle
-import android.view.View
 import androidx.activity.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.p2p.presentation.basegame.GameActivity
-import com.p2p.presentation.truco.lobby.TrucoBuildTeamsFragment
 import com.p2p.presentation.truco.create.CreateTrucoFragment
 import com.p2p.presentation.truco.finalscore.FinalScoreTrucoFragment
+import com.p2p.presentation.truco.lobby.TrucoBuildTeamsFragment
 import com.p2p.presentation.truco.lobby.TrucoClientLobbyFragment
 import com.p2p.presentation.truco.lobby.TrucoServerLobbyFragment
 
