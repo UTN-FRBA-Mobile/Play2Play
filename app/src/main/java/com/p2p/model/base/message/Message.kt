@@ -32,4 +32,4 @@ import java.io.Serializable
     JsonSubTypes.Type(value = TrucoActionMessage::class),
     JsonSubTypes.Type(value = TrucoPlayCardMessage::class),
 )
-abstract class Message(private val type: String) : Serializable
+abstract class Message(val type: String) : Serializable

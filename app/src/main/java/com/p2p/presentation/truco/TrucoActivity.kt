@@ -2,6 +2,8 @@ package com.p2p.presentation.truco
 
 import android.app.Activity
 import android.bluetooth.BluetoothDevice
+import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.p2p.presentation.basegame.GameActivity
@@ -15,6 +17,16 @@ class TrucoActivity : GameActivity<TrucoSpecificGameEvent, TrucoViewModel>() {
 
     override val viewModel: TrucoViewModel by viewModels {
         TrucoViewModelFactory(this, gameViewModelFactoryData)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.onStart()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.onStop()
     }
 
     override fun goToCreate() = addFragment(CreateTrucoFragment.newInstance(), shouldAddToBackStack = false)

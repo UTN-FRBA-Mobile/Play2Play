@@ -20,7 +20,16 @@ import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.home.games.Game
 import com.p2p.presentation.truco.actions.EnvidoGameAction
 import com.p2p.presentation.truco.actions.TrucoAction
-import com.p2p.presentation.truco.actions.TrucoAction.*
+import com.p2p.presentation.truco.actions.TrucoAction.Envido
+import com.p2p.presentation.truco.actions.TrucoAction.EnvidoGoesFirst
+import com.p2p.presentation.truco.actions.TrucoAction.FaltaEnvido
+import com.p2p.presentation.truco.actions.TrucoAction.GoToDeck
+import com.p2p.presentation.truco.actions.TrucoAction.NoIDont
+import com.p2p.presentation.truco.actions.TrucoAction.RealEnvido
+import com.p2p.presentation.truco.actions.TrucoAction.Retruco
+import com.p2p.presentation.truco.actions.TrucoAction.Truco
+import com.p2p.presentation.truco.actions.TrucoAction.ValeCuatro
+import com.p2p.presentation.truco.actions.TrucoAction.YesIDo
 import com.p2p.presentation.truco.actions.TrucoActionAvailableResponses
 import com.p2p.presentation.truco.actions.TrucoGameAction
 import com.p2p.presentation.truco.envidoCalculator.EnvidoMessageCalculator
@@ -106,8 +115,12 @@ abstract class TrucoViewModel(
     private val playedCards: MutableList<MutableList<PlayedCard>> = mutableListOf(mutableListOf())
     private val currentHandWinners: MutableList<TeamPlayer?> = mutableListOf()
 
-    private var isAbleToReadMessages = true
-    private var pendingMessagesReceived: List<Conversation> = emptyList()
+    private var hasAlreadyDispatchedNewHand = false
+    private var isAbleToReadMessagesBecauseNewHand = false
+    private var newHandPendingMessagesReceived: List<Conversation> = emptyList()
+
+    private var isAbleToReadMessagesBecauseBackground = true
+    private var backgroundPendingMessagesReceived: List<Conversation> = emptyList()
 
     init {
         _ourScore.value = 0
@@ -125,6 +138,15 @@ abstract class TrucoViewModel(
         dispatchSingleTimeEvent(TrucoGoToBuildTeams)
     }
 
+    fun onStart() {
+        backgroundPendingMessagesReceived.forEach { acceptMessage(it, isAbleToReadMessagesBecauseBackground = true) }
+        backgroundPendingMessagesReceived = emptyList()
+        isAbleToReadMessagesBecauseBackground = true
+    }
+
+    fun onStop() {
+        isAbleToReadMessagesBecauseBackground = false
+    }
 
     /** This will only be used by the server */
     open fun handOutCards() {}
@@ -132,12 +154,19 @@ abstract class TrucoViewModel(
     @CallSuper
     override fun receiveMessage(conversation: Conversation) {
         super.receiveMessage(conversation)
-        receiveMessage(conversation, isAbleToReadMessages)
+        acceptMessage(conversation)
     }
 
-    private fun receiveMessage(conversation: Conversation, isAbleToReadMessages: Boolean) {
-        if (!isAbleToReadMessages) {
-            pendingMessagesReceived = pendingMessagesReceived + conversation
+    private fun acceptMessage(
+        conversation: Conversation,
+        isAbleToReadMessagesBecauseNewHand: Boolean = this.isAbleToReadMessagesBecauseNewHand,
+        isAbleToReadMessagesBecauseBackground: Boolean = this.isAbleToReadMessagesBecauseBackground
+    ) {
+        if (!isAbleToReadMessagesBecauseNewHand) {
+            newHandPendingMessagesReceived = newHandPendingMessagesReceived + conversation
+            return
+        } else if (!isAbleToReadMessagesBecauseBackground) {
+            backgroundPendingMessagesReceived = backgroundPendingMessagesReceived + conversation
             return
         }
         when (val message = conversation.lastMessage) {
@@ -167,7 +196,7 @@ abstract class TrucoViewModel(
         val nextTrucoAction = _lastTrucoAction.value?.nextAction()
             ?: Truco(
                 envidoGoesFirstAllowed = currentRound.requireValue() == 1 &&
-                previousActions.none { it is EnvidoGameAction }
+                        previousActions.none { it is EnvidoGameAction }
             )
         performAction(nextTrucoAction)
     }
@@ -200,9 +229,9 @@ abstract class TrucoViewModel(
 
     fun onMyCardsLoad() {
         nextTurn(firstHandPlayer)
-        pendingMessagesReceived.forEach { receiveMessage(it) }
-        pendingMessagesReceived = emptyList()
-        isAbleToReadMessages = true
+        newHandPendingMessagesReceived.forEach { acceptMessage(it, isAbleToReadMessagesBecauseNewHand = true) }
+        newHandPendingMessagesReceived = emptyList()
+        isAbleToReadMessagesBecauseNewHand = hasAlreadyDispatchedNewHand
     }
 
     private fun performOrReplyAction(isReply: Boolean, action: TrucoAction) {
@@ -226,9 +255,10 @@ abstract class TrucoViewModel(
     }
 
     protected fun newHand(myCards: List<Card>) {
-        isAbleToReadMessages = false
+        isAbleToReadMessagesBecauseNewHand = false
         viewModelScope.launch(Dispatchers.Main) {
             withContext(Dispatchers.Default) { delay(NEW_HAND_DELAY_TIME_MS) }
+            hasAlreadyDispatchedNewHand = true
             dispatchSingleTimeEvent(TrucoNewHand)
             cleanActionValues()
             currentHandWinners.clear()
