@@ -424,10 +424,9 @@ abstract class TrucoViewModel(
         val roundWinner = getRoundWinnerTeamPlayer(currentRoundPlayedCards)?.team
         val hasLostCurrentRound = roundWinner != null && roundWinner != teamWithRoundFinished
         val hasTieCurrentRound = roundWinner == null
-        val hasWonAnyRound = currentHandWinners.any { it?.team == teamWithRoundFinished }
         val hasLostAnyRound =
             currentHandWinners.any { it != null && it.team != teamWithRoundFinished }
-        return (hasLostCurrentRound && !hasWonAnyRound) || (hasTieCurrentRound && hasLostAnyRound)
+        return (hasLostCurrentRound && (hasLostAnyRound || isLastRound())) || (hasTieCurrentRound && hasLostAnyRound)
     }
 
     private fun hasCurrentHandFinished(): Boolean {
@@ -562,9 +561,10 @@ abstract class TrucoViewModel(
         }
     }
 
+    private fun isLastRound() = currentRound.requireValue() == MAX_HAND_ROUNDS
+
     // unused
     override fun startGame() {
-
     }
 
     companion object {
