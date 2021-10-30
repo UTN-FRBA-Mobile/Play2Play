@@ -94,8 +94,10 @@ abstract class TrucoViewModel(
     private val _playersPositions = MutableLiveData<List<Pair<TrucoPlayerPosition, String>>>()
     val playersPositions: LiveData<List<Pair<TrucoPlayerPosition, String>>> = _playersPositions
 
-    protected val _firstHandPlayer = MutableLiveData<TeamPlayer>()
-    val firstHandPlayer: LiveData<TeamPlayer> = _firstHandPlayer
+    private val _currentHandPlayerPosition = MutableLiveData<TrucoPlayerPosition>()
+    val currentHandPlayerPosition: LiveData<TrucoPlayerPosition> = _currentHandPlayerPosition
+
+    protected lateinit var firstHandPlayer: TeamPlayer
 
     private lateinit var currentTurnPlayer: TeamPlayer
 
@@ -187,7 +189,7 @@ abstract class TrucoViewModel(
         performAction(action)
     }
 
-    fun onMyCardsLoad() = nextTurn(firstHandPlayer.requireValue())
+    fun onMyCardsLoad() = nextTurn(firstHandPlayer)
 
     private fun performOrReplyAction(isReply: Boolean, action: TrucoAction) {
         if (isReply)
@@ -321,8 +323,9 @@ abstract class TrucoViewModel(
     private fun onHandFinished(handWinnerPlayerTeam: Int = getCurrentHandWinner().team) {
         val hasFinished = updateScore(handWinnerPlayerTeam)
         if (!hasFinished) {
-            val nextHandIndex = (teamPlayers.indexOf(firstHandPlayer.requireValue()) + 1)
-            _firstHandPlayer.value = teamPlayers[nextHandIndex % totalPlayers.requireValue()]
+            val nextHandIndex = (teamPlayers.indexOf(firstHandPlayer) + 1)
+            firstHandPlayer = teamPlayers[nextHandIndex % totalPlayers.requireValue()]
+            _currentHandPlayerPosition.value = TrucoPlayerPosition.get(firstHandPlayer, teamPlayers, myTeamPlayer)
             handOutCards()
         }
     }
@@ -484,7 +487,7 @@ abstract class TrucoViewModel(
     }
 
     private fun getRoundOrder(): List<TeamPlayer> {
-        val handIndex = teamPlayers.indexOf(firstHandPlayer.requireValue())
+        val handIndex = teamPlayers.indexOf(firstHandPlayer)
         return teamPlayers.drop(handIndex) + teamPlayers.take(handIndex)
     }
 

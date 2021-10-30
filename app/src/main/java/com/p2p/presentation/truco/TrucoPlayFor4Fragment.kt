@@ -9,7 +9,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import com.p2p.R
 import com.p2p.databinding.FragmentPlayTrucoFor4Binding
-import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.truco.cards.TrucoCardsHand
 import com.p2p.presentation.truco.cards.TrucoFor4FrontPlayerCardsHand
 import com.p2p.presentation.truco.cards.TrucoFor4LeftPlayerCardsHand
@@ -51,8 +50,8 @@ class TrucoPlayFor4Fragment : TrucoFragment<FragmentPlayTrucoFor4Binding>() {
         observe(gameViewModel.playersPositions) {
             it.forEach { (position, name) -> getPlayerNameTextView(position)?.text = name }
         }
-        observe(gameViewModel.firstHandPlayer) {
-            // TODO: Check hand player position and set player hand icon visible
+        observe(gameViewModel.currentHandPlayerPosition) {
+            setHandPlayerIcon(getHandPlayerIcon(it))
         }
     }
 
@@ -122,6 +121,22 @@ class TrucoPlayFor4Fragment : TrucoFragment<FragmentPlayTrucoFor4Binding>() {
         TrucoPlayerPosition.values().forEach {
             val color = if (it == playerPosition) R.color.colorPrimary else R.color.colorText
             getPlayerNameTextView(it)?.setTextColor(ContextCompat.getColor(requireContext(), color))
+        }
+    }
+
+    private fun getHandPlayerIcon(playerPosition: TrucoPlayerPosition) = when (playerPosition) {
+        TrucoPlayerPosition.FRONT -> gameBinding.frontPlayerHand
+        TrucoPlayerPosition.LEFT -> gameBinding.leftPlayerHand
+        TrucoPlayerPosition.RIGHT -> gameBinding.rightPlayerHand
+        TrucoPlayerPosition.MY_SELF -> null
+    }
+
+    private fun setHandPlayerIcon(handPlayerIcon: ImageView?) {
+        gameBinding.frontPlayerHand.visibility = View.INVISIBLE
+        gameBinding.leftPlayerHand.visibility = View.INVISIBLE
+        gameBinding.rightPlayerHand.visibility = View.INVISIBLE
+        if (handPlayerIcon != null) {
+            handPlayerIcon.visibility = View.VISIBLE
         }
     }
 
