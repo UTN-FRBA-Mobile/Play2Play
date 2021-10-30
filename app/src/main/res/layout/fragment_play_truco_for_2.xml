@@ -15,6 +15,17 @@
         app:layout_constraintGuide_percent="0.5"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <TextView
+        android:id="@+id/truco_points"
+        style="@style/P2P_Description"
+        android:textColor="@color/green_black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/medium"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/header_background"
+        android:text="@string/truco_acummulated_points" />
+
     <ImageView
         android:id="@+id/their_right_card"
         android:layout_width="@dimen/truco_their_card_width"

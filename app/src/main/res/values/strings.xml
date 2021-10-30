@@ -144,6 +144,8 @@
     <string name="truco_answer_envido_are_better">%d son mejores</string>
     <string name="truco_go_to_deck">Me voy al mazo</string>
     <string name="truco_go_to_deck_action">Me voy\nal mazo</string>
+    <string name="truco_acummulated_points"><![CDATA[Puntos truco: <font color=#FF8550>%d</font>/%d]]></string>
+
 
     <!-- Truco final score -->
     <string name="tr_final_score_other_team">Ellxs</string>
