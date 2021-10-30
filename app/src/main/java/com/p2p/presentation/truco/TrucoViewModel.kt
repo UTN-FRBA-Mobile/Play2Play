@@ -94,6 +94,9 @@ abstract class TrucoViewModel(
     private val _playersPositions = MutableLiveData<List<Pair<TrucoPlayerPosition, String>>>()
     val playersPositions: LiveData<List<Pair<TrucoPlayerPosition, String>>> = _playersPositions
 
+    private val _trucoAccumulatedPoints = MutableLiveData<Int>()
+    val trucoAccumulatedPoints: LiveData<Int> = _trucoAccumulatedPoints
+
     protected lateinit var firstHandPlayer: TeamPlayer
     private lateinit var currentTurnPlayer: TeamPlayer
 
@@ -107,6 +110,7 @@ abstract class TrucoViewModel(
     init {
         _ourScore.value = 0
         _theirScore.value = 0
+        _trucoAccumulatedPoints.value = 0
     }
 
     abstract fun startGame(players: List<String>)
@@ -219,6 +223,7 @@ abstract class TrucoViewModel(
         _trucoButtonEnabled.value = true
         _currentRound.value = 1
         _myCards.value = myCards
+        _trucoAccumulatedPoints.value = 0
     }
 
     private fun canAnswer(otherPlayer: TeamPlayer): Boolean =
@@ -238,9 +243,28 @@ abstract class TrucoViewModel(
      */
     private fun updateActionValues(action: TrucoAction) {
         when (action) {
-            is YesIDo -> currentActionPoints = previousActions.last().yesPoints
-            is NoIDont -> currentActionPoints = previousActions.last().noPoints
+            is YesIDo -> {
+                val lastAction = previousActions.last()
+                val actionPoints = lastAction.yesPoints
+                currentActionPoints = actionPoints
+                updateTrucoAccumulatedPoints(lastAction, actionPoints)
+
+            }
+            is NoIDont -> {
+                val lastAction = previousActions.last()
+                val actionPoints = lastAction.noPoints
+                currentActionPoints = actionPoints
+                updateTrucoAccumulatedPoints(lastAction, actionPoints)
+            }
             else -> previousActions = previousActions + action
+        }
+    }
+
+    private fun updateTrucoAccumulatedPoints(action: TrucoAction, actionPoints: Int) {
+        when(action) {
+            is Truco, is Retruco, is ValeCuatro -> {
+                _trucoAccumulatedPoints.value = trucoAccumulatedPoints.requireValue() + actionPoints
+            }
         }
     }
 

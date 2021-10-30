@@ -14,6 +14,7 @@ import com.p2p.presentation.truco.cards.TrucoFor4FrontPlayerCardsHand
 import com.p2p.presentation.truco.cards.TrucoFor4LeftPlayerCardsHand
 import com.p2p.presentation.truco.cards.TrucoFor4MyCardsHand
 import com.p2p.presentation.truco.cards.TrucoFor4RightPlayerCardsHand
+import com.p2p.utils.fromHtml
 
 class TrucoPlayFor4Fragment : TrucoFragment<FragmentPlayTrucoFor4Binding>() {
 

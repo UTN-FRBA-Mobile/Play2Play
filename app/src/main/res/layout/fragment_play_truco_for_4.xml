@@ -36,7 +36,7 @@
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintTop_toBottomOf="@+id/header_background"
-        android:text="@string/truco_acummulated_points" />
+        android:text="@string/truco_accumulated_points" />
 
     <TextView
         android:id="@+id/left_player_name"
