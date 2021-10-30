@@ -85,6 +85,8 @@ abstract class TrucoViewModel(
     private val _envidoButtonEnabled = MutableLiveData<Boolean>()
     val envidoButtonEnabled: LiveData<Boolean> = _envidoButtonEnabled
 
+    private var envidoDisabledForHand = false
+
     private val _currentTurnPlayerPosition = MutableLiveData<TrucoPlayerPosition>()
     val currentTurnPlayerPosition: LiveData<TrucoPlayerPosition> = _currentTurnPlayerPosition
 
@@ -222,6 +224,7 @@ abstract class TrucoViewModel(
         _envidoButtonEnabled.value = true
         _trucoButtonEnabled.value = true
         _currentRound.value = 1
+        envidoDisabledForHand = false
         _myCards.value = myCards
         _trucoAccumulatedPoints.value = 0
     }
@@ -256,6 +259,7 @@ abstract class TrucoViewModel(
                 currentActionPoints = actionPoints
                 updateTrucoAccumulatedPoints(lastAction, actionPoints)
             }
+            is GoToDeck -> currentActionPoints = if(previousActions.isEmpty()) 2 else currentActionPoints
             else -> previousActions = previousActions + action
         }
     }
@@ -281,11 +285,19 @@ abstract class TrucoViewModel(
                 _lastTrucoAction.value = null
                 _trucoButtonEnabled.value = true
                 _envidoButtonEnabled.value = false
+                envidoDisabledForHand = true
             }
-            is EnvidoGameAction -> _envidoButtonEnabled.value = false
+            is EnvidoGameAction -> {
+                _envidoButtonEnabled.value = false
+                envidoDisabledForHand = true
+            }
             is YesIDo -> if (isAcceptingTruco()) _envidoButtonEnabled.value = false
             else -> Unit
         }
+    }
+
+    private fun setEnvidoButtonAvailability(enabled: Boolean) {
+        _envidoButtonEnabled.value = enabled && !envidoDisabledForHand
     }
 
     private fun isAcceptingTruco() = _lastTrucoAction.value != null
@@ -293,6 +305,7 @@ abstract class TrucoViewModel(
     private fun updateTrucoValues(action: TrucoGameAction, buttonEnabled: Boolean) {
         _lastTrucoAction.value = action
         _trucoButtonEnabled.value = buttonEnabled
+        envidoDisabledForHand = true
     }
 
     fun setTotalPlayers(players: Int) {
@@ -326,6 +339,7 @@ abstract class TrucoViewModel(
 
     private fun onRoundFinished(currentRoundPlayedCards: List<PlayedCard>) {
         val round = _currentRound.requireValue()
+        if (round == 1) envidoDisabledForHand = true
         _currentRound.value = round + 1
         playedCards.add(mutableListOf())
         val roundWinnerTeamPlayer = getRoundWinnerTeamPlayer(currentRoundPlayedCards)
@@ -445,8 +459,9 @@ abstract class TrucoViewModel(
         _currentTurnPlayerPosition.value = TrucoPlayerPosition.get(player, teamPlayers, myTeamPlayer)
         if (player == myTeamPlayer) {
             dispatchSingleTimeEvent(TrucoTakeTurnEvent)
-            _envidoButtonEnabled.value =
+            setEnvidoButtonAvailability(
                 playedCards.last().any { it.teamPlayer.team == myTeamPlayer.team } || totalPlayers.requireValue() == 2
+            )
         }
     }
 

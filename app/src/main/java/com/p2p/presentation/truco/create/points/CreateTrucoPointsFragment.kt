@@ -19,8 +19,8 @@ class CreateTrucoPointsFragment :
         FragmentCreateTrucoPointsBinding::inflate
 
     override fun initUI() {
-        binding.arrowLeft.isEnabled = false
-        binding.arrowRight.isEnabled = true
+        binding.arrowLeft.isEnabled = true
+        binding.arrowRight.isEnabled = false
         binding.arrowRight.setOnClickListener { viewModel.increase() }
         binding.arrowLeft.setOnClickListener { viewModel.decrease() }
         binding.createButton.setOnClickListener {
