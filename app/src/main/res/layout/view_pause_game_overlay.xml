@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/pause_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/screen_padding"
+    android:visibility="gone"
+    tools:visibility="visible">
+
+    <ImageView
+        android:id="@+id/pause_image"
+        android:layout_width="@dimen/error_image_size"
+        android:layout_height="@dimen/error_image_size"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_pause_circle_outline"
+        app:tint="@color/colorSecondary" />
+
+    <TextView
+        android:id="@+id/pause_text"
+        style="@style/P2P_Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/large_extra"
+        android:textAlignment="center"
+        android:textColor="@color/colorSecondary"
+        tools:text="El juego está pausado hasta que Román se vuelva a unir" />
+
+</LinearLayout>

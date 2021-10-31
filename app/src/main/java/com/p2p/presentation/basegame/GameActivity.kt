@@ -123,7 +123,7 @@ abstract class GameActivity<E : SpecificGameEvent, VM : GameViewModel> :
             errorView.isVisible = error != null
             error?.run {
                 findViewById<ImageView>(R.id.error_image).setImageResource(image)
-                findViewById<TextView>(R.id.error_text).setText(text)
+                findViewById<TextView>(R.id.error_text).text = getString(text, *stringArgs.toTypedArray())
                 findViewById<TextView>(R.id.error_button).run {
                     setText(actionText)
                     setOnClickListener { onActionClicked() }
@@ -152,6 +152,8 @@ abstract class GameActivity<E : SpecificGameEvent, VM : GameViewModel> :
         GoToServerLobby -> goToServerLobby()
         GoToPlay -> goToPlay()
         KillGame -> finish()
+        ResumeGame -> resumeGame()
+        is PauseGame -> pauseGame(event.lostPlayers)
         is OpenInstructions -> showInstructions(event.instructions)
         is SpecificGameEvent -> {
             try {
@@ -172,7 +174,7 @@ abstract class GameActivity<E : SpecificGameEvent, VM : GameViewModel> :
 
     protected abstract fun goToClientLobby()
 
-    open protected fun goToServerLobby(){
+    protected open fun goToServerLobby() {
         throw IllegalStateException(
             "There is no server lobby for game"
         )
@@ -193,6 +195,23 @@ abstract class GameActivity<E : SpecificGameEvent, VM : GameViewModel> :
                 // Respond to positive button press
             }
             .show()
+    }
+
+    private fun pauseGame(lostPlayers: List<String>) {
+        val lastLostPlayer = lostPlayers.last()
+        val lostPlayersButLast = lostPlayers.dropLast(1).takeIf { it.size > 1 }?.joinToString(", ")
+        findViewById<TextView>(R.id.pause_text).text = resources.getQuantityString(
+            R.plurals.games_paused,
+            lostPlayers.size,
+            lostPlayersButLast
+                ?.let { getString(R.string.games_paused_join_last_names, it, lastLostPlayer) }
+                ?: lastLostPlayer
+        )
+        findViewById<View>(R.id.pause_view).isVisible = true
+    }
+
+    private fun resumeGame() {
+        findViewById<View>(R.id.pause_view).isVisible = false
     }
 
     private fun android.os.Message.toConversation(): Conversation {

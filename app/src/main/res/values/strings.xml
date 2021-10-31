@@ -26,6 +26,12 @@
     <string name="games_user_name">Tu nombre</string>
     <string name="games_join">Unirse</string>
     <string name="games_create">Crear partida</string>
+    <plurals name="games_paused">
+        <item quantity="one">El juego está pausado hasta que %s se vuelva a unir</item>
+        <item quantity="other">El juego está pausado hasta que %s se vuelvan a unir</item>
+    </plurals>
+    <string name="games_paused_join_last_names">%s y %s</string>
+
     <!-- Join games -->
     <string name="join_games_title">Seleccioná el celular de quien creó el juego</string>
     <string name="join_game_troubleshoot">En caso de no encontrar el celular deben conectarse manualmente. Hacé click acá y sigan las instrucciones en ambos celulares.</string>
@@ -111,6 +117,7 @@
     <string name="error_server_connection_failure">Se perdió la conexión con la sala.</string>
     <string name="error_name_in_use">El nombre que elegiste ya está siendo usado por otrx jugadorx. Elegí otro así se pueden diferenciar.</string>
     <string name="error_room_already_full">La sala del juego ya está llena.</string>
+    <string name="error_rejoin_name">Para unirte a la sala del juego que ya inició tenés que hacerlo con alguno de los siguientes nombres: %s\nEs importante que este sea exactamente igual, incluyendo mayúsculas y tildes.</string>
     <string name="error_client_connection_lost">Se perdió la conexión con %s.</string>
     <string name="error_connection_write_failure">Se perdió la conexión con la sala de juego, lo sentimos mucho.</string>
     <string name="tf_error_single_player">El resto de lxs jugadorxs abandonaron el juego… ¡felicitaciones ganadorx!</string>

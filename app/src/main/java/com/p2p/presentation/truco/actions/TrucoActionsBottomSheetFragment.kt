@@ -127,11 +127,11 @@ class TrucoActionsBottomSheetFragment :
         }
     }
 
-    fun isVisible(isVisible: Boolean) {
+    fun isVisible(isVisible: Boolean, onComplete: () -> Unit = {}) {
         if (isVisible) {
-            view?.fadeIn()
+            view?.fadeIn(onComplete = onComplete)
         } else {
-            view?.fadeOut()
+            view?.fadeOut(onComplete = onComplete)
             behaviour?.state = STATE_COLLAPSED
             toggleEnvidoOptionsState(false)
         }
