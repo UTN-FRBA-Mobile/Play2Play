@@ -5,7 +5,7 @@ import android.animation.AnimatorListenerAdapter
 import android.content.Context
 import android.view.View
 import android.widget.ImageView
-import androidx.core.view.isVisible
+import androidx.core.view.isInvisible
 import com.p2p.R
 import com.p2p.model.truco.Card
 import com.p2p.presentation.extensions.fadeIn
@@ -17,6 +17,8 @@ abstract class TrucoCardsHand(
     private val droppingPlaces: List<View>,
     private val listener: Listener?
 ) : TrucoDragAndDropCard.Listener {
+
+    private var lastDroppingPlace: View? = null
 
     private val dragAndDropCards = cards
         .map { TrucoDragAndDropCard(it.view, this) to it }
@@ -35,10 +37,11 @@ abstract class TrucoCardsHand(
 
     /** Taking the turn will enable the user to touch and move the card to the next available dropping place. */
     fun takeTurn() {
-        droppingPlaces.firstOrNull { !it.isVisible }?.let { updateDroppingPlace(it) }
+        val lastIndex = lastDroppingPlace?.let { droppingPlaces.indexOf(it) } ?: -1
+        droppingPlaces.getOrNull(lastIndex + 1)?.let { updateDroppingPlace(it) }
     }
 
-    fun playCard(card: Card, droppingPlace: View, round: Int) {
+    fun playCard(card: Card, droppingPlace: View, round: Int) = dragAndDropCards.keys.first().cardView.post {
         val dragAndDropCardEntry = dragAndDropCards.toList()[round]
         val cardView = dragAndDropCardEntry.second.view
         val movingAnimation = cardView.animate()
@@ -96,7 +99,8 @@ abstract class TrucoCardsHand(
     override fun onDrop(dragAndDropCard: TrucoDragAndDropCard, isInDroppingView: Boolean) {
         updateUIAfterHandChange(dragAndDropCard, isInTheHand = !isInDroppingView)
         if (isInDroppingView) {
-            dragAndDropCard.cardView.elevation = droppingPlaces.count { it.isVisible }.toFloat() - 1
+            dragAndDropCard.cardView.elevation = lastDroppingPlace?.let { droppingPlaces.indexOf(it).toFloat() } ?: 0f
+            dragAndDropCard.droppingView?.let { it.postDelayed({ it.isInvisible = true }, HIDE_DROPPING_VIEW_DELAY) }
             updateDroppingPlace(null)
             listener?.onCardPlayed(dragAndDropCards.getValue(dragAndDropCard))
         }
@@ -163,8 +167,9 @@ abstract class TrucoCardsHand(
     }
 
     private fun updateDroppingPlace(droppingPlace: View?) {
-        droppingPlace?.elevation = droppingPlaces.lastOrNull { it.isVisible }?.elevation?.plus(1) ?: 0f
+        droppingPlace?.elevation = lastDroppingPlace?.elevation?.plus(1) ?: 0f
         droppingPlace?.fadeIn()
+        droppingPlace?.let { lastDroppingPlace = it }
         dragAndDropCards.keys.forEach { it.droppingView = droppingPlace }
     }
 
@@ -183,5 +188,6 @@ abstract class TrucoCardsHand(
         const val SECOND_CARD = 1
         private const val HALF_ANIMATION = 0.5
         private const val THREE_QUARTERS = 0.75
+        private const val HIDE_DROPPING_VIEW_DELAY = 2_000L
     }
 }

@@ -49,7 +49,7 @@ abstract class TrucoFragment<VB : ViewBinding> :
 
     private val bottomSheet by lazy { TrucoActionsBottomSheetFragment.newInstance() }
 
-    private var isBottomSheetAdded = false
+    private var isFirstHand = true
 
     private val shortDuration by lazy {
         resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
@@ -75,7 +75,6 @@ abstract class TrucoFragment<VB : ViewBinding> :
 
     override fun initUI() = with(requireView()) {
         super.initUI()
-        initializeRivalHands(isFirstHand = true)
         headerBinding = ViewTrucoHeaderBinding.bind(gameBinding.root)
         earnedPointsBinding = ViewTrucoEarnedPointsBinding.bind(gameBinding.root)
         roundViews =
@@ -152,7 +151,8 @@ abstract class TrucoFragment<VB : ViewBinding> :
     private fun newHand() {
         clearRoundWinners()
         myDroppingPlacesViews.forEach { it.isInvisible = true }
-        initializeRivalHands(isFirstHand = false)
+        initializeRivalHands(isFirstHand = isFirstHand)
+        isFirstHand = false
     }
 
     protected fun hideActionBubble(bubbleView: View, bubbleTextView: TextView) {
