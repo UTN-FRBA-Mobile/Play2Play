@@ -9,4 +9,6 @@ interface BluetoothConnectionCreator {
     fun createServer(): BluetoothConnection
 
     fun createClient(serverDevice: BluetoothDevice): BluetoothConnection
+
+    fun makeMeVisible()
 }
