@@ -157,7 +157,7 @@ abstract class GameViewModel(
         if (gameAlreadyFinished) return
         val playerLost = connectedPlayers.firstOrNull { it.first == peerId } ?: return
         lostPlayers = lostPlayers + playerLost.second
-        connection.write(playersRecoverability.constructMessage(lostPlayers))
+        connection.write(playersRecoverability.constructOnPlayerLostMessage(lostPlayers))
         removePlayer(playerLost)
         if (playersRecoverability.shouldPauseGame(lostPlayers)) {
             dispatchSingleTimeEvent(PauseGame(lostPlayers))

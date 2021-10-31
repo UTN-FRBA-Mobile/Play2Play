@@ -10,7 +10,7 @@ enum class PlayersRecoverability {
 
     CANNOT_RECOVER {
 
-        override fun constructMessage(lostPlayers: List<String>) = GoodbyePlayerMessage(lostPlayers.last())
+        override fun constructOnPlayerLostMessage(lostPlayers: List<String>) = GoodbyePlayerMessage(lostPlayers.last())
 
         override fun constructCantJoinToStartedGameMessage(
             lostPlayers: List<String>
@@ -28,7 +28,7 @@ enum class PlayersRecoverability {
 
     MUST_BE_RECOVERED {
 
-        override fun constructMessage(lostPlayers: List<String>) = PauseGameMessage(lostPlayers)
+        override fun constructOnPlayerLostMessage(lostPlayers: List<String>) = PauseGameMessage(lostPlayers)
 
         override fun constructCantJoinToStartedGameMessage(
             lostPlayers: List<String>
@@ -44,7 +44,7 @@ enum class PlayersRecoverability {
         ) = newPlayerName in lostPlayers
     };
 
-    abstract fun constructMessage(lostPlayers: List<String>): Message
+    abstract fun constructOnPlayerLostMessage(lostPlayers: List<String>): Message
     abstract fun constructCantJoinToStartedGameMessage(lostPlayers: List<String>): Message
     abstract fun shouldPauseGame(lostPlayers: List<String>): Boolean
     abstract fun shouldResumeGame(lostPlayers: List<String>): Boolean
