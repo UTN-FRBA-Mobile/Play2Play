@@ -28,7 +28,8 @@ class GamesViewModel(
     fun createGame(game: Game, userName: String?) {
         when {
             !validateAndSaveName(userName) -> return
-            !bluetoothStateProvider.isEnabled() -> dispatchSingleTimeEvent(TurnOnBluetooth)
+            !bluetoothStateProvider.isEnabled() ->
+                dispatchSingleTimeEvent(TurnOnBluetooth(game, TurnOnBluetoothReason.CREATE))
             else -> when (game) {
                 Game.TUTTI_FRUTTI -> dispatchSingleTimeEvent(GoToCreateTuttiFrutti)
                 Game.IMPOSTOR -> dispatchSingleTimeEvent(GoToCreateImpostor)
@@ -41,7 +42,8 @@ class GamesViewModel(
     fun joinGame(game: Game, userName: String?) {
         when {
             !validateAndSaveName(userName) -> return
-            !bluetoothStateProvider.isEnabled() -> dispatchSingleTimeEvent(TurnOnBluetooth)
+            !bluetoothStateProvider.isEnabled() ->
+                dispatchSingleTimeEvent(TurnOnBluetooth(game, TurnOnBluetoothReason.JOIN))
             else -> dispatchSingleTimeEvent(JoinGame(game))
         }
     }

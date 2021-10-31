@@ -9,6 +9,6 @@ object GoToCreateImpostor : GamesEvents()
 
 object GoToCreateTruco : GamesEvents()
 
-object TurnOnBluetooth : GamesEvents()
+class TurnOnBluetooth(val game: Game, val reason: TurnOnBluetoothReason) : GamesEvents()
 
 class JoinGame(val game: Game) : GamesEvents()
