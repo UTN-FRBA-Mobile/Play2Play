@@ -13,9 +13,7 @@ import com.p2p.model.truco.Suit.CUPS
 import com.p2p.model.truco.Suit.GOLDS
 import com.p2p.model.truco.Suit.SWORDS
 import com.p2p.model.truco.TeamPlayer
-import com.p2p.model.truco.message.TrucoCardsMessage
-import com.p2p.model.truco.message.TrucoStartGameMessage
-import com.p2p.model.truco.message.TrucoWelcomeBack
+import com.p2p.model.truco.message.*
 import com.p2p.presentation.basegame.ConnectionType
 import com.p2p.presentation.extensions.requireValue
 

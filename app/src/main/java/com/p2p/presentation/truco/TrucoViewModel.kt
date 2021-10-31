@@ -21,16 +21,7 @@ import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.home.games.Game
 import com.p2p.presentation.truco.actions.EnvidoGameAction
 import com.p2p.presentation.truco.actions.TrucoAction
-import com.p2p.presentation.truco.actions.TrucoAction.Envido
-import com.p2p.presentation.truco.actions.TrucoAction.EnvidoGoesFirst
-import com.p2p.presentation.truco.actions.TrucoAction.FaltaEnvido
-import com.p2p.presentation.truco.actions.TrucoAction.GoToDeck
-import com.p2p.presentation.truco.actions.TrucoAction.NoIDont
-import com.p2p.presentation.truco.actions.TrucoAction.RealEnvido
-import com.p2p.presentation.truco.actions.TrucoAction.Retruco
-import com.p2p.presentation.truco.actions.TrucoAction.Truco
-import com.p2p.presentation.truco.actions.TrucoAction.ValeCuatro
-import com.p2p.presentation.truco.actions.TrucoAction.YesIDo
+import com.p2p.presentation.truco.actions.TrucoAction.*
 import com.p2p.presentation.truco.actions.TrucoActionAvailableResponses
 import com.p2p.presentation.truco.actions.TrucoGameAction
 import com.p2p.presentation.truco.envidoCalculator.EnvidoMessageCalculator
@@ -259,7 +250,6 @@ abstract class TrucoViewModel(
     }
 
     protected fun newHand(myCards: List<Card>) {
-        checkIfShouldResumeGame()
         isAbleToReadMessagesBecauseNewHand = false
         viewModelScope.launch(Dispatchers.Main) {
             withContext(Dispatchers.Default) { delay(NEW_HAND_DELAY_TIME_MS) }
@@ -275,6 +265,7 @@ abstract class TrucoViewModel(
             _currentRound.value = 1
             envidoDisabledForHand = false
             _myCards.value = myCards
+            checkIfShouldResumeGame()
         }
     }
 
