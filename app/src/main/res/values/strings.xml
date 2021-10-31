@@ -25,7 +25,7 @@
     <!-- Games -->
     <string name="games_user_name">Tu nombre</string>
     <string name="games_join">Unirse</string>
-    <string name="games_create">Crear partida</string>
+    <string name="games_create">Crear sala</string>
     <!-- Join games -->
     <string name="join_games_title">Seleccioná el celular de quien creó el juego</string>
     <string name="join_game_troubleshoot">En caso de no encontrar el celular deben conectarse manualmente. Hacé click acá y sigan las instrucciones en ambos celulares.</string>

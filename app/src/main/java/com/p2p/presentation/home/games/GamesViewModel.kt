@@ -16,32 +16,20 @@ class GamesViewModel(
     private val _games = MutableLiveData<List<Game>>()
     val games: LiveData<List<Game>> = _games
 
-    /** Whether the create and join button are enabled or not. */
-    private val _buttonsEnabled = MutableLiveData<Boolean>()
-    val buttonsEnabled: LiveData<Boolean> = _buttonsEnabled
-
     /** The current saved user name. */
     private val _userName = MutableLiveData(userSession.getUserName())
     val userName: LiveData<String?> = _userName
-
-    private var selectedGame: Game? = null
 
     init {
         _games.value = Game.values().toList()
     }
 
-    /** Select the given [game] and allow to create it. */
-    fun selectGame(game: Game?) {
-        _buttonsEnabled.value = game != null
-        selectedGame = game
-    }
-
-    /** Open the view that corresponds to create the [selectedGame]. */
-    fun createGame(userName: String?) {
+    /** Open the view that corresponds to create the [game]. */
+    fun createGame(game: Game, userName: String?) {
         when {
             !validateAndSaveName(userName) -> return
             !bluetoothStateProvider.isEnabled() -> dispatchSingleTimeEvent(TurnOnBluetooth)
-            else -> when (selectedGame) {
+            else -> when (game) {
                 Game.TUTTI_FRUTTI -> dispatchSingleTimeEvent(GoToCreateTuttiFrutti)
                 Game.IMPOSTOR -> dispatchSingleTimeEvent(GoToCreateImpostor)
                 Game.TRUCO -> dispatchSingleTimeEvent(GoToCreateTruco)
@@ -50,11 +38,11 @@ class GamesViewModel(
     }
 
     /** Open the view to join to a game. */
-    fun joinGame(userName: String?) {
+    fun joinGame(game: Game, userName: String?) {
         when {
             !validateAndSaveName(userName) -> return
             !bluetoothStateProvider.isEnabled() -> dispatchSingleTimeEvent(TurnOnBluetooth)
-            else -> dispatchSingleTimeEvent(JoinGame(requireNotNull(selectedGame)))
+            else -> dispatchSingleTimeEvent(JoinGame(game))
         }
     }
 

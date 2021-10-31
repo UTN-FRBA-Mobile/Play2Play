@@ -25,20 +25,12 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesEvents, GamesViewM
 
     override fun initUI() {
         setupGamesRecycler()
-        binding.createButton.isEnabled = false
-        binding.createButton.setOnClickListener { viewModel.createGame(getUserName()) }
-        binding.joinButton.isEnabled = false
-        binding.joinButton.setOnClickListener { viewModel.joinGame(getUserName()) }
         binding.shareButton.setOnClickListener { ApplicationSharer.share(requireActivity()) }
     }
 
     override fun setupObservers() = with(viewModel) {
         observe(games) { adapter.games = it }
         observe(userName) { binding.userNameInput.clearAndAppend(it) }
-        observe(buttonsEnabled) {
-            binding.createButton.isEnabled = it
-            binding.joinButton.isEnabled = it
-        }
     }
 
     override fun onEvent(event: GamesEvents) = when (event) {
@@ -52,7 +44,10 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesEvents, GamesViewM
 
     private fun setupGamesRecycler() = with(binding.gamesRecycler) {
         layoutManager = LinearLayoutManager(context)
-        adapter = GamesAdapter(viewModel::selectGame).also {
+        adapter = GamesAdapter(
+            onCreateClicked = { viewModel.createGame(it, getUserName()) },
+            onJoinClicked = { viewModel.joinGame(it, getUserName()) }
+        ).also {
             this@GamesFragment.adapter = it
         }
     }
