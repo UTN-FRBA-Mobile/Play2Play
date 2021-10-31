@@ -7,7 +7,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.p2p.R
 import com.p2p.presentation.base.BaseActivity
@@ -19,6 +21,8 @@ class TurnOnBluetoothActivity : BaseActivity(R.layout.activity_turn_on_bluetooth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         findViewById<Button>(R.id.turn_on_button).setOnClickListener {
+            findViewById<Button>(R.id.turn_on_button).text = null
+            findViewById<View>(R.id.loading).isVisible = true
             BluetoothAdapter.getDefaultAdapter().enable()
         }
     }
