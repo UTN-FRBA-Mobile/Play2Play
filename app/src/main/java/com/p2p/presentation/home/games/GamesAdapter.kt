@@ -66,7 +66,7 @@ class GamesAdapter(
             name.text = name.context.getText(game.nameRes)
             container.setOnClickListener {
                 buttons.fadeIn()
-                buttons.postDelayed({ buttons.fadeOut() }, 10_000L)
+                buttons.postDelayed({ buttons.fadeOut() }, VISIBLE_BUTTONS_TIME)
             }
             createButton.setOnClickListener { onCreateClicked(game) }
             joinButton.setOnClickListener { onJoinClicked(game) }
@@ -78,5 +78,10 @@ class GamesAdapter(
         override fun areItemsTheSame(oldItem: Game, newItem: Game) = oldItem == newItem
 
         override fun areContentsTheSame(oldItem: Game, newItem: Game) = oldItem == newItem
+    }
+
+    companion object {
+
+        private const val VISIBLE_BUTTONS_TIME = 10_000L
     }
 }

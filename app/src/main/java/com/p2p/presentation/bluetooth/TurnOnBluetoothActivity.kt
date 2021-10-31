@@ -29,6 +29,11 @@ class TurnOnBluetoothActivity : BaseActivity(R.layout.activity_turn_on_bluetooth
 
     override fun onResume() {
         super.onResume()
+        if (BluetoothAdapter.getDefaultAdapter().isEnabled) {
+            setResult(Activity.RESULT_OK)
+            finish()
+            return
+        }
         registerReceiver(receiver, receiver.intentFilter)
     }
 

@@ -20,6 +20,8 @@ class GamesViewModel(
     private val _userName = MutableLiveData(userSession.getUserName())
     val userName: LiveData<String?> = _userName
 
+    private var turnOnBluetoothOnResult: Pair<Game, TurnOnBluetoothReason>? = null
+
     init {
         _games.value = Game.values().toList()
     }
@@ -28,8 +30,10 @@ class GamesViewModel(
     fun createGame(game: Game, userName: String?) {
         when {
             !validateAndSaveName(userName) -> return
-            !bluetoothStateProvider.isEnabled() ->
-                dispatchSingleTimeEvent(TurnOnBluetooth(game, TurnOnBluetoothReason.CREATE))
+            !bluetoothStateProvider.isEnabled() -> {
+                turnOnBluetoothOnResult = game to TurnOnBluetoothReason.CREATE
+                dispatchSingleTimeEvent(TurnOnBluetooth)
+            }
             else -> when (game) {
                 Game.TUTTI_FRUTTI -> dispatchSingleTimeEvent(GoToCreateTuttiFrutti)
                 Game.IMPOSTOR -> dispatchSingleTimeEvent(GoToCreateImpostor)
@@ -42,9 +46,19 @@ class GamesViewModel(
     fun joinGame(game: Game, userName: String?) {
         when {
             !validateAndSaveName(userName) -> return
-            !bluetoothStateProvider.isEnabled() ->
-                dispatchSingleTimeEvent(TurnOnBluetooth(game, TurnOnBluetoothReason.JOIN))
+            !bluetoothStateProvider.isEnabled() -> {
+                turnOnBluetoothOnResult = game to TurnOnBluetoothReason.JOIN
+                dispatchSingleTimeEvent(TurnOnBluetooth)
+            }
             else -> dispatchSingleTimeEvent(JoinGame(game))
+        }
+    }
+
+    fun onBluetoothTurnedOn(userName: String?) {
+         val (game, reason) = turnOnBluetoothOnResult ?: return
+        when (reason) {
+            TurnOnBluetoothReason.JOIN -> joinGame(game, userName)
+            TurnOnBluetoothReason.CREATE -> createGame(game, userName)
         }
     }
 
@@ -73,6 +87,11 @@ class GamesViewModel(
     private fun saveName(name: String) {
         _userName.value = name
         userSession.saveUserName(name)
+    }
+
+    enum class TurnOnBluetoothReason {
+        JOIN,
+        CREATE
     }
 
     companion object {

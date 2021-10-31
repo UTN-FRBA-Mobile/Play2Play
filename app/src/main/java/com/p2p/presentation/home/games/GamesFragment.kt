@@ -24,7 +24,6 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesEvents, GamesViewM
         FragmentGamesBinding::inflate
 
     private lateinit var adapter: GamesAdapter
-    private var turnOnBluetoothOnResult: Pair<Game, TurnOnBluetoothReason>? = null
 
     override fun initUI() {
         setupGamesRecycler()
@@ -42,10 +41,7 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesEvents, GamesViewM
         GoToCreateTruco -> TrucoActivity.startCreate(requireActivity(), GAME_REQUEST_CODE)
         is JoinGame -> JoinGamesBottomSheetFragment.newInstance(event.game)
             .show(parentFragmentManager, null)
-        is TurnOnBluetooth -> {
-            turnOnBluetoothOnResult = event.game to event.reason
-            TurnOnBluetoothActivity.startForResult(this, TURN_ON_BLUETOOTH_REQUEST_CODE)
-        }
+        TurnOnBluetooth -> TurnOnBluetoothActivity.startForResult(this, TURN_ON_BLUETOOTH_REQUEST_CODE)
     }
 
     private fun setupGamesRecycler() = with(binding.gamesRecycler) {
@@ -61,11 +57,7 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesEvents, GamesViewM
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == TURN_ON_BLUETOOTH_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            val (game, reason) = turnOnBluetoothOnResult ?: return
-            when (reason) {
-                TurnOnBluetoothReason.JOIN -> viewModel.joinGame(game, getUserName())
-                TurnOnBluetoothReason.CREATE -> viewModel.createGame(game, getUserName())
-            }
+            viewModel.onBluetoothTurnedOn(getUserName())
         }
     }
 
