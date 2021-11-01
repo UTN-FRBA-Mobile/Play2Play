@@ -112,7 +112,7 @@ abstract class TrucoViewModel(
     init {
         _ourScore.value = 0
         _theirScore.value = 0
-        _trucoAccumulatedPoints.value = 0
+        _trucoAccumulatedPoints.value = 1
     }
 
     abstract fun startGame(players: List<String>)
@@ -226,7 +226,7 @@ abstract class TrucoViewModel(
         _currentRound.value = 1
         envidoDisabledForHand = false
         _myCards.value = myCards
-        _trucoAccumulatedPoints.value = 0
+        _trucoAccumulatedPoints.value = 1
     }
 
     private fun canAnswer(otherPlayer: TeamPlayer): Boolean =
