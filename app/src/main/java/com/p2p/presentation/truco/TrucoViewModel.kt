@@ -109,6 +109,13 @@ abstract class TrucoViewModel(
     private val playedCards: MutableList<MutableList<PlayedCard>> = mutableListOf(mutableListOf())
     private val currentHandWinners: MutableList<TeamPlayer?> = mutableListOf()
 
+    private var hasAlreadyDispatchedNewHand = false
+    private var isAbleToReadMessagesBecauseNewHand = false
+    private var newHandPendingMessagesReceived: List<Conversation> = emptyList()
+
+    private var isAbleToReadMessagesBecauseBackground = true
+    private var backgroundPendingMessagesReceived: List<Conversation> = emptyList()
+
     init {
         _ourScore.value = 0
         _theirScore.value = 0
@@ -126,6 +133,15 @@ abstract class TrucoViewModel(
         dispatchSingleTimeEvent(TrucoGoToBuildTeams)
     }
 
+    fun onStart() {
+        backgroundPendingMessagesReceived.forEach { acceptMessage(it, isAbleToReadMessagesBecauseBackground = true) }
+        backgroundPendingMessagesReceived = emptyList()
+        isAbleToReadMessagesBecauseBackground = true
+    }
+
+    fun onStop() {
+        isAbleToReadMessagesBecauseBackground = false
+    }
 
     /** This will only be used by the server */
     open fun handOutCards() {}
@@ -133,6 +149,21 @@ abstract class TrucoViewModel(
     @CallSuper
     override fun receiveMessage(conversation: Conversation) {
         super.receiveMessage(conversation)
+        acceptMessage(conversation)
+    }
+
+    private fun acceptMessage(
+        conversation: Conversation,
+        isAbleToReadMessagesBecauseNewHand: Boolean = this.isAbleToReadMessagesBecauseNewHand,
+        isAbleToReadMessagesBecauseBackground: Boolean = this.isAbleToReadMessagesBecauseBackground
+    ) {
+        if (!isAbleToReadMessagesBecauseNewHand) {
+            newHandPendingMessagesReceived = newHandPendingMessagesReceived + conversation
+            return
+        } else if (!isAbleToReadMessagesBecauseBackground) {
+            backgroundPendingMessagesReceived = backgroundPendingMessagesReceived + conversation
+            return
+        }
         when (val message = conversation.lastMessage) {
             is TrucoActionMessage -> {
                 disableButtonsIfApplies(
@@ -160,7 +191,7 @@ abstract class TrucoViewModel(
         val nextTrucoAction = _lastTrucoAction.value?.nextAction()
             ?: Truco(
                 envidoGoesFirstAllowed = currentRound.requireValue() == 1 &&
-                previousActions.none { it is EnvidoGameAction }
+                        previousActions.none { it is EnvidoGameAction }
             )
         performAction(nextTrucoAction)
     }
@@ -191,7 +222,12 @@ abstract class TrucoViewModel(
         performAction(action)
     }
 
-    fun onMyCardsLoad() = nextTurn(firstHandPlayer)
+    fun onMyCardsLoad() {
+        nextTurn(firstHandPlayer)
+        newHandPendingMessagesReceived.forEach { acceptMessage(it, isAbleToReadMessagesBecauseNewHand = true) }
+        newHandPendingMessagesReceived = emptyList()
+        isAbleToReadMessagesBecauseNewHand = hasAlreadyDispatchedNewHand
+    }
 
     private fun performOrReplyAction(isReply: Boolean, action: TrucoAction) {
         if (isReply)
@@ -213,20 +249,24 @@ abstract class TrucoViewModel(
         }
     }
 
-    protected fun newHand(myCards: List<Card>) = viewModelScope.launch(Dispatchers.Main) {
-        withContext(Dispatchers.Default) { delay(NEW_HAND_DELAY_TIME_MS) }
-        dispatchSingleTimeEvent(TrucoNewHand)
-        cleanActionValues()
-        currentHandWinners.clear()
-        playedCards.clear()
-        playedCards.add(mutableListOf())
-        _lastTrucoAction.value = null
-        _envidoButtonEnabled.value = true
-        _trucoButtonEnabled.value = true
-        _currentRound.value = 1
-        envidoDisabledForHand = false
-        _myCards.value = myCards
-        _trucoAccumulatedPoints.value = 1
+    protected fun newHand(myCards: List<Card>) {
+        isAbleToReadMessagesBecauseNewHand = false
+        viewModelScope.launch(Dispatchers.Main) {
+            withContext(Dispatchers.Default) { delay(NEW_HAND_DELAY_TIME_MS) }
+            hasAlreadyDispatchedNewHand = true
+            dispatchSingleTimeEvent(TrucoNewHand)
+            cleanActionValues()
+            currentHandWinners.clear()
+            playedCards.clear()
+            playedCards.add(mutableListOf())
+            _lastTrucoAction.value = null
+            _envidoButtonEnabled.value = true
+            _trucoButtonEnabled.value = true
+            _currentRound.value = 1
+            envidoDisabledForHand = false
+            _myCards.value = myCards
+            _trucoAccumulatedPoints.value = 1
+        }
     }
 
     private fun canAnswer(otherPlayer: TeamPlayer): Boolean =
@@ -400,10 +440,9 @@ abstract class TrucoViewModel(
         val roundWinner = getRoundWinnerTeamPlayer(currentRoundPlayedCards)?.team
         val hasLostCurrentRound = roundWinner != null && roundWinner != teamWithRoundFinished
         val hasTieCurrentRound = roundWinner == null
-        val hasWonAnyRound = currentHandWinners.any { it?.team == teamWithRoundFinished }
         val hasLostAnyRound =
             currentHandWinners.any { it != null && it.team != teamWithRoundFinished }
-        return (hasLostCurrentRound && !hasWonAnyRound) || (hasTieCurrentRound && hasLostAnyRound)
+        return (hasLostCurrentRound && (hasLostAnyRound || isLastRound())) || (hasTieCurrentRound && hasLostAnyRound)
     }
 
     private fun hasCurrentHandFinished(): Boolean {
@@ -538,9 +577,10 @@ abstract class TrucoViewModel(
         }
     }
 
+    private fun isLastRound() = currentRound.requireValue() == MAX_HAND_ROUNDS
+
     // unused
     override fun startGame() {
-
     }
 
     companion object {
