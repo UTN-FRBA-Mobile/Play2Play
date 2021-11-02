@@ -132,11 +132,8 @@ class TrucoPlayFor4Fragment : TrucoFragment<FragmentPlayTrucoFor4Binding>() {
     }
 
     private fun setHandPlayerIcon(handPlayerIcon: ImageView?) {
-        gameBinding.frontPlayerHand.visibility = View.INVISIBLE
-        gameBinding.leftPlayerHand.visibility = View.INVISIBLE
-        gameBinding.rightPlayerHand.visibility = View.INVISIBLE
-        if (handPlayerIcon != null) {
-            handPlayerIcon.visibility = View.VISIBLE
+        listOf(gameBinding.frontPlayerHand, gameBinding.leftPlayerHand, gameBinding.rightPlayerHand).forEach {
+            is.isVisible = it == handPlayerIcon
         }
     }
 
