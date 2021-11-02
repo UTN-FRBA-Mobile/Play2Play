@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/error_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorBackground"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:paddingHorizontal="@dimen/screen_padding">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/error_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/screen_padding">
 
     <include layout="@layout/view_guidelines" />
 
@@ -24,7 +23,9 @@
         style="@style/P2P_Title_Extra"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginTop="@dimen/medium"
+        android:gravity="center"
         android:textColor="@color/coral"
         tools:text="BALLENA" />
 
@@ -41,7 +42,9 @@
         style="@style/P2P_Title_Extra"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginTop="@dimen/medium"
+        android:gravity="center"
         android:textColor="@color/colorSecondary"
         tools:text="ANIMALES" />
 
@@ -59,7 +62,9 @@
         style="@style/P2P_Title_Extra"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginTop="@dimen/medium"
+        android:gravity="center"
         android:textColor="@color/colorPrimary"
         tools:text="DARDO" />
 
@@ -68,6 +73,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/largest"
-        android:text="@string/finish_game"/>
+        android:text="@string/finish_game" />
 
 </LinearLayout>
