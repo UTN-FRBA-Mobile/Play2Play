@@ -73,9 +73,8 @@ abstract class TrucoFragment<VB : ViewBinding> :
         observe(gameViewModel.theirScore) { updateScore(headerBinding.theirScore, it) }
         observe(gameViewModel.currentTurnPlayerPosition) { updateCurrentTurn(it) }
         observe(gameViewModel.trucoAccumulatedPoints) {
-            val pointsWord = if(it > 1) { POINTS_PLURAL } else { POINTS_SINGULAR }
             requireView().findViewById<TextView>(R.id.truco_points).text = resources
-                .getString(R.string.truco_accumulated_points, it, pointsWord)
+                .getQuantityString(R.plurals.truco_accumulated_points, it)
                 .fromHtml()
         }
     }
@@ -415,7 +414,5 @@ abstract class TrucoFragment<VB : ViewBinding> :
         private const val ACTION_BACKGROUND_FINAL_ALPHA = 0.5f
         private const val HIDE_ACTION_BUBBLES_DELAY = 3_000L
         private const val EARNED_POINTS_DELAY_MS = 3_000L
-        private const val POINTS_PLURAL = "puntos"
-        private const val POINTS_SINGULAR = "punto"
     }
 }

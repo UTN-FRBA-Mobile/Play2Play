@@ -147,6 +147,10 @@
     <string name="truco_go_to_deck_action">Me voy\nal mazo</string>
     <string name="truco_accumulated_points"><![CDATA[<font color=#FF8550>%d</font> %s en juego]]></string>
 
+    <plurals name="truco_accumulated_points">
+        <item quantity="one"><![CDATA[<font color=#FF8550>%d</font> punto en juego]]></item>
+        <item quantity="other"><![CDATA[<font color=#FF8550>%d</font> puntos en juego]]></item>
+    </plurals>
 
     <!-- Truco final score -->
     <string name="tr_final_score_other_team">Ellxs</string>
