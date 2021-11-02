@@ -99,7 +99,7 @@ abstract class TrucoViewModel(
     private val _currentHandPlayerPosition = MutableLiveData<TrucoPlayerPosition>()
     val currentHandPlayerPosition: LiveData<TrucoPlayerPosition> = _currentHandPlayerPosition
 
-    protected lateinit var firstHandPlayer: TeamPlayer
+    private lateinit var firstHandPlayer: TeamPlayer
 
     private lateinit var currentTurnPlayer: TeamPlayer
 
@@ -268,6 +268,11 @@ abstract class TrucoViewModel(
         }
     }
 
+    protected fun setHandPlayer(teamPlayer: TeamPlayer) {
+        firstHandPlayer = teamPlayer
+        _currentHandPlayerPosition.value = TrucoPlayerPosition.get(teamPlayer, teamPlayers, myTeamPlayer)
+    }
+
     private fun canAnswer(otherPlayer: TeamPlayer): Boolean =
         teamPlayers.last { it.team != otherPlayer.team } == myTeamPlayer
 
@@ -378,8 +383,7 @@ abstract class TrucoViewModel(
         val hasFinished = updateScore(handWinnerPlayerTeam)
         if (!hasFinished) {
             val nextHandIndex = (teamPlayers.indexOf(firstHandPlayer) + 1)
-            firstHandPlayer = teamPlayers[nextHandIndex % totalPlayers.requireValue()]
-            _currentHandPlayerPosition.value = TrucoPlayerPosition.get(firstHandPlayer, teamPlayers, myTeamPlayer)
+            setHandPlayer(teamPlayers[nextHandIndex % totalPlayers.requireValue()])
             handOutCards()
         }
     }

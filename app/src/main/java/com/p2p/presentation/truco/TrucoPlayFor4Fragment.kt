@@ -32,6 +32,7 @@ class TrucoPlayFor4Fragment : TrucoFragment<FragmentPlayTrucoFor4Binding>() {
     private lateinit var leftPlayerDroppingPlacesViews: List<View>
     private lateinit var rightPlayerCardViews: List<ImageView>
     private lateinit var rightPlayerDroppingPlacesViews: List<View>
+    private lateinit var playerHandIcons: List<View>
 
     override fun initUI() = with(gameBinding) {
         frontPlayerCardViews = listOf(frontPlayerLeftCard, frontPlayerMiddleCard, frontPlayerRightCard)
@@ -43,6 +44,7 @@ class TrucoPlayFor4Fragment : TrucoFragment<FragmentPlayTrucoFor4Binding>() {
         rightPlayerCardViews = listOf(rightPlayerLeftCard, rightPlayerMiddleCard, rightPlayerRightCard)
         rightPlayerDroppingPlacesViews =
             listOf(dropRightPlayerFirstCard, dropRightPlayerSecondCard, dropRightPlayerThirdCard)
+        playerHandIcons = listOf(frontPlayerHand, leftPlayerHand, rightPlayerHand)
         super.initUI()
     }
 
@@ -133,9 +135,7 @@ class TrucoPlayFor4Fragment : TrucoFragment<FragmentPlayTrucoFor4Binding>() {
     }
 
     private fun setHandPlayerIcon(handPlayerIcon: ImageView?) {
-        listOf(gameBinding.frontPlayerHand, gameBinding.leftPlayerHand, gameBinding.rightPlayerHand).forEach {
-            it.isVisible = it == handPlayerIcon
-        }
+        playerHandIcons.forEach { it.isVisible = it == handPlayerIcon }
     }
 
     companion object {
