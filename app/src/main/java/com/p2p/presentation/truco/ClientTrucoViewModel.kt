@@ -63,7 +63,7 @@ class ClientTrucoViewModel(
         setPlayers(teamPlayers)
         setTotalPlayers(totalPlayers)
         setTotalPoints(totalPoints)
-        this.handPlayer = handPlayer
+        setHandPlayer(handPlayer)
         startGame(emptyList())
     }
 

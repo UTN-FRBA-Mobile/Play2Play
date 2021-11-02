@@ -34,6 +34,17 @@
         tools:text="Dylan" />
 
     <ImageView
+        android:id="@+id/left_player_hand"
+        android:layout_width="@dimen/checkbox_icon_size"
+        android:layout_height="@dimen/checkbox_icon_size"
+        android:layout_marginStart="@dimen/medium"
+        android:layout_marginTop="@dimen/small"
+        android:src="@drawable/ic_hand_player"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/left_player_name" />
+
+    <ImageView
         android:id="@+id/left_player_right_card"
         android:layout_width="@dimen/truco_for_4_card_width"
         android:layout_height="@dimen/truco_for_4_card_height"
@@ -80,6 +91,17 @@
         tools:text="Flor" />
 
     <ImageView
+        android:id="@+id/front_player_hand"
+        android:layout_width="@dimen/checkbox_icon_size"
+        android:layout_height="@dimen/checkbox_icon_size"
+        android:layout_marginEnd="@dimen/medium"
+        android:layout_marginTop="@dimen/small"
+        android:src="@drawable/ic_hand_player"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/front_player_name" />
+
+    <ImageView
         android:id="@+id/front_player_right_card"
         android:layout_width="@dimen/truco_for_4_card_width"
         android:layout_height="@dimen/truco_for_4_card_height"
@@ -124,6 +146,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/table"
         tools:text="Vale" />
+
+    <ImageView
+        android:id="@+id/right_player_hand"
+        android:layout_width="@dimen/checkbox_icon_size"
+        android:layout_height="@dimen/checkbox_icon_size"
+        android:layout_marginEnd="@dimen/medium"
+        android:layout_marginBottom="@dimen/small"
+        android:src="@drawable/ic_hand_player"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/right_player_name" />
 
     <ImageView
         android:id="@+id/right_player_left_card"
