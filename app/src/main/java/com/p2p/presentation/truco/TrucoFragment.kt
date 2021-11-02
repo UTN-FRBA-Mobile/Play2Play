@@ -206,15 +206,27 @@ abstract class TrucoFragment<VB : ViewBinding> :
         actionsByPlayer: Map<TrucoPlayerPosition, TrucoAction>,
         onComplete: () -> Unit
     ) {
-        val actionsList = actionsByPlayer.toList()
-        actionsList.forEachIndexed { index, (position, action) ->
-            showPlayerAction(
-                position,
-                action,
-                canAnswer = false,
-                onComplete = onComplete.takeIf { index == actionsList.lastIndex } ?: {}
-            )
-        }
+        showOneOfManyActions(actionsByPlayer.toList(), onComplete)
+    }
+
+    private fun showOneOfManyActions(
+        actions: List<Pair<TrucoPlayerPosition, TrucoAction>>,
+        finalOnComplete: () -> Unit
+    ) {
+        val action = actions.first()
+        showPlayerAction(
+            action.first,
+            action.second,
+            canAnswer = false,
+            onComplete = {
+                val pendingActions = actions.drop(1)
+                if (pendingActions.isEmpty()) {
+                    finalOnComplete()
+                } else {
+                    showOneOfManyActions(pendingActions, finalOnComplete)
+                }
+            }
+        )
     }
 
     private fun showAction(
@@ -271,6 +283,7 @@ abstract class TrucoFragment<VB : ViewBinding> :
         onComplete: () -> Unit
     ) {
         hideTrucoActionsBottomSheet()
+        hideActions()
         bubbleText.text = action.message(requireContext())
         showBubbleView(bubbleBackground)
         showBubbleView(bubbleText)
