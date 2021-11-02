@@ -23,16 +23,6 @@
         app:layout_constraintBottom_toBottomOf="@id/table"
         app:layout_constraintTop_toTopOf="@id/table" />
 
-    <ImageView
-        android:id="@+id/left_player_hand"
-        android:layout_width="@dimen/checkbox_icon_size"
-        android:layout_height="@dimen/checkbox_icon_size"
-        android:layout_marginStart="@dimen/medium"
-        android:src="@drawable/ic_hand_player"
-        android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/table" />
-
     <TextView
         android:id="@+id/left_player_name"
         android:layout_width="wrap_content"
@@ -40,8 +30,19 @@
         android:layout_marginStart="@dimen/medium"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/table"
-        app:layout_constraintStart_toEndOf="@id/left_player_hand"
+        app:layout_constraintStart_toStartOf="parent"
         tools:text="Dylan" />
+
+    <ImageView
+        android:id="@+id/left_player_hand"
+        android:layout_width="@dimen/checkbox_icon_size"
+        android:layout_height="@dimen/checkbox_icon_size"
+        android:layout_marginStart="@dimen/medium"
+        android:layout_marginTop="@dimen/small"
+        android:src="@drawable/ic_hand_player"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/left_player_name" />
 
     <ImageView
         android:id="@+id/left_player_right_card"
@@ -79,16 +80,6 @@
         app:layout_constraintTop_toTopOf="@id/left_player_right_card"
         tools:ignore="ContentDescription" />
 
-    <ImageView
-        android:id="@+id/front_player_hand"
-        android:layout_width="@dimen/checkbox_icon_size"
-        android:layout_height="@dimen/checkbox_icon_size"
-        android:layout_marginEnd="@dimen/medium"
-        android:src="@drawable/ic_hand_player"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toStartOf="@id/front_player_name"
-        app:layout_constraintBottom_toTopOf="@id/table" />
-
     <TextView
         android:id="@+id/front_player_name"
         android:layout_width="wrap_content"
@@ -98,6 +89,17 @@
         app:layout_constraintBottom_toTopOf="@id/table"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="Flor" />
+
+    <ImageView
+        android:id="@+id/front_player_hand"
+        android:layout_width="@dimen/checkbox_icon_size"
+        android:layout_height="@dimen/checkbox_icon_size"
+        android:layout_marginEnd="@dimen/medium"
+        android:layout_marginTop="@dimen/small"
+        android:src="@drawable/ic_hand_player"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/front_player_name" />
 
     <ImageView
         android:id="@+id/front_player_right_card"
@@ -135,16 +137,6 @@
         app:layout_constraintTop_toTopOf="@id/front_player_right_card"
         tools:ignore="ContentDescription" />
 
-    <ImageView
-        android:id="@+id/right_player_hand"
-        android:layout_width="@dimen/checkbox_icon_size"
-        android:layout_height="@dimen/checkbox_icon_size"
-        android:layout_marginEnd="@dimen/medium"
-        android:src="@drawable/ic_hand_player"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toStartOf="@id/right_player_name"
-        app:layout_constraintTop_toBottomOf="@id/table" />
-
     <TextView
         android:id="@+id/right_player_name"
         android:layout_width="wrap_content"
@@ -152,8 +144,19 @@
         android:layout_marginEnd="@dimen/medium"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/right_player_hand"
+        app:layout_constraintTop_toBottomOf="@id/table"
         tools:text="Vale" />
+
+    <ImageView
+        android:id="@+id/right_player_hand"
+        android:layout_width="@dimen/checkbox_icon_size"
+        android:layout_height="@dimen/checkbox_icon_size"
+        android:layout_marginEnd="@dimen/medium"
+        android:layout_marginBottom="@dimen/small"
+        android:src="@drawable/ic_hand_player"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/right_player_name" />
 
     <ImageView
         android:id="@+id/right_player_left_card"
