@@ -10,43 +10,44 @@ enum class PlayersRecoverability {
 
     CANNOT_RECOVER {
 
-        override fun constructOnPlayerLostMessage(lostPlayers: List<String>) = GoodbyePlayerMessage(lostPlayers.last())
+        override fun constructOnPlayerLostMessage(lostPlayers: Set<String>) = GoodbyePlayerMessage(lostPlayers.last())
 
         override fun constructCantJoinToStartedGameMessage(
-            lostPlayers: List<String>
+            lostPlayers: Set<String>
         ) = CannotJoinToStartedGameMessage()
 
-        override fun shouldPauseGame(lostPlayers: List<String>) = false
+        override fun shouldPauseGame(lostPlayers: Set<String>) = false
 
-        override fun shouldResumeGame(lostPlayers: List<String>) = false
+        override fun shouldResumeGame(lostPlayers: Set<String>) = false
 
         override fun canJoinToStartedGame(
-            lostPlayers: List<String>,
+            lostPlayers: Set<String>,
             newPlayerName: String
         ) = false
     },
 
     MUST_BE_RECOVERED {
 
-        override fun constructOnPlayerLostMessage(lostPlayers: List<String>) = PauseGameMessage(lostPlayers)
+        override fun constructOnPlayerLostMessage(lostPlayers: Set<String>) =
+            PauseGameMessage(lostPlayers.toList())
 
         override fun constructCantJoinToStartedGameMessage(
-            lostPlayers: List<String>
-        ) = RejoinNameErrorMessage(lostPlayers)
+            lostPlayers: Set<String>
+        ) = RejoinNameErrorMessage(lostPlayers.toList())
 
-        override fun shouldPauseGame(lostPlayers: List<String>) = lostPlayers.isNotEmpty()
+        override fun shouldPauseGame(lostPlayers: Set<String>) = lostPlayers.isNotEmpty()
 
-        override fun shouldResumeGame(lostPlayers: List<String>) = lostPlayers.isEmpty()
+        override fun shouldResumeGame(lostPlayers: Set<String>) = lostPlayers.isEmpty()
 
         override fun canJoinToStartedGame(
-            lostPlayers: List<String>,
+            lostPlayers: Set<String>,
             newPlayerName: String
         ) = newPlayerName in lostPlayers
     };
 
-    abstract fun constructOnPlayerLostMessage(lostPlayers: List<String>): Message
-    abstract fun constructCantJoinToStartedGameMessage(lostPlayers: List<String>): Message
-    abstract fun shouldPauseGame(lostPlayers: List<String>): Boolean
-    abstract fun shouldResumeGame(lostPlayers: List<String>): Boolean
-    abstract fun canJoinToStartedGame(lostPlayers: List<String>, newPlayerName: String): Boolean
+    abstract fun constructOnPlayerLostMessage(lostPlayers: Set<String>): Message
+    abstract fun constructCantJoinToStartedGameMessage(lostPlayers: Set<String>): Message
+    abstract fun shouldPauseGame(lostPlayers: Set<String>): Boolean
+    abstract fun shouldResumeGame(lostPlayers: Set<String>): Boolean
+    abstract fun canJoinToStartedGame(lostPlayers: Set<String>, newPlayerName: String): Boolean
 }

@@ -199,7 +199,7 @@ abstract class GameActivity<E : SpecificGameEvent, VM : GameViewModel> :
 
     private fun pauseGame(lostPlayers: List<String>) {
         val lastLostPlayer = lostPlayers.last()
-        val lostPlayersButLast = lostPlayers.dropLast(1).takeIf { it.size > 1 }?.joinToString(", ")
+        val lostPlayersButLast = lostPlayers.dropLast(1).takeIf { it.isNotEmpty() }?.joinToString(", ")
         findViewById<TextView>(R.id.pause_text).text = resources.getQuantityString(
             R.plurals.games_paused,
             lostPlayers.size,

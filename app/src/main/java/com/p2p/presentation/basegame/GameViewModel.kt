@@ -56,7 +56,13 @@ abstract class GameViewModel(
             field = value
             _players.value = value.map { it.second }
         }
-    private var lostPlayers = emptyList<String>()
+    private var lostPlayers = emptySet<String>()
+        set(value) {
+            field = value
+            if (playersRecoverability.shouldPauseGame(lostPlayers)) {
+                dispatchSingleTimeEvent(PauseGame(value.toList()))
+            }
+        }
 
     private val _myDeviceName = MutableLiveData<String>()
     val myDeviceName: LiveData<String> = _myDeviceName
@@ -101,11 +107,16 @@ abstract class GameViewModel(
             })
             is ServerHandshakeMessage -> {
                 connectedPlayers = message.players.map { conversation.peer to it }
+                lostPlayers = lostPlayers
+                    .filterNot { lost -> connectedPlayers.any { (_, connected) -> lost == connected } }
+                    .toSet()
             }
             is GoodbyePlayerMessage -> {
                 connectedPlayers.firstOrNull { it.second == message.name }?.let { removePlayer(it) }
             }
-            is PauseGameMessage -> dispatchSingleTimeEvent(PauseGame(lostPlayers))
+            is PauseGameMessage -> {
+                lostPlayers = message.lostPlayers.toSet()
+            }
         }
     }
 
@@ -159,9 +170,6 @@ abstract class GameViewModel(
         lostPlayers = lostPlayers + playerLost.second
         connection.write(playersRecoverability.constructOnPlayerLostMessage(lostPlayers))
         removePlayer(playerLost)
-        if (playersRecoverability.shouldPauseGame(lostPlayers)) {
-            dispatchSingleTimeEvent(PauseGame(lostPlayers))
-        }
     }
 
     @CallSuper

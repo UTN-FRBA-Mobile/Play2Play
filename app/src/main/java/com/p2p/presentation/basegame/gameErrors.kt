@@ -38,7 +38,7 @@ class RejoinNameError(availableNames: List<String>, onOkClicked: () -> Unit) : G
     R.string.error_rejoin_name,
     android.R.string.ok,
     onOkClicked,
-    listOf(availableNames.joinToString("", "\n- ", "."))
+    listOf(availableNames.joinToString(".\n- ", "\n- ", "."))
 )
 
 class ServerConnectionLostError(onOkClicked: () -> Unit) : GameError(
