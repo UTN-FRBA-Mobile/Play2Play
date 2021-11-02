@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import com.p2p.R
 import com.p2p.databinding.FragmentPlayTrucoFor4Binding
@@ -133,7 +134,7 @@ class TrucoPlayFor4Fragment : TrucoFragment<FragmentPlayTrucoFor4Binding>() {
 
     private fun setHandPlayerIcon(handPlayerIcon: ImageView?) {
         listOf(gameBinding.frontPlayerHand, gameBinding.leftPlayerHand, gameBinding.rightPlayerHand).forEach {
-            is.isVisible = it == handPlayerIcon
+            it.isVisible = it == handPlayerIcon
         }
     }
 
