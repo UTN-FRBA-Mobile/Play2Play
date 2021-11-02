@@ -17,6 +17,7 @@ import java.io.Serializable
     JsonSubTypes.Type(value = ClientHandshakeMessage::class),
     JsonSubTypes.Type(value = ServerHandshakeMessage::class),
     JsonSubTypes.Type(value = NameInUseMessage::class),
+    JsonSubTypes.Type(value = WrongGameJoinedMessage::class),
     JsonSubTypes.Type(value = RoomIsAlreadyFullMessage::class),
     JsonSubTypes.Type(value = CannotJoinToStartedGameMessage::class),
     JsonSubTypes.Type(value = RejoinNameErrorMessage::class),
