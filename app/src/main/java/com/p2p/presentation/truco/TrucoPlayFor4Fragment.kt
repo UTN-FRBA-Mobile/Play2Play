@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import com.p2p.R
 import com.p2p.databinding.FragmentPlayTrucoFor4Binding
@@ -31,6 +32,7 @@ class TrucoPlayFor4Fragment : TrucoFragment<FragmentPlayTrucoFor4Binding>() {
     private lateinit var leftPlayerDroppingPlacesViews: List<View>
     private lateinit var rightPlayerCardViews: List<ImageView>
     private lateinit var rightPlayerDroppingPlacesViews: List<View>
+    private lateinit var playerHandIcons: List<View>
 
     override fun initUI() = with(gameBinding) {
         frontPlayerCardViews = listOf(frontPlayerLeftCard, frontPlayerMiddleCard, frontPlayerRightCard)
@@ -42,6 +44,7 @@ class TrucoPlayFor4Fragment : TrucoFragment<FragmentPlayTrucoFor4Binding>() {
         rightPlayerCardViews = listOf(rightPlayerLeftCard, rightPlayerMiddleCard, rightPlayerRightCard)
         rightPlayerDroppingPlacesViews =
             listOf(dropRightPlayerFirstCard, dropRightPlayerSecondCard, dropRightPlayerThirdCard)
+        playerHandIcons = listOf(frontPlayerHand, leftPlayerHand, rightPlayerHand)
         super.initUI()
     }
 
@@ -49,6 +52,9 @@ class TrucoPlayFor4Fragment : TrucoFragment<FragmentPlayTrucoFor4Binding>() {
         super.setupObservers()
         observe(gameViewModel.playersPositions) {
             it.forEach { (position, name) -> getPlayerNameTextView(position)?.text = name }
+        }
+        observe(gameViewModel.currentHandPlayerPosition) {
+            setHandPlayerIcon(getHandPlayerIcon(it))
         }
     }
 
@@ -119,6 +125,17 @@ class TrucoPlayFor4Fragment : TrucoFragment<FragmentPlayTrucoFor4Binding>() {
             val color = if (it == playerPosition) R.color.colorPrimary else R.color.colorText
             getPlayerNameTextView(it)?.setTextColor(ContextCompat.getColor(requireContext(), color))
         }
+    }
+
+    private fun getHandPlayerIcon(playerPosition: TrucoPlayerPosition) = when (playerPosition) {
+        TrucoPlayerPosition.FRONT -> gameBinding.frontPlayerHand
+        TrucoPlayerPosition.LEFT -> gameBinding.leftPlayerHand
+        TrucoPlayerPosition.RIGHT -> gameBinding.rightPlayerHand
+        TrucoPlayerPosition.MY_SELF -> null
+    }
+
+    private fun setHandPlayerIcon(handPlayerIcon: ImageView?) {
+        playerHandIcons.forEach { it.isVisible = it == handPlayerIcon }
     }
 
     companion object {
