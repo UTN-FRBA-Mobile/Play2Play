@@ -74,7 +74,7 @@ abstract class TrucoFragment<VB : ViewBinding> :
         observe(gameViewModel.currentTurnPlayerPosition) { updateCurrentTurn(it) }
         observe(gameViewModel.trucoAccumulatedPoints) {
             requireView().findViewById<TextView>(R.id.truco_points).text = resources
-                .getQuantityString(R.plurals.truco_accumulated_points, it)
+                .getQuantityString(R.plurals.truco_accumulated_points, it, it)
                 .fromHtml()
         }
     }
