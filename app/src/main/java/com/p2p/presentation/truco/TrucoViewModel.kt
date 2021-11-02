@@ -315,7 +315,7 @@ abstract class TrucoViewModel(
     private fun updateTrucoAccumulatedPoints(action: TrucoAction, actionPoints: Int) {
         when(action) {
             is Truco, is Retruco, is ValeCuatro -> {
-                _trucoAccumulatedPoints.value = trucoAccumulatedPoints.requireValue() + actionPoints
+                _trucoAccumulatedPoints.value = actionPoints
             }
         }
     }
