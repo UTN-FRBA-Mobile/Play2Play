@@ -40,6 +40,13 @@ class RejoinNameError(availableNames: List<String>, onOkClicked: () -> Unit) : G
     onOkClicked,
     listOf(availableNames.joinToString("", "\n- ", "."))
 )
+    
+class WrongJoinedGameError(onOkClicked: () -> Unit) : GameError(
+    R.drawable.ic_info,
+    R.string.error_joined_game,
+    android.R.string.ok,
+    onOkClicked
+)
 
 class ServerConnectionLostError(onOkClicked: () -> Unit) : GameError(
     R.drawable.ic_no_cell,

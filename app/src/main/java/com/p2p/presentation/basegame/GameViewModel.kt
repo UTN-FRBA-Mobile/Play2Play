@@ -28,7 +28,7 @@ abstract class GameViewModel(
     private val bluetoothConnectionCreator: BluetoothConnectionCreator,
     private val instructionsRepository: InstructionsRepository,
     protected val loadingTextRepository: LoadingTextRepository,
-    theGame: Game
+    val theGame: Game
 ) : BaseViewModel<GameEvent>() {
 
     protected open val maxPlayersOnRoom: Int = Int.MAX_VALUE
@@ -99,6 +99,9 @@ abstract class GameViewModel(
             is RejoinNameErrorMessage -> dispatchErrorScreen(RejoinNameError(message.availableNames) {
                 dispatchSingleTimeEvent(KillGame)
             })
+            is WrongGameJoinedMessage -> dispatchErrorScreen(WrongJoinedGameError {
+                dispatchSingleTimeEvent(KillGame)
+            })
             is ServerHandshakeMessage -> {
                 connectedPlayers = message.players.map { conversation.peer to it }
             }
@@ -141,7 +144,7 @@ abstract class GameViewModel(
 
     /** Invoked when the client connection to the server was established successfully. */
     @CallSuper
-    open fun onClientConnectionSuccess() = connection.write(ClientHandshakeMessage(userName))
+    open fun onClientConnectionSuccess() = connection.write(ClientHandshakeMessage(userName, theGame.id))
 
     /** Invoked when there was an error while trying to connect the client with the server. */
     @CallSuper
@@ -254,6 +257,10 @@ abstract class GameViewModel(
                 }
                 connectedPlayers.size >= maxPlayersOnRoom -> {
                     connection.talk(conversation, RoomIsAlreadyFullMessage())
+                    false
+                }
+                message.joinedGame != theGame.id -> {
+                    connection.talk(conversation, WrongGameJoinedMessage())
                     false
                 }
                 gameAlreadyStarted && !playersRecoverability.canJoinToStartedGame(lostPlayers, message.name) -> {
