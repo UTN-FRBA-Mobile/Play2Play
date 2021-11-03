@@ -13,7 +13,6 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.viewbinding.ViewBinding
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.p2p.R
 import com.p2p.databinding.ViewTrucoEarnedPointsBinding
 import com.p2p.databinding.ViewTrucoHeaderBinding
@@ -21,6 +20,7 @@ import com.p2p.model.truco.Card
 import com.p2p.presentation.base.NoViewModel
 import com.p2p.presentation.basegame.BaseGameFragment
 import com.p2p.presentation.basegame.GameEvent
+import com.p2p.presentation.basegame.PauseGame
 import com.p2p.presentation.extensions.animateBackgroundTint
 import com.p2p.presentation.extensions.fadeIn
 import com.p2p.presentation.extensions.fadeOut
@@ -145,7 +145,10 @@ abstract class TrucoFragment<VB : ViewBinding> :
             event.onComplete
         )
         TrucoTakeTurnEvent -> takeTurn()
-        else -> super.onEvent(event)
+        else -> {
+            if (event is PauseGame) deleteTrucoActionsBottomSheet()
+            super.onEvent(event)
+        }
     }
 
     private fun newHand() {
@@ -206,15 +209,27 @@ abstract class TrucoFragment<VB : ViewBinding> :
         actionsByPlayer: Map<TrucoPlayerPosition, TrucoAction>,
         onComplete: () -> Unit
     ) {
-        val actionsList = actionsByPlayer.toList()
-        actionsList.forEachIndexed { index, (position, action) ->
-            showPlayerAction(
-                position,
-                action,
-                canAnswer = false,
-                onComplete = onComplete.takeIf { index == actionsList.lastIndex } ?: {}
-            )
-        }
+        showOneOfManyActions(actionsByPlayer.toList(), onComplete)
+    }
+
+    private fun showOneOfManyActions(
+        actions: List<Pair<TrucoPlayerPosition, TrucoAction>>,
+        finalOnComplete: () -> Unit
+    ) {
+        val action = actions.first()
+        showPlayerAction(
+            action.first,
+            action.second,
+            canAnswer = false,
+            onComplete = {
+                val pendingActions = actions.drop(1)
+                if (pendingActions.isEmpty()) {
+                    finalOnComplete()
+                } else {
+                    showOneOfManyActions(pendingActions, finalOnComplete)
+                }
+            }
+        )
     }
 
     private fun showAction(
@@ -271,6 +286,7 @@ abstract class TrucoFragment<VB : ViewBinding> :
         onComplete: () -> Unit
     ) {
         hideTrucoActionsBottomSheet()
+        hideActions()
         bubbleText.text = action.message(requireContext())
         showBubbleView(bubbleBackground)
         showBubbleView(bubbleText)
@@ -293,7 +309,9 @@ abstract class TrucoFragment<VB : ViewBinding> :
     }
 
     private fun deleteTrucoActionsBottomSheet() {
-        (parentFragmentManager.findFragmentByTag(ACTIONS_BOTTOM_SHEET_TAG) as BottomSheetDialogFragment?)?.dismiss()
+        (parentFragmentManager.findFragmentByTag(ACTIONS_BOTTOM_SHEET_TAG) as TrucoActionsBottomSheetFragment?)?.run {
+            isVisible(false) { dismiss() }
+        }
     }
 
     private fun hideTrucoActionsBottomSheet() {
