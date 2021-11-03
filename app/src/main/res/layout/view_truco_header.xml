@@ -5,6 +5,8 @@
     tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout"
     tools:showIn="@layout/fragment_play_truco_for_2">
 
+    <include layout="@layout/view_guidelines" />
+
     <View
         android:id="@+id/header_background"
         android:layout_width="0dp"
@@ -47,7 +49,8 @@
         android:background="@drawable/ic_circle"
         android:backgroundTint="@color/colorPrimary"
         android:elevation="@dimen/truco_round_circle_elevation"
-        app:layout_constraintBottom_toBottomOf="@id/header_background"
+        android:layout_marginTop="@dimen/medium"
+        app:layout_constraintBottom_toTopOf="@id/truco_points"
         app:layout_constraintEnd_toStartOf="@id/second_round"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toEndOf="@id/our_score_label"
@@ -79,6 +82,19 @@
         app:layout_constraintStart_toEndOf="@id/second_round"
         app:layout_constraintTop_toTopOf="@id/first_round"
         tools:backgroundTint="@color/colorSuccess" />
+
+    <TextView
+        android:id="@+id/truco_points"
+        style="@style/P2P_Description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="@dimen/cardview_default_elevation"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="@id/guideline_begin"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintTop_toBottomOf="@id/third_round"
+        app:layout_constraintBottom_toBottomOf="@id/header_background"
+        android:text="@plurals/truco_accumulated_points" />
 
     <TextView
         android:id="@+id/their_score_label"

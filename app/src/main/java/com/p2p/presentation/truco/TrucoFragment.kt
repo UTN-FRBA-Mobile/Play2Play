@@ -29,6 +29,7 @@ import com.p2p.presentation.truco.actions.TrucoActionAvailableResponses
 import com.p2p.presentation.truco.actions.TrucoActionsBottomSheetFragment
 import com.p2p.presentation.truco.cards.CardImageCreator
 import com.p2p.presentation.truco.cards.TrucoCardsHand
+import com.p2p.utils.fromHtml
 import com.p2p.utils.setOnEndListener
 
 abstract class TrucoFragment<VB : ViewBinding> :
@@ -71,6 +72,11 @@ abstract class TrucoFragment<VB : ViewBinding> :
         observe(gameViewModel.ourScore) { updateScore(headerBinding.ourScore, it) }
         observe(gameViewModel.theirScore) { updateScore(headerBinding.theirScore, it) }
         observe(gameViewModel.currentTurnPlayerPosition) { updateCurrentTurn(it) }
+        observe(gameViewModel.trucoAccumulatedPoints) {
+            requireView().findViewById<TextView>(R.id.truco_points).text = resources
+                .getQuantityString(R.plurals.truco_accumulated_points, it, it)
+                .fromHtml()
+        }
     }
 
     override fun initUI() = with(requireView()) {
