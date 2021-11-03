@@ -301,12 +301,7 @@ abstract class TrucoViewModel(
                 updateTrucoAccumulatedPoints(lastAction, actionPoints)
 
             }
-            is NoIDont -> {
-                val lastAction = previousActions.last()
-                val actionPoints = lastAction.noPoints
-                currentActionPoints = actionPoints
-                updateTrucoAccumulatedPoints(lastAction, actionPoints)
-            }
+            is NoIDont -> currentActionPoints = previousActions.last().noPoints
             is GoToDeck -> currentActionPoints = if(previousActions.isEmpty()) 2 else currentActionPoints
             else -> previousActions = previousActions + action
         }
