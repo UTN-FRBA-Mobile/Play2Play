@@ -99,11 +99,15 @@ abstract class TrucoViewModel(
     private val _playersPositions = MutableLiveData<List<Pair<TrucoPlayerPosition, String>>>()
     val playersPositions: LiveData<List<Pair<TrucoPlayerPosition, String>>> = _playersPositions
 
+    private val _trucoAccumulatedPoints = MutableLiveData<Int>()
+    val trucoAccumulatedPoints: LiveData<Int> = _trucoAccumulatedPoints
+
     private val _currentHandPlayerPosition = MutableLiveData<TrucoPlayerPosition>()
     val currentHandPlayerPosition: LiveData<TrucoPlayerPosition> = _currentHandPlayerPosition
-
+    
     protected lateinit var handPlayer: TeamPlayer
         private set
+
     private lateinit var currentTurnPlayer: TeamPlayer
 
     private var currentActionPoints: Int = 1
@@ -124,6 +128,7 @@ abstract class TrucoViewModel(
     init {
         _ourScore.value = 0
         _theirScore.value = 0
+        _trucoAccumulatedPoints.value = 1
     }
 
     abstract fun startGame(players: List<String>)
@@ -269,6 +274,7 @@ abstract class TrucoViewModel(
             _currentRound.value = 1
             envidoDisabledForHand = false
             _myCards.value = myCards
+            _trucoAccumulatedPoints.value = 1
             checkIfShouldResumeGame()
         }
     }
@@ -295,10 +301,24 @@ abstract class TrucoViewModel(
      */
     private fun updateActionValues(action: TrucoAction) {
         when (action) {
-            is YesIDo -> currentActionPoints = previousActions.last().yesPoints
+            is YesIDo -> {
+                val lastAction = previousActions.last()
+                val actionPoints = lastAction.yesPoints
+                currentActionPoints = actionPoints
+                updateTrucoAccumulatedPoints(lastAction, actionPoints)
+
+            }
             is NoIDont -> currentActionPoints = previousActions.last().noPoints
             is GoToDeck -> currentActionPoints = getGoToDeckPoints()
             else -> previousActions = previousActions + action
+        }
+    }
+
+    private fun updateTrucoAccumulatedPoints(action: TrucoAction, actionPoints: Int) {
+        when(action) {
+            is Truco, is Retruco, is ValeCuatro -> {
+                _trucoAccumulatedPoints.value = actionPoints
+            }
         }
     }
 
