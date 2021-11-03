@@ -65,6 +65,7 @@ class GamesAdapter(
             gameCardIcon.setBackgroundResource(game.iconRes)
             name.text = name.context.getText(game.nameRes)
             container.setOnClickListener {
+                if (buttons.isVisible) return@setOnClickListener
                 buttons.fadeIn()
                 buttons.postDelayed({ buttons.fadeOut() }, VISIBLE_BUTTONS_TIME)
             }

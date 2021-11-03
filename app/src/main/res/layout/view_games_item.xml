@@ -85,7 +85,6 @@
                 style="@style/Widget.P2P.Button.SecondOptionOutline"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/medium"
                 android:text="@string/games_join"
                 app:layout_constraintBottom_toTopOf="@id/create_button"
                 app:layout_constraintEnd_toEndOf="@id/create_button"
