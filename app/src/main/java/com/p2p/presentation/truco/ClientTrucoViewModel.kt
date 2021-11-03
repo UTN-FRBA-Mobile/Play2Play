@@ -6,8 +6,10 @@ import com.p2p.data.loadingMessages.LoadingTextRepository
 import com.p2p.data.userInfo.UserSession
 import com.p2p.model.base.message.Conversation
 import com.p2p.model.truco.PlayerWithCards
+import com.p2p.model.truco.TeamPlayer
 import com.p2p.model.truco.message.TrucoCardsMessage
 import com.p2p.model.truco.message.TrucoStartGameMessage
+import com.p2p.model.truco.message.TrucoWelcomeBack
 import com.p2p.presentation.basegame.ConnectionType
 
 class ClientTrucoViewModel(
@@ -27,14 +29,14 @@ class ClientTrucoViewModel(
     override fun receiveMessage(conversation: Conversation) {
         super.receiveMessage(conversation)
         when (val message = conversation.lastMessage) {
-            is TrucoStartGameMessage -> {
-                setPlayers(message.teamPlayers)
-                setTotalPlayers(message.totalPlayers)
-                setTotalPoints(message.totalPoints)
-                setHandPlayer(message.teamPlayers[0])
-                startGame(emptyList())
-            }
+            is TrucoStartGameMessage -> startGame(
+                message.teamPlayers,
+                message.totalPlayers,
+                message.totalPoints,
+                message.teamPlayers.first()
+            )
             is TrucoCardsMessage -> onReceiveCards(message.cardsForPlayers)
+            is TrucoWelcomeBack -> welcomeBack(message)
         }
     }
 
@@ -52,4 +54,22 @@ class ClientTrucoViewModel(
         _myCards.value = playersWithCards.first { it.name == userName }.cards
     }
 
+    private fun startGame(
+        teamPlayers: List<TeamPlayer>,
+        totalPlayers: Int,
+        totalPoints: Int,
+        handPlayer: TeamPlayer
+    ) {
+        setPlayers(teamPlayers)
+        setTotalPlayers(totalPlayers)
+        setTotalPoints(totalPoints)
+        setHandPlayer(handPlayer)
+        startGame(emptyList())
+    }
+
+    private fun welcomeBack(message: TrucoWelcomeBack) {
+        startGame(message.teamPlayers, message.totalPlayers, message.totalPoints, message.handPlayer)
+        _ourScore.value = message.scores.getValue(myTeamPlayer.team)
+        _theirScore.value = message.scores.getValue(rivalTeam)
+    }
 }

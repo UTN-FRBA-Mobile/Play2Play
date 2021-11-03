@@ -19,7 +19,7 @@ class TrucoActivity : GameActivity<TrucoSpecificGameEvent, TrucoViewModel>() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.onStart()
+        viewModel.onResume()
     }
 
     override fun onStop() {
@@ -35,7 +35,7 @@ class TrucoActivity : GameActivity<TrucoSpecificGameEvent, TrucoViewModel>() {
     override fun goToServerLobby() =
         addFragment(TrucoServerLobbyFragment.newInstance(), shouldAddToBackStack = false)
 
-    fun goToBuildTeams() =
+    private fun goToBuildTeams() =
         addFragment(TrucoBuildTeamsFragment.newInstance(), shouldAddToBackStack = false)
 
     override fun onGameEvent(event: TrucoSpecificGameEvent) {

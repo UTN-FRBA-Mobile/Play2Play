@@ -32,6 +32,7 @@ abstract class GameViewModel(
 ) : BaseViewModel<GameEvent>() {
 
     protected open val maxPlayersOnRoom: Int = Int.MAX_VALUE
+    protected open val playersRecoverability = PlayersRecoverability.CANNOT_RECOVER
 
     protected var gameAlreadyStarted = false
     protected var gameAlreadyFinished = false
@@ -54,6 +55,13 @@ abstract class GameViewModel(
         set(value) {
             field = value
             _players.value = value.map { it.second }
+        }
+    private var lostPlayers = emptySet<String>()
+        set(value) {
+            field = value
+            if (playersRecoverability.shouldPauseGame(lostPlayers)) {
+                dispatchSingleTimeEvent(PauseGame(value.toList()))
+            }
         }
 
     private val _myDeviceName = MutableLiveData<String>()
@@ -94,14 +102,23 @@ abstract class GameViewModel(
             is RoomIsAlreadyFullMessage -> dispatchErrorScreen(RoomIsAlreadyFullError {
                 dispatchSingleTimeEvent(KillGame)
             })
+            is RejoinNameErrorMessage -> dispatchErrorScreen(RejoinNameError(message.availableNames) {
+                dispatchSingleTimeEvent(KillGame)
+            })
             is WrongGameJoinedMessage -> dispatchErrorScreen(WrongJoinedGameError {
                 dispatchSingleTimeEvent(KillGame)
             })
             is ServerHandshakeMessage -> {
                 connectedPlayers = message.players.map { conversation.peer to it }
+                lostPlayers = lostPlayers
+                    .filterNot { lost -> connectedPlayers.any { (_, connected) -> lost == connected } }
+                    .toSet()
             }
             is GoodbyePlayerMessage -> {
                 connectedPlayers.firstOrNull { it.second == message.name }?.let { removePlayer(it) }
+            }
+            is PauseGameMessage -> {
+                lostPlayers = message.lostPlayers.toSet()
             }
         }
     }
@@ -153,7 +170,8 @@ abstract class GameViewModel(
     open fun onClientConnectionLost(peerId: Long) {
         if (gameAlreadyFinished) return
         val playerLost = connectedPlayers.firstOrNull { it.first == peerId } ?: return
-        connection.write(GoodbyePlayerMessage(playerLost.second))
+        lostPlayers = lostPlayers + playerLost.second
+        connection.write(playersRecoverability.constructOnPlayerLostMessage(lostPlayers))
         removePlayer(playerLost)
     }
 
@@ -233,20 +251,47 @@ abstract class GameViewModel(
         )
     }
 
-    private fun onClientHandshake(message: ClientHandshakeMessage, conversation: Conversation) {
+    /**
+     * Invoked when a client has joined to the room.
+     * Returns true if the client has joined successfully, false if there was an error.
+     */
+    @CallSuper
+    protected open fun onClientHandshake(message: ClientHandshakeMessage, conversation: Conversation): Boolean {
         if (isServer()) {
-            when {
-                connectedPlayers.any { it.second == message.name } ->
+            return when {
+                connectedPlayers.any { it.second == message.name } -> {
                     connection.talk(conversation, NameInUseMessage())
-                connectedPlayers.size >= maxPlayersOnRoom ->
+                    false
+                }
+                connectedPlayers.size >= maxPlayersOnRoom -> {
                     connection.talk(conversation, RoomIsAlreadyFullMessage())
-                message.joinedGame != theGame.id ->
+                    false
+                }
+                message.joinedGame != theGame.id -> {
                     connection.talk(conversation, WrongGameJoinedMessage())
+                    false
+                }
+                gameAlreadyStarted && !playersRecoverability.canJoinToStartedGame(lostPlayers, message.name) -> {
+                    connection.talk(
+                        conversation,
+                        playersRecoverability.constructCantJoinToStartedGameMessage(lostPlayers)
+                    )
+                    false
+                }
                 else -> {
                     connectedPlayers = connectedPlayers + (conversation.peer to message.name)
+                    lostPlayers = lostPlayers - message.name
                     connection.write(ServerHandshakeMessage(connectedPlayers.map { it.second }))
+                    true
                 }
             }
+        }
+        return false
+    }
+
+    protected fun checkIfShouldResumeGame() {
+        if (playersRecoverability.shouldResumeGame(lostPlayers)) {
+            dispatchSingleTimeEvent(ResumeGame)
         }
     }
 
