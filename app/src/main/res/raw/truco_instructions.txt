@@ -14,6 +14,7 @@ Otra forma de ganar puntos es cantando Envido. Este se juega en la primera ronda
 
 ¿Cómo se cuentan los tantos? Todas las cartas cuentan con un valor igual a su número (Salvo los dieces, onces y doces).
 Si se cuenta con dos o más cartas del mismo palo, se suman las dos de mayor valor. A ese resultado se le agregan 20 tantos.
+En caso de no contar dos cartas del mismo valor, el tanto será la carta de mayor valor.
 
 Por ejemplo:
 Si un jugador tiene
