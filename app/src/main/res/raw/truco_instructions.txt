@@ -14,6 +14,7 @@ Otra forma de ganar puntos es cantando Envido. Este se juega en la primera ronda
 
 ¿Cómo se cuentan los tantos? Todas las cartas cuentan con un valor igual a su número (Salvo los dieces, onces y doces).
 Si se cuenta con dos o más cartas del mismo palo, se suman las dos de mayor valor. A ese resultado se le agregan 20 tantos.
+En caso de no contar dos cartas del mismo valor, el tanto será la carta de mayor valor.
 
 Por ejemplo:
 Si un jugador tiene
@@ -26,9 +27,9 @@ Los tantos de envido de este jugador serán: 20 + 7 + 4 = 31 tantos
 El envido es acumulativo e incremental, por lo que un canto de envido puede ser respondido con envido o real envido. En cambio un real envido no puede ser respondido por un envido.
 
 Los puntos ganados por envido son los siguientes:
-Envido -> 2 puntos
-Real envido -> 3 puntos
-Falta envido -> Si ambos equipos tienen menos de 15 puntos, los puntos ganados serán 15 menos los puntos del ganador de ese momento. Si algún equipo tiene mas de 15 puntos, los puntos ganados serán 30 menos los puntos del ganador de ese momento.
+- Envido -> 2 puntos.
+- Real envido -> 3 puntos.
+- Falta envido -> Si ambos equipos tienen menos de 15 puntos, los puntos ganados serán 15 menos los puntos del ganador de ese momento. Si algún equipo tiene mas de 15 puntos, los puntos ganados serán 30 menos los puntos del ganador de ese momento.
 
 El orden de poder de las cartas es el siguiente:
 
