@@ -1,4 +1,4 @@
-Al inicio de la partida, todxs lxs jugadorxs reciben una palabra y una categoría, salvo uno (lx impostorx) que solo recibe la categoría
+Al inicio de la partida, todxs lxs jugadorxs reciben una palabra y una categoría, salvo unx (lx impostorx) que solo recibe la categoría
 
 Todxs lxs jugadorxs intercambian preguntas que puedan ser respondidas con "sí" o con "no", con el objetivo de encontrar a lx importorx. Puede comenzar preguntando cualquierx jugadorx.
 
