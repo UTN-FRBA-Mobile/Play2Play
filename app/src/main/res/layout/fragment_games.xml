@@ -49,10 +49,9 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/big"
-        android:layout_marginBottom="@dimen/large"
         android:orientation="vertical"
         android:requiresFadingEdge="vertical"
-        app:layout_constraintBottom_toTopOf="@id/create_button"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
         app:layout_constraintTop_toBottomOf="@id/text_field"
@@ -66,36 +65,7 @@
         android:contentDescription="@string/share"
         android:src="@drawable/ic_share"
         app:backgroundTint="@color/coral"
-        app:layout_constraintBottom_toTopOf="@id/bottom_background"
-        app:layout_constraintEnd_toStartOf="@id/guideline_end" />
-
-    <View
-        android:id="@+id/bottom_background"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@color/wild_sand"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/games_recycler" />
-
-    <Button
-        android:id="@+id/create_button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/games_create"
-        app:layout_constraintBottom_toTopOf="@id/join_button"
-        app:layout_constraintEnd_toEndOf="@id/guideline_end"
-        app:layout_constraintStart_toStartOf="@id/guideline_begin" />
-
-    <Button
-        android:id="@+id/join_button"
-        style="@style/Widget.P2P.Button.SecondOptionButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/games_join"
-        app:layout_constraintBottom_toBottomOf="@id/guideline_bottom"
-        app:layout_constraintEnd_toEndOf="@id/guideline_end"
-        app:layout_constraintStart_toStartOf="@id/guideline_begin" />
+        app:layout_constraintEnd_toStartOf="@id/guideline_end" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

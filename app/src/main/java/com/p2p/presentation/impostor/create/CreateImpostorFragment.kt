@@ -32,6 +32,7 @@ class CreateImpostorFragment : BaseGameFragment<
             val keyWord = gameBinding.keyWordField.value()
             viewModel.tryStartGame(keyWord, keyWordTheme)
         }
+        gameBinding.makeMeVisibleButton.setOnClickListener { gameViewModel.makeMeVisible() }
     }
 
     override fun setupObservers() {

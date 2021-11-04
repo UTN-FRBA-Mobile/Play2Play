@@ -185,6 +185,7 @@ abstract class GameViewModel(
 
     fun startConnection() {
         _connection = if (isServer()) {
+            bluetoothConnectionCreator.makeMeVisible()
             bluetoothConnectionCreator.createServer()
         } else {
             bluetoothConnectionCreator.createClient(requireNotNull(connectionType.device) {
@@ -192,6 +193,8 @@ abstract class GameViewModel(
             })
         }
     }
+
+    fun makeMeVisible() = bluetoothConnectionCreator.makeMeVisible()
 
     fun showInstructions() = dispatchSingleTimeEvent(OpenInstructions(instructions))
 

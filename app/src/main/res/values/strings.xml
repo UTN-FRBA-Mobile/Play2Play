@@ -25,7 +25,7 @@
     <!-- Games -->
     <string name="games_user_name">Tu nombre</string>
     <string name="games_join">Unirse</string>
-    <string name="games_create">Crear partida</string>
+    <string name="games_create">Crear sala</string>
     <plurals name="games_paused">
         <item quantity="one">El juego está pausado hasta que %s se vuelva a unir</item>
         <item quantity="other">El juego está pausado hasta que %s se vuelvan a unir</item>
@@ -75,6 +75,7 @@
     <string name="lobby_no_players_yet">Aún no hay jugadorxs…</string>
     <string name="lobby_waiting_players">Esperando jugadorxs</string>
     <string name="lobby_start_game">Comenzar juego</string>
+    <string name="lobby_make_me_visible">Hacerme visible para otros dispositivos bluetooth</string>
     <string name="lobby_build_teams">Armar equipos</string>
     <string name="tr_lobby_help_order_players"><![CDATA[Arrastrá lxs jugadorxs según la posición que vayan a ocupar en la mesa. Lx jugadorx en la posición <font color=#FFB349><b>marcada</b></font> será la mano.]]></string>
 

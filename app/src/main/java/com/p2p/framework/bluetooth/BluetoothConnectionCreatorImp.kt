@@ -5,7 +5,6 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.content.Intent
 import android.os.Handler
-import com.p2p.data.bluetooth.BluetoothConnection
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
 
 class BluetoothConnectionCreatorImp(
@@ -18,14 +17,15 @@ class BluetoothConnectionCreatorImp(
         DEFAULT_NAME
     }
 
-    override fun createServer(): BluetoothConnection {
+    override fun createServer() = BluetoothServer(handler)
+
+    override fun createClient(serverDevice: BluetoothDevice) = BluetoothClient(handler, serverDevice)
+
+    override fun makeMeVisible() {
         activity.startActivity(Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE).apply {
             putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, MAX_DISCOVERABLE_DURATION_SEC)
         })
-        return BluetoothServer(handler)
     }
-
-    override fun createClient(serverDevice: BluetoothDevice) = BluetoothClient(handler, serverDevice)
 
     companion object {
 

@@ -31,6 +31,7 @@ abstract class ServerLobbyFragment<GVM : GameViewModel> : BaseGameFragment<
         gameBinding.nextScreenButton.setOnClickListener {
             continueAction()
         }
+        gameBinding.makeMeVisibleButton.setOnClickListener { gameViewModel.makeMeVisible() }
         gameBinding.nextScreenButton.text = continueText
     }
 

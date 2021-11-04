@@ -55,4 +55,19 @@
         app:layout_constraintStart_toStartOf="@id/guideline_begin"
         app:layout_constraintTop_toBottomOf="@id/icon" />
 
+    <ProgressBar
+        android:id="@+id/loading"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/medium_extra"
+        android:layout_marginBottom="@dimen/medium_extra"
+        android:elevation="20dp"
+        android:indeterminateTint="@color/white_alpha_100"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/turn_on_button"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/turn_on_button" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

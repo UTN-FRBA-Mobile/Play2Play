@@ -309,7 +309,7 @@ abstract class TrucoViewModel(
 
             }
             is NoIDont -> currentActionPoints = previousActions.last().noPoints
-            is GoToDeck -> currentActionPoints = if (previousActions.isEmpty()) 2 else currentActionPoints
+            is GoToDeck -> currentActionPoints = getGoToDeckPoints()
             else -> previousActions = previousActions + action
         }
     }
@@ -588,6 +588,13 @@ abstract class TrucoViewModel(
     }
 
     private fun isLastRound() = currentRound.requireValue() == MAX_HAND_ROUNDS
+
+    private fun getGoToDeckPoints(): Int {
+        val didTheRivalHaveTheChanceToCallEnvido = previousActions.isEmpty() &&
+                currentRound.requireValue() == 1 &&
+                playedCards.last().size < totalPlayers.requireValue() - 1
+        return if (didTheRivalHaveTheChanceToCallEnvido) 2 else currentActionPoints
+    }
 
     // unused
     override fun startGame() {
