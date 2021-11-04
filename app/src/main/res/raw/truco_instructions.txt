@@ -11,7 +11,7 @@ La cantidad de puntos asignados al fin de la mano varían si se cantó truco pre
 - Vale cuatro -> 4 puntos
 
 Otra forma de ganar puntos es cantando Envido. Éste, se juega en la primera ronda de la mano y consiste en contar tantos según las cartas de un jugador. Todas las cartas cuentan con un valor igual a su número (Salvo los dieces, onces y doces).
-Si se cuenta con dos o mas cartas del mismo palo, se suman las dos de mayor valor. A ese resultado se le agregan 20 tantos.
+Si se cuenta con dos o más cartas del mismo palo, se suman las dos de mayor valor. A ese resultado se le agregan 20 tantos.
 
 Por ejemplo:
 Si un jugador tiene
