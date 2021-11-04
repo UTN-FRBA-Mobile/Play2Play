@@ -1,6 +1,6 @@
 Para iniciar el partido, lx creadorx seleccionará la cantidad de personas que van a jugar (2 o 4) y la cantidad de puntos de la partida (15 o 30). En el lobby, lx creadorx podrá seleccionar el orden de juego y los equipos.
 
-La dinamica del juego está determinada por manos. Previo a iniciar una mano, cada jugadorx recibe 3 cartas, siguiendo una ronda de juego (alternando lxs jugadorxs del equipo) para jugarlas. El primer equipo en ganar dos rondas, es lx ganadorx de la mano.
+La dinámica del juego está determinada por manos. Previo a iniciar una mano, cada jugadorx recibe 3 cartas, siguiendo una ronda de juego (alternando lxs jugadorxs del equipo) para jugarlas. El primer equipo en ganar dos rondas, es lx ganadorx de la mano.
 
 En caso de que la primera ronda no tenga ganador (empate o parda), el equipo vencedor de la ronda siguiente es considerado el ganador de la mano. Si el empate se produce en la segunda o tercera mano, el ganador de la mano es el que venció la ronda anterior.
 
