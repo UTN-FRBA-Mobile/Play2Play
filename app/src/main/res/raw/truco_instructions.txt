@@ -2,9 +2,11 @@ Para iniciar el partido, lx creadorx seleccionará la cantidad de personas que v
 
 La dinámica del juego está determinada por manos. Previo a iniciar una mano, cada jugadorx recibe 3 cartas, siguiendo una ronda de juego (alternando lxs jugadorxs del equipo) para jugarlas. El primer equipo en ganar dos rondas, es lx ganadorx de la mano.
 
-En caso de que la primera ronda no tenga ganador (empate o parda), el equipo vencedor de la ronda siguiente es considerado el ganador de la mano. En caso de empatar también la segunda se definirá en la tercera. Si todas las manos salen empatadas, el equipo ganador será el equipo de quien es mano. 
+En caso de que la primera ronda no tenga ganador (empate o parda), el equipo vencedor de la ronda siguiente es considerado el ganador de la mano. En caso de empatar también la segunda se definirá en la tercera. Si todas las rondas salen empatadas, el equipo ganador será el equipo de quien es la mano.
 
-En caso de que haya un empate en la segunda mano habiendo un ganador en la primera, este será el equipo ganador. En caso de haberlo en la tercera, habiendo ganado una mano cada equipo, el equipo ganador será el equipo de quien es mano. 
+En caso de que haya un empate en la segunda ronda habiendo un equipo ganador en la primera, este será el ganador. En caso de haberlo en la tercera, habiendo ganado una ronda cada equipo, el equipo ganador será el equipo de quien es la mano.
+
+Se le llama "Mano" a lx jugadorx que juega la primera carta.
 
 La cantidad de puntos asignados al fin de la mano varían si se cantó truco previamente. Los valores son los siguientes:
 - Sin truco -> 1 punto
