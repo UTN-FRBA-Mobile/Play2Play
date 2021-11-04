@@ -74,7 +74,7 @@ class GamesAdapter(
         }
     }
 
-    class Differ : DiffUtil.ItemCallback<Game>() {
+    private class Differ : DiffUtil.ItemCallback<Game>() {
 
         override fun areItemsTheSame(oldItem: Game, newItem: Game) = oldItem == newItem
 
