@@ -26,9 +26,9 @@ Los tantos de envido de este jugador serán: 20 + 7 + 4 = 31 tantos
 El envido es acumulativo e incremental, por lo que un canto de envido puede ser respondido con envido o real envido. En cambio un real envido no puede ser respondido por un envido.
 
 Los puntos ganados por envido son los siguientes:
-Envido -> 2 puntos
-Real envido -> 3 puntos
-Falta envido -> Si ambos equipos tienen menos de 15 puntos, los puntos ganados serán 15 menos los puntos del ganador de ese momento. Si algún equipo tiene mas de 15 puntos, los puntos ganados serán 30 menos los puntos del ganador de ese momento.
+- Envido -> 2 puntos.
+- Real envido -> 3 puntos.
+- Falta envido -> Si ambos equipos tienen menos de 15 puntos, los puntos ganados serán 15 menos los puntos del ganador de ese momento. Si algún equipo tiene mas de 15 puntos, los puntos ganados serán 30 menos los puntos del ganador de ese momento.
 
 El orden de poder de las cartas es el siguiente:
 
