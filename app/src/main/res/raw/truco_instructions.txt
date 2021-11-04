@@ -10,9 +10,17 @@ La cantidad de puntos asignados al fin de la mano varían si se cantó truco pre
 - Retruco -> 3 puntos
 - Vale cuatro -> 4 puntos
 
+
+Irse al mazo
+
+Si no te gustan tus chances, en cualquier momento de la mano podes irte al mazo. Se pierden dos puntos si te fuiste antes que tu rival pueda cantar "Envido". Caso contrario es solo un punto.
+
+
+Envido
+
 Otra forma de ganar puntos es cantando Envido. Este se juega en la primera ronda de la mano y consiste en contar tantos según las cartas de un jugador. 
 
-¿Cómo se cuentan los tantos? Todas las cartas cuentan con un valor igual a su número (Salvo los dieces, onces y doces).
+¿Cómo se cuentan los tantos? Todas las cartas cuentan con un valor igual a su número (Salvo los dieces, onces y doces que cuentan 0).
 Si se cuenta con dos o más cartas del mismo palo, se suman las dos de mayor valor. A ese resultado se le agregan 20 tantos.
 En caso de no contar dos cartas del mismo valor, el tanto será la carta de mayor valor.
 
@@ -30,6 +38,9 @@ Los puntos ganados por envido son los siguientes:
 - Envido -> 2 puntos.
 - Real envido -> 3 puntos.
 - Falta envido -> Si ambos equipos tienen menos de 15 puntos, los puntos ganados serán 15 menos los puntos del ganador de ese momento. Si algún equipo tiene mas de 15 puntos, los puntos ganados serán 30 menos los puntos del ganador de ese momento.
+
+
+Cartas
 
 El orden de poder de las cartas es el siguiente:
 
