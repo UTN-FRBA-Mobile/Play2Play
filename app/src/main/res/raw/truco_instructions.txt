@@ -4,11 +4,11 @@ La dinamica del juego está determinada por manos. Previo a iniciar una mano, ca
 
 En caso de que la primera ronda no tenga ganador (empate o parda), el equipo vencedor de la ronda siguiente es considerado el ganador de la mano. Si el empate se produce en la segunda o tercera mano, el ganador de la mano es el que venció la ronda anterior.
 
-La cantidad de puntos asignados al fin de la mano varían si se cantó truco previamente. Los valores son los siguientes
-Sin truco -> 1 punto
-Truco -> 2 puntos
-Retruco -> 3 puntos
-Vale cuatro -> 4 puntos.
+La cantidad de puntos asignados al fin de la mano varían si se cantó truco previamente. Los valores son los siguientes:
+- Sin truco -> 1 punto
+- Truco -> 2 puntos
+- Retruco -> 3 puntos
+- Vale cuatro -> 4 puntos
 
 Otra forma de ganar puntos es cantando Envido. Éste, se juega en la primera ronda de la mano y consiste en contar tantos según las cartas de un jugador. Todas las cartas cuentan con un valor igual a su número (Salvo los dieces, onces y doces).
 Si se cuenta con dos o mas cartas del mismo palo, se suman las dos de mayor valor. A ese resultado se le agregan 20 tantos.
