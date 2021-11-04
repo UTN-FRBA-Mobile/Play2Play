@@ -89,7 +89,7 @@ class GamesViewModel(
         userSession.saveUserName(name)
     }
 
-    enum class TurnOnBluetoothReason {
+    private enum class TurnOnBluetoothReason {
         JOIN,
         CREATE
     }
