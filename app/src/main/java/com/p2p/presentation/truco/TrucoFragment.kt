@@ -212,11 +212,9 @@ abstract class TrucoFragment<VB : ViewBinding> :
     }
 
     private fun showManyActions(
-        actionsByPlayer: Map<TrucoPlayerPosition, TrucoAction>,
+        actionsByPlayer: List<Pair<TrucoPlayerPosition, TrucoAction>>,
         onComplete: () -> Unit
-    ) {
-        showOneOfManyActions(actionsByPlayer.toList(), onComplete)
-    }
+    ) = showOneOfManyActions(actionsByPlayer, onComplete)
 
     private fun showOneOfManyActions(
         actions: List<Pair<TrucoPlayerPosition, TrucoAction>>,

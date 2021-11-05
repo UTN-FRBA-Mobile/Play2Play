@@ -23,7 +23,7 @@ open class TrucoShowActionEvent(
 ) : TrucoSpecificGameEvent()
 
 data class TrucoShowManyActionsEvent(
-    val actionByPlayer: Map<TrucoPlayerPosition, TrucoAction>,
+    val actionByPlayer: List<Pair<TrucoPlayerPosition, TrucoAction>>,
     val onComplete: () -> Unit
 ) : TrucoSpecificGameEvent()
 

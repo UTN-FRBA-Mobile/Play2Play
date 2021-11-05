@@ -7,10 +7,12 @@ import com.p2p.presentation.truco.actions.TrucoAction.ShowEnvidoPoints
 
 object EnvidoMessageCalculator {
 
-    fun envidoMessagesFor2(playersWithPoints: List<Pair<TeamPlayer, Int>>): Map<TeamPlayer, TrucoAction?> {
+    fun envidoMessagesFor2(
+        playersWithPoints: List<Pair<TeamPlayer, Int>>
+    ): List<Pair<TeamPlayer, TrucoAction?>> {
         val (firstPlayer, firstPlayerScore) = playersWithPoints.first()
         val (secondPlayer, secondPlayerScore) = playersWithPoints.last()
-        return mapOf(
+        return listOf(
             firstPlayer to showScore(firstPlayerScore),
             secondPlayer to
                     if (secondPlayerScore > firstPlayerScore) showAreBetter(secondPlayerScore)
@@ -19,49 +21,72 @@ object EnvidoMessageCalculator {
     }
 
     /***
-     * La lógica es:
-     * 1 -> muestra su puntaje
-    // 2 -> Si supera dice su puntaje (a) || o "Son buenas" (b)
-    //      (a) 3 -> Si supera dice su puntaje (cDONE) || o "Son buenas" (d)
-    //          (c) 4 -> Si supera dice su puntaje (e) || o "Son buenas" (f)
-    //          (d) 4 -> No dice nada (g)
-    //      (b) 4 -> Si supera dice su puntaje (h) || o "Son buenas" (i)
-    //          (h) 3 -> Si supera dice su puntaje (eDONE) || o "Son buenas" (f)
-    //      (i) 3 -> No dice nada (g)
+     * - The first player always shows their points.
+     * - The second player shows their points only if these are greater than first player points.
+     *   Otherwise they say "Yours are good".
+     * - The third player shows their points in case the second or the fourth win.
+     *   In the case the first player win they say nothing.
+     *   Otherwise they say "Yours are good.
+     * - The fourth player shows their points in case the first or the third win.
+     *   In the case the second player win they say nothing.
+     *   Otherwise they say "Yours are good.
      */
-    fun envidoMessagesFor4(playersWithPoints: List<Pair<TeamPlayer, Int>>): Map<TeamPlayer, TrucoAction?> {
+    fun envidoMessagesFor4(
+        playersWithPoints: List<Pair<TeamPlayer, Int>>
+    ): List<Pair<TeamPlayer, TrucoAction?>> {
         val (firstPlayer, firstPlayerScore) = playersWithPoints.first()
         val (secondPlayer, secondPlayerScore) = playersWithPoints[1]
         val (thirdPlayer, thirdPlayerScore) = playersWithPoints[2]
         val (fourthPlayer, fourthPlayerScore) = playersWithPoints[3]
-        return mapOf(
+        val messages = mutableListOf<Pair<TeamPlayer, TrucoAction?>>(
             firstPlayer to showScore(firstPlayerScore),
-            secondPlayer to getFinalMessageForPlayer(firstPlayerScore, secondPlayerScore),
-            thirdPlayer to getThirdPlayerMessage(firstPlayerScore, secondPlayerScore, thirdPlayerScore, fourthPlayerScore),
-            fourthPlayer to getFourthPlayerMessage(firstPlayerScore, secondPlayerScore, thirdPlayerScore, fourthPlayerScore)
+            secondPlayer to getFinalMessageForPlayer(firstPlayerScore, secondPlayerScore)
         )
-    }
-    private fun getThirdPlayerMessage(firstPlayerScore: Int, secondPlayerScore: Int,
-                                      thirdPlayerScore: Int, fourthPlayerScore: Int): TrucoAction? =
-        if(secondPlayerScore > firstPlayerScore){
-            getFinalMessageForPlayer(secondPlayerScore, thirdPlayerScore)
-        }else{
-            if(fourthPlayerScore > firstPlayerScore){
-                getFinalMessageForPlayer(fourthPlayerScore, thirdPlayerScore)
-            }else{
-                showNothing()
-            }
-        }
-    private fun getFourthPlayerMessage(firstPlayerScore: Int, secondPlayerScore: Int,
-                                       thirdPlayerScore: Int, fourthPlayerScore: Int): TrucoAction? =
-        if(secondPlayerScore > firstPlayerScore){
-            if(thirdPlayerScore > secondPlayerScore){
-                getFinalMessageForPlayer(thirdPlayerScore, fourthPlayerScore)
-            }else showNothing()
-        } else{
-            getFinalMessageForPlayer(firstPlayerScore, fourthPlayerScore)
-        }
+        val thirdPlayerMessage = thirdPlayer to getThirdPlayerMessage(
+            firstPlayerScore,
+            secondPlayerScore,
+            thirdPlayerScore,
+            fourthPlayerScore
+        )
+        val fourthPlayerMessage = fourthPlayer to getFourthPlayerMessage(
+            firstPlayerScore,
+            secondPlayerScore,
+            thirdPlayerScore,
+            fourthPlayerScore
+        )
 
+        val shouldFourthPlayerCallFirst =
+            shouldForthPlayerCallFirst(firstPlayerScore, secondPlayerScore, fourthPlayerScore)
+        messages.add(if (shouldFourthPlayerCallFirst) fourthPlayerMessage else thirdPlayerMessage)
+        messages.add(if (shouldFourthPlayerCallFirst) thirdPlayerMessage else fourthPlayerMessage)
+        return messages
+    }
+
+    private fun getThirdPlayerMessage(
+        firstPlayerScore: Int,
+        secondPlayerScore: Int,
+        thirdPlayerScore: Int,
+        fourthPlayerScore: Int
+    ): TrucoAction? = when {
+        secondPlayerScore > firstPlayerScore ->
+            getFinalMessageForPlayer(secondPlayerScore, thirdPlayerScore)
+        fourthPlayerScore > firstPlayerScore ->
+            getFinalMessageForPlayer(fourthPlayerScore, thirdPlayerScore)
+        else -> showNothing()
+    }
+
+    private fun getFourthPlayerMessage(
+        firstPlayerScore: Int,
+        secondPlayerScore: Int,
+        thirdPlayerScore: Int,
+        fourthPlayerScore: Int
+    ): TrucoAction? = when {
+        secondPlayerScore <= firstPlayerScore ->
+            getFinalMessageForPlayer(firstPlayerScore, fourthPlayerScore)
+        thirdPlayerScore > secondPlayerScore ->
+            getFinalMessageForPlayer(thirdPlayerScore, fourthPlayerScore)
+        else -> showNothing()
+    }
 
     private fun getFinalMessageForPlayer(lastBestScore: Int, playerScore: Int): TrucoAction =
         if (playerScore > lastBestScore) showScore(playerScore)
@@ -74,6 +99,13 @@ object EnvidoMessageCalculator {
         ShowEnvidoPoints(points, R.string.truco_answer_envido_are_good)
 
     private fun showScore(points: Int) = ShowEnvidoPoints(points)
+
     private fun showNothing() = null
 
+    @Suppress("ConvertTwoComparisonsToRangeCheck") // It's more clear this way.
+    private fun shouldForthPlayerCallFirst(
+        firstPlayerScore: Int,
+        secondPlayerScore: Int,
+        fourthPlayerScore: Int
+    ) = firstPlayerScore >= secondPlayerScore && fourthPlayerScore > firstPlayerScore
 }

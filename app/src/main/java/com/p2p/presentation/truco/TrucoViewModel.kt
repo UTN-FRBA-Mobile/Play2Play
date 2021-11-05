@@ -104,7 +104,7 @@ abstract class TrucoViewModel(
 
     private val _currentHandPlayerPosition = MutableLiveData<TrucoPlayerPosition>()
     val currentHandPlayerPosition: LiveData<TrucoPlayerPosition> = _currentHandPlayerPosition
-    
+
     protected lateinit var handPlayer: TeamPlayer
         private set
 
@@ -143,7 +143,12 @@ abstract class TrucoViewModel(
     }
 
     fun onResume() {
-        backgroundPendingMessagesReceived.forEach { acceptMessage(it, isAbleToReadMessagesBecauseBackground = true) }
+        backgroundPendingMessagesReceived.forEach {
+            acceptMessage(
+                it,
+                isAbleToReadMessagesBecauseBackground = true
+            )
+        }
         backgroundPendingMessagesReceived = emptyList()
         isAbleToReadMessagesBecauseBackground = true
     }
@@ -233,7 +238,12 @@ abstract class TrucoViewModel(
 
     fun onMyCardsLoad() {
         nextTurn(handPlayer)
-        newHandPendingMessagesReceived.forEach { acceptMessage(it, isAbleToReadMessagesBecauseNewHand = true) }
+        newHandPendingMessagesReceived.forEach {
+            acceptMessage(
+                it,
+                isAbleToReadMessagesBecauseNewHand = true
+            )
+        }
         newHandPendingMessagesReceived = emptyList()
         isAbleToReadMessagesBecauseNewHand = hasAlreadyDispatchedNewHand
     }
@@ -281,7 +291,8 @@ abstract class TrucoViewModel(
 
     protected fun setHandPlayer(teamPlayer: TeamPlayer) {
         handPlayer = teamPlayer
-        _currentHandPlayerPosition.value = TrucoPlayerPosition.get(teamPlayer, teamPlayers, myTeamPlayer)
+        _currentHandPlayerPosition.value =
+            TrucoPlayerPosition.get(teamPlayer, teamPlayers, myTeamPlayer)
     }
 
     private fun canAnswer(otherPlayer: TeamPlayer): Boolean =
@@ -315,7 +326,7 @@ abstract class TrucoViewModel(
     }
 
     private fun updateTrucoAccumulatedPoints(action: TrucoAction, actionPoints: Int) {
-        when(action) {
+        when (action) {
             is Truco, is Retruco, is ValeCuatro -> {
                 _trucoAccumulatedPoints.value = actionPoints
             }
@@ -505,11 +516,13 @@ abstract class TrucoViewModel(
 
     private fun setCurrentPlayerTurn(player: TeamPlayer) {
         currentTurnPlayer = player
-        _currentTurnPlayerPosition.value = TrucoPlayerPosition.get(player, teamPlayers, myTeamPlayer)
+        _currentTurnPlayerPosition.value =
+            TrucoPlayerPosition.get(player, teamPlayers, myTeamPlayer)
         if (player == myTeamPlayer) {
             dispatchSingleTimeEvent(TrucoTakeTurnEvent)
             setEnvidoButtonAvailability(
-                playedCards.last().any { it.teamPlayer.team == myTeamPlayer.team } || totalPlayers.requireValue() == 2
+                playedCards.last()
+                    .any { it.teamPlayer.team == myTeamPlayer.team } || totalPlayers.requireValue() == 2
             )
         }
     }
@@ -538,17 +551,17 @@ abstract class TrucoViewModel(
 
         val winner = getWinner(pointsByPlayer, roundOrder)
 
-        val actionsByPlayer: Map<TeamPlayer, TrucoAction?> =
+        val actionsByPlayer: List<Pair<TeamPlayer, TrucoAction?>> =
             if (roundOrder.size == 2)
                 EnvidoMessageCalculator.envidoMessagesFor2(playersWithPoints)
             else
                 EnvidoMessageCalculator.envidoMessagesFor4(playersWithPoints)
 
-        val actionsByPosition = actionsByPlayer.filter { it.value != null }.map { actionByPlayer ->
-            val playerPosition =
-                TrucoPlayerPosition.get(actionByPlayer.key, teamPlayers, myTeamPlayer)
-            playerPosition to actionByPlayer.value!!
-        }.toMap()
+        val actionsByPosition = actionsByPlayer
+            .filter { (_, action) -> action != null }
+            .map { (player, action) ->
+                TrucoPlayerPosition.get(player, teamPlayers, myTeamPlayer) to action!!
+            }
 
         dispatchSingleTimeEvent(TrucoShowManyActionsEvent(actionsByPosition) {
             updateScore(winner.first.team)
