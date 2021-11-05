@@ -15,6 +15,8 @@ class TrucoSingleOpponentMyCardsHand(
         R.dimen.truco_third_card_horizontal_margin
     ).map { context.resources.getDimension(it) }
 
+    override fun isAbleToDrag() = true
+
     override fun getCardX(cardView: View, cardIndex: Int) = cardsHorizontalMargins[cardIndex]
 
     override fun getCardY(cardView: View, playingCards: Int, cardIndex: Int): Float {
