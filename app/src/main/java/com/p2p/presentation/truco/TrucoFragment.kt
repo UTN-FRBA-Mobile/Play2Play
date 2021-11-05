@@ -411,7 +411,12 @@ abstract class TrucoFragment<VB : ViewBinding> :
         title.setText(if (isMyTeam) R.string.truco_our_score_label else R.string.truco_their_score_label)
         @SuppressLint("SetTextI18n")
         subtitle.text = "+$earnedPoints"
-        container.fadeIn()
+        container.postDelayed(
+            {
+                container.fadeIn()
+            },
+            SHOW_EARNED_POINTS_DELAY_MS
+        )
         container.postDelayed(
             {
                 container.fadeOut()
@@ -429,6 +434,7 @@ abstract class TrucoFragment<VB : ViewBinding> :
         const val ACTIONS_BOTTOM_SHEET_TAG = "TRUCO_ACTIONS_BOTTOM_SHEET"
         private const val ACTION_BACKGROUND_FINAL_ALPHA = 0.5f
         private const val HIDE_ACTION_BUBBLES_DELAY = 2_000L
-        private const val EARNED_POINTS_DELAY_MS = 3_000L
+        private const val EARNED_POINTS_DELAY_MS = 3_500L
+        private const val SHOW_EARNED_POINTS_DELAY_MS = 1_000L
     }
 }
