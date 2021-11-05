@@ -124,7 +124,7 @@ abstract class TrucoCardsHand(
         val cardsRotation = getCardsRotation(playingCardsSize)
         dragAndDropCardsInHand.forEachIndexed { index, dragAndDropCard ->
             val cardView = dragAndDropCard.cardView
-            cardView.elevation = if (shouldSetCardInitialElevation()) index.toFloat() else 0f
+            cardView.elevation = if (shouldSetCardInitialElevation()) COMPLETE_HAND - index.toFloat() else 0f
             cardView.pivotX = getPivotX() * cardView.measuredWidth.toFloat()
             cardView.pivotY = getPivotY() * cardView.measuredHeight.toFloat()
             cardView.animate()
