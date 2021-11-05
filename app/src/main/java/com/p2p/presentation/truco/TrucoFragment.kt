@@ -290,7 +290,7 @@ abstract class TrucoFragment<VB : ViewBinding> :
         onComplete: () -> Unit
     ) {
         hideTrucoActionsBottomSheet()
-        hideActions()
+        hideActions(showBottomSheet = false)
         bubbleText.text = action.message(requireContext())
         showBubbleView(bubbleBackground)
         showBubbleView(bubbleText)
@@ -330,8 +330,8 @@ abstract class TrucoFragment<VB : ViewBinding> :
             ?.isVisible(true)
     }
 
-    private fun hideActions() {
-        showTrucoActionsBottomSheet()
+    private fun hideActions(showBottomSheet: Boolean = true) {
+        if (showBottomSheet) showTrucoActionsBottomSheet()
         hideActionBubble(
             requireView().findViewById(R.id.my_action_bubble),
             requireView().findViewById(R.id.my_action_bubble_text)
