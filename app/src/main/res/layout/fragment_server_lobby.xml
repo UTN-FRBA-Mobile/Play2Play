@@ -46,10 +46,20 @@
         android:layout_marginTop="@dimen/medium"
         android:layout_marginBottom="@dimen/medium"
         app:layout_constrainedHeight="true"
-        app:layout_constraintBottom_toTopOf="@id/make_me_visible_button"
+        app:layout_constraintBottom_toTopOf="@id/make_me_visible_text"
         app:layout_constraintTop_toBottomOf="@id/connected_players_text"
         app:layout_constraintVertical_bias="0"
         tools:listitem="@layout/view_connected_user" />
+
+    <TextView
+        android:id="@+id/make_me_visible_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/medium"
+        android:text="@string/server_lobby_make_me_visible_text"
+        app:layout_constraintBottom_toTopOf="@id/make_me_visible_button"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintStart_toStartOf="@id/guideline_begin" />
 
     <Button
         android:id="@+id/make_me_visible_button"

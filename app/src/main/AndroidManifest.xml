@@ -43,6 +43,7 @@
 
         <activity
             android:name=".presentation.home.HomeActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -53,6 +54,7 @@
 
         <activity
             android:name=".presentation.tuttifrutti.TuttiFruttiActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.P2P"
             android:windowSoftInputMode="adjustResize" />
 
@@ -64,15 +66,18 @@
 
         <activity
             android:name=".presentation.truco.TrucoActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.P2P"
             android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name=".presentation.bluetooth.TurnOnBluetoothActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.P2P" />
 
         <activity
             android:name=".presentation.bluetooth.HowToConnectBluetoothActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.P2P" />
     </application>
 </manifest>

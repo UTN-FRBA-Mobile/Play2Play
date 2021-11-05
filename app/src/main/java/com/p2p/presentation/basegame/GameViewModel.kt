@@ -155,7 +155,8 @@ abstract class GameViewModel(
 
     /** Invoked when the client connection to the server was established successfully. */
     @CallSuper
-    open fun onClientConnectionSuccess() = connection.write(ClientHandshakeMessage(userName, theGame.id))
+    open fun onClientConnectionSuccess() =
+        connection.write(ClientHandshakeMessage(userName, theGame.id))
 
     /** Invoked when there was an error while trying to connect the client with the server. */
     @CallSuper
@@ -170,8 +171,10 @@ abstract class GameViewModel(
     open fun onClientConnectionLost(peerId: Long) {
         if (gameAlreadyFinished) return
         val playerLost = connectedPlayers.firstOrNull { it.first == peerId } ?: return
-        lostPlayers = lostPlayers + playerLost.second
-        connection.write(playersRecoverability.constructOnPlayerLostMessage(lostPlayers))
+        if (gameAlreadyStarted) {
+            lostPlayers = lostPlayers + playerLost.second
+            connection.write(playersRecoverability.constructOnPlayerLostMessage(lostPlayers))
+        }
         removePlayer(playerLost)
     }
 
@@ -259,7 +262,10 @@ abstract class GameViewModel(
      * Returns true if the client has joined successfully, false if there was an error.
      */
     @CallSuper
-    protected open fun onClientHandshake(message: ClientHandshakeMessage, conversation: Conversation): Boolean {
+    protected open fun onClientHandshake(
+        message: ClientHandshakeMessage,
+        conversation: Conversation
+    ): Boolean {
         if (isServer()) {
             return when {
                 connectedPlayers.any { it.second == message.name } -> {
@@ -274,7 +280,10 @@ abstract class GameViewModel(
                     connection.talk(conversation, WrongGameJoinedMessage())
                     false
                 }
-                gameAlreadyStarted && !playersRecoverability.canJoinToStartedGame(lostPlayers, message.name) -> {
+                gameAlreadyStarted && !playersRecoverability.canJoinToStartedGame(
+                    lostPlayers,
+                    message.name
+                ) -> {
                     connection.talk(
                         conversation,
                         playersRecoverability.constructCantJoinToStartedGameMessage(lostPlayers)

@@ -45,8 +45,8 @@ class CreateImpostorFragment : BaseGameFragment<
             }
         }
         observe(viewModel.startButtonEnabled) {
-            if (it) { gameBinding.startButton.alpha = ENABLED_BUTTON_ALPHA }
-            else { gameBinding.startButton.alpha = DISABLED_BUTTON_ALPHA }
+            gameBinding.startButton.alpha =
+                if (it) ENABLED_BUTTON_ALPHA else DISABLED_BUTTON_ALPHA
         }
     }
 
@@ -68,12 +68,14 @@ class CreateImpostorFragment : BaseGameFragment<
         }
 
     private fun markErrorKeyWordInput() {
-        gameBinding.keyWordField.error = resources.getString(R.string.im_validation_error_key_word_input)
+        gameBinding.keyWordField.error =
+            resources.getString(R.string.im_validation_error_key_word_input)
         gameBinding.keyWordField.requestFocus()
     }
 
     private fun markErrorKeyWordThemeInput() {
-        gameBinding.keyWordThemeField.error = resources.getString(R.string.im_validation_error_key_word_theme_input)
+        gameBinding.keyWordThemeField.error =
+            resources.getString(R.string.im_validation_error_key_word_theme_input)
         gameBinding.keyWordThemeField.requestFocus()
     }
 
