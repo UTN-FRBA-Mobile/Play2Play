@@ -212,11 +212,9 @@ abstract class TrucoFragment<VB : ViewBinding> :
     }
 
     private fun showManyActions(
-        actionsByPlayer: Map<TrucoPlayerPosition, TrucoAction>,
+        actionsByPlayer: List<Pair<TrucoPlayerPosition, TrucoAction>>,
         onComplete: () -> Unit
-    ) {
-        showOneOfManyActions(actionsByPlayer.toList(), onComplete)
-    }
+    ) = showOneOfManyActions(actionsByPlayer, onComplete)
 
     private fun showOneOfManyActions(
         actions: List<Pair<TrucoPlayerPosition, TrucoAction>>,
@@ -292,7 +290,7 @@ abstract class TrucoFragment<VB : ViewBinding> :
         onComplete: () -> Unit
     ) {
         hideTrucoActionsBottomSheet()
-        hideActions()
+        hideActions(showBottomSheet = false)
         bubbleText.text = action.message(requireContext())
         showBubbleView(bubbleBackground)
         showBubbleView(bubbleText)
@@ -332,8 +330,8 @@ abstract class TrucoFragment<VB : ViewBinding> :
             ?.isVisible(true)
     }
 
-    private fun hideActions() {
-        showTrucoActionsBottomSheet()
+    private fun hideActions(showBottomSheet: Boolean = true) {
+        if (showBottomSheet) showTrucoActionsBottomSheet()
         hideActionBubble(
             requireView().findViewById(R.id.my_action_bubble),
             requireView().findViewById(R.id.my_action_bubble_text)
@@ -435,7 +433,7 @@ abstract class TrucoFragment<VB : ViewBinding> :
         private const val MIN_ACTION_BUBBLE_VISIBLE_SCALING = 0.9f
         const val ACTIONS_BOTTOM_SHEET_TAG = "TRUCO_ACTIONS_BOTTOM_SHEET"
         private const val ACTION_BACKGROUND_FINAL_ALPHA = 0.5f
-        private const val HIDE_ACTION_BUBBLES_DELAY = 3_000L
+        private const val HIDE_ACTION_BUBBLES_DELAY = 2_000L
         private const val EARNED_POINTS_DELAY_MS = 3_500L
         private const val SHOW_EARNED_POINTS_DELAY_MS = 1_000L
     }

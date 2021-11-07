@@ -19,7 +19,7 @@ class ConnectedPlayersTrucoAdapter(
     private val context: Context
 ) : BaseAdapter() {
 
-    var players = mutableListOf<String>()
+    var players = emptyList<String>()
         set(value) {
             field = value
             notifyDataSetChanged()

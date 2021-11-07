@@ -22,6 +22,8 @@ class TrucoFor4MyCardsHand(
         SINGLE_CARD to listOf(0f),
     )
 
+    override fun isAbleToDrag() = true
+
     override fun getCardsRotation(playingCards: Int) = cardsRotationForHand.getValue(playingCards)
 
     override fun getCardX(cardView: View, cardIndex: Int) = cardsHorizontalMargins[cardIndex]

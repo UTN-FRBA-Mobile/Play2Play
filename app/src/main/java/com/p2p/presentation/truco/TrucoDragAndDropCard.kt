@@ -7,6 +7,7 @@ import android.view.View
 @SuppressLint("ClickableViewAccessibility")
 class TrucoDragAndDropCard(
     val cardView: View,
+    private val isAbleToDrag: Boolean,
     listener: Listener,
 ) {
 
@@ -18,9 +19,8 @@ class TrucoDragAndDropCard(
 
     init {
         cardView.setOnTouchListener { view: View, event: MotionEvent ->
-            val currentDroppingView = droppingView
             when {
-                currentDroppingView == null -> false
+                !isAbleToDrag -> false
                 event.action == MotionEvent.ACTION_DOWN -> {
                     initialPosition = event.rawX to event.rawY
                     initialCoordinates = view.x to view.y
@@ -36,31 +36,38 @@ class TrucoDragAndDropCard(
                     val initialPosition = initialPosition ?: return@setOnTouchListener false
                     view.x = initialCoordinates.first + event.rawX - initialPosition.first
                     view.y = initialCoordinates.second + event.rawY - initialPosition.second
-                    val initialDistance = currentDroppingView.y - initialCoordinates.second
-                    val currentDistance = currentDroppingView.y - view.y
-                    val distanceWithDroppingPlaceMultiplicator = (currentDistance / initialDistance)
-                        .coerceAtLeast(0f)
-                        .coerceAtMost(1f)
-                    view.rotationX = currentDroppingView.rotationX * (1f - distanceWithDroppingPlaceMultiplicator)
-                    val scale = when {
-                        view.y > initialCoordinates.second -> 1f
-                        view.y > currentDroppingView.y ->
-                            currentDroppingView.scaleX + (1f - currentDroppingView.scaleX) * distanceWithDroppingPlaceMultiplicator
-                        else -> MIN_CARD_SCALE + (currentDroppingView.scaleX - MIN_CARD_SCALE) * view.y / currentDroppingView.y
+                    droppingView?.let { currentDroppingView ->
+                        val initialDistance = currentDroppingView.y - initialCoordinates.second
+                        val currentDistance = currentDroppingView.y - view.y
+                        val distanceWithDroppingPlaceMultiplicator =
+                            (currentDistance / initialDistance)
+                                .coerceAtLeast(0f)
+                                .coerceAtMost(1f)
+                        view.rotationX =
+                            currentDroppingView.rotationX * (1f - distanceWithDroppingPlaceMultiplicator)
+                        val scale = when {
+                            view.y > initialCoordinates.second -> 1f
+                            view.y > currentDroppingView.y ->
+                                currentDroppingView.scaleX + (1f - currentDroppingView.scaleX) * distanceWithDroppingPlaceMultiplicator
+                            else -> MIN_CARD_SCALE + (currentDroppingView.scaleX - MIN_CARD_SCALE) * view.y / currentDroppingView.y
+                        }
+                        view.scaleX = scale
+                        view.scaleY = scale
                     }
-                    view.scaleX = scale
-                    view.scaleY = scale
                     listener.onMove(this)
                     true
                 }
                 event.actionMasked == MotionEvent.ACTION_UP -> {
                     initialCoordinates = null
                     initialPosition = null
-                    val isInDroppingView = currentDroppingView.x <= event.rawX &&
-                            event.rawX <= currentDroppingView.x + currentDroppingView.width &&
-                            currentDroppingView.y <= event.rawY &&
-                            event.rawY <= currentDroppingView.y + currentDroppingView.height
-                    if (isInDroppingView) {
+                    val currentDroppingView = droppingView
+                    val isInDroppingView = currentDroppingView?.let {
+                        currentDroppingView.x <= event.rawX &&
+                                event.rawX <= currentDroppingView.x + currentDroppingView.width &&
+                                currentDroppingView.y <= event.rawY &&
+                                event.rawY <= currentDroppingView.y + currentDroppingView.height
+                    }
+                    if (isInDroppingView == true) {
                         view.animate()
                             .x(currentDroppingView.x)
                             .y(currentDroppingView.y)
@@ -78,7 +85,7 @@ class TrucoDragAndDropCard(
                             .rotation(initialRotation)
                             .start()
                     }
-                    listener.onDrop(this@TrucoDragAndDropCard, isInDroppingView)
+                    listener.onDrop(this@TrucoDragAndDropCard, isInDroppingView ?: false)
                     true
                 }
                 else -> false
