@@ -3,12 +3,12 @@ package com.p2p.presentation.tuttifrutti
 import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.loadingMessages.LoadingTextRepository
-import com.p2p.model.LoadingMessageType
 import com.p2p.data.userInfo.UserSession
 import com.p2p.model.base.message.Conversation
-import com.p2p.model.tuttifrutti.message.*
+import com.p2p.model.tuttifrutti.message.FinalScoreMessage
+import com.p2p.model.tuttifrutti.message.TuttiFruttiStartGameMessage
+import com.p2p.model.tuttifrutti.message.TuttiFruttiStartRoundMessage
 import com.p2p.presentation.basegame.ConnectionType
-import com.p2p.presentation.tuttifrutti.create.categories.Category
 
 class ClientTuttiFruttiViewModel(
     connectionType: ConnectionType,
@@ -24,8 +24,6 @@ class ClientTuttiFruttiViewModel(
     loadingTextRepository
 ) {
 
-    private var enoughForAllConversation: Conversation? = null
-
     override fun receiveMessage(conversation: Conversation) {
         super.receiveMessage(conversation)
         when (val message = conversation.lastMessage) {
@@ -36,10 +34,6 @@ class ClientTuttiFruttiViewModel(
                 startGame()
             }
             is TuttiFruttiStartRoundMessage -> startRound()
-            is TuttiFruttiClientReviewMessage -> {
-                setFinishedRoundInfos(message.finishedRoundInfos)
-                goToClientReview()
-            }
             is FinalScoreMessage -> {
                 setFinalScores(message.playersScores)
                 goToFinalScore()
@@ -47,40 +41,9 @@ class ClientTuttiFruttiViewModel(
         }
     }
 
-    override fun onSentSuccessfully(conversation: Conversation) {
-        when (conversation.lastMessage) {
-            is TuttiFruttiEnoughForMeEnoughForAllMessage -> receiveMessage(conversation)
-        }
-        super.onSentSuccessfully(conversation)
-    }
-
-    override fun enoughForMeEnoughForAll() {
-        startLoading(loadingTextRepository.getText(LoadingMessageType.TF_WAITING_FOR_REVIEW))
-        super.enoughForMeEnoughForAll()
-    }
-
-    override fun onReceiveEnoughForAll(conversation: Conversation) {
-        enoughForAllConversation = conversation
-        startLoading(loadingTextRepository.getText(LoadingMessageType.TF_WAITING_FOR_REVIEW))
-        super.onReceiveEnoughForAll(conversation)
-    }
-
-    private fun goToClientReview() {
-        dispatchSingleTimeEvent(GoToClientReview)
-    }
-
-    override fun sendWords(categoriesWords: LinkedHashMap<Category, String>) {
-        enoughForAllConversation?.let {
-            connection.talk(
-                it,
-                TuttiFruttiSendWordsMessage(categoriesWords)
-            )
-        }
-        enoughForAllConversation = null
-    }
+    override fun goToReview() = dispatchSingleTimeEvent(GoToClientReview)
 
     override fun startGame() = goToPlay()
 
     override fun startRound() = goToPlay()
-
 }
