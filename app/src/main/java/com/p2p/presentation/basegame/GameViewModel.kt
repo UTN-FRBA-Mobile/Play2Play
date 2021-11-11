@@ -35,7 +35,15 @@ abstract class GameViewModel(
     protected open val playersRecoverability = PlayersRecoverability.CANNOT_RECOVER
 
     protected var gameAlreadyStarted = false
+        set(value) {
+            field = value
+            updateIsBackButtonVisible()
+        }
     protected var gameAlreadyFinished = false
+        set(value) {
+            field = value
+            updateIsBackButtonVisible()
+        }
 
     protected val userName by lazy { userSession.getUserNameOrEmpty() }
     private val instructions by lazy { instructionsRepository.getInstructions(game.requireValue()) }
@@ -79,6 +87,9 @@ abstract class GameViewModel(
 
     private val _error = MutableLiveData<GameError?>()
     val error: LiveData<GameError?> = _error
+
+    private val _isBackButtonVisible = MutableLiveData<Boolean>()
+    val isBackAllowed: LiveData<Boolean> = _isBackButtonVisible
 
     init {
         _game.value = theGame
@@ -305,6 +316,10 @@ abstract class GameViewModel(
         if (playersRecoverability.shouldResumeGame(lostPlayers)) {
             dispatchSingleTimeEvent(ResumeGame)
         }
+    }
+
+    private fun updateIsBackButtonVisible() {
+        _isBackButtonVisible.value = !gameAlreadyStarted || gameAlreadyFinished
     }
 
     companion object {

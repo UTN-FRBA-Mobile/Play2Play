@@ -3,6 +3,7 @@ package com.p2p.presentation.basegame
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.appbar.MaterialToolbar
@@ -53,6 +54,10 @@ abstract class BaseGameFragment<GVB : ViewBinding, E : Any, VM : BaseViewModel<E
     override fun setupObservers() {
         super.setupObservers()
         observe(gameViewModel.game) { binding.header.title = context?.getText(it.nameRes) }
+        observe(gameViewModel.isBackAllowed) {
+            binding.header.navigationIcon =
+                if (it) ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_arrow_back_24) else null
+        }
     }
 
     private fun setHeaderEvents(header: MaterialToolbar) {
