@@ -19,7 +19,7 @@ import com.p2p.presentation.base.BaseViewModel
  * [E]: Event
  * [VM]: BaseViewModel with the same event defined
  */
-abstract class BaseGameFragment<GVB : ViewBinding, E : Any, VM : BaseViewModel<E>, GVM : GameViewModel>(protected val isAddedToBackStack: Boolean = false) :
+abstract class BaseGameFragment<GVB : ViewBinding, E : Any, VM : BaseViewModel<E>, GVM : GameViewModel> :
     BaseFragment<BaseGameBinding, E, VM>() {
 
     protected abstract val gameViewModel: GVM
