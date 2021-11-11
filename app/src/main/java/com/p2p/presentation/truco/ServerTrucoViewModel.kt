@@ -4,12 +4,18 @@ import com.p2p.data.bluetooth.BluetoothConnectionCreator
 import com.p2p.data.instructions.InstructionsRepository
 import com.p2p.data.loadingMessages.LoadingTextRepository
 import com.p2p.data.userInfo.UserSession
+import com.p2p.model.base.message.ClientHandshakeMessage
 import com.p2p.model.base.message.Conversation
 import com.p2p.model.truco.Card
 import com.p2p.model.truco.PlayerWithCards
-import com.p2p.model.truco.Suit.*
-import com.p2p.model.truco.message.TrucoCardsMessage
+import com.p2p.model.truco.Suit.CLUBS
+import com.p2p.model.truco.Suit.CUPS
+import com.p2p.model.truco.Suit.GOLDS
+import com.p2p.model.truco.Suit.SWORDS
+import com.p2p.model.truco.TeamPlayer
+import com.p2p.model.truco.message.*
 import com.p2p.presentation.basegame.ConnectionType
+import com.p2p.presentation.extensions.requireValue
 
 class ServerTrucoViewModel(
     connectionType: ConnectionType,
@@ -27,32 +33,48 @@ class ServerTrucoViewModel(
     /** Deck of cards being used by all players in a hand  */
     private var cards = listOf<Card>()
 
-    /** Be careful: this will be called for every client on a broadcast. */
-    override fun onSentSuccessfully(conversation: Conversation) {
-        super.onSentSuccessfully(conversation)
-    }
-
-    override fun startGame() {
-        // TODO: Start truco game
-        closeDiscovery()
+    override fun startGame(players: List<String>) {
+        _players.value = players
+        setPlayers(createPlayersTeams())
+        setHandPlayer(teamPlayers[0])
+        connection.write(
+            TrucoStartGameMessage(teamPlayers, totalPlayers.requireValue(), totalPoints.requireValue())
+        )
         handOutCards()
+        goToPlayTruco()
     }
 
-    override fun receiveMessage(conversation: Conversation) {
-        super.receiveMessage(conversation)
-        when (val message = conversation.lastMessage) {
-            // TODO: Implement messages handling
+    override fun onClientHandshake(message: ClientHandshakeMessage, conversation: Conversation): Boolean {
+        val hasJoined = super.onClientHandshake(message, conversation)
+        if (gameAlreadyStarted && hasJoined) {
+            val welcomeBack = TrucoWelcomeBack(
+                teamPlayers,
+                totalPlayers.requireValue(),
+                totalPoints.requireValue(),
+                mapOf(myTeamPlayer.team to ourScore.requireValue(), rivalTeam to theirScore.requireValue()),
+                handPlayer
+            )
+            connection.talk(conversation, welcomeBack)
+            if (teamPlayers.size == players.requireValue().size) {
+                handOutCards()
+            }
+        }
+        return hasJoined
+    }
+
+    private fun createPlayersTeams(): List<TeamPlayer> {
+        return players.requireValue().take(totalPlayers.requireValue()).mapIndexed { index, playerName ->
+            val teamNumber = index % PLAYERS_PER_TEAM + 1
+            TeamPlayer(playerName, teamNumber)
         }
     }
 
     /** Sends all client players the cards for each one and picks self cards. */
     override fun handOutCards() {
         mixDeck()
-        val playersWithCards = connectedPlayers
-            .filterNot { it.first == MYSELF_PEER_ID }
-            .map { player -> PlayerWithCards(player.second, cardsForPlayer()) }
-        _currentCards.value = cardsForPlayer()
-        connection.write(TrucoCardsMessage(playersWithCards))
+        cardsByPlayer = connectedPlayers.map { player -> PlayerWithCards(player.second, cardsForPlayer()) }
+        newHand(cardsByPlayer.first { it.name == userName }.cards)
+        connection.write(TrucoCardsMessage(cardsByPlayer))
     }
 
     private fun cardsForPlayer(): List<Card> {
@@ -67,4 +89,7 @@ class ServerTrucoViewModel(
         cards = suits.flatMap { suit -> numbers.map { number -> Card(number, suit) } }.shuffled()
     }
 
+    companion object {
+        const val PLAYERS_PER_TEAM = 2
+    }
 }

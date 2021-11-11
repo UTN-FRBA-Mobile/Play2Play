@@ -1,5 +1,7 @@
 package com.p2p.presentation.home.games
 
+import android.app.Activity
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
@@ -25,20 +27,12 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesEvents, GamesViewM
 
     override fun initUI() {
         setupGamesRecycler()
-        binding.createButton.isEnabled = false
-        binding.createButton.setOnClickListener { viewModel.createGame(getUserName()) }
-        binding.joinButton.isEnabled = false
-        binding.joinButton.setOnClickListener { viewModel.joinGame(getUserName()) }
         binding.shareButton.setOnClickListener { ApplicationSharer.share(requireActivity()) }
     }
 
     override fun setupObservers() = with(viewModel) {
         observe(games) { adapter.games = it }
         observe(userName) { binding.userNameInput.clearAndAppend(it) }
-        observe(buttonsEnabled) {
-            binding.createButton.isEnabled = it
-            binding.joinButton.isEnabled = it
-        }
     }
 
     override fun onEvent(event: GamesEvents) = when (event) {
@@ -47,19 +41,32 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesEvents, GamesViewM
         GoToCreateTruco -> TrucoActivity.startCreate(requireActivity(), GAME_REQUEST_CODE)
         is JoinGame -> JoinGamesBottomSheetFragment.newInstance(event.game)
             .show(parentFragmentManager, null)
-        TurnOnBluetooth -> TurnOnBluetoothActivity.start(requireContext())
+        TurnOnBluetooth -> TurnOnBluetoothActivity.startForResult(this, TURN_ON_BLUETOOTH_REQUEST_CODE)
     }
 
     private fun setupGamesRecycler() = with(binding.gamesRecycler) {
         layoutManager = LinearLayoutManager(context)
-        adapter = GamesAdapter(viewModel::selectGame).also {
+        adapter = GamesAdapter(
+            onCreateClicked = { viewModel.createGame(it, getUserName()) },
+            onJoinClicked = { viewModel.joinGame(it, getUserName()) }
+        ).also {
             this@GamesFragment.adapter = it
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == TURN_ON_BLUETOOTH_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            viewModel.onBluetoothTurnedOn(getUserName())
         }
     }
 
     private fun getUserName() = binding.userNameInput.text?.toString()
 
     companion object {
+
+        private const val TURN_ON_BLUETOOTH_REQUEST_CODE = 9001
+
         /** Create a new instance of the [GamesFragment]. */
         fun newInstance() = GamesFragment()
     }

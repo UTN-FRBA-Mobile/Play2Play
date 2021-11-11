@@ -26,10 +26,13 @@ class CreateImpostorFragment : BaseGameFragment<
     override fun initUI() {
         super.initUI()
         gameViewModel.startConnection()
+        gameBinding.startButton.alpha = DISABLED_BUTTON_ALPHA
         gameBinding.startButton.setOnClickListener {
-            val keyWord = gameBinding.textField.value()
-            viewModel.tryStartGame(keyWord)
+            val keyWordTheme = gameBinding.keyWordThemeField.value()
+            val keyWord = gameBinding.keyWordField.value()
+            viewModel.tryStartGame(keyWord, keyWordTheme)
         }
+        gameBinding.makeMeVisibleButton.setOnClickListener { gameViewModel.makeMeVisible() }
     }
 
     override fun setupObservers() {
@@ -40,6 +43,10 @@ class CreateImpostorFragment : BaseGameFragment<
                 updateConnectedPlayers(otherPlayers)
                 viewModel.updatePlayers(otherPlayers)
             }
+        }
+        observe(viewModel.startButtonEnabled) {
+            gameBinding.startButton.alpha =
+                if (it) ENABLED_BUTTON_ALPHA else DISABLED_BUTTON_ALPHA
         }
     }
 
@@ -54,15 +61,23 @@ class CreateImpostorFragment : BaseGameFragment<
 
     override fun onEvent(event: ImpostorCreateEvents) =
         when (event) {
-            is StartGame -> gameViewModel.createGame(event.keyWord)
-            InvalidInput -> markErrorInput()
-            NoConnectedPlayers -> markErrorConnectedPlayers()
+            is StartGame -> gameViewModel.createGame(event.keyWord, event.keyWordTheme)
+            InvalidKeyWordInput -> markErrorKeyWordInput()
+            InvalidKeyWordThemeInput -> markErrorKeyWordThemeInput()
+            NotEnoughPlayers -> markErrorConnectedPlayers()
         }
 
-    private fun markErrorInput() {
-        gameBinding.textField.error = resources.getString(R.string.im_validation_error_input)
+    private fun markErrorKeyWordInput() {
+        gameBinding.keyWordField.error =
+            resources.getString(R.string.im_validation_error_key_word_input)
+        gameBinding.keyWordField.requestFocus()
     }
 
+    private fun markErrorKeyWordThemeInput() {
+        gameBinding.keyWordThemeField.error =
+            resources.getString(R.string.im_validation_error_key_word_theme_input)
+        gameBinding.keyWordThemeField.requestFocus()
+    }
 
     private fun markErrorConnectedPlayers() {
         MaterialAlertDialogBuilder(requireContext())
@@ -78,5 +93,8 @@ class CreateImpostorFragment : BaseGameFragment<
 
         /** Create a new instance of the [CreateImpostorFragment]. */
         fun newInstance() = CreateImpostorFragment()
+
+        private const val DISABLED_BUTTON_ALPHA = 0.3F
+        private const val ENABLED_BUTTON_ALPHA = 1.0F
     }
 }

@@ -122,8 +122,8 @@
         android:gravity="center"
         android:outlineProvider="none"
         android:rotationX="@integer/truco_card_final_rotation"
-        android:scaleX="@integer/truco_card_final_scale"
-        android:scaleY="@integer/truco_card_final_scale"
+        android:scaleX="@integer/truco_for_2_card_final_scale"
+        android:scaleY="@integer/truco_for_2_card_final_scale"
         android:text="@string/truco_card_dropping_place"
         android:textColor="@color/colorPrimary"
         android:textStyle="bold"
@@ -142,8 +142,8 @@
         android:gravity="center"
         android:outlineProvider="none"
         android:rotationX="@integer/truco_card_final_rotation"
-        android:scaleX="@integer/truco_card_final_scale"
-        android:scaleY="@integer/truco_card_final_scale"
+        android:scaleX="@integer/truco_for_2_card_final_scale"
+        android:scaleY="@integer/truco_for_2_card_final_scale"
         android:text="@string/truco_card_dropping_place"
         android:textColor="@color/colorPrimary"
         android:textStyle="bold"
@@ -163,8 +163,8 @@
         android:gravity="center"
         android:outlineProvider="none"
         android:rotationX="@integer/truco_card_final_rotation"
-        android:scaleX="@integer/truco_card_final_scale"
-        android:scaleY="@integer/truco_card_final_scale"
+        android:scaleX="@integer/truco_for_2_card_final_scale"
+        android:scaleY="@integer/truco_for_2_card_final_scale"
         android:text="@string/truco_card_dropping_place"
         android:textColor="@color/colorPrimary"
         android:textStyle="bold"
@@ -242,7 +242,7 @@
         android:padding="@dimen/truco_action_bubble_padding"
         android:scaleX="0"
         android:scaleY="0"
-        android:textColor="@android:color/black"
+        android:textColor="@color/green_black"
         android:textSize="@dimen/font_huge_extra"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -275,7 +275,7 @@
         android:padding="@dimen/truco_action_bubble_padding"
         android:scaleX="0"
         android:scaleY="0"
-        android:textColor="@android:color/black"
+        android:textColor="@color/green_black"
         android:textSize="@dimen/font_huge_extra"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -284,8 +284,18 @@
         tools:scaleY="1f"
         tools:text="Envido" />
 
-    <include
-        android:id="@+id/actions_responses"
-        layout="@layout/view_truco_actions_responses" />
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <include
+            android:id="@+id/actions_responses"
+            layout="@layout/view_truco_actions_responses" />
+    </FrameLayout>
+
+    <include layout="@layout/view_truco_earned_points"  />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

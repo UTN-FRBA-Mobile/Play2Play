@@ -15,4 +15,7 @@
 
     <include
         layout="@layout/view_error_overlay" />
+
+    <include
+        layout="@layout/view_pause_game_overlay" />
 </FrameLayout>

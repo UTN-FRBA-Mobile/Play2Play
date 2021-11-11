@@ -46,20 +46,40 @@
         android:layout_marginTop="@dimen/medium"
         android:layout_marginBottom="@dimen/medium"
         app:layout_constrainedHeight="true"
-        app:layout_constraintBottom_toTopOf="@id/start_game_button"
+        app:layout_constraintBottom_toTopOf="@id/make_me_visible_text"
         app:layout_constraintTop_toBottomOf="@id/connected_players_text"
         app:layout_constraintVertical_bias="0"
         tools:listitem="@layout/view_connected_user" />
 
-    <Button
-        android:id="@+id/start_game_button"
+    <TextView
+        android:id="@+id/make_me_visible_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/medium_extra"
-        android:enabled="false"
-        android:text="@string/lobby_start_game"
-        app:layout_constraintBottom_toBottomOf="@id/guideline_bottom"
+        android:layout_marginBottom="@dimen/medium"
+        android:text="@string/server_lobby_make_me_visible_text"
+        app:layout_constraintBottom_toTopOf="@id/make_me_visible_button"
         app:layout_constraintEnd_toEndOf="@id/guideline_end"
         app:layout_constraintStart_toStartOf="@id/guideline_begin" />
+
+    <Button
+        android:id="@+id/make_me_visible_button"
+        style="@style/Widget.P2P.Button.Outline"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/small"
+        android:text="@string/lobby_make_me_visible"
+        app:layout_constraintBottom_toTopOf="@id/next_screen_button"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintStart_toStartOf="@id/guideline_begin" />
+
+    <Button
+        android:id="@+id/next_screen_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        app:layout_constraintBottom_toBottomOf="@id/guideline_bottom"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintStart_toStartOf="@id/guideline_begin"
+        tools:text="@string/lobby_start_game" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

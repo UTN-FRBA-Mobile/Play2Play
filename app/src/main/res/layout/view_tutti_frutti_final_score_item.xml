@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/P2P_Description"
-        android:textColor="@color/persimmon"
+        android:textColor="@color/coral"
         android:textSize="@dimen/font_huge"
         android:textStyle="bold"
         android:paddingBottom="@dimen/medium_more"
@@ -46,7 +46,7 @@
         android:layout_marginStart="@dimen/medium_more"
         app:layout_constraintStart_toEndOf="@+id/playerName"
         app:layout_constraintTop_toTopOf="@+id/playerName"
-        app:tint="@color/persimmon"
+        app:tint="@color/coral"
         android:src="@drawable/ic_crown"/>
 
     <TextView

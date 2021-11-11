@@ -55,6 +55,7 @@ class CreateTuttiFruttiFragment : BaseGameFragment<
     }
 
 
+
     override fun onEvent(event: TuttiFruttiCategoriesEvents) = when (event) {
         is GoToSelectRounds -> {
             gameViewModel.setCategoriesToPlay(event.categories)

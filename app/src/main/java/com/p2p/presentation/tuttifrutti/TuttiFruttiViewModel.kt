@@ -18,7 +18,8 @@ import com.p2p.presentation.basegame.KillGame
 import com.p2p.presentation.extensions.requireValue
 import com.p2p.presentation.home.games.Game
 import com.p2p.presentation.tuttifrutti.create.categories.Category
-import com.p2p.presentation.tuttifrutti.finalscore.TuttiFruttiFinalScore
+import com.p2p.model.tuttifrutti.TuttiFruttiFinalScore
+import com.p2p.model.tuttifrutti.message.TuttiFruttiClientReviewMessage
 
 abstract class TuttiFruttiViewModel(
     connectionType: ConnectionType,
@@ -65,9 +66,17 @@ abstract class TuttiFruttiViewModel(
         _totalRounds.value = totalRounds
     }
 
+    fun setFinishedRoundInfos(finishedRoundInfos: Set<FinishedRoundInfo>) {
+        _finishedRoundInfos.value = finishedRoundInfos
+    }
+
     fun setFinishedRoundPointsInfos(finishedRoundPointsInfo: List<FinishedRoundPointsInfo>) {
         _finishedRoundsPointsInfos.value =
             _finishedRoundsPointsInfos.value?.plus(finishedRoundPointsInfo)
+    }
+
+    fun setFinalScores(scores: List<TuttiFruttiFinalScore>) {
+        _finalScores.value = scores
     }
 
     /**
@@ -121,10 +130,6 @@ abstract class TuttiFruttiViewModel(
         }
     }
 
-    fun setFinalScores(scores: List<TuttiFruttiFinalScore>) {
-        _finalScores.value = scores
-    }
-
     override fun goToPlay() {
         gameAlreadyStarted = true
         super.goToPlay()
@@ -156,6 +161,10 @@ abstract class TuttiFruttiViewModel(
     protected fun goToFinalScore() {
         gameAlreadyFinished = true
         dispatchSingleTimeEvent(GoToFinalScore)
+    }
+
+    fun sendClientReview() {
+        connection.write(TuttiFruttiClientReviewMessage(finishedRoundInfos.requireValue()))
     }
 
     companion object {

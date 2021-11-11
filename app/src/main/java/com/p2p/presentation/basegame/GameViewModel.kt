@@ -22,15 +22,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-
 abstract class GameViewModel(
     private val connectionType: ConnectionType,
     private val userSession: UserSession,
     private val bluetoothConnectionCreator: BluetoothConnectionCreator,
     private val instructionsRepository: InstructionsRepository,
     protected val loadingTextRepository: LoadingTextRepository,
-    theGame: Game
+    val theGame: Game
 ) : BaseViewModel<GameEvent>() {
+
+    protected open val maxPlayersOnRoom: Int = Int.MAX_VALUE
+    protected open val playersRecoverability = PlayersRecoverability.CANNOT_RECOVER
 
     protected var gameAlreadyStarted = false
     protected var gameAlreadyFinished = false
@@ -54,6 +56,13 @@ abstract class GameViewModel(
             field = value
             _players.value = value.map { it.second }
         }
+    private var lostPlayers = emptySet<String>()
+        set(value) {
+            field = value
+            if (playersRecoverability.shouldPauseGame(lostPlayers)) {
+                dispatchSingleTimeEvent(PauseGame(value.toList()))
+            }
+        }
 
     private val _myDeviceName = MutableLiveData<String>()
     val myDeviceName: LiveData<String> = _myDeviceName
@@ -61,7 +70,7 @@ abstract class GameViewModel(
     private val _game = MutableLiveData<Game>()
     val game: LiveData<Game> = _game
 
-    private val _players = MutableLiveData(emptyList<String>())
+    protected val _players = MutableLiveData(emptyList<String>())
     val players: LiveData<List<String>> = _players
 
     //Loading value for loading screen, being first if isLoading and second the text to show
@@ -86,31 +95,30 @@ abstract class GameViewModel(
     @CallSuper
     open fun receiveMessage(conversation: Conversation) {
         when (val message = conversation.lastMessage) {
-            is ClientHandshakeMessage -> {
-                val isNameInUse = connectedPlayers.any { it.second == message.name }
-                if (isServer()) {
-                    if (isNameInUse) {
-                        connection.talk(conversation, NameInUseMessage())
-                    } else {
-                        connection.talk(
-                            conversation,
-                            ServerHandshakeMessage(connectedPlayers.map { it.second })
-                        )
-                    }
-                }
-                if (!isNameInUse) {
-                    connectedPlayers = connectedPlayers + (conversation.peer to message.name)
-                }
-            }
+            is ClientHandshakeMessage -> onClientHandshake(message, conversation)
             is NameInUseMessage -> dispatchErrorScreen(NameInUseError {
                 dispatchSingleTimeEvent(KillGame)
             })
+            is RoomIsAlreadyFullMessage -> dispatchErrorScreen(RoomIsAlreadyFullError {
+                dispatchSingleTimeEvent(KillGame)
+            })
+            is RejoinNameErrorMessage -> dispatchErrorScreen(RejoinNameError(message.availableNames) {
+                dispatchSingleTimeEvent(KillGame)
+            })
+            is WrongGameJoinedMessage -> dispatchErrorScreen(WrongJoinedGameError {
+                dispatchSingleTimeEvent(KillGame)
+            })
             is ServerHandshakeMessage -> {
-                connectedPlayers =
-                    connectedPlayers + message.players.map { conversation.peer to it }
+                connectedPlayers = message.players.map { conversation.peer to it }
+                lostPlayers = lostPlayers
+                    .filterNot { lost -> connectedPlayers.any { (_, connected) -> lost == connected } }
+                    .toSet()
             }
             is GoodbyePlayerMessage -> {
                 connectedPlayers.firstOrNull { it.second == message.name }?.let { removePlayer(it) }
+            }
+            is PauseGameMessage -> {
+                lostPlayers = message.lostPlayers.toSet()
             }
         }
     }
@@ -147,7 +155,8 @@ abstract class GameViewModel(
 
     /** Invoked when the client connection to the server was established successfully. */
     @CallSuper
-    open fun onClientConnectionSuccess() = connection.write(ClientHandshakeMessage(userName))
+    open fun onClientConnectionSuccess() =
+        connection.write(ClientHandshakeMessage(userName, theGame.id))
 
     /** Invoked when there was an error while trying to connect the client with the server. */
     @CallSuper
@@ -162,7 +171,10 @@ abstract class GameViewModel(
     open fun onClientConnectionLost(peerId: Long) {
         if (gameAlreadyFinished) return
         val playerLost = connectedPlayers.firstOrNull { it.first == peerId } ?: return
-        connection.write(GoodbyePlayerMessage(playerLost.second))
+        if (gameAlreadyStarted) {
+            lostPlayers = lostPlayers + playerLost.second
+            connection.write(playersRecoverability.constructOnPlayerLostMessage(lostPlayers))
+        }
         removePlayer(playerLost)
     }
 
@@ -176,6 +188,7 @@ abstract class GameViewModel(
 
     fun startConnection() {
         _connection = if (isServer()) {
+            bluetoothConnectionCreator.makeMeVisible()
             bluetoothConnectionCreator.createServer()
         } else {
             bluetoothConnectionCreator.createClient(requireNotNull(connectionType.device) {
@@ -183,6 +196,8 @@ abstract class GameViewModel(
             })
         }
     }
+
+    fun makeMeVisible() = bluetoothConnectionCreator.makeMeVisible()
 
     fun showInstructions() = dispatchSingleTimeEvent(OpenInstructions(instructions))
 
@@ -240,6 +255,56 @@ abstract class GameViewModel(
             type = MessageData.Type.ERROR,
             formatArgs = arrayOf(playerLost.second),
         )
+    }
+
+    /**
+     * Invoked when a client has joined to the room.
+     * Returns true if the client has joined successfully, false if there was an error.
+     */
+    @CallSuper
+    protected open fun onClientHandshake(
+        message: ClientHandshakeMessage,
+        conversation: Conversation
+    ): Boolean {
+        if (isServer()) {
+            return when {
+                connectedPlayers.any { it.second == message.name } -> {
+                    connection.talk(conversation, NameInUseMessage())
+                    false
+                }
+                connectedPlayers.size >= maxPlayersOnRoom -> {
+                    connection.talk(conversation, RoomIsAlreadyFullMessage())
+                    false
+                }
+                message.joinedGame != theGame.id -> {
+                    connection.talk(conversation, WrongGameJoinedMessage())
+                    false
+                }
+                gameAlreadyStarted && !playersRecoverability.canJoinToStartedGame(
+                    lostPlayers,
+                    message.name
+                ) -> {
+                    connection.talk(
+                        conversation,
+                        playersRecoverability.constructCantJoinToStartedGameMessage(lostPlayers)
+                    )
+                    false
+                }
+                else -> {
+                    connectedPlayers = connectedPlayers + (conversation.peer to message.name)
+                    lostPlayers = lostPlayers - message.name
+                    connection.write(ServerHandshakeMessage(connectedPlayers.map { it.second }))
+                    true
+                }
+            }
+        }
+        return false
+    }
+
+    protected fun checkIfShouldResumeGame() {
+        if (playersRecoverability.shouldResumeGame(lostPlayers)) {
+            dispatchSingleTimeEvent(ResumeGame)
+        }
     }
 
     companion object {

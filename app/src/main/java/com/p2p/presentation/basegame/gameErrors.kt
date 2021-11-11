@@ -8,7 +8,8 @@ abstract class GameError(
     @DrawableRes val image: Int,
     @StringRes val text: Int,
     @StringRes val actionText: Int,
-    val onActionClicked: () -> Unit
+    val onActionClicked: () -> Unit,
+    val stringArgs: List<Any> = emptyList()
 )
 
 class CannotEstablishClientConnectionError(onRetry: () -> Unit) : GameError(
@@ -21,6 +22,28 @@ class CannotEstablishClientConnectionError(onRetry: () -> Unit) : GameError(
 class NameInUseError(onOkClicked: () -> Unit) : GameError(
     R.drawable.ic_info,
     R.string.error_name_in_use,
+    android.R.string.ok,
+    onOkClicked
+)
+
+class RoomIsAlreadyFullError(onOkClicked: () -> Unit) : GameError(
+    R.drawable.ic_info,
+    R.string.error_room_already_full,
+    android.R.string.ok,
+    onOkClicked
+)
+
+class RejoinNameError(availableNames: List<String>, onOkClicked: () -> Unit) : GameError(
+    R.drawable.ic_info,
+    R.string.error_rejoin_name,
+    android.R.string.ok,
+    onOkClicked,
+    listOf(availableNames.joinToString(".\n- ", "\n- ", "."))
+)
+    
+class WrongJoinedGameError(onOkClicked: () -> Unit) : GameError(
+    R.drawable.ic_info,
+    R.string.error_joined_game,
     android.R.string.ok,
     onOkClicked
 )

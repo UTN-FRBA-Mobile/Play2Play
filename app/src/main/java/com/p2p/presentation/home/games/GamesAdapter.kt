@@ -1,30 +1,29 @@
 package com.p2p.presentation.home.games
+
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.p2p.R
 import com.p2p.databinding.ViewGamesItemBinding
+import com.p2p.presentation.extensions.fadeIn
+import com.p2p.presentation.extensions.fadeOut
 import com.p2p.utils.isEven
 
 /** The adapter used to show the list of games. */
-class GamesAdapter(private val onSelectedChanged: (Game?) -> Unit) :
-    RecyclerView.Adapter<GamesAdapter.ViewHolder>() {
+class GamesAdapter(
+    private val onCreateClicked: (Game) -> Unit,
+    private val onJoinClicked: (Game) -> Unit
+) : ListAdapter<Game, GamesAdapter.ViewHolder>(Differ()) {
 
     /** The list of games displayed on the recycler. */
     var games = listOf<Game>()
         set(value) {
+            submitList(value)
             field = value
-            notifyDataSetChanged()
-        }
-
-    /** The current selected game on the list. */
-    var selected: Game? = null
-        private set(value) {
-            if (field == value) return
-            field = value
-            onSelectedChanged.invoke(value)
-            notifyDataSetChanged()
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -39,8 +38,6 @@ class GamesAdapter(private val onSelectedChanged: (Game?) -> Unit) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(games[position])
 
-    override fun getItemCount() = games.size
-
     private fun getGameCardBackgroundColor(index: Int) =
         if (index.isEven()) R.color.colorSecondaryVariant else R.color.colorPrimaryVariant
 
@@ -52,38 +49,40 @@ class GamesAdapter(private val onSelectedChanged: (Game?) -> Unit) :
 
         /** Show the given [game] into the view. */
         fun bind(game: Game) = with(binding) {
+            buttons.isVisible = false
             gameCard.setBackgroundColor(
                 ContextCompat.getColor(
                     itemView.context,
-                    getGameCardBackgroundColor(position)
+                    getGameCardBackgroundColor(absoluteAdapterPosition)
                 )
             )
             name.setBackgroundColor(
                 ContextCompat.getColor(
                     itemView.context,
-                    getNameBackgroundColor(position)
+                    getNameBackgroundColor(absoluteAdapterPosition)
                 )
             )
             gameCardIcon.setBackgroundResource(game.iconRes)
             name.text = name.context.getText(game.nameRes)
-            container.setOnClickListener { selected = game }
-            container
-                .animate()
-                .alpha(
-                    when (selected) {
-                        game -> SELECTED_OPACITY
-                        null -> NONE_SELECTED_OPACITY
-                        else -> NO_SELECTED_OPACITY
-                    }
-                )
-                .start()
+            container.setOnClickListener {
+                if (buttons.isVisible) return@setOnClickListener
+                buttons.fadeIn()
+                buttons.postDelayed({ buttons.fadeOut() }, VISIBLE_BUTTONS_TIME)
+            }
+            createButton.setOnClickListener { onCreateClicked(game) }
+            joinButton.setOnClickListener { onJoinClicked(game) }
         }
+    }
+
+    private class Differ : DiffUtil.ItemCallback<Game>() {
+
+        override fun areItemsTheSame(oldItem: Game, newItem: Game) = oldItem == newItem
+
+        override fun areContentsTheSame(oldItem: Game, newItem: Game) = oldItem == newItem
     }
 
     companion object {
 
-        private const val SELECTED_OPACITY = 1f
-        private const val NO_SELECTED_OPACITY = 0.5f
-        private const val NONE_SELECTED_OPACITY = 0.8f
+        private const val VISIBLE_BUTTONS_TIME = 10_000L
     }
 }

@@ -17,7 +17,6 @@
     <dimen name="huge_extra">46dp</dimen>
     <dimen name="largest">54dp</dimen>
     <dimen name="largest_extra">64dp</dimen>
-    <dimen name="final_score_image_size">96dp</dimen>
 
     <!-- Text sizes -->
     <dimen name="font_tiny">6sp</dimen>
@@ -51,15 +50,29 @@
     <!-- Tutti frutti categories -->
     <dimen name="tf_categories_custom_elevation">10dp</dimen>
 
+    <!-- Tutti frutti final score -->
+    <dimen name="tf_final_score_image_size">96dp</dimen>
+
     <!-- Countdown -->
     <dimen name="countdown_number_width">100dp</dimen>
     <dimen name="countdown_number_height">200dp</dimen>
+
+    <!-- Truco create -->
+    <dimen name="truco_create_game_card">150dp</dimen>
+
+    <!-- Truco lobby -->
+    <dimen name="tr_grid_card_size">100dp</dimen>
+
+    <!-- Truco game -->
     <dimen name="truco_card_drop_height">90dp</dimen>
     <dimen name="truco_my_card_width">98dp</dimen>
     <dimen name="truco_my_card_height">150dp</dimen>
+    <dimen name="truco_for_4_card_width">78dp</dimen>
+    <dimen name="truco_for_4_card_height">120dp</dimen>
     <dimen name="truco_their_card_separation">12dp</dimen>
     <dimen name="truco_their_card_width">62dp</dimen>
     <dimen name="truco_their_card_height">95dp</dimen>
+    <dimen name="truco_their_card_half_height">40dp</dimen>
     <dimen name="truco_normal_card_vertical_margin">10dp</dimen>
     <dimen name="truco_elevated_card_vertical_margin">20dp</dimen>
     <dimen name="truco_first_card_horizontal_margin">30dp</dimen>
@@ -68,10 +81,18 @@
     <dimen name="truco_their_first_card_horizontal_margin">60dp</dimen>
     <dimen name="truco_their_second_card_horizontal_margin">90dp</dimen>
     <dimen name="truco_their_third_card_horizontal_margin">130dp</dimen>
+    <dimen name="truco_for_4_elevated_card_vertical_margin">14dp</dimen>
+    <dimen name="truco_for_4_my_first_card_horizontal_margin">30dp</dimen>
+    <dimen name="truco_for_4_my_second_card_horizontal_margin">70dp</dimen>
+    <dimen name="truco_for_4_my_third_card_horizontal_margin">110dp</dimen>
+    <dimen name="truco_for_4_their_first_card_horizontal_margin">30dp</dimen>
+    <dimen name="truco_for_4_their_second_card_horizontal_margin">40dp</dimen>
+    <dimen name="truco_for_4_their_third_card_horizontal_margin">50dp</dimen>
+    <dimen name="truco_for_4_dropping_place_separation">20dp</dimen>
     <dimen name="truco_round_circle_size">16dp</dimen>
     <dimen name="truco_round_circle_elevation">10dp</dimen>
-    <dimen name="truco_actions_open_button_width">40dp</dimen>
-    <dimen name="truco_actions_open_button_height">20dp</dimen>
+    <dimen name="truco_actions_open_button_width">50dp</dimen>
+    <dimen name="truco_actions_open_button_height">30dp</dimen>
     <dimen name="truco_actions_sheet_elevation">10dp</dimen>
     <dimen name="truco_actions_border_size">1dp</dimen>
     <dimen name="truco_table_height">350dp</dimen>
@@ -80,6 +101,16 @@
     <dimen name="truco_table_margin_top">4dp</dimen>
     <dimen name="truco_table_margin_horizontal">2dp</dimen>
     <dimen name="truco_table_border_bottom_height">30dp</dimen>
-    <dimen name="truco_action_bubble_padding">60dp</dimen>
+    <dimen name="truco_action_bubble_padding">50dp</dimen>
     <dimen name="truco_action_bubble_elevation">50dp</dimen>
+    <dimen name="truco_earned_points_title_size">80sp</dimen>
+    <dimen name="truco_earned_points_subtitle_size">64sp</dimen>
+    <dimen name="truco_result_title_size">40sp</dimen>
+    <dimen name="truco_result_subtitle_size">60sp</dimen>
+
+    <!-- Impostor -->
+    <dimen name="game_task_image_size">140dp</dimen>
+
+    <!-- Truco final score -->
+    <dimen name="tr_final_score_image_size">120dp</dimen>
 </resources>
