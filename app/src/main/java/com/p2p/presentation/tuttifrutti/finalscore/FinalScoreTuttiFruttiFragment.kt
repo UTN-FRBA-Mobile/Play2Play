@@ -14,7 +14,7 @@ class FinalScoreTuttiFruttiFragment : BaseGameFragment<
         FragmentTuttiFruttiFinalScoreBinding,
         TuttiFruttiFinalScoreEvent,
         FinalScoreTuttiFruttiViewModel,
-        TuttiFruttiViewModel>(isAddedToBackStack = true) {
+        TuttiFruttiViewModel>() {
 
     override val gameViewModel: TuttiFruttiViewModel by activityViewModels()
 

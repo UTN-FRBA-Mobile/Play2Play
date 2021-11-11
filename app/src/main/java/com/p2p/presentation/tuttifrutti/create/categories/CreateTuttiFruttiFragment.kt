@@ -16,7 +16,7 @@ class CreateTuttiFruttiFragment : BaseGameFragment<
         FragmentCreateTuttiFruttiBinding,
         TuttiFruttiCategoriesEvents,
         CreateTuttiFruttiViewModel,
-        TuttiFruttiViewModel>(isAddedToBackStack = true) {
+        TuttiFruttiViewModel>() {
 
     override val gameViewModel: TuttiFruttiViewModel by activityViewModels()
     override val viewModel: CreateTuttiFruttiViewModel by viewModels {
