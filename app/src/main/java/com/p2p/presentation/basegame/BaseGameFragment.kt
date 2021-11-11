@@ -1,11 +1,9 @@
 package com.p2p.presentation.basegame
 
-import android.app.AlertDialog
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
 import androidx.annotation.CallSuper
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.appbar.MaterialToolbar
@@ -34,9 +32,6 @@ abstract class BaseGameFragment<GVB : ViewBinding, E : Any, VM : BaseViewModel<E
             _gameBinding = gameInflater(inflater, container, boolean)
             val gameView = gameBinding.root
             baseView.content.addView(gameView)
-            if( !isAddedToBackStack ) {
-                baseView.header.navigationIcon = null
-            }
             baseView
         }
 
@@ -56,32 +51,13 @@ abstract class BaseGameFragment<GVB : ViewBinding, E : Any, VM : BaseViewModel<E
     }
 
     @CallSuper
-    override fun onCreate(
-        savedInstanceState: Bundle?
-    ){
-        super.onCreate(savedInstanceState)
-        if(!isAddedToBackStack) {
-            activity?.onBackPressedDispatcher?.addCallback(
-                this,
-                object : OnBackPressedCallback(true) {
-                    override fun handleOnBackPressed() {
-                        AlertDialog.Builder(requireContext())
-                            .setMessage(R.string.exit_game)
-                            .setCancelable(false)
-                            .setPositiveButton(R.string.exit_game_yes) { _, _ ->
-                                activity?.finish()
-                            }
-                            .setNegativeButton(R.string.exit_game_no, null)
-                            .show()
-                    }
-                })
-        }
-    }
-
-    @CallSuper
     override fun setupObservers() {
         super.setupObservers()
         observe(gameViewModel.game) { binding.header.title = context?.getText(it.nameRes) }
+        observe(gameViewModel.isBackAllowed) {
+            binding.header.navigationIcon =
+                if (it) ContextCompat.getDrawable(requireContext(), R.drawable.ic_baseline_arrow_back_24) else null
+        }
     }
 
     private fun setHeaderEvents(header: MaterialToolbar) {
