@@ -1,6 +1,7 @@
 package com.p2p.presentation.basegame
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.content.BroadcastReceiver
@@ -105,6 +106,7 @@ abstract class GameActivity<E : SpecificGameEvent, VM : GameViewModel> :
     }
     private val device: BluetoothDevice? by lazy { intent.getParcelableExtra(SERVER_DEVICE_EXTRA) }
     private val objectMapper by lazy { jacksonObjectMapper() }
+    private var isBackAllowed = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -131,6 +133,7 @@ abstract class GameActivity<E : SpecificGameEvent, VM : GameViewModel> :
             }
         }
         viewModel.message.observe(this) { showSnackBar(it) }
+        viewModel.isBackAllowed.observe(this) { isBackAllowed = it }
     }
 
     override fun onResume() {
@@ -144,6 +147,20 @@ abstract class GameActivity<E : SpecificGameEvent, VM : GameViewModel> :
     override fun onPause() {
         super.onPause()
         unregisterReceiver(bluetoothConnectionReceiver)
+    }
+
+    override fun onBackPressed() {
+        if (isBackAllowed) {
+            super.onBackPressed()
+            return
+        }
+
+        AlertDialog.Builder(this)
+            .setMessage(R.string.exit_game)
+            .setCancelable(false)
+            .setPositiveButton(R.string.exit_game_yes) { _, _ -> super.onBackPressed() }
+            .setNegativeButton(R.string.exit_game_no, null)
+            .show()
     }
 
     final override fun onEvent(event: GameEvent) = when (event) {

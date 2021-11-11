@@ -124,6 +124,10 @@
     <string name="error_connection_write_failure">Se perdió la conexión con la sala de juego, lo sentimos mucho.</string>
     <string name="tf_error_single_player">El resto de lxs jugadorxs abandonaron el juego… ¡felicitaciones ganadorx!</string>
 
+    <string name="exit_game">¿Está seguro de que querés abandonar el juego?</string>
+    <string name="exit_game_yes">Si</string>
+    <string name="exit_game_no">No</string>
+
     <!-- Truco -->
     <!-- Create game -->
     <string name="truco_create_game_title">Creá tu partida de truco</string>
