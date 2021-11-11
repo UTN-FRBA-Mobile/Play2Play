@@ -27,7 +27,6 @@ import java.io.Serializable
     JsonSubTypes.Type(value = TuttiFruttiEnoughForMeEnoughForAllMessage::class),
     JsonSubTypes.Type(value = TuttiFruttiSendWordsMessage::class),
     JsonSubTypes.Type(value = TuttiFruttiStartRoundMessage::class),
-    JsonSubTypes.Type(value = TuttiFruttiClientReviewMessage::class),
     JsonSubTypes.Type(value = FinalScoreMessage::class),
     JsonSubTypes.Type(value = ImpostorAssignWord::class),
     JsonSubTypes.Type(value = ImpostorEndGame::class),

@@ -12,6 +12,9 @@ abstract class TuttiFruttiReviewRoundAdapterHelper :
     RecyclerView.Adapter<TuttiFruttiReviewRoundAdapterHelper.RecyclerViewHolder>() {
 
     var finishedRoundInfo = listOf<FinishedRoundInfo>()
+        set(value) {
+            field = value.sortedBy { it.player }
+        }
 
     abstract override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder
 
