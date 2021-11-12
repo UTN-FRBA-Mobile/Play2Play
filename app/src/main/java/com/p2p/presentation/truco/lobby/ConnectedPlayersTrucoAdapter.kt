@@ -105,7 +105,7 @@ class ConnectedPlayersTrucoAdapter(
             true
         }
 
-        connectedUserView.setOnDragListener(DragListener())
+        connectedUserView.setOnDragListener(DragListener { players = it })
         return connectedUserView
     }
 }
