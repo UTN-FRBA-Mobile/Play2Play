@@ -11,7 +11,7 @@ import com.p2p.R
 import com.p2p.utils.Logger
 import java.util.*
 
-class DragListener : View.OnDragListener {
+class DragListener(private val onNewList: (List<String>) -> Unit) : View.OnDragListener {
     override fun onDrag(view: View, event: DragEvent?): Boolean {
         when (event!!.action) {
             DragEvent.ACTION_DRAG_STARTED -> {
@@ -31,7 +31,7 @@ class DragListener : View.OnDragListener {
             DragEvent.ACTION_DROP -> {
                 val adapter = getViewAdapter(view)
                 val droppedPlayer = getViewPlayerName(view)
-                val players: MutableList<String> = adapter.players.toMutableList()
+                val players = adapter.players.toMutableList()
 
                 val replacedItem: ClipData.Item = event.clipData.getItemAt(0)
                 val replacedPlayer = replacedItem.text
@@ -39,7 +39,7 @@ class DragListener : View.OnDragListener {
                 val replacedPlayerIndex: Int = getPlayerIndex(replacedPlayer, players)
                 val droppedPlayerIndex: Int = getPlayerIndex(droppedPlayer, players)
 
-                Collections.swap(players, replacedPlayerIndex, droppedPlayerIndex)
+                onNewList(players.swap(replacedPlayerIndex, droppedPlayerIndex))
                 adapter.notifyDataSetChanged()
 
                 return true
@@ -80,6 +80,14 @@ class DragListener : View.OnDragListener {
     private fun getViewPlayerName(view: View) = view.findViewById<TextView>(R.id.name).text
 
     private fun getPlayerIndex(player: CharSequence, players: List<String>) = players.indexOf(player)
+
+    private fun <T> List<T>.swap(index1: Int, index2: Int): List<T> {
+        val tmpList = toMutableList()
+        val tmp = this[index1] // 'this' corresponds to the list
+        tmpList[index1] = this[index2]
+        tmpList[index2] = tmp
+        return tmpList.toList()
+    }
 
     companion object {
         const val TAG = "P2P_TRUCO_TEAMS_DRAG_AND_DROP"
