@@ -7,19 +7,20 @@ import ar.com.play2play.data.bluetooth.BluetoothConnectionCreator
 import ar.com.play2play.data.instructions.InstructionsRepository
 import ar.com.play2play.data.loadingMessages.LoadingTextRepository
 import ar.com.play2play.data.userInfo.UserSession
+import ar.com.play2play.model.LoadingMessageType
 import ar.com.play2play.model.base.message.Conversation
 import ar.com.play2play.model.tuttifrutti.FinishedRoundInfo
 import ar.com.play2play.model.tuttifrutti.FinishedRoundPointsInfo
 import ar.com.play2play.model.tuttifrutti.RoundInfo
+import ar.com.play2play.model.tuttifrutti.TuttiFruttiFinalScore
 import ar.com.play2play.model.tuttifrutti.message.TuttiFruttiEnoughForMeEnoughForAllMessage
+import ar.com.play2play.model.tuttifrutti.message.TuttiFruttiSendWordsMessage
 import ar.com.play2play.presentation.basegame.ConnectionType
 import ar.com.play2play.presentation.basegame.GameViewModel
 import ar.com.play2play.presentation.basegame.KillGame
 import ar.com.play2play.presentation.extensions.requireValue
 import ar.com.play2play.presentation.home.games.Game
 import ar.com.play2play.presentation.tuttifrutti.create.categories.Category
-import ar.com.play2play.model.tuttifrutti.TuttiFruttiFinalScore
-import ar.com.play2play.model.tuttifrutti.message.TuttiFruttiClientReviewMessage
 
 abstract class TuttiFruttiViewModel(
     connectionType: ConnectionType,
@@ -38,10 +39,10 @@ abstract class TuttiFruttiViewModel(
 
     protected lateinit var lettersByRound: List<Char>
 
-    protected val _totalRounds = MutableLiveData<Int>()
+    private val _totalRounds = MutableLiveData<Int>()
     val totalRounds: LiveData<Int> = _totalRounds
 
-    protected val _finishedRoundInfos = MutableLiveData(setOf<FinishedRoundInfo>())
+    private val _finishedRoundInfos = MutableLiveData(setOf<FinishedRoundInfo>())
     val finishedRoundInfos: LiveData<Set<FinishedRoundInfo>> = _finishedRoundInfos
 
     private val _finishedRoundsPointsInfos = MutableLiveData(listOf<FinishedRoundPointsInfo>())
@@ -57,6 +58,12 @@ abstract class TuttiFruttiViewModel(
     private val _finalScores = MutableLiveData<List<TuttiFruttiFinalScore>>()
     val finalScores: LiveData<List<TuttiFruttiFinalScore>> = _finalScores
 
+    private var saidEnoughPlayer: String? = null
+
+    abstract fun startRound()
+
+    abstract fun goToReview()
+
     /** Set the categories selected by the user when creating the game . */
     fun setCategoriesToPlay(categories: List<Category>) {
         _categoriesToPlay.value = categories
@@ -64,10 +71,6 @@ abstract class TuttiFruttiViewModel(
 
     fun setTotalRounds(totalRounds: Int) {
         _totalRounds.value = totalRounds
-    }
-
-    fun setFinishedRoundInfos(finishedRoundInfos: Set<FinishedRoundInfo>) {
-        _finishedRoundInfos.value = finishedRoundInfos
     }
 
     fun setFinishedRoundPointsInfos(finishedRoundPointsInfo: List<FinishedRoundPointsInfo>) {
@@ -95,23 +98,16 @@ abstract class TuttiFruttiViewModel(
         _actualRound.value = RoundInfo(lettersByRound[round - 1], round)
     }
 
-    abstract fun startRound()
-
-    /**
-     * Enough for me enough for all will say to the room that the round is finished.
-     *
-     * The client and the server will handle different the invocation of this method:
-     * - The client will just send the message and when it's sent, it'll stop the round
-     *   (that's because it needs the conversation started with the server to send their words).
-     * - The server will stop the round immediately when this is invoked because it doesn't need
-     *   to do anything more, just wait for the others words.
-     */
-    @CallSuper
-    open fun enoughForMeEnoughForAll() {
-        connection.write(TuttiFruttiEnoughForMeEnoughForAllMessage())
+    /** Enough for me enough for all will say to the room that the round is finished. */
+    fun enoughForMeEnoughForAll() {
+        connection.write(TuttiFruttiEnoughForMeEnoughForAllMessage(userName))
+        saidEnough(userName)
     }
 
-    abstract fun sendWords(categoriesWords: LinkedHashMap<Category, String>)
+    fun sendWords(categoriesWords: LinkedHashMap<Category, String>) {
+        connection.write(TuttiFruttiSendWordsMessage(userName, categoriesWords))
+        acceptWords(MYSELF_PEER_ID, userName, categoriesWords)
+    }
 
     /**
      * The server calculates the final scores and send them to the clients.
@@ -138,13 +134,10 @@ abstract class TuttiFruttiViewModel(
     @CallSuper
     override fun receiveMessage(conversation: Conversation) {
         super.receiveMessage(conversation)
-        when (conversation.lastMessage) {
-            is TuttiFruttiEnoughForMeEnoughForAllMessage -> onReceiveEnoughForAll(conversation)
+        when (val message = conversation.lastMessage) {
+            is TuttiFruttiEnoughForMeEnoughForAllMessage -> saidEnough(message.player)
+            is TuttiFruttiSendWordsMessage -> acceptWords(conversation.peer, message.player, message.words)
         }
-    }
-
-    protected open fun onReceiveEnoughForAll(conversation: Conversation) {
-        stopRound()
     }
 
     override fun onClientConnectionLost(peerId: Long) {
@@ -156,15 +149,37 @@ abstract class TuttiFruttiViewModel(
         }
     }
 
-    protected fun stopRound() = dispatchSingleTimeEvent(ObtainWords)
-
     protected fun goToFinalScore() {
         gameAlreadyFinished = true
         dispatchSingleTimeEvent(GoToFinalScore)
     }
 
-    fun sendClientReview() {
-        connection.write(TuttiFruttiClientReviewMessage(finishedRoundInfos.requireValue()))
+    @CallSuper
+    protected open fun saidEnough(player: String) {
+        startLoading(loadingTextRepository.getText(LoadingMessageType.TF_WAITING_FOR_WORDS))
+        saidEnoughPlayer = player
+        _finishedRoundInfos.value = emptySet()
+        stopRound()
+    }
+
+    @CallSuper
+    protected open fun goToReviewIfCorresponds() {
+        if (finishedRoundInfos.requireValue().size == connectedPlayers.size) {
+            // When all the players send their words, go to the review and clean the players round words.
+            goToReview()
+        }
+    }
+
+    private fun stopRound() = dispatchSingleTimeEvent(ObtainWords)
+
+    private fun acceptWords(peer: Long, player: String, categoriesWords: LinkedHashMap<Category, String>) {
+        _finishedRoundInfos.value = _finishedRoundInfos.requireValue() + FinishedRoundInfo(
+            peer = peer,
+            player = player,
+            categoriesWords = categoriesWords,
+            saidEnough = player == saidEnoughPlayer
+        )
+        goToReviewIfCorresponds()
     }
 
     companion object {

@@ -4,18 +4,14 @@ import androidx.lifecycle.viewModelScope
 import ar.com.play2play.data.bluetooth.BluetoothConnectionCreator
 import ar.com.play2play.data.instructions.InstructionsRepository
 import ar.com.play2play.data.loadingMessages.LoadingTextRepository
-import ar.com.play2play.model.LoadingMessageType
 import ar.com.play2play.data.userInfo.UserSession
 import ar.com.play2play.model.base.message.Conversation
-import ar.com.play2play.model.tuttifrutti.FinishedRoundInfo
 import ar.com.play2play.model.tuttifrutti.message.FinalScoreMessage
-import ar.com.play2play.model.tuttifrutti.message.TuttiFruttiSendWordsMessage
 import ar.com.play2play.model.tuttifrutti.message.TuttiFruttiStartGameMessage
 import ar.com.play2play.model.tuttifrutti.message.TuttiFruttiStartRoundMessage
 import ar.com.play2play.presentation.basegame.ConnectionType
 import ar.com.play2play.presentation.basegame.KillGame
 import ar.com.play2play.presentation.extensions.requireValue
-import ar.com.play2play.presentation.tuttifrutti.create.categories.Category
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -36,7 +32,6 @@ class ServerTuttiFruttiViewModel(
     loadingTextRepository
 ) {
     private var roundAlreadyStarted = false
-    private var saidEnoughPeer: Long? = null
     private var waitingWordsJob: Job? = null
 
     /** Be careful: this will be called for every client on a broadcast. */
@@ -69,50 +64,23 @@ class ServerTuttiFruttiViewModel(
         roundAlreadyStarted = false
     }
 
-    override fun receiveMessage(conversation: Conversation) {
-        super.receiveMessage(conversation)
-        when (val message = conversation.lastMessage) {
-            is TuttiFruttiSendWordsMessage -> acceptWords(conversation.peer, message.words)
-        }
-    }
-
-    override fun sendWords(categoriesWords: LinkedHashMap<Category, String>) =
-        acceptWords(MYSELF_PEER_ID, categoriesWords)
-
-    override fun enoughForMeEnoughForAll() {
-        saidEnough(MYSELF_PEER_ID)
-        super.enoughForMeEnoughForAll()
-        stopRound()
-    }
-
-    override fun onReceiveEnoughForAll(conversation: Conversation) {
-        saidEnough(conversation.peer)
-        super.onReceiveEnoughForAll(conversation)
-    }
-
     override fun calculateFinalScores() {
         super.calculateFinalScores()
         connection.write(FinalScoreMessage(finalScores.requireValue()))
     }
 
-    private fun saidEnough(peer: Long) {
-        startLoading(loadingTextRepository.getText(LoadingMessageType.TF_WAITING_FOR_WORDS))
-        saidEnoughPeer = peer
-        _finishedRoundInfos.value = emptySet()
+    override fun saidEnough(player: String) {
+        super.saidEnough(player)
         waitingWordsJob = viewModelScope.launch(Dispatchers.Default) {
             delay(WAITING_WORDS_TIMEOUT_MS)
             withContext(Dispatchers.Main) { stopAcceptingWords() }
         }
     }
 
-    private fun acceptWords(peer: Long, categoriesWords: LinkedHashMap<Category, String>) {
-        _finishedRoundInfos.value = _finishedRoundInfos.requireValue() + FinishedRoundInfo(
-            peer = peer,
-            player = getPlayerById(peer),
-            categoriesWords = categoriesWords,
-            saidEnough = peer == saidEnoughPeer
-        )
-        goToReviewIfCorresponds()
+    override fun goToReview() {
+        waitingWordsJob?.cancel()
+        waitingWordsJob = null
+        dispatchSingleTimeEvent(GoToReview)
     }
 
     private fun stopAcceptingWords() {
@@ -130,15 +98,6 @@ class ServerTuttiFruttiViewModel(
 
     private fun getRandomLetters(): List<Char> =
         availableLetters.toList().shuffled().take(totalRounds.requireValue())
-
-    private fun goToReviewIfCorresponds() {
-        if (finishedRoundInfos.requireValue().size == connectedPlayers.size) {
-            waitingWordsJob?.cancel()
-            waitingWordsJob = null
-            // When all the players send their words, go to the review and clean the players round words.
-            dispatchSingleTimeEvent(GoToReview)
-        }
-    }
 
     companion object {
 

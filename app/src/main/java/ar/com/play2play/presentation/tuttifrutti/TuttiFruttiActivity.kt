@@ -39,13 +39,10 @@ class TuttiFruttiActivity : GameActivity<TuttiFruttiSpecificGameEvent, TuttiFrut
                 FinalScoreTuttiFruttiFragment.newInstance(),
                 shouldAddToBackStack = false
             )
-            GoToReview -> {
-                viewModel.sendClientReview()
+            GoToReview ->
                 addFragment(TuttiFruttiReviewFragment.newInstance(), shouldAddToBackStack = false)
-            }
-            GoToClientReview -> {
+            GoToClientReview ->
                 addFragment(TuttiFruttiClientReviewFragment.newInstance(), shouldAddToBackStack = false)
-            }
             else -> Unit
         }
     }

@@ -10,7 +10,6 @@ import ar.com.play2play.model.LoadingMessageType
 class LoadingTextLocalResourcesSource(context: Context) : LoadingSource {
 
     private val textByMessage = mapOf(
-        LoadingMessageType.TF_WAITING_FOR_REVIEW to getString(context, R.string.tf_wait_for_review),
         LoadingMessageType.TF_WAITING_FOR_WORDS to getString(context, R.string.tf_wait_for_words)
     )
 
