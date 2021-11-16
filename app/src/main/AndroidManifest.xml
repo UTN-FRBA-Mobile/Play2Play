@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.p2p">
+    package="ar.com.play2play">
 
     <uses-feature
         android:name="android.hardware.bluetooth"
@@ -33,7 +33,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.p2p.provider"
+            android:authorities="ar.com.play2play.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
