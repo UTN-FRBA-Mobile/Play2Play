@@ -38,7 +38,7 @@ ext {
                     kotlin     : "com.fasterxml.jackson.module:jackson-module-kotlin:$versions.jacksonKotlin"
             ],
             material  : "com.google.android.material:material:$versions.material",
-            leakCanary: "com.squareup.leakcanary:leakcanary-android-no-op:$versions.leakCanary",
+            leakCanary: "com.squareup.leakcanary:leakcanary-android:$versions.leakCanary",
     ]
 
     testingVersions = [
