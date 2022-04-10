@@ -2,8 +2,11 @@ package com.p2p.presentation.home
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.Manifest.permission.BLUETOOTH_CONNECT
+import android.Manifest.permission.BLUETOOTH_SCAN
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
+import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.core.app.ActivityCompat
@@ -26,7 +29,7 @@ class HomeActivity : BaseActivity() {
             addFragment(GamesFragment.newInstance(), shouldAddToBackStack = false)
             removeSplashStyle()
         }
-        if (!hasLocationPermissions()) requestLocationPermissions()
+        if (!hasRequiredPermissions()) requestRequiredPermissions()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -37,7 +40,7 @@ class HomeActivity : BaseActivity() {
                 MaterialAlertDialogBuilder(this)
                     .setTitle(R.string.request_location_title)
                     .setMessage(R.string.request_location_description)
-                    .setPositiveButton(R.string.understood) { _, _ -> requestLocationPermissions() }
+                    .setPositiveButton(R.string.understood) { _, _ -> requestRequiredPermissions() }
                     .show()
             } else {
                 finish() // If the user doesn't give us the location permission we close the application :(
@@ -57,17 +60,34 @@ class HomeActivity : BaseActivity() {
         }
     }
 
-    private fun hasLocationPermissions(): Boolean {
+    private fun hasRequiredPermissions(): Boolean {
         return ContextCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION) == PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) == PERMISSION_GRANTED
+                && hasBluetoothPermissions()
+    }
+
+    private fun hasBluetoothPermissions(): Boolean {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+            return true
+        }
+        return ContextCompat.checkSelfPermission(this, BLUETOOTH_SCAN) == PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(this, BLUETOOTH_CONNECT) == PERMISSION_GRANTED
     }
 
 
-    private fun requestLocationPermissions() = ActivityCompat.requestPermissions(
+    private fun requestRequiredPermissions() = ActivityCompat.requestPermissions(
         this,
-        arrayOf(ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION),
+        getRequiredPermissions(),
         REQUEST_LOCATION_PERMISSION_CODE
     )
+
+    private fun getRequiredPermissions(): Array<String> {
+        return arrayOf(ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION) + if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            arrayOf(BLUETOOTH_CONNECT, BLUETOOTH_SCAN)
+        } else {
+            emptyArray()
+        }
+    }
 
     private fun removeSplashStyle() = with(window) {
         setBackgroundDrawableResource(R.color.colorBackground)
