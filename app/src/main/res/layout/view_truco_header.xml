@@ -1,0 +1,121 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout"
+    tools:showIn="@layout/fragment_play_truco_for_2">
+
+    <include layout="@layout/view_guidelines" />
+
+    <View
+        android:id="@+id/header_background"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/colorPrimaryVariant"
+        android:elevation="@dimen/cardview_default_elevation"
+        app:layout_constraintBottom_toBottomOf="@id/our_score"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/our_score_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/screen_padding"
+        android:layout_marginTop="@dimen/screen_padding"
+        android:elevation="@dimen/cardview_default_elevation"
+        android:text="@string/truco_our_score_label"
+        android:textSize="@dimen/font_large"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/our_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="@dimen/cardview_default_elevation"
+        android:paddingBottom="@dimen/screen_padding"
+        app:layout_constraintEnd_toEndOf="@id/our_score_label"
+        app:layout_constraintStart_toStartOf="@id/our_score_label"
+        app:layout_constraintTop_toBottomOf="@id/our_score_label"
+        tools:text="0" />
+
+    <View
+        android:id="@+id/first_round"
+        android:layout_width="@dimen/truco_round_circle_size"
+        android:layout_height="@dimen/truco_round_circle_size"
+        android:layout_marginTop="@dimen/medium"
+        android:background="@drawable/ic_circle"
+        android:backgroundTint="@color/colorPrimary"
+        android:elevation="@dimen/truco_round_circle_elevation"
+        app:layout_constraintBottom_toTopOf="@id/truco_points"
+        app:layout_constraintEnd_toStartOf="@id/second_round"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="@+id/guideline_begin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <View
+        android:id="@+id/second_round"
+        android:layout_width="@dimen/truco_round_circle_size"
+        android:layout_height="@dimen/truco_round_circle_size"
+        android:layout_marginStart="@dimen/medium"
+        android:background="@drawable/ic_circle"
+        android:elevation="@dimen/truco_round_circle_elevation"
+        app:layout_constraintBottom_toBottomOf="@id/first_round"
+        app:layout_constraintEnd_toStartOf="@id/third_round"
+        app:layout_constraintStart_toEndOf="@id/first_round"
+        app:layout_constraintTop_toTopOf="@id/first_round"
+        tools:backgroundTint="@color/colorError" />
+
+    <View
+        android:id="@+id/third_round"
+        android:layout_width="@dimen/truco_round_circle_size"
+        android:layout_height="@dimen/truco_round_circle_size"
+        android:layout_marginStart="@dimen/medium"
+        android:background="@drawable/ic_circle"
+        android:elevation="@dimen/truco_round_circle_elevation"
+        app:layout_constraintBottom_toBottomOf="@id/first_round"
+        app:layout_constraintEnd_toEndOf="@+id/guideline_end"
+        app:layout_constraintStart_toEndOf="@id/second_round"
+        app:layout_constraintTop_toTopOf="@id/first_round"
+        tools:backgroundTint="@color/colorSuccess" />
+
+    <TextView
+        android:id="@+id/truco_points"
+        style="@style/P2P_Description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="@dimen/cardview_default_elevation"
+        android:gravity="center"
+        android:text="@plurals/truco_accumulated_points"
+        app:layout_constraintBottom_toBottomOf="@id/header_background"
+        app:layout_constraintEnd_toEndOf="@id/guideline_end"
+        app:layout_constraintStart_toStartOf="@id/guideline_begin"
+        app:layout_constraintTop_toBottomOf="@id/third_round" />
+
+    <TextView
+        android:id="@+id/their_score_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/screen_padding"
+        android:layout_marginEnd="@dimen/screen_padding"
+        android:elevation="@dimen/cardview_default_elevation"
+        android:text="@string/truco_their_score_label"
+        android:textSize="@dimen/font_large"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/their_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="@dimen/cardview_default_elevation"
+        app:layout_constraintEnd_toEndOf="@id/their_score_label"
+        app:layout_constraintStart_toStartOf="@id/their_score_label"
+        app:layout_constraintTop_toBottomOf="@id/their_score_label"
+        tools:text="0" />
+
+</merge>

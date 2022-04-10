@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="@dimen/tr_grid_card_size"
+    android:layout_height="@dimen/tr_grid_card_size"
+    android:orientation="vertical"
+    android:background="@drawable/grid_view_item_first_team_player">
+
+    <include layout="@layout/view_guidelines" />
+
+    <ImageView
+        android:id="@+id/avatar"
+        android:layout_width="@dimen/huge"
+        android:layout_height="@dimen/huge"
+        android:layout_marginBottom="@dimen/big_extra"
+        android:src="@drawable/ic_baseline_account_circle_yellow"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/medium_extra"
+        android:layout_marginBottom="@dimen/medium_extra"
+        android:textSize="@dimen/font_large"
+        android:ellipsize="end"
+        android:lines="1"
+        android:maxLines="1"
+        android:textStyle="bold"
+        android:elevation="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/avatar"
+        app:layout_constraintStart_toStartOf="@id/guideline_begin"
+        app:layout_constraintEnd_toStartOf="@id/guideline_end"
+        tools:text="Usuario" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

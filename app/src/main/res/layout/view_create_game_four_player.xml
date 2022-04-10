@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/view_guidelines" />
+
+    <ImageView
+        android:id="@+id/first_avatar"
+        android:layout_width="@dimen/big"
+        android:layout_height="@dimen/big"
+        android:src="@drawable/ic_baseline_account_circle_yellow"
+        app:layout_constraintStart_toEndOf="@id/second_avatar"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+
+    <ImageView
+        android:id="@+id/second_avatar"
+        android:layout_width="@dimen/big"
+        android:layout_height="@dimen/big"
+        android:src="@drawable/ic_baseline_account_circle_yellow"
+        app:layout_constraintStart_toStartOf="@id/parent"
+        app:layout_constraintTop_toBottomOf="@id/first_avatar"/>
+
+    <ImageView
+        android:id="@+id/third_avatar"
+        android:layout_width="@dimen/big"
+        android:layout_height="@dimen/big"
+        android:src="@drawable/ic_baseline_account_circle_yellow"
+        app:layout_constraintStart_toEndOf="@id/first_avatar"
+        app:layout_constraintTop_toBottomOf="@id/first_avatar"/>
+
+    <ImageView
+        android:id="@+id/fourth_avatar"
+        android:layout_width="@dimen/big"
+        android:layout_height="@dimen/big"
+        android:src="@drawable/ic_baseline_account_circle_yellow"
+        app:layout_constraintStart_toEndOf="@id/second_avatar"
+        app:layout_constraintTop_toBottomOf="@id/second_avatar"/>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

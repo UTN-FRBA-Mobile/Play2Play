@@ -1,0 +1,7 @@
+Al inicio de la partida, todxs lxs jugadorxs reciben una palabra y una categoría, salvo unx (lx impostorx) que solo recibe la categoría.
+
+Todxs lxs jugadorxs intercambian preguntas que puedan ser respondidas con "sí" o con "no", con el objetivo de encontrar a lx importorx. Puede comenzar preguntando cualquierx jugadorx.
+
+El objetivo de lx impostorx es el de descubrir esa palabra antes que el resto de lxs participantxs descubran quién es lx impostorx. También deberá simular como si supiera la palabra escogida, para que el resto de lxs jugadorxs no develen su identidad.
+
+En el caso de que lx impostorx sea descubiertx, puede intentar adivinar esa palabra. En caso de que la adivine, será lx ganadorx, caso contario el resto lo será.

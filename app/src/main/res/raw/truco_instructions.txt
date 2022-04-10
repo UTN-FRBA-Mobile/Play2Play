@@ -1,0 +1,64 @@
+Para iniciar el partido, lx creadorx seleccionará la cantidad de personas que van a jugar (2 o 4) y la cantidad de puntos de la partida (15 o 30). En el lobby, lx creadorx podrá seleccionar el orden de juego y los equipos.
+
+La dinámica del juego está determinada por manos. Previo a iniciar una mano, cada jugadorx recibe 3 cartas, siguiendo una ronda de juego (alternando lxs jugadorxs del equipo) para jugarlas. El primer equipo en ganar dos rondas, es lx ganadorx de la mano.
+
+En caso de que la primera ronda no tenga ganador (empate o parda), el equipo vencedor de la ronda siguiente es considerado el ganador de la mano. En caso de empatar también la segunda se definirá en la tercera. Si todas las rondas salen empatadas, el equipo ganador será el equipo de quien es la mano.
+
+En caso de que haya un empate en la segunda ronda habiendo un equipo ganador en la primera, este será el ganador. En caso de haberlo en la tercera, habiendo ganado una ronda cada equipo, el equipo ganador será el equipo de quien es la mano.
+
+Se le llama "Mano" a lx jugadorx que juega la primera carta.
+
+La cantidad de puntos asignados al fin de la mano varían si se cantó truco previamente. Los valores son los siguientes:
+- Sin truco -> 1 punto
+- Truco -> 2 puntos
+- Retruco -> 3 puntos
+- Vale cuatro -> 4 puntos
+
+
+Irse al mazo
+
+Si no te gustan tus chances, en cualquier momento de la mano podes irte al mazo. Se pierden dos puntos si te fuiste antes que tu rival pueda cantar "Envido". Caso contrario es solo un punto.
+
+
+Envido
+
+Otra forma de ganar puntos es cantando Envido. Este se juega en la primera ronda de la mano y consiste en contar tantos según las cartas de un jugador. 
+
+¿Cómo se cuentan los tantos? Todas las cartas cuentan con un valor igual a su número (Salvo los dieces, onces y doces que cuentan 0).
+Si se cuenta con dos o más cartas del mismo palo, se suman las dos de mayor valor. A ese resultado se le agregan 20 tantos.
+En caso de no contar dos cartas del mismo valor, el tanto será la carta de mayor valor.
+
+Por ejemplo:
+Si un jugador tiene
+- 7 de espadas
+- 4 de espadas
+- 3 de copas
+
+Los tantos de envido de este jugador serán: 20 + 7 + 4 = 31 tantos
+
+El envido es acumulativo e incremental, por lo que un canto de envido puede ser respondido con envido o real envido. En cambio un real envido no puede ser respondido por un envido.
+
+Los puntos ganados por envido son los siguientes:
+- Envido -> 2 puntos.
+- Real envido -> 3 puntos.
+- Falta envido -> Si ambos equipos tienen menos de 15 puntos, los puntos ganados serán 15 menos los puntos del ganador de ese momento. Si algún equipo tiene mas de 15 puntos, los puntos ganados serán 30 menos los puntos del ganador de ese momento.
+
+
+Cartas
+
+El orden de poder de las cartas es el siguiente:
+
+Ancho de espada
+Ancho de basto
+Siete de espada
+Siete de oro
+Treses
+Doses
+Ancho de oro y Ancho de copa
+Doces
+Onces
+Dieces
+Siete de copa y siete de basto
+Seises
+Cincos
+Cuatros

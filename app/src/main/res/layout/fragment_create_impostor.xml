@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/impostor_data"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@color/colorBackground">
+
+        <include layout="@layout/view_guidelines" />
+
+        <TextView
+            android:id="@+id/connected_players_text"
+            style="@style/P2P_Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/lobby_connected_players"
+            app:layout_constraintBottom_toTopOf="@id/players"
+            app:layout_constraintEnd_toEndOf="@id/guideline_end"
+            app:layout_constraintStart_toStartOf="@id/guideline_begin"
+            app:layout_constraintTop_toTopOf="@+id/guideline_top" />
+
+        <TextView
+            android:id="@+id/players"
+            style="@style/P2P_Description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/medium"
+            android:text="@string/lobby_no_players_yet"
+            app:layout_constraintBottom_toTopOf="@id/key_word_text"
+            app:layout_constraintEnd_toEndOf="@id/guideline_end"
+            app:layout_constraintStart_toStartOf="@id/guideline_begin"
+            app:layout_constraintTop_toBottomOf="@id/connected_players_text" />
+
+        <TextView
+            android:id="@+id/key_word_text"
+            style="@style/P2P_Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/large_extra"
+            android:text="@string/im_write_key_word"
+            app:layout_constraintBottom_toTopOf="@id/key_word_field"
+            app:layout_constraintEnd_toEndOf="@id/guideline_end"
+            app:layout_constraintStart_toStartOf="@id/guideline_begin"
+            app:layout_constraintTop_toBottomOf="@id/players" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/key_word_field"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/medium"
+            android:gravity="center"
+            android:inputType="textCapSentences"
+            android:maxLines="1"
+            android:theme="@style/P2P.SecondEditTextTheme"
+            app:layout_constraintBottom_toTopOf="@id/key_word_theme_text"
+            app:layout_constraintEnd_toEndOf="@id/guideline_end"
+            app:layout_constraintStart_toStartOf="@id/guideline_begin"
+            app:layout_constraintTop_toBottomOf="@id/key_word_text" />
+
+        <TextView
+            android:id="@+id/key_word_theme_text"
+            style="@style/P2P_Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/large"
+            android:layout_marginTop="@dimen/large_extra"
+            android:layout_marginEnd="@dimen/large"
+            android:text="@string/im_write_key_word_theme"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toTopOf="@id/key_word_theme_field"
+            app:layout_constraintEnd_toEndOf="@id/guideline_end"
+            app:layout_constraintStart_toStartOf="@id/guideline_begin"
+            app:layout_constraintTop_toBottomOf="@id/key_word_field" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/key_word_theme_field"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/medium"
+            android:gravity="center"
+            android:inputType="textCapSentences"
+            android:maxLines="1"
+            android:theme="@style/P2P.SecondEditTextTheme"
+            app:layout_constraintBottom_toTopOf="@id/make_me_visible_text"
+            app:layout_constraintEnd_toEndOf="@id/guideline_end"
+            app:layout_constraintStart_toStartOf="@id/guideline_begin"
+            app:layout_constraintTop_toBottomOf="@id/key_word_theme_text" />
+
+        <TextView
+            android:id="@+id/make_me_visible_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/large_extra"
+            android:layout_marginBottom="@dimen/medium"
+            android:gravity="center"
+            android:text="@string/server_lobby_make_me_visible_text"
+            app:layout_constraintEnd_toEndOf="@id/guideline_end"
+            app:layout_constraintBottom_toTopOf="@id/make_me_visible_button"
+            app:layout_constraintStart_toStartOf="@id/guideline_begin"
+            app:layout_constraintTop_toBottomOf="@id/key_word_theme_field" />
+
+        <Button
+            android:id="@+id/make_me_visible_button"
+            style="@style/Widget.P2P.Button.Outline"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/lobby_make_me_visible"
+            app:layout_constraintBottom_toTopOf="@id/start_button"
+            app:layout_constraintEnd_toEndOf="@id/guideline_end"
+            app:layout_constraintStart_toStartOf="@id/guideline_begin"
+            app:layout_constraintTop_toBottomOf="@id/make_me_visible_text" />
+
+        <Button
+            android:id="@+id/start_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/medium"
+            android:text="@string/lobby_start_game"
+            app:layout_constraintBottom_toBottomOf="@+id/guideline_bottom"
+            app:layout_constraintEnd_toEndOf="@id/guideline_end"
+            app:layout_constraintStart_toStartOf="@id/guideline_begin"
+            app:layout_constraintTop_toBottomOf="@id/make_me_visible_button" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
