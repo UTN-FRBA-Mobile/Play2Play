@@ -20,7 +20,7 @@
 
     <!-- Request location permission -->
     <string name="request_location_title">Lo necesitás para jugar</string>
-    <string name="request_location_description">La tecnología Bluetooth requiere que tengamos los permisos de tu ubicación, en caso de no otorgárnoslo tendremos que cerrar la aplicación :(</string>
+    <string name="request_location_description">La tecnología Bluetooth requiere que tengamos los permisos de Bluetooth y de tu ubicación, en caso de no otorgárnoslo tendremos que cerrar la aplicación :(</string>
 
     <!-- Games -->
     <string name="games_user_name">Tu nombre</string>
